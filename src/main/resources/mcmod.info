@@ -1,0 +1,14 @@
+[
+  {
+    "modid": "playerhud",
+    "name": "Player-HUD",
+    "description": "This mod changes the way the HUD is rendered. Created for the server",
+    "version": "1.0.0",
+    "mcversion": "1.12",
+    "authorList": ["PhoenixRa"],
+    "credits": "PhoenixRa",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

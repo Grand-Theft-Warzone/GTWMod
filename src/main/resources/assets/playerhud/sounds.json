@@ -1,0 +1,11 @@
+{
+  "levelup":
+    {
+        "sounds": [
+          {
+            "name": "playerhud:levelup",
+            "stream": false
+          }
+        ]
+    }
+}
