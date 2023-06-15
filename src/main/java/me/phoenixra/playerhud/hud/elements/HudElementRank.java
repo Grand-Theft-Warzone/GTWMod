@@ -23,7 +23,8 @@ public class HudElementRank extends HudElement {
          mc.fontRenderer.drawStringWithShadow(rank,
                 posXLocal,
                 posYLocal,
-                0xAEED7A);
+                0xAEED7A
+         );
 
         GlStateManager.enableBlend();
     }
