@@ -5,10 +5,9 @@ import me.phoenixra.playerhud.gui.GuiSession;
 import me.phoenixra.playerhud.networking.gui.PacketGUIAction;
 import me.phoenixra.playerhud.proxy.ClientProxy;
 import me.phoenixra.playerhud.proxy.CommonProxy;
-import me.phoenixra.playerhud.utils.MathUtils;
-import me.phoenixra.playerhud.utils.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
@@ -63,7 +62,7 @@ public abstract class BaseGUI extends GuiScreen {
         if(child != null){
             child.drawScreen(mouseX,mouseY,partialTicks);
             return;
-        }else {
+        } else {
             if(parent==null&&!initializedMouse){
                 Minecraft.getMinecraft().mouseHelper.ungrabMouseCursor();
                 initializedMouse = true;
@@ -72,12 +71,23 @@ public abstract class BaseGUI extends GuiScreen {
 
         int x;
         int y;
-        if(mc.displayWidth>640&&mc.displayHeight>480){
-            x = mc.displayWidth/4-sizeX/2;
-            y = mc.displayHeight/4-sizeY/2;
-        }else{
-            x = mc.displayWidth/2-sizeX/2;
-            y = mc.displayHeight/2-sizeY/2;
+        switch (getScaleFactor()){
+            case 2:
+                x = mc.displayWidth/4 - sizeX/2;
+                y = mc.displayHeight/4 - sizeY/2;
+                break;
+            case 3:
+                x = mc.displayWidth/6 - sizeX/2;
+                y = mc.displayHeight/6 - sizeY/2;
+                break;
+            case 4:
+                x = mc.displayWidth/8 - sizeX/2;
+                y = mc.displayHeight/8 - sizeY/2;
+                break;
+            default:
+                x = mc.displayWidth/2 - sizeX/2;
+                y = mc.displayHeight/2 - sizeY/2;
+                break;
         }
         mc.getTextureManager().bindTexture(GUI_IMAGE_MAIN);
         drawTexturedModalRect(
@@ -183,6 +193,31 @@ public abstract class BaseGUI extends GuiScreen {
         barList.clear();
         child = null;
         initGui();
+    }
+
+
+    public final int getScaleFactor(){
+        int scaledWidth = mc.displayWidth;
+        int scaledHeight = mc.displayHeight;
+        int scaleFactor = 1;
+        boolean flag = mc.isUnicode();
+        int i = mc.gameSettings.guiScale;
+
+        if (i == 0)
+        {
+            i = 1000;
+        }
+
+        while (scaleFactor < i && scaledWidth / (scaleFactor + 1) >= 320 && scaledHeight / (scaleFactor + 1) >= 240)
+        {
+            ++scaleFactor;
+        }
+
+        if (flag && scaleFactor % 2 != 0 && scaleFactor != 1)
+        {
+            --scaleFactor;
+        }
+        return scaleFactor;
     }
 
 
