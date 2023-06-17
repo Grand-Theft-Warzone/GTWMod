@@ -71,24 +71,9 @@ public abstract class BaseGUI extends GuiScreen {
 
         int x;
         int y;
-        switch (getScaleFactor()){
-            case 2:
-                x = mc.displayWidth/4 - sizeX/2;
-                y = mc.displayHeight/4 - sizeY/2;
-                break;
-            case 3:
-                x = mc.displayWidth/6 - sizeX/2;
-                y = mc.displayHeight/6 - sizeY/2;
-                break;
-            case 4:
-                x = mc.displayWidth/8 - sizeX/2;
-                y = mc.displayHeight/8 - sizeY/2;
-                break;
-            default:
-                x = mc.displayWidth/2 - sizeX/2;
-                y = mc.displayHeight/2 - sizeY/2;
-                break;
-        }
+        int scaleFactor = getScaleFactor();
+        x = mc.displayWidth/(2*scaleFactor) - sizeX/2;
+        y = mc.displayHeight/(2*scaleFactor) - sizeY/2;
         mc.getTextureManager().bindTexture(GUI_IMAGE_MAIN);
         drawTexturedModalRect(
                 x,
