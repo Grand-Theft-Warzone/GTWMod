@@ -1,0 +1,11 @@
+{
+  "levelup":
+    {
+        "sounds": [
+          {
+            "name": "gtwclient:levelup",
+            "stream": false
+          }
+        ]
+    }
+}

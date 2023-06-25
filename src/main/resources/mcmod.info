@@ -1,8 +1,8 @@
 [
   {
-    "modid": "playerhud",
-    "name": "Player-HUD",
-    "description": "This mod changes the way the HUD is rendered. Created for the server",
+    "modid": "gtwclient",
+    "name": "GTW Client",
+    "description": "This is the mod of the Grand Theft Warzone project",
     "version": "1.0.0",
     "mcversion": "1.12",
     "authorList": ["PhoenixRa"],
