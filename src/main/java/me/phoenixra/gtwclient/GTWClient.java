@@ -1,5 +1,9 @@
 package me.phoenixra.gtwclient;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 import lombok.Getter;
 import me.phoenixra.gtwclient.proxy.CommonProxy;
 import me.phoenixra.gtwclient.sounds.SoundsHandler;
@@ -14,6 +18,10 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Objects;
 
 @Mod(modid = GTWClient.MOD_ID,
         version = GTWClient.VERSION,
@@ -25,6 +33,8 @@ public class GTWClient {
     public static final String NAME = "Player-HUD";
     /** The mod version of this mod */
     public static final String VERSION = "1.0.0";
+
+    public static Settings settings;
 
     @Getter
     public File resourcesFolder;
@@ -41,6 +51,8 @@ public class GTWClient {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         resourcesFolder = event.getModConfigurationDirectory();
+        System.out.println("resourcesFolder = " + resourcesFolder);
+        settings = new Settings(getClass().getResourceAsStream("/assets/gtwclient/settings.json"));
         proxy.preInit(event);
         SoundsHandler.registerSounds();
         MinecraftForge.EVENT_BUS.register(this);
@@ -61,5 +73,42 @@ public class GTWClient {
     @SubscribeEvent(receiveCanceled = true)
     public void registerSoundEvents(RegistryEvent.Register<SoundEvent> event) {
         event.getRegistry().registerAll(SoundsHandler.USER_LEVEL_UP);
+    }
+
+
+    public static class Settings{
+        @Getter
+        private String serverHost;
+        @Getter
+        private int serverPort;
+        @Getter
+        private String playerInfoHost;
+        @Getter
+        private int playerInfoPort;
+        @Getter
+        private String discordLink;
+        @Getter
+        private String websiteLink;
+
+        private Settings(InputStream stream){
+            JsonParser jsonParser = new JsonParser();
+            try(JsonReader reader = new JsonReader(new InputStreamReader(stream))) {
+                JsonElement jsonElement = jsonParser.parse(reader);
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                String serverAddress = jsonObject.getAsJsonPrimitive("serverAddress").getAsString();
+
+                serverHost = serverAddress.split(":")[0];
+                serverPort = Integer.parseInt(serverAddress.split(":")[1]);
+
+                String playerInfoAddress = jsonObject.getAsJsonPrimitive("playerInfoService").getAsString();
+                playerInfoHost = playerInfoAddress.split(":")[0];
+                playerInfoPort = Integer.parseInt(playerInfoAddress.split(":")[1]);
+
+                discordLink = jsonObject.getAsJsonPrimitive("discordLink").getAsString();
+                websiteLink = jsonObject.getAsJsonPrimitive("websiteLink").getAsString();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

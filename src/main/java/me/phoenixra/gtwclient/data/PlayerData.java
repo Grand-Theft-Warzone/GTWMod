@@ -1,26 +1,47 @@
 package me.phoenixra.gtwclient.data;
 
+import lombok.Getter;
+import lombok.Setter;
 import me.phoenixra.gtwclient.gui.api.BaseGUI;
 import me.phoenixra.gtwclient.playerhud.notification.NotificationRequest;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerData {
 
+    @Getter
+    private String rank;
+    @Getter
+    private String gang;
+
+    @Getter
     private int level;
+    @Getter
     private double experience;
+    @Getter
     private double experienceCap;
 
+    @Getter
     private double money;
 
-    private String rank;
+    @Getter
+    private ConcurrentHashMap<String,String> other;
 
 
-
+    @Getter
     private BaseGUI openedGui;
 
+    @Getter
     private final List<NotificationRequest> notificationQueue;
+
+    @Getter @Setter
+    private boolean updatedFromServer;
+    @Getter @Setter
+    private long lastUpdateAttempt;
 
     public PlayerData(){
         level = 1;
@@ -28,7 +49,9 @@ public class PlayerData {
         experienceCap = 0;
         money = 0;
         rank = "";
-        notificationQueue = new ArrayList<>();
+        gang = "";
+        notificationQueue = Collections.synchronizedList(new ArrayList<>());
+        other = new ConcurrentHashMap<>();
     }
     public PlayerData(int level, double experience, double experienceCap){
         this.level = level;
@@ -48,36 +71,18 @@ public class PlayerData {
         return getQueuedNotification();
     }
 
-    public int getLevel() {
-        return level;
+    public String getOtherOrDefault(String key, String defaultValue){
+        return other.getOrDefault(key, defaultValue);
     }
 
-    public double getExperience() {
-        return experience;
+    public PlayerData setRank(String rank) {
+        this.rank = rank;
+        return this;
     }
-
-    public double getExperienceCap() {
-        return experienceCap;
+    public PlayerData setGang(String gang) {
+        this.gang = gang;
+        return this;
     }
-
-    public double getMoney() {
-        return money;
-    }
-
-    public String getRank() {
-        return rank;
-    }
-
-    public BaseGUI getOpenedGui() {
-        return openedGui;
-    }
-
-
-    public List<NotificationRequest> getNotificationQueue() {
-        return notificationQueue;
-    }
-
-
     public PlayerData setLevel(int level) {
         this.level = level;
         return this;
@@ -97,9 +102,8 @@ public class PlayerData {
         this.money = money;
         return this;
     }
-
-    public PlayerData setRank(String rank) {
-        this.rank = rank;
+    public PlayerData putOther(String key, String value) {
+        this.other.put(key, value);
         return this;
     }
     public void setOpenedGui(BaseGUI openedGui) {

@@ -1,6 +1,9 @@
 package me.phoenixra.gtwclient.utils;
 
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+
 import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_HEIGHT;
@@ -17,9 +20,14 @@ import static org.lwjgl.opengl.GL11.glVertex3f;
 
 public class RenderUtils
 {
-    public static void drawCompleteImage(int posX, int posY, int width, int height)
+    public static void drawCompleteImage(int posX, int posY, int width, int height, int scaleFactor)
     {
+        if(scaleFactor>0) {
+            width = width * scaleFactor;
+            height = height * scaleFactor;
+        }
         glPushMatrix();
+        GlStateManager.enableBlend();
 
         glTranslatef(posX, posY, 0);
         glBegin(GL_QUADS);
@@ -37,8 +45,20 @@ public class RenderUtils
         glPopMatrix();
     }
 
-    public static void drawPartialImage(int posX, int posY, int imageX, int imageY, int width, int height, int imagePartWidth, int imagePartHeight)
+    public static void drawPartialImage(int posX,
+                                        int posY,
+                                        int imageX,
+                                        int imageY,
+                                        int width,
+                                        int height,
+                                        int imagePartWidth,
+                                        int imagePartHeight,
+                                        int scaleFactor)
     {
+        if(scaleFactor>0) {
+            width = width / (2 * scaleFactor);
+            height = height / (2 * scaleFactor);
+        }
         double imageWidth = glGetTexLevelParameteri(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH);
         double imageHeight = glGetTexLevelParameteri(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT);
 
@@ -66,5 +86,31 @@ public class RenderUtils
         glEnd();
 
         glPopMatrix();
+    }
+
+
+    public static int getScaleFactor(){
+        Minecraft mc = Minecraft.getMinecraft();
+        int scaledWidth = mc.displayWidth;
+        int scaledHeight = mc.displayHeight;
+        int scaleFactor = 1;
+        boolean flag = mc.isUnicode();
+        int i = mc.gameSettings.guiScale;
+
+        if (i == 0)
+        {
+            i = 1000;
+        }
+
+        while (scaleFactor < i && scaledWidth / (scaleFactor + 1) >= 320 && scaledHeight / (scaleFactor + 1) >= 240)
+        {
+            ++scaleFactor;
+        }
+
+        if (flag && scaleFactor % 2 != 0 && scaleFactor != 1)
+        {
+            --scaleFactor;
+        }
+        return scaleFactor;
     }
 }
