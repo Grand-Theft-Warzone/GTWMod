@@ -18,10 +18,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Objects;
 
 @Mod(modid = GTWClient.MOD_ID,
         version = GTWClient.VERSION,
@@ -51,7 +49,6 @@ public class GTWClient {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         resourcesFolder = event.getModConfigurationDirectory();
-        System.out.println("resourcesFolder = " + resourcesFolder);
         settings = new Settings(getClass().getResourceAsStream("/assets/gtwclient/settings.json"));
         proxy.preInit(event);
         SoundsHandler.registerSounds();
