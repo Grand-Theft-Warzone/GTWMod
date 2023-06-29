@@ -72,7 +72,7 @@ public class GTWClient {
 
     @SubscribeEvent(receiveCanceled = true)
     public void registerSoundEvents(RegistryEvent.Register<SoundEvent> event) {
-        event.getRegistry().registerAll(SoundsHandler.USER_LEVEL_UP);
+        event.getRegistry().registerAll(SoundsHandler.getAllSounds());
     }
 
 
@@ -81,10 +81,6 @@ public class GTWClient {
         private String serverHost;
         @Getter
         private int serverPort;
-        @Getter
-        private String playerInfoHost;
-        @Getter
-        private int playerInfoPort;
         @Getter
         private String discordLink;
         @Getter
@@ -99,10 +95,6 @@ public class GTWClient {
 
                 serverHost = serverAddress.split(":")[0];
                 serverPort = Integer.parseInt(serverAddress.split(":")[1]);
-
-                String playerInfoAddress = jsonObject.getAsJsonPrimitive("playerInfoService").getAsString();
-                playerInfoHost = playerInfoAddress.split(":")[0];
-                playerInfoPort = Integer.parseInt(playerInfoAddress.split(":")[1]);
 
                 discordLink = jsonObject.getAsJsonPrimitive("discordLink").getAsString();
                 websiteLink = jsonObject.getAsJsonPrimitive("websiteLink").getAsString();

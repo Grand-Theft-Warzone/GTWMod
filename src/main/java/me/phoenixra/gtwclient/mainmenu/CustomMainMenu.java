@@ -1,11 +1,8 @@
 package me.phoenixra.gtwclient.mainmenu;
 
 import me.phoenixra.gtwclient.GTWClient;
-import me.phoenixra.gtwclient.networking.mainmenu.SocketConnectorPlayerInfo;
 import me.phoenixra.gtwclient.proxy.ClientProxy;
-import me.phoenixra.gtwclient.proxy.CommonProxy;
 import me.phoenixra.gtwclient.utils.RenderUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
@@ -19,7 +16,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class CustomMainMenu extends GuiMainMenu {
 
@@ -58,62 +54,62 @@ public class CustomMainMenu extends GuiMainMenu {
 
         this.buttonList.add(
                 ButtonAdvanced.builder(QUIT_BUTTON_ID)
-                        .x(0,20)
-                        .y(height-50,-10)
-                        .width(50)
-                        .height(50)
+                        .x((scaleFactor)-> 40 / scaleFactor)
+                        .y((scaleFactor)-> height - 120 / scaleFactor)
+                        .width((scaleFactor)-> 100 / scaleFactor)
+                        .height((scaleFactor)-> 100 / scaleFactor)
                         .image(QUIT_BUTTON_IMAGE)
                         .build()
         );
         this.buttonList.add(
                 ButtonAdvanced.builder(SETTINGS_BUTTON_ID)
-                        .x(width-50,-20)
-                        .y(height-50,-12)
-                        .width(50)
-                        .height(50)
+                        .x((scaleFactor)-> width - 140 / scaleFactor)
+                        .y((scaleFactor)-> height - 124 / scaleFactor)
+                        .width((scaleFactor)-> 100 / scaleFactor)
+                        .height((scaleFactor)-> 100 / scaleFactor)
                         .image(SETTINGS_BUTTON_IMAGE)
                         .build()
         );
         this.buttonList.add(
                 ButtonAdvanced.builder(DISCORD_BUTTON_ID)
-                        .x(width-50,-20)
-                        .y(height-50,-55 - 12)
-                        .width(50)
-                        .height(50)
+                        .x((scaleFactor)-> width - 140 / scaleFactor)
+                        .y((scaleFactor)-> height - 244 / scaleFactor)
+                        .width((scaleFactor)-> 100 / scaleFactor)
+                        .height((scaleFactor)-> 100 / scaleFactor)
                         .image(DISCORD_BUTTON_IMAGE)
                         .build()
         );
         this.buttonList.add(
                 ButtonAdvanced.builder(WEBSITE_BUTTON_ID)
-                        .x(width-50,-20)
-                        .y(height-50,-110 -12)
-                        .width(50)
-                        .height(50)
+                        .x((scaleFactor)-> width - 140 / scaleFactor)
+                        .y((scaleFactor)-> height - 364 / scaleFactor)
+                        .width((scaleFactor)-> 100 / scaleFactor)
+                        .height((scaleFactor)-> 100 / scaleFactor)
                         .image(WEBSITE_BUTTON_IMAGE)
                         .build()
         );
         this.buttonList.add(
                 ButtonAdvanced.builder(PLAY_BUTTON_ID)
-                        .x(width/2,-50)
-                        .y(height-150)
-                        .width(100)
-                        .height(100)
+                        .x((scaleFactor)-> width/2 - 200 / scaleFactor)
+                        .y((scaleFactor)-> height - 350 / scaleFactor)
+                        .width((scaleFactor)->  320 / scaleFactor)
+                        .height((scaleFactor)->  320 / scaleFactor)
                         .image(PLAY_BUTTON_IMAGE)
                         .build()
         );
         GuiButton buttonMultiplayer = ButtonAdvanced.builder(MULTIPLAYER_BUTTON_ID)
-                .x(width/2 - 68,-100)
-                .y(height - 60,-40)
-                .width(75)
-                .height(75)
+                .x((scaleFactor)-> width/2 - 508 / scaleFactor)
+                .y((scaleFactor)-> height - 237 / scaleFactor)
+                .width((scaleFactor)-> 230 / scaleFactor)
+                .height((scaleFactor)-> 230 / scaleFactor)
                 .image(MULTIPLAYER_BUTTON_IMAGE)
                 .build();
         this.buttonList.add(
                 ButtonAdvanced.builder(SINGLEPLAYER_BUTTON_ID)
-                        .x(width/2 - 100,-100)
-                        .y(height - 120,-40)
-                        .width(85)
-                        .height(85)
+                        .x((scaleFactor)-> width/2 - 590 / scaleFactor)
+                        .y((scaleFactor)-> height - 437 / scaleFactor)
+                        .width((scaleFactor)-> 270 / scaleFactor)
+                        .height((scaleFactor)-> 270 / scaleFactor)
                         .image(SINGLEPLAYER_BUTTON_IMAGE)
                         .buttonUnder(buttonMultiplayer)
                         .build()
@@ -123,82 +119,92 @@ public class CustomMainMenu extends GuiMainMenu {
         );
 
         //------texts------
+        FontRenderer fontRenderer = mc.fontRenderer;
 
         //player name
         this.textList.add(
                 new TextAdvanced(
+                        fontRenderer,
                         ()-> mc.getSession().getUsername(),
                         TEXT_COLOR,
-                        100,
-                        0,
-                        30,
-                        0
+                        (scaleFactor)-> (int)(270 / (scaleFactor)),
+                        (scaleFactor)-> (int)(80 / (scaleFactor)),
+                        (scaleFactor)-> 2.7F / scaleFactor,
+                        (scaleFactor)-> 2.7F / scaleFactor
                 )
         );
+
+
         //rank
         this.textList.add(
                 new TextAdvanced(
+                        fontRenderer,
                         ()-> ClientProxy.playerData.getRank(),
                         TEXT_COLOR,
-                        150,
-                        0,
-                        65,
-                        0
+                        (scaleFactor)-> (int)(210 / (scaleFactor)),
+                        (scaleFactor)-> (int)(135 / (scaleFactor)),
+                        (scaleFactor)-> 2.7F / scaleFactor,
+                        (scaleFactor)-> 2.7F / scaleFactor
                 )
         );
         //gang name
         this.textList.add(
                 new TextAdvanced(
+                        fontRenderer,
                         ()->ClientProxy.playerData.getGang(),
                         TEXT_COLOR,
-                        150,
-                        0,
-                        85,
-                        0
+                        (scaleFactor)-> (int)(210 / (scaleFactor)),
+                        (scaleFactor)-> (int)(180 / (scaleFactor)),
+                        (scaleFactor)-> 2.7F / scaleFactor,
+                        (scaleFactor)-> 2.7F / scaleFactor
                 )
         );
         //level
         this.textList.add(
                 new TextAdvanced(
+                        fontRenderer,
                         ()-> String.valueOf(ClientProxy.playerData.getLevel()),
                         TEXT_COLOR,
-                        150,
-                        0,
-                        115,
-                        0
+                        (scaleFactor)-> (int)(225 / (scaleFactor)),
+                        (scaleFactor)-> (int)(219 / (scaleFactor)),
+                        (scaleFactor)-> 2.7F / scaleFactor,
+                        (scaleFactor)-> 2.7F / scaleFactor
                 )
         );
         //money
         this.textList.add(
                 new TextAdvanced(
+                        fontRenderer,
                         ()->"$ "+ClientProxy.playerData.getMoney(),
                         TEXT_COLOR,
-                        150,
-                        0,
-                        135,
-                        0
+                        (scaleFactor)-> (int)(245 / (scaleFactor)),
+                        (scaleFactor)-> (int)(267 / (scaleFactor)),
+                        (scaleFactor)-> 2.7F / scaleFactor,
+                        (scaleFactor)-> 2.7F / scaleFactor
                 )
         );
         //kills
         this.textList.add(
                 new TextAdvanced(
+                        fontRenderer,
                         ()-> ClientProxy.playerData.getOtherOrDefault("kills","0"),
                         TEXT_COLOR,
-                        150,
-                        0,
-                        155,
-                        0
+                        (scaleFactor)-> (int)(215 / (scaleFactor)),
+                        (scaleFactor)-> (int)(307 / (scaleFactor)),
+                        (scaleFactor)-> 2.7F / scaleFactor,
+                        (scaleFactor)-> 2.7F / scaleFactor
                 )
         );
         //deaths
         this.textList.add(
                 new TextAdvanced(
+                        fontRenderer,
                         ()->ClientProxy.playerData.getOtherOrDefault("deaths","0"),
                         TEXT_COLOR,
-                        150,
-                        0,
-                        175,
-                        0
+                        (scaleFactor)-> (int)(245 / (scaleFactor)),
+                        (scaleFactor)-> (int)(350 / (scaleFactor)),
+                        (scaleFactor)-> 2.7F / scaleFactor,
+                        (scaleFactor)-> 2.7F / scaleFactor
                 )
         );
 
@@ -207,18 +213,9 @@ public class CustomMainMenu extends GuiMainMenu {
 
     }
 
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-
-        if(!ClientProxy.playerData.isUpdatedFromServer() && ClientProxy.playerData.getLastUpdateAttempt() + 10000
-                < System.currentTimeMillis()){
-            ClientProxy.playerData.setLastUpdateAttempt(System.currentTimeMillis());
-            new SocketConnectorPlayerInfo(
-                    GTWClient.settings.getPlayerInfoHost(),
-                    GTWClient.settings.getPlayerInfoPort()
-            ).sendAndRead(Minecraft.getMinecraft().getSession().getProfile().getName());
-
-        }
 
         this.mc.getTextureManager().bindTexture(BACKGROUND_IMAGE);
         RenderUtils.drawCompleteImage(0,0,this.width,this.height, -1);

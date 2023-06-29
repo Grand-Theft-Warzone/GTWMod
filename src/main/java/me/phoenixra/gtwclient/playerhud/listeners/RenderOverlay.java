@@ -8,6 +8,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -90,5 +91,15 @@ public class RenderOverlay {
 
     private void bind(ResourceLocation res) {
         mc.getTextureManager().bindTexture(res);
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void onGuiResize(GuiScreenEvent.InitGuiEvent event) {
+
+        if(!mc.isFullScreen()) {
+            mc.toggleFullscreen();
+        }
+
     }
 }

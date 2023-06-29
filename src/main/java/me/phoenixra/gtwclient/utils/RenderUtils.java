@@ -3,6 +3,20 @@ package me.phoenixra.gtwclient.utils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.file.Files;
 
 import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -23,8 +37,8 @@ public class RenderUtils
     public static void drawCompleteImage(int posX, int posY, int width, int height, int scaleFactor)
     {
         if(scaleFactor>0) {
-            width = width * scaleFactor;
-            height = height * scaleFactor;
+            width = width / scaleFactor;
+            height = height / scaleFactor;
         }
         glPushMatrix();
         GlStateManager.enableBlend();
@@ -56,8 +70,8 @@ public class RenderUtils
                                         int scaleFactor)
     {
         if(scaleFactor>0) {
-            width = width / (2 * scaleFactor);
-            height = height / (2 * scaleFactor);
+            width = width / (scaleFactor);
+            height = height / (scaleFactor);
         }
         double imageWidth = glGetTexLevelParameteri(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH);
         double imageHeight = glGetTexLevelParameteri(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT);

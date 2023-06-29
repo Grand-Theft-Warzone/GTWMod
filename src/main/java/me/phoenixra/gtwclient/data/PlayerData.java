@@ -38,11 +38,6 @@ public class PlayerData {
     @Getter
     private final List<NotificationRequest> notificationQueue;
 
-    @Getter @Setter
-    private boolean updatedFromServer;
-    @Getter @Setter
-    private long lastUpdateAttempt;
-
     public PlayerData(){
         level = 1;
         experience = 0;
@@ -108,5 +103,34 @@ public class PlayerData {
     }
     public void setOpenedGui(BaseGUI openedGui) {
         this.openedGui = openedGui;
+    }
+
+
+    public String toPlainText(){
+        StringBuilder sb = new StringBuilder();
+        for(String key : other.keySet()){
+            sb.append(key).append(":").append(other.get(key)).append("_");
+        }
+        return  rank+"_"+
+                gang+"_"+
+                level+"_"+
+                experience+"_"+
+                experienceCap+"_"+
+                money+"_"+sb.toString();
+
+    }
+
+    public void fromString(String data){
+        String[] split = data.split("_");
+        rank = split[0];
+        gang = split[1];
+        level = Integer.parseInt(split[2]);
+        experience = Double.parseDouble(split[3]);
+        experienceCap = Double.parseDouble(split[4]);
+        money = Double.parseDouble(split[5]);
+        for(int i = 6; i<split.length; i++){
+            String[] otherSplit = split[i].split(":");
+            other.put(otherSplit[0], otherSplit[1]);
+        }
     }
 }
