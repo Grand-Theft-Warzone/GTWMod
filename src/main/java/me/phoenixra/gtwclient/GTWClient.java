@@ -95,14 +95,14 @@ public class GTWClient {
             JsonParser jsonParser = new JsonParser();
             try(JsonReader reader = new JsonReader(new InputStreamReader(stream))) {
                 JsonElement jsonElement = jsonParser.parse(reader);
-                JsonObject jsonObject = jsonElement.getAsJsonObject();
-                String serverAddress = jsonObject.getAsJsonPrimitive("serverAddress").getAsString();
+                baseObject = jsonElement.getAsJsonObject();
+                String serverAddress = baseObject.getAsJsonPrimitive("serverAddress").getAsString();
 
                 serverHost = serverAddress.split(":")[0];
                 serverPort = Integer.parseInt(serverAddress.split(":")[1]);
 
-                discordLink = jsonObject.getAsJsonPrimitive("discordLink").getAsString();
-                websiteLink = jsonObject.getAsJsonPrimitive("websiteLink").getAsString();
+                discordLink = baseObject.getAsJsonPrimitive("discordLink").getAsString();
+                websiteLink = baseObject.getAsJsonPrimitive("websiteLink").getAsString();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -120,7 +120,7 @@ public class GTWClient {
         }
         public GuiElementColor getColorValue(String key){
             String value = getStringValue(key);
-            return GuiElementColor.fromHex(value);
+            return GuiElementColor.fromHex(value.replace("#", ""));
         }
         public double getStringEvaluated(String key, List<Pair<String, Supplier<String>>> placeholders){
             String value = getStringValue(key);
@@ -131,7 +131,7 @@ public class GTWClient {
                         replacement.getSecond().get()
                 );
             }
-            return Crunch.compileExpression(getStringValue(key)).evaluate();
+            return Crunch.compileExpression(value).evaluate();
         }
     }
 }

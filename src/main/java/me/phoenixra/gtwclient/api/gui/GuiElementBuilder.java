@@ -40,7 +40,7 @@ public interface GuiElementBuilder {
         );
     }
     default GuiElementBuilder setY(String jsonPath){
-        return setX((f)->
+        return setY((f)->
                 (int)(GTWClient.settings.getStringEvaluated(jsonPath,
                         Lists.newArrayList(
                                 new Pair<>(
@@ -60,7 +60,7 @@ public interface GuiElementBuilder {
         );
     }
     default GuiElementBuilder setWidth(String jsonPath){
-        return setX((f)->
+        return setWidth((f)->
                 (int)(GTWClient.settings.getStringEvaluated(jsonPath,
                         Lists.newArrayList(
                                 new Pair<>(
@@ -80,7 +80,7 @@ public interface GuiElementBuilder {
         );
     }
     default GuiElementBuilder setHeight(String jsonPath){
-        return setX((f)->
+        return setHeight((f)->
                 (int)(GTWClient.settings.getStringEvaluated(jsonPath,
                         Lists.newArrayList(
                                 new Pair<>(

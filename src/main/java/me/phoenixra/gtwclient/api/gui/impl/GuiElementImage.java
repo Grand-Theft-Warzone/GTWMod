@@ -43,16 +43,25 @@ public class GuiElementImage extends BaseGuiElement {
         GL11.glPushMatrix();
         color.useColor();
         imageBinder.run();
-        RenderUtils.drawPartialImage(
-                getX(),
-                getY(),
-                getWidth(),
-                getHeight(),
-                textureX,
-                textureY,
-                textureWidth,
-                textureHeight
-        );
+        if(textureHeight==-1){
+            RenderUtils.drawCompleteImage(
+                    getX(),
+                    getY(),
+                    getWidth(),
+                    getHeight()
+            );
+        }else {
+            RenderUtils.drawPartialImage(
+                    getX(),
+                    getY(),
+                    getWidth(),
+                    getHeight(),
+                    textureX,
+                    textureY,
+                    textureWidth,
+                    textureHeight
+            );
+        }
         GL11.glPopMatrix();
     }
     public static Builder builder(GtwGuiMenu guiMenu) {

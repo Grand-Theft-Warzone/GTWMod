@@ -275,8 +275,9 @@ public class CustomMainMenu extends GtwGuiMenu {
                 .setY((scaleFactor) -> 0)
                 .setWidth((scaleFactor) -> width)
                 .setHeight((scaleFactor) -> height)
-                .build()
-                .register();
+                .setTextureWidth(-1)
+                .setTextureHeight(-1)
+                .build().register();
 
         //player head
         GuiElementImage.builder(this)
@@ -288,10 +289,10 @@ public class CustomMainMenu extends GtwGuiMenu {
                 .setLayer("main_menu.player_head.layer",
                         GuiElementLayer.MIDDLE
                 )
-                .setX("main_menu.player_head")
-                .setY("main_menu.player_head")
-                .setWidth("main_menu.player_head")
-                .setHeight("main_menu.player_head")
+                .setX("main_menu.player_head.x")
+                .setY("main_menu.player_head.y")
+                .setWidth("main_menu.player_head.width")
+                .setHeight("main_menu.player_head.height")
                 .build().register();
 
 
