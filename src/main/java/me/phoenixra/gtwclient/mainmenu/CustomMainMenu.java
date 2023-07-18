@@ -40,6 +40,7 @@ public class CustomMainMenu extends GuiMainMenu {
 
 
     private final ArrayList<TextAdvanced> textList = new ArrayList<>();
+    private final ArrayList<ImageAdvanced> imageList = new ArrayList<>();
 
     public CustomMainMenu() {
         super();
@@ -54,62 +55,62 @@ public class CustomMainMenu extends GuiMainMenu {
 
         this.buttonList.add(
                 ButtonAdvanced.builder(QUIT_BUTTON_ID)
-                        .x((scaleFactor)-> 40 / scaleFactor)
-                        .y((scaleFactor)-> height - 120 / scaleFactor)
-                        .width((scaleFactor)-> 100 / scaleFactor)
-                        .height((scaleFactor)-> 100 / scaleFactor)
+                        .x((scaleFactor)-> (int)(40 / scaleFactor))
+                        .y((scaleFactor)-> (int)(height - 120 / scaleFactor))
+                        .width((scaleFactor)-> (int)(100 / scaleFactor))
+                        .height((scaleFactor)-> (int)(100 / scaleFactor))
                         .image(QUIT_BUTTON_IMAGE)
                         .build()
         );
         this.buttonList.add(
                 ButtonAdvanced.builder(SETTINGS_BUTTON_ID)
-                        .x((scaleFactor)-> width - 140 / scaleFactor)
-                        .y((scaleFactor)-> height - 124 / scaleFactor)
-                        .width((scaleFactor)-> 100 / scaleFactor)
-                        .height((scaleFactor)-> 100 / scaleFactor)
+                        .x((scaleFactor)-> (int)(width - 140 / scaleFactor))
+                        .y((scaleFactor)-> (int)(height - 124 / scaleFactor))
+                        .width((scaleFactor)-> (int)(100 / scaleFactor))
+                        .height((scaleFactor)-> (int)(100 / scaleFactor))
                         .image(SETTINGS_BUTTON_IMAGE)
                         .build()
         );
         this.buttonList.add(
                 ButtonAdvanced.builder(DISCORD_BUTTON_ID)
-                        .x((scaleFactor)-> width - 140 / scaleFactor)
-                        .y((scaleFactor)-> height - 244 / scaleFactor)
-                        .width((scaleFactor)-> 100 / scaleFactor)
-                        .height((scaleFactor)-> 100 / scaleFactor)
+                        .x((scaleFactor)-> (int)(width - 140 / scaleFactor))
+                        .y((scaleFactor)-> (int)(height - 244 / scaleFactor))
+                        .width((scaleFactor)-> (int)(100 / scaleFactor))
+                        .height((scaleFactor)-> (int)(100 / scaleFactor))
                         .image(DISCORD_BUTTON_IMAGE)
                         .build()
         );
         this.buttonList.add(
                 ButtonAdvanced.builder(WEBSITE_BUTTON_ID)
-                        .x((scaleFactor)-> width - 140 / scaleFactor)
-                        .y((scaleFactor)-> height - 364 / scaleFactor)
-                        .width((scaleFactor)-> 100 / scaleFactor)
-                        .height((scaleFactor)-> 100 / scaleFactor)
+                        .x((scaleFactor)-> (int)(width - 140 / scaleFactor))
+                        .y((scaleFactor)-> (int)(height - 364 / scaleFactor))
+                        .width((scaleFactor)-> (int)(100 / scaleFactor))
+                        .height((scaleFactor)-> (int)(100 / scaleFactor))
                         .image(WEBSITE_BUTTON_IMAGE)
                         .build()
         );
         this.buttonList.add(
                 ButtonAdvanced.builder(PLAY_BUTTON_ID)
-                        .x((scaleFactor)-> width/2 - 200 / scaleFactor)
-                        .y((scaleFactor)-> height - 350 / scaleFactor)
-                        .width((scaleFactor)->  320 / scaleFactor)
-                        .height((scaleFactor)->  320 / scaleFactor)
+                        .x((scaleFactor)-> (int)(width/2 - 200 / scaleFactor))
+                        .y((scaleFactor)-> (int)(height - 350 / scaleFactor))
+                        .width((scaleFactor)-> (int)(320 / scaleFactor))
+                        .height((scaleFactor)-> (int)(320 / scaleFactor))
                         .image(PLAY_BUTTON_IMAGE)
                         .build()
         );
         GuiButton buttonMultiplayer = ButtonAdvanced.builder(MULTIPLAYER_BUTTON_ID)
-                .x((scaleFactor)-> width/2 - 508 / scaleFactor)
-                .y((scaleFactor)-> height - 237 / scaleFactor)
-                .width((scaleFactor)-> 230 / scaleFactor)
-                .height((scaleFactor)-> 230 / scaleFactor)
+                .x((scaleFactor)-> (int)(width/2 - 508 / scaleFactor))
+                .y((scaleFactor)-> (int)(height - 237 / scaleFactor))
+                .width((scaleFactor)-> (int)(230 / scaleFactor))
+                .height((scaleFactor)-> (int)(230 / scaleFactor))
                 .image(MULTIPLAYER_BUTTON_IMAGE)
                 .build();
         this.buttonList.add(
                 ButtonAdvanced.builder(SINGLEPLAYER_BUTTON_ID)
-                        .x((scaleFactor)-> width/2 - 590 / scaleFactor)
-                        .y((scaleFactor)-> height - 437 / scaleFactor)
-                        .width((scaleFactor)-> 270 / scaleFactor)
-                        .height((scaleFactor)-> 270 / scaleFactor)
+                        .x((scaleFactor)-> (int)(width/2 - 590 / scaleFactor))
+                        .y((scaleFactor)-> (int)(height - 437 / scaleFactor))
+                        .width((scaleFactor)-> (int)(270 / scaleFactor))
+                        .height((scaleFactor)-> (int)(270 / scaleFactor))
                         .image(SINGLEPLAYER_BUTTON_IMAGE)
                         .buttonUnder(buttonMultiplayer)
                         .build()
@@ -124,7 +125,6 @@ public class CustomMainMenu extends GuiMainMenu {
         //player name
         this.textList.add(
                 new TextAdvanced(
-                        fontRenderer,
                         ()-> mc.getSession().getUsername(),
                         TEXT_COLOR,
                         (scaleFactor)-> (int)(270 / (scaleFactor)),
@@ -138,7 +138,6 @@ public class CustomMainMenu extends GuiMainMenu {
         //rank
         this.textList.add(
                 new TextAdvanced(
-                        fontRenderer,
                         ()-> ClientProxy.playerData.getRank(),
                         TEXT_COLOR,
                         (scaleFactor)-> (int)(210 / (scaleFactor)),
@@ -150,7 +149,6 @@ public class CustomMainMenu extends GuiMainMenu {
         //gang name
         this.textList.add(
                 new TextAdvanced(
-                        fontRenderer,
                         ()->ClientProxy.playerData.getGang(),
                         TEXT_COLOR,
                         (scaleFactor)-> (int)(210 / (scaleFactor)),
@@ -162,7 +160,6 @@ public class CustomMainMenu extends GuiMainMenu {
         //level
         this.textList.add(
                 new TextAdvanced(
-                        fontRenderer,
                         ()-> String.valueOf(ClientProxy.playerData.getLevel()),
                         TEXT_COLOR,
                         (scaleFactor)-> (int)(225 / (scaleFactor)),
@@ -174,7 +171,6 @@ public class CustomMainMenu extends GuiMainMenu {
         //money
         this.textList.add(
                 new TextAdvanced(
-                        fontRenderer,
                         ()->"$ "+ClientProxy.playerData.getMoney(),
                         TEXT_COLOR,
                         (scaleFactor)-> (int)(245 / (scaleFactor)),
@@ -186,7 +182,6 @@ public class CustomMainMenu extends GuiMainMenu {
         //kills
         this.textList.add(
                 new TextAdvanced(
-                        fontRenderer,
                         ()-> ClientProxy.playerData.getOtherOrDefault("kills","0"),
                         TEXT_COLOR,
                         (scaleFactor)-> (int)(215 / (scaleFactor)),
@@ -198,7 +193,6 @@ public class CustomMainMenu extends GuiMainMenu {
         //deaths
         this.textList.add(
                 new TextAdvanced(
-                        fontRenderer,
                         ()->ClientProxy.playerData.getOtherOrDefault("deaths","0"),
                         TEXT_COLOR,
                         (scaleFactor)-> (int)(245 / (scaleFactor)),
@@ -208,6 +202,19 @@ public class CustomMainMenu extends GuiMainMenu {
                 )
         );
 
+
+        //----images----
+        imageList.add(new ImageAdvanced(
+                (scaleFactor)-> (int)(414 / (scaleFactor)),
+                (scaleFactor)-> (int)(193 / (scaleFactor)),
+                (scaleFactor)-> 4.0f / scaleFactor,
+                (scaleFactor)-> 3.55f / scaleFactor,
+                 ClientProxy::bindPlayerSkinTexture,
+                32,
+                32,
+                32,
+                32
+        ));
 
 
 
@@ -225,6 +232,9 @@ public class CustomMainMenu extends GuiMainMenu {
         }
         for(TextAdvanced text : textList){
             text.drawText(this.mc);
+        }
+        for(ImageAdvanced image : imageList){
+            image.drawImage(this);
         }
     }
 

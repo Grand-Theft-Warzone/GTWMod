@@ -4,6 +4,7 @@ package me.phoenixra.gtwclient.utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.fml.common.ProgressManager;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -34,12 +35,8 @@ import static org.lwjgl.opengl.GL11.glVertex3f;
 
 public class RenderUtils
 {
-    public static void drawCompleteImage(int posX, int posY, int width, int height, int scaleFactor)
+    public static void drawCompleteImage(int posX, int posY, int width, int height)
     {
-        if(scaleFactor>0) {
-            width = width / scaleFactor;
-            height = height / scaleFactor;
-        }
         glPushMatrix();
         GlStateManager.enableBlend();
 
@@ -61,18 +58,14 @@ public class RenderUtils
 
     public static void drawPartialImage(int posX,
                                         int posY,
-                                        int imageX,
-                                        int imageY,
                                         int width,
                                         int height,
+                                        int imageX,
+                                        int imageY,
                                         int imagePartWidth,
-                                        int imagePartHeight,
-                                        int scaleFactor)
+                                        int imagePartHeight)
     {
-        if(scaleFactor>0) {
-            width = width / (scaleFactor);
-            height = height / (scaleFactor);
-        }
+
         double imageWidth = glGetTexLevelParameteri(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH);
         double imageHeight = glGetTexLevelParameteri(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT);
 
@@ -126,5 +119,12 @@ public class RenderUtils
             --scaleFactor;
         }
         return scaleFactor;
+    }
+
+    public static double getWindowRatioWidth(){
+        return (double)Display.getWidth()/1920;
+    }
+    public static double getWindowRatioHeight(){
+        return (double)Display.getHeight()/1080;
     }
 }

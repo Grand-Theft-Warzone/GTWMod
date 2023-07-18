@@ -97,9 +97,9 @@ public class RenderOverlay {
     @SideOnly(Side.CLIENT)
     public void onGuiResize(GuiScreenEvent.InitGuiEvent event) {
 
-        if(!mc.isFullScreen()) {
+       /* if(!mc.isFullScreen()) {
             mc.toggleFullscreen();
-        }
+        }*/
 
     }
 }
