@@ -12,6 +12,7 @@ public class Fonts {
 
     @Nullable
     public static GlyphPage registerFont(@NotNull String id, @NotNull InputStream fontFile){
+        if(fonts.containsKey(id)) return fonts.get(id);
         try (InputStream stream = fontFile) {
             Font font = Font.createFont(
                     0,

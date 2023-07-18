@@ -5,8 +5,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import lombok.Getter;
+import me.phoenixra.gtwclient.api.gui.GuiElementColor;
 import me.phoenixra.gtwclient.proxy.CommonProxy;
 import me.phoenixra.gtwclient.sounds.SoundsHandler;
+import me.phoenixra.gtwclient.utils.Pair;
+import me.phoenixra.gtwclient.utils.StringUtils;
+import me.phoenixra.libs.crunch.Crunch;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -20,6 +24,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
+import java.util.function.Supplier;
 
 @Mod(modid = GTWClient.MOD_ID,
         version = GTWClient.VERSION,
@@ -83,6 +89,8 @@ public class GTWClient {
         @Getter
         private String websiteLink;
 
+        private JsonObject baseObject;
+
         private Settings(InputStream stream){
             JsonParser jsonParser = new JsonParser();
             try(JsonReader reader = new JsonReader(new InputStreamReader(stream))) {
@@ -98,6 +106,32 @@ public class GTWClient {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+        public String getStringValue(String key){
+            if(key.contains(".")){
+                String[] keys = key.split("\\.");
+                JsonObject object = baseObject.getAsJsonObject(keys[0]);
+                for(int i = 1; i < keys.length - 1; i++){
+                    object = object.getAsJsonObject(keys[i]);
+                }
+                return object.getAsJsonPrimitive(keys[keys.length - 1]).getAsString();
+            }
+            return baseObject.getAsJsonPrimitive(key).getAsString();
+        }
+        public GuiElementColor getColorValue(String key){
+            String value = getStringValue(key);
+            return GuiElementColor.fromHex(value);
+        }
+        public double getStringEvaluated(String key, List<Pair<String, Supplier<String>>> placeholders){
+            String value = getStringValue(key);
+            for(Pair<String, Supplier<String>> replacement : placeholders){
+                value = StringUtils.replaceFast(
+                        value,
+                        replacement.getFirst(),
+                        replacement.getSecond().get()
+                );
+            }
+            return Crunch.compileExpression(getStringValue(key)).evaluate();
         }
     }
 }

@@ -60,18 +60,20 @@ java{
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
-
+repositories {
+    //crunch
+    maven { url = 'https://redempt.dev' }
+}
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
     compileOnly 'javazoom:jlayer:1.0.1'
 
+    //annotations
     compileOnly 'org.projectlombok:lombok:1.18.24'
     compileOnly 'org.jetbrains:annotations:23.0.0'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.jetbrains:annotations:23.0.0'
 }
-
-
 
 group 'me.phoenixRa'
 version '1.0-SNAPSHOT'

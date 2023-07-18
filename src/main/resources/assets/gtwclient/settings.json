@@ -2,5 +2,125 @@
   "serverAddress": "130.61.203.254:2002",
   "playerInfoService": "130.61.203.254:2003",
   "discordLink": "https://discord.gg/pasteHereYourDiscordLink",
-  "websiteLink": "https://google.com"
+  "websiteLink": "https://google.com",
+  "main_menu": {
+    "player_head": {
+      "layer": "MIDDLE",
+      "x": "414 / %scale_factor%",
+      "y": "193 / %scale_factor%",
+      "width": "4 / %scale_factor%",
+      "height": "3.55 / %scale_factor%"
+    },
+    "texts": {
+      "player_name": {
+        "layer": "MIDDLE",
+        "x": "270 / %scale_factor%",
+        "y": "80 / %scale_factor%",
+        "width": "80 / %scale_factor%",
+        "height": "80 / %scale_factor%",
+        "color": "#A24D37"
+      },
+      "rank": {
+        "layer": "MIDDLE",
+        "x": "210 / %scale_factor%",
+        "y": "135 / %scale_factor%",
+        "width": "80 / %scale_factor%",
+        "height": "80 / %scale_factor%",
+        "color": "#A24D37"
+      },
+      "gang_name": {
+        "layer": "MIDDLE",
+        "x": "210 / %scale_factor%",
+        "y": "180 / %scale_factor%",
+        "width": "80 / %scale_factor%",
+        "height": "80 / %scale_factor%",
+        "color": "#A24D37"
+      },
+      "level": {
+        "layer": "MIDDLE",
+        "x": "225 / %scale_factor%",
+        "y": "219 / %scale_factor%",
+        "width": "80 / %scale_factor%",
+        "height": "80 / %scale_factor%",
+        "color": "#A24D37"
+      },
+      "money": {
+        "layer": "MIDDLE",
+        "x": "245 / %scale_factor%",
+        "y": "267 / %scale_factor%",
+        "width": "80 / %scale_factor%",
+        "height": "80 / %scale_factor%",
+        "color": "#A24D37"
+      },
+      "kills": {
+        "layer": "MIDDLE",
+        "x": "215 / %scale_factor%",
+        "y": "307 / %scale_factor%",
+        "width": "80 / %scale_factor%",
+        "height": "80 / %scale_factor%",
+        "color": "#A24D37"
+      },
+      "deaths": {
+        "layer": "MIDDLE",
+        "x": "245 / %scale_factor%",
+        "y": "350 / %scale_factor%",
+        "width": "80 / %scale_factor%",
+        "height": "80 / %scale_factor%",
+        "color": "#A24D37"
+      }
+    },
+    "buttons": {
+        "quit": {
+          "layer": "FOREGROUND",
+          "x": "40 / %scale_factor%",
+          "y": "%screen_height% - 120 / %scale_factor%",
+          "width": "100 / %scale_factor%",
+          "height": "100 / %scale_factor%"
+        },
+        "settings": {
+          "layer": "FOREGROUND",
+          "x": "%screen_width% - 140 / %scale_factor%",
+          "y": "%screen_height% - 124 / %scale_factor%",
+          "width": "100 / %scale_factor%",
+          "height": "100 / %scale_factor%"
+        },
+        "discord": {
+            "layer": "FOREGROUND",
+            "x": "%screen_width% - 140 / %scale_factor%",
+            "y": "%screen_height% - 244 / %scale_factor%",
+            "width": "100 / %scale_factor%",
+            "height": "100 / %scale_factor%"
+        },
+        "website": {
+            "layer": "FOREGROUND",
+            "x": "%screen_width% - 140 / %scale_factor%",
+            "y": "%screen_height% - 364 / %scale_factor%",
+            "width": "100 / %scale_factor%",
+            "height": "100 / %scale_factor%"
+        },
+        "play": {
+          "layer": "FOREGROUND",
+          "x": "%screen_width% / 2 - 200 / %scale_factor%",
+          "y": "%screen_height% - 350 / %scale_factor%",
+          "width": "320 / %scale_factor%",
+          "height": "320 / %scale_factor%"
+        },
+        "singleplayer": {
+            "layer": "FOREGROUND",
+            "x": "%screen_width% / 2 - 590 / %scale_factor%",
+            "y": "%screen_height% - 437 / %scale_factor%",
+            "width": "270 / %scale_factor%",
+            "height": "270 / %scale_factor%"
+        },
+        "multiplayer": {
+            "layer": "FOREGROUND",
+            "x": "%screen_width% / 2 - 508 / %scale_factor%",
+            "y": "%screen_height% - 237 / %scale_factor%",
+            "width": "230 / %scale_factor%",
+            "height": "230 / %scale_factor%"
+
+        }
+    }
+  }
+
 }

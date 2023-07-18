@@ -1,8 +1,18 @@
 package me.phoenixra.gtwclient.mainmenu;
 
+import com.google.common.collect.Lists;
 import me.phoenixra.gtwclient.GTWClient;
+import me.phoenixra.gtwclient.api.font.CustomFontRenderer;
+import me.phoenixra.gtwclient.api.font.Fonts;
+import me.phoenixra.gtwclient.api.font.GlyphPage;
+import me.phoenixra.gtwclient.api.gui.GtwGuiMenu;
+import me.phoenixra.gtwclient.api.gui.GuiElementColor;
+import me.phoenixra.gtwclient.api.gui.GuiElementLayer;
+import me.phoenixra.gtwclient.api.gui.impl.GuiElementButton;
+import me.phoenixra.gtwclient.api.gui.impl.GuiElementImage;
+import me.phoenixra.gtwclient.api.gui.impl.GuiElementText;
 import me.phoenixra.gtwclient.proxy.ClientProxy;
-import me.phoenixra.gtwclient.utils.RenderUtils;
+import me.phoenixra.gtwclient.utils.Pair;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
@@ -14,10 +24,9 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
+import java.util.List;
 
-public class CustomMainMenu extends GuiMainMenu {
+public class CustomMainMenu extends GtwGuiMenu {
 
     private static final ResourceLocation BACKGROUND_IMAGE = new ResourceLocation("gtwclient:textures/gui/main_menu/background.png");
     private static final ResourceLocation QUIT_BUTTON_IMAGE = new ResourceLocation("gtwclient:textures/gui/main_menu/quit_button.png");
@@ -27,20 +36,8 @@ public class CustomMainMenu extends GuiMainMenu {
     private static final ResourceLocation PLAY_BUTTON_IMAGE = new ResourceLocation("gtwclient:textures/gui/main_menu/play_button.png");
     private static final ResourceLocation SINGLEPLAYER_BUTTON_IMAGE = new ResourceLocation("gtwclient:textures/gui/main_menu/singleplayer_button.png");
     private static final ResourceLocation MULTIPLAYER_BUTTON_IMAGE = new ResourceLocation("gtwclient:textures/gui/main_menu/multiplayer_button.png");
-    private final int SETTINGS_BUTTON_ID = 0;
-    private final int SINGLEPLAYER_BUTTON_ID = 1;
-    private final int MULTIPLAYER_BUTTON_ID = 2;
-    private final int QUIT_BUTTON_ID = 4;
-
-    private final int PLAY_BUTTON_ID = 100;
-    private final int DISCORD_BUTTON_ID = 101;
-    private final int WEBSITE_BUTTON_ID = 102;
 
     private final int TEXT_COLOR = 10636599;
-
-
-    private final ArrayList<TextAdvanced> textList = new ArrayList<>();
-    private final ArrayList<ImageAdvanced> imageList = new ArrayList<>();
 
     public CustomMainMenu() {
         super();
@@ -51,253 +48,271 @@ public class CustomMainMenu extends GuiMainMenu {
         super.initGui();
         // Remove existing buttons (optional)
         this.buttonList.clear();
-        this.textList.clear();
-
-        this.buttonList.add(
-                ButtonAdvanced.builder(QUIT_BUTTON_ID)
-                        .x((scaleFactor)-> (int)(40 / scaleFactor))
-                        .y((scaleFactor)-> (int)(height - 120 / scaleFactor))
-                        .width((scaleFactor)-> (int)(100 / scaleFactor))
-                        .height((scaleFactor)-> (int)(100 / scaleFactor))
-                        .image(QUIT_BUTTON_IMAGE)
-                        .build()
-        );
-        this.buttonList.add(
-                ButtonAdvanced.builder(SETTINGS_BUTTON_ID)
-                        .x((scaleFactor)-> (int)(width - 140 / scaleFactor))
-                        .y((scaleFactor)-> (int)(height - 124 / scaleFactor))
-                        .width((scaleFactor)-> (int)(100 / scaleFactor))
-                        .height((scaleFactor)-> (int)(100 / scaleFactor))
-                        .image(SETTINGS_BUTTON_IMAGE)
-                        .build()
-        );
-        this.buttonList.add(
-                ButtonAdvanced.builder(DISCORD_BUTTON_ID)
-                        .x((scaleFactor)-> (int)(width - 140 / scaleFactor))
-                        .y((scaleFactor)-> (int)(height - 244 / scaleFactor))
-                        .width((scaleFactor)-> (int)(100 / scaleFactor))
-                        .height((scaleFactor)-> (int)(100 / scaleFactor))
-                        .image(DISCORD_BUTTON_IMAGE)
-                        .build()
-        );
-        this.buttonList.add(
-                ButtonAdvanced.builder(WEBSITE_BUTTON_ID)
-                        .x((scaleFactor)-> (int)(width - 140 / scaleFactor))
-                        .y((scaleFactor)-> (int)(height - 364 / scaleFactor))
-                        .width((scaleFactor)-> (int)(100 / scaleFactor))
-                        .height((scaleFactor)-> (int)(100 / scaleFactor))
-                        .image(WEBSITE_BUTTON_IMAGE)
-                        .build()
-        );
-        this.buttonList.add(
-                ButtonAdvanced.builder(PLAY_BUTTON_ID)
-                        .x((scaleFactor)-> (int)(width/2 - 200 / scaleFactor))
-                        .y((scaleFactor)-> (int)(height - 350 / scaleFactor))
-                        .width((scaleFactor)-> (int)(320 / scaleFactor))
-                        .height((scaleFactor)-> (int)(320 / scaleFactor))
-                        .image(PLAY_BUTTON_IMAGE)
-                        .build()
-        );
-        GuiButton buttonMultiplayer = ButtonAdvanced.builder(MULTIPLAYER_BUTTON_ID)
-                .x((scaleFactor)-> (int)(width/2 - 508 / scaleFactor))
-                .y((scaleFactor)-> (int)(height - 237 / scaleFactor))
-                .width((scaleFactor)-> (int)(230 / scaleFactor))
-                .height((scaleFactor)-> (int)(230 / scaleFactor))
-                .image(MULTIPLAYER_BUTTON_IMAGE)
-                .build();
-        this.buttonList.add(
-                ButtonAdvanced.builder(SINGLEPLAYER_BUTTON_ID)
-                        .x((scaleFactor)-> (int)(width/2 - 590 / scaleFactor))
-                        .y((scaleFactor)-> (int)(height - 437 / scaleFactor))
-                        .width((scaleFactor)-> (int)(270 / scaleFactor))
-                        .height((scaleFactor)-> (int)(270 / scaleFactor))
-                        .image(SINGLEPLAYER_BUTTON_IMAGE)
-                        .buttonUnder(buttonMultiplayer)
-                        .build()
-        );
-        this.buttonList.add(
-                buttonMultiplayer
-        );
+        this.getElements().clear();
+        // ---------buttons---------
+        // QUIT BUTTON
+        GuiElementButton.builder(this)
+                .setImageBinder(() -> mc.getTextureManager().bindTexture(QUIT_BUTTON_IMAGE))
+                .setActionOnClick(() -> {mc.shutdown();})
+                .setLayer("main_menu.buttons.quit.layer",
+                        GuiElementLayer.FOREGROUND
+                )
+                .setX("main_menu.buttons.quit.x")
+                .setY("main_menu.buttons.quit.y")
+                .setWidth("main_menu.buttons.quit.width")
+                .setHeight("main_menu.buttons.quit.height")
+                .build().register();
+        // SETTINGS BUTTON
+        GuiElementButton.builder(this)
+                .setImageBinder(() -> mc.getTextureManager().bindTexture(SETTINGS_BUTTON_IMAGE))
+                .setActionOnClick(() -> {
+                    mc.displayGuiScreen(new GuiOptions(this, mc.gameSettings));
+                })
+                .setLayer("main_menu.buttons.settings.layer",
+                        GuiElementLayer.FOREGROUND
+                )
+                .setX("main_menu.buttons.settings.x")
+                .setY("main_menu.buttons.settings.y")
+                .setWidth("main_menu.buttons.settings.width")
+                .setHeight("main_menu.buttons.settings.height")
+                .build().register();
+        // DISCORD BUTTON
+        GuiElementButton.builder(this)
+                .setImageBinder(() -> mc.getTextureManager().bindTexture(DISCORD_BUTTON_IMAGE))
+                .setActionOnClick(() -> {
+                    try {
+                        Desktop.getDesktop().browse(new URI(GTWClient.settings.getDiscordLink()));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .setLayer("main_menu.buttons.discord.layer",
+                        GuiElementLayer.FOREGROUND
+                )
+                .setX("main_menu.buttons.discord.x")
+                .setY("main_menu.buttons.discord.y")
+                .setWidth("main_menu.buttons.discord.width")
+                .setHeight("main_menu.buttons.discord.height")
+                .build().register();
+        // WEBSITE BUTTON
+        GuiElementButton.builder(this)
+                .setImageBinder(() -> mc.getTextureManager().bindTexture(WEBSITE_BUTTON_IMAGE))
+                .setActionOnClick(() -> {
+                    try {
+                        Desktop.getDesktop().browse(new URI(GTWClient.settings.getWebsiteLink()));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .setLayer(
+                        "main_menu.buttons.website.layer",
+                        GuiElementLayer.FOREGROUND
+                )
+                .setX("main_menu.buttons.website.x")
+                .setY("main_menu.buttons.website.y")
+                .setWidth("main_menu.buttons.website.width")
+                .setHeight("main_menu.buttons.website.height")
+                .build().register();
+        // PLAY BUTTON
+        GuiElementButton.builder(this)
+                .setImageBinder(() -> mc.getTextureManager().bindTexture(PLAY_BUTTON_IMAGE))
+                .setActionOnClick(() -> {
+                    FMLClientHandler.instance().connectToServerAtStartup(
+                            GTWClient.settings.getServerHost(),
+                            GTWClient.settings.getServerPort()
+                    );
+                })
+                .setLayer("main_menu.buttons.play.layer",
+                        GuiElementLayer.FOREGROUND
+                )
+                .setX("main_menu.buttons.play.x")
+                .setY("main_menu.buttons.play.y")
+                .setWidth("main_menu.buttons.play.width")
+                .setHeight("main_menu.buttons.play.height")
+                .build().register();
+        // SINGLEPLAYER BUTTON
+        GuiElementButton.builder(this)
+                .setImageBinder(() -> mc.getTextureManager().bindTexture(SINGLEPLAYER_BUTTON_IMAGE))
+                .setActionOnClick(() -> {
+                    this.mc.displayGuiScreen(new GuiWorldSelection(this));
+                })
+                .setLayer("main_menu.buttons.singleplayer.layer",
+                        GuiElementLayer.FOREGROUND
+                )
+                .setX("main_menu.buttons.singleplayer.x")
+                .setY("main_menu.buttons.singleplayer.y")
+                .setWidth("main_menu.buttons.singleplayer.width")
+                .setHeight("main_menu.buttons.singleplayer.height")
+                .build().register();
+        // MULTIPLAYER BUTTON
+        GuiElementButton.builder(this)
+                .setImageBinder(() -> mc.getTextureManager().bindTexture(MULTIPLAYER_BUTTON_IMAGE))
+                .setActionOnClick(() -> {
+                    this.mc.displayGuiScreen(new GuiMultiplayer(this));
+                })
+                .setLayer("main_menu.buttons.multiplayer.layer",
+                        GuiElementLayer.FOREGROUND
+                )
+                .setX("main_menu.buttons.multiplayer.x")
+                .setY("main_menu.buttons.multiplayer.y")
+                .setWidth("main_menu.buttons.multiplayer.width")
+                .setHeight("main_menu.buttons.multiplayer.height")
+                .build().register();
 
         //------texts------
-        FontRenderer fontRenderer = mc.fontRenderer;
+        GlyphPage glyphPage = Fonts.registerFont(
+                "main_menu",
+                GTWClient.class.getResourceAsStream("/assets/gtwclient/fonts/main_menu.ttf")
+        );
+        CustomFontRenderer fontRenderer = new CustomFontRenderer(
+                glyphPage,
+                glyphPage,
+                glyphPage,
+                glyphPage
+        );
 
         //player name
-        this.textList.add(
-                new TextAdvanced(
-                        ()-> mc.getSession().getUsername(),
-                        TEXT_COLOR,
-                        (scaleFactor)-> (int)(270 / (scaleFactor)),
-                        (scaleFactor)-> (int)(80 / (scaleFactor)),
-                        (scaleFactor)-> 2.7F / scaleFactor,
-                        (scaleFactor)-> 2.7F / scaleFactor
+        GuiElementText.builder(this)
+                .setFontRenderer(fontRenderer)
+                .setText(() -> mc.getSession().getUsername())
+                .setColor("main_menu.texts.player_name.color")
+                .setLayer("main_menu.texts.player_name.layer",
+                        GuiElementLayer.MIDDLE
                 )
-        );
-
-
+                .setX("main_menu.texts.player_name.x")
+                .setY("main_menu.texts.player_name.y")
+                .setWidth("main_menu.texts.player_name.width")
+                .setHeight("main_menu.texts.player_name.height")
+                .build().register();
         //rank
-        this.textList.add(
-                new TextAdvanced(
-                        ()-> ClientProxy.playerData.getRank(),
-                        TEXT_COLOR,
-                        (scaleFactor)-> (int)(210 / (scaleFactor)),
-                        (scaleFactor)-> (int)(135 / (scaleFactor)),
-                        (scaleFactor)-> 2.7F / scaleFactor,
-                        (scaleFactor)-> 2.7F / scaleFactor
+        GuiElementText.builder(this)
+                .setFontRenderer(fontRenderer)
+                .setText(() -> ClientProxy.playerData.getRank())
+                .setColor("main_menu.texts.rank.color")
+                .setLayer("main_menu.texts.rank.layer",
+                        GuiElementLayer.MIDDLE
                 )
-        );
+                .setX("main_menu.texts.rank.x")
+                .setY("main_menu.texts.rank.y")
+                .setWidth("main_menu.texts.rank.width")
+                .setHeight("main_menu.texts.rank.height")
+                .build().register();
         //gang name
-        this.textList.add(
-                new TextAdvanced(
-                        ()->ClientProxy.playerData.getGang(),
-                        TEXT_COLOR,
-                        (scaleFactor)-> (int)(210 / (scaleFactor)),
-                        (scaleFactor)-> (int)(180 / (scaleFactor)),
-                        (scaleFactor)-> 2.7F / scaleFactor,
-                        (scaleFactor)-> 2.7F / scaleFactor
+        GuiElementText.builder(this)
+                .setFontRenderer(fontRenderer)
+                .setText(() -> ClientProxy.playerData.getGang())
+                .setColor("main_menu.texts.gang_name.color")
+                .setLayer("main_menu.texts.gang_name.layer",
+                        GuiElementLayer.MIDDLE
                 )
-        );
+                .setX("main_menu.texts.gang_name.x")
+                .setY("main_menu.texts.gang_name.y")
+                .setWidth("main_menu.texts.gang_name.width")
+                .setHeight("main_menu.texts.gang_name.height")
+                .build().register();
         //level
-        this.textList.add(
-                new TextAdvanced(
-                        ()-> String.valueOf(ClientProxy.playerData.getLevel()),
-                        TEXT_COLOR,
-                        (scaleFactor)-> (int)(225 / (scaleFactor)),
-                        (scaleFactor)-> (int)(219 / (scaleFactor)),
-                        (scaleFactor)-> 2.7F / scaleFactor,
-                        (scaleFactor)-> 2.7F / scaleFactor
+        GuiElementText.builder(this)
+                .setFontRenderer(fontRenderer)
+                .setText(() -> String.valueOf(ClientProxy.playerData.getLevel()))
+                .setColor("main_menu.texts.level.color")
+                .setLayer("main_menu.texts.level.layer",
+                        GuiElementLayer.MIDDLE
                 )
-        );
+                .setX("main_menu.texts.level.x")
+                .setY("main_menu.texts.level.y")
+                .setWidth("main_menu.texts.level.width")
+                .setHeight("main_menu.texts.level.height")
+                .build().register();
         //money
-        this.textList.add(
-                new TextAdvanced(
-                        ()->"$ "+ClientProxy.playerData.getMoney(),
-                        TEXT_COLOR,
-                        (scaleFactor)-> (int)(245 / (scaleFactor)),
-                        (scaleFactor)-> (int)(267 / (scaleFactor)),
-                        (scaleFactor)-> 2.7F / scaleFactor,
-                        (scaleFactor)-> 2.7F / scaleFactor
+        GuiElementText.builder(this)
+                .setFontRenderer(fontRenderer)
+                .setText(() -> "$ " + ClientProxy.playerData.getMoney())
+                .setColor("main_menu.texts.money.color")
+                .setLayer("main_menu.texts.money.layer",
+                        GuiElementLayer.MIDDLE
                 )
-        );
+                .setX("main_menu.texts.money.x")
+                .setY("main_menu.texts.money.y")
+                .setWidth("main_menu.texts.money.width")
+                .setHeight("main_menu.texts.money.height")
+                .build().register();
         //kills
-        this.textList.add(
-                new TextAdvanced(
-                        ()-> ClientProxy.playerData.getOtherOrDefault("kills","0"),
-                        TEXT_COLOR,
-                        (scaleFactor)-> (int)(215 / (scaleFactor)),
-                        (scaleFactor)-> (int)(307 / (scaleFactor)),
-                        (scaleFactor)-> 2.7F / scaleFactor,
-                        (scaleFactor)-> 2.7F / scaleFactor
+        GuiElementText.builder(this)
+                .setFontRenderer(fontRenderer)
+                .setText(() -> ClientProxy.playerData.getOtherOrDefault("kills", "0"))
+                .setColor("main_menu.texts.kills.color")
+                .setLayer("main_menu.texts.kills.layer",
+                        GuiElementLayer.MIDDLE
                 )
-        );
+                .setX("main_menu.texts.kills.x")
+                .setY("main_menu.texts.kills.y")
+                .setWidth("main_menu.texts.kills.width")
+                .setHeight("main_menu.texts.kills.height")
+                .build().register();
         //deaths
-        this.textList.add(
-                new TextAdvanced(
-                        ()->ClientProxy.playerData.getOtherOrDefault("deaths","0"),
-                        TEXT_COLOR,
-                        (scaleFactor)-> (int)(245 / (scaleFactor)),
-                        (scaleFactor)-> (int)(350 / (scaleFactor)),
-                        (scaleFactor)-> 2.7F / scaleFactor,
-                        (scaleFactor)-> 2.7F / scaleFactor
+        GuiElementText.builder(this)
+                .setFontRenderer(fontRenderer)
+                .setText(() -> ClientProxy.playerData.getOtherOrDefault("deaths", "0"))
+                .setColor("main_menu.texts.deaths.color")
+                .setLayer("main_menu.texts.deaths.layer",
+                        GuiElementLayer.MIDDLE
                 )
-        );
+
+                .setX("main_menu.texts.deaths.x")
+                .setY("main_menu.texts.deaths.y")
+                .setWidth("main_menu.texts.deaths.width")
+                .setHeight("main_menu.texts.deaths.height")
+                .build().register();
 
 
         //----images----
-        imageList.add(new ImageAdvanced(
-                (scaleFactor)-> (int)(414 / (scaleFactor)),
-                (scaleFactor)-> (int)(193 / (scaleFactor)),
-                (scaleFactor)-> 4.0f / scaleFactor,
-                (scaleFactor)-> 3.55f / scaleFactor,
-                 ClientProxy::bindPlayerSkinTexture,
-                32,
-                32,
-                32,
-                32
-        ));
+
+        //background
+        GuiElementImage.builder(this)
+                .setLayer(GuiElementLayer.BACKGROUND)
+                .setImageBinder(() -> mc.getTextureManager().bindTexture(BACKGROUND_IMAGE))
+                .setX((scaleFactor) -> 0)
+                .setY((scaleFactor) -> 0)
+                .setWidth((scaleFactor) -> width)
+                .setHeight((scaleFactor) -> height)
+                .build()
+                .register();
+
+        //player head
+        GuiElementImage.builder(this)
+                .setImageBinder(ClientProxy::bindPlayerSkinTexture)
+                .setTextureX(32)
+                .setTextureY(32)
+                .setTextureWidth(32)
+                .setTextureHeight(32)
+                .setLayer("main_menu.player_head.layer",
+                        GuiElementLayer.MIDDLE
+                )
+                .setX("main_menu.player_head")
+                .setY("main_menu.player_head")
+                .setWidth("main_menu.player_head")
+                .setHeight("main_menu.player_head")
+                .build().register();
 
 
-
-    }
-
-
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-
-        this.mc.getTextureManager().bindTexture(BACKGROUND_IMAGE);
-        RenderUtils.drawCompleteImage(0,0,this.width,this.height, -1);
-
-        for(GuiButton button : buttonList){
-            button.drawButton(this.mc, mouseX, mouseY, partialTicks);
-        }
-        for(TextAdvanced text : textList){
-            text.drawText(this.mc);
-        }
-        for(ImageAdvanced image : imageList){
-            image.drawImage(this);
-        }
     }
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
-        if (button.id == SETTINGS_BUTTON_ID)
-        {
-            this.mc.displayGuiScreen(new GuiOptions(this, this.mc.gameSettings));
-        }
-        if (button.id == SINGLEPLAYER_BUTTON_ID)
-        {
-            this.mc.displayGuiScreen(new GuiWorldSelection(this));
-        }
-
-        if (button.id == MULTIPLAYER_BUTTON_ID)
-        {
-            this.mc.displayGuiScreen(new GuiMultiplayer(this));
-        }
-
-        if (button.id == QUIT_BUTTON_ID)
-        {
-            this.mc.shutdown();
-        }
-
-        if (button.id == 5)
-        {
+        if (button.id == 5) {
             this.mc.displayGuiScreen(new GuiLanguage(this, this.mc.gameSettings, this.mc.getLanguageManager()));
         }
 
-        if (button.id == 11)
-        {
+        if (button.id == 11) {
             this.mc.launchIntegratedServer("Demo_World", "Demo_World", WorldServerDemo.DEMO_WORLD_SETTINGS);
         }
 
-        if (button.id == 12)
-        {
+        if (button.id == 12) {
             ISaveFormat isaveformat = this.mc.getSaveLoader();
             WorldInfo worldinfo = isaveformat.getWorldInfo("Demo_World");
 
-            if (worldinfo != null)
-            {
+            if (worldinfo != null) {
                 this.mc.displayGuiScreen(new GuiYesNo(this, I18n.format("selectWorld.deleteQuestion"), "'" + worldinfo.getWorldName() + "' " + I18n.format("selectWorld.deleteWarning"), I18n.format("selectWorld.deleteButton"), I18n.format("gui.cancel"), 12));
-            }
-        }
-
-        if(button.id == PLAY_BUTTON_ID) {
-            FMLClientHandler.instance().connectToServerAtStartup(
-                    GTWClient.settings.getServerHost(),
-                    GTWClient.settings.getServerPort()
-            );
-        }
-        if(button.id == DISCORD_BUTTON_ID) {
-            try {
-                Desktop.getDesktop().browse(new URI(GTWClient.settings.getDiscordLink()));
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        if(button.id == WEBSITE_BUTTON_ID) {
-            try {
-                Desktop.getDesktop().browse(new URI(GTWClient.settings.getWebsiteLink()));
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
             }
         }
     }

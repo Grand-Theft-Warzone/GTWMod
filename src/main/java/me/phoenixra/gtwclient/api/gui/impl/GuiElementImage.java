@@ -8,16 +8,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 
 
-public class GuiElementImage implements GuiElement {
-    @Getter
-    private final GtwGuiMenu guiMenu;
-    @Getter
-    private final GuiElementLayer layer;
-    private final PositionFunction functionX;
-    private final PositionFunction functionY;
-
-    private final PositionFunction functionWidth;
-    private final PositionFunction functionHeight;
+public class GuiElementImage extends BaseGuiElement {
 
     private final Runnable imageBinder;
     private final GuiElementColor color;
@@ -27,10 +18,6 @@ public class GuiElementImage implements GuiElement {
     private final int textureHeight;
 
 
-    private int savedX;
-    private int savedY;
-    private int savedWidth;
-    private int savedHeight;
     public GuiElementImage(GtwGuiMenu guiMenu,
                            GuiElementLayer layer,
                            PositionFunction  functionX,
@@ -43,12 +30,7 @@ public class GuiElementImage implements GuiElement {
                            int textureY,
                            int textureWidth,
                            int textureHeight) {
-        this.guiMenu = guiMenu;
-        this.layer = layer;
-        this.functionX = functionX;
-        this.functionY = functionY;
-        this.functionWidth = functionWidth;
-        this.functionHeight = functionHeight;
+        super(guiMenu, layer, functionX, functionY, functionWidth, functionHeight);
         this.imageBinder = imageBinder;
         this.textureX = textureX;
         this.textureY = textureY;
@@ -57,21 +39,15 @@ public class GuiElementImage implements GuiElement {
         this.color = color;
     }
     @Override
-    public void draw(int scaleFactor, float windowRationX, float windowRationY) {
+    public void handleDraw(int scaleFactor, float windowRationX, float windowRationY) {
         GL11.glPushMatrix();
-        GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue());
+        color.useColor();
         imageBinder.run();
-        float finalScaleFactorX = windowRationX / scaleFactor;
-        float finalScaleFactorY = windowRationX / scaleFactor;
-        savedX = functionX.getValue(finalScaleFactorX);
-        savedY = functionY.getValue(finalScaleFactorY);
-        savedWidth = functionWidth.getValue(finalScaleFactorX);
-        savedHeight = functionHeight.getValue(finalScaleFactorY);
         RenderUtils.drawPartialImage(
-                savedX,
-                savedY,
-                savedWidth,
-                savedHeight,
+                getX(),
+                getY(),
+                getWidth(),
+                getHeight(),
                 textureX,
                 textureY,
                 textureWidth,
@@ -79,32 +55,13 @@ public class GuiElementImage implements GuiElement {
         );
         GL11.glPopMatrix();
     }
-
-    @Override
-    public int getX() {
-        return savedX;
-    }
-
-    @Override
-    public int getY() {
-        return savedY;
-    }
-
-    @Override
-    public int getWidth() {
-        return savedWidth;
-    }
-
-    @Override
-    public int getHeight() {
-        return savedHeight;
-    }
     public static Builder builder(GtwGuiMenu guiMenu) {
         return new Builder(guiMenu);
     }
     public static class Builder implements GuiElementBuilder {
+        @Getter
         private GtwGuiMenu guiMenu;
-        private GuiElementLayer layer = GuiElementLayer.MEDIUM;
+        private GuiElementLayer layer = GuiElementLayer.MIDDLE;
         private PositionFunction functionX;
         private PositionFunction functionY;
         private PositionFunction functionWidth;
@@ -119,53 +76,53 @@ public class GuiElementImage implements GuiElement {
             this.guiMenu = guiMenu;
         }
         @Override
-        public GuiElementBuilder setX(PositionFunction functionX) {
+        public Builder setX(PositionFunction functionX) {
             this.functionX = functionX;
             return this;
         }
         @Override
-        public GuiElementBuilder setY(PositionFunction functionY) {
+        public Builder setY(PositionFunction functionY) {
             this.functionY = functionY;
             return this;
         }
         @Override
-        public GuiElementBuilder setWidth(PositionFunction functionWidth) {
+        public Builder setWidth(PositionFunction functionWidth) {
             this.functionWidth = functionWidth;
             return this;
         }
         @Override
-        public GuiElementBuilder setHeight(PositionFunction functionHeight) {
+        public Builder setHeight(PositionFunction functionHeight) {
             this.functionHeight = functionHeight;
             return this;
         }
 
         @Override
-        public GuiElementBuilder setLayer(GuiElementLayer layer) {
+        public Builder setLayer(GuiElementLayer layer) {
             this.layer = layer;
             return this;
         }
 
-        public GuiElementBuilder setColor(GuiElementColor color) {
+        public Builder setColor(GuiElementColor color) {
             this.color = color;
             return this;
         }
-        public GuiElementBuilder setTextureX(int textureX) {
+        public Builder setTextureX(int textureX) {
             this.textureX = textureX;
             return this;
         }
-        public GuiElementBuilder setTextureY(int textureY) {
+        public Builder setTextureY(int textureY) {
             this.textureY = textureY;
             return this;
         }
-        public GuiElementBuilder setTextureWidth(int textureWidth) {
+        public Builder setTextureWidth(int textureWidth) {
             this.textureWidth = textureWidth;
             return this;
         }
-        public GuiElementBuilder setTextureHeight(int textureHeight) {
+        public Builder setTextureHeight(int textureHeight) {
             this.textureHeight = textureHeight;
             return this;
         }
-        public GuiElementBuilder setImageBinder(Runnable imageBinder) {
+        public Builder setImageBinder(Runnable imageBinder) {
             this.imageBinder = imageBinder;
             return this;
         }

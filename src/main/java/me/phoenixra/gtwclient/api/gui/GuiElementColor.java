@@ -2,6 +2,7 @@ package me.phoenixra.gtwclient.api.gui;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.minecraft.client.renderer.GlStateManager;
 
 @AllArgsConstructor
 public class GuiElementColor {
@@ -31,6 +32,14 @@ public class GuiElementColor {
 
     public int toInt() {
         return ((int) (red * 255) << 16) | ((int) (green * 255) << 8) | (int) (blue * 255);
+    }
+    public void useColor(){
+        GlStateManager.color(red, green, blue);
+    }
+
+    //from string hex
+    public static GuiElementColor fromHex(String hex) {
+        return from(Integer.parseInt(hex, 16));
     }
 
     public static GuiElementColor from(float red, float green, float blue) {

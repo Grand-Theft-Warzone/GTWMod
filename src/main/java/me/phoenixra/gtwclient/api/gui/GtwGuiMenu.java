@@ -1,22 +1,25 @@
 package me.phoenixra.gtwclient.api.gui;
 
+import lombok.Getter;
 import me.phoenixra.gtwclient.api.gui.impl.GuiElementButton;
 import me.phoenixra.gtwclient.utils.Pair;
 import me.phoenixra.gtwclient.utils.RenderUtils;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.gui.GuiScreen;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class GtwGuiMenu extends GuiMainMenu {
-
+public class GtwGuiMenu extends GuiScreen {
+    @Getter
     private HashMap<GuiElementLayer, List<GuiElement>> elements = new HashMap<>();
+
+    @Getter
+    private int savedScaleFactor;
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        int scaleFactor = RenderUtils.getScaleFactor();
+        savedScaleFactor = RenderUtils.getScaleFactor();
         float windowRationWidth = (float) RenderUtils.getWindowRatioWidth();
         float windowRationY = (float) RenderUtils.getWindowRatioHeight();
 
@@ -26,7 +29,7 @@ public class GtwGuiMenu extends GuiMainMenu {
                 continue;
             }
             for (GuiElement element : list) {
-                element.draw(scaleFactor, windowRationWidth, windowRationY);
+                element.draw(savedScaleFactor, windowRationWidth, windowRationY);
             }
         }
         for(GuiButton button : buttonList){
@@ -34,10 +37,6 @@ public class GtwGuiMenu extends GuiMainMenu {
         }
     }
 
-    @Override
-    protected final void actionPerformed(GuiButton button) throws IOException {
-       //empty
-    }
 
     public void addElement(GuiElementLayer layer, GuiElement element) {
         if (elements.containsKey(layer)) {

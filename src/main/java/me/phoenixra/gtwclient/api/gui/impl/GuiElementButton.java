@@ -3,8 +3,10 @@ package me.phoenixra.gtwclient.api.gui.impl;
 import lombok.Getter;
 import me.phoenixra.gtwclient.api.gui.GuiElement;
 import me.phoenixra.gtwclient.api.gui.GtwGuiMenu;
+import me.phoenixra.gtwclient.api.gui.GuiElementBuilder;
 import me.phoenixra.gtwclient.api.gui.GuiElementLayer;
 import me.phoenixra.gtwclient.api.gui.functions.PositionFunction;
+import me.phoenixra.gtwclient.utils.Pair;
 import me.phoenixra.gtwclient.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -32,6 +34,11 @@ public class GuiElementButton extends GuiButton implements GuiElement {
     private float savedWindowRationX;
     private float savedWindowRationY;
 
+    private Pair<Float, Integer> savedX;
+    private Pair<Float, Integer> savedY;
+    private Pair<Float, Integer> savedWidth;
+    private Pair<Float, Integer> savedHeight;
+
     private final Runnable actionOnClick;
     public GuiElementButton(GtwGuiMenu guiMenu,
                             GuiElementLayer layer,
@@ -50,6 +57,7 @@ public class GuiElementButton extends GuiButton implements GuiElement {
                 ""
         );
         this.guiMenu = guiMenu;
+        this.layer = layer;
         this.imageBinder = imageBinder;
         this.actionOnClick = actionOnClick;
         this.functionX = functionX;
@@ -79,14 +87,9 @@ public class GuiElementButton extends GuiButton implements GuiElement {
     public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         if (this.visible)
         {
+            updateX(savedWindowRationX/savedScaleFactor);
+            updateY(savedWindowRationY/savedScaleFactor);
             GL11.glPushMatrix();
-            float scaleFactorX = savedScaleFactor/savedWindowRationX;
-            float scaleFactorY = savedScaleFactor/savedWindowRationY;
-            x = this.functionX.getValue(scaleFactorX);
-            y = this.functionY.getValue(scaleFactorY);
-            width = this.functionWidth.getValue(scaleFactorX);
-            height = this.functionHeight.getValue(scaleFactorY);
-
             imageBinder.run();
             this.hovered = isHovered(mouseX, mouseY);
             //GL color
@@ -109,6 +112,26 @@ public class GuiElementButton extends GuiButton implements GuiElement {
         savedWindowRationX = windowRationX;
         savedWindowRationY = windowRationY;
     }
+    private void updateX(float scaleFactor){
+        if(savedX == null || savedX.getFirst() != scaleFactor){
+            savedX = new Pair<>(scaleFactor, functionX.getValue(scaleFactor));
+            x = savedX.getSecond();
+        }
+        if(savedWidth == null || savedWidth.getFirst() != scaleFactor){
+            savedWidth = new Pair<>(scaleFactor, functionWidth.getValue(scaleFactor));
+            width = savedWidth.getSecond();
+        }
+    }
+    private void updateY(float scaleFactor){
+        if(savedY == null || savedY.getFirst() != scaleFactor){
+            savedY = new Pair<>(scaleFactor, functionY.getValue(scaleFactor));
+            y = savedY.getSecond();
+        }
+        if(savedHeight == null || savedHeight.getFirst() != scaleFactor){
+            savedHeight = new Pair<>(scaleFactor, functionHeight.getValue(scaleFactor));
+            height = savedHeight.getSecond();
+        }
+    }
 
     @Override
     public int getX() {
@@ -130,10 +153,12 @@ public class GuiElementButton extends GuiButton implements GuiElement {
         return height;
     }
 
+
     public static Builder builder(GtwGuiMenu guiMenu) {
         return new Builder(guiMenu);
     }
-    public static class Builder {
+    public static class Builder implements GuiElementBuilder {
+        @Getter
         private GtwGuiMenu guiMenu;
         private GuiElementLayer layer;
         private PositionFunction functionX;
@@ -149,19 +174,23 @@ public class GuiElementButton extends GuiButton implements GuiElement {
             this.layer = layer;
             return this;
         }
-        public Builder setFunctionX(PositionFunction functionX) {
+        @Override
+        public Builder setX(PositionFunction functionX) {
             this.functionX = functionX;
             return this;
         }
-        public Builder setFunctionY(PositionFunction functionY) {
+        @Override
+        public Builder setY(PositionFunction functionY) {
             this.functionY = functionY;
             return this;
         }
-        public Builder setFunctionWidth(PositionFunction functionWidth) {
+        @Override
+        public Builder setWidth(PositionFunction functionWidth) {
             this.functionWidth = functionWidth;
             return this;
         }
-        public Builder setFunctionHeight(PositionFunction functionHeight) {
+        @Override
+        public Builder setHeight(PositionFunction functionHeight) {
             this.functionHeight = functionHeight;
             return this;
         }
