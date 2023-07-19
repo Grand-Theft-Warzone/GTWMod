@@ -25,7 +25,7 @@ public interface GuiElementBuilder {
                         Lists.newArrayList(
                                 new Pair<>(
                                         "%scale_factor%",
-                                        ()->String.valueOf(getGuiMenu().getSavedScaleFactor())
+                                        ()->String.valueOf(scaleFactor)
                                 ),
                                 new Pair<>(
                                         "%screen_height%",
@@ -40,12 +40,12 @@ public interface GuiElementBuilder {
         );
     }
     default GuiElementBuilder setY(String jsonPath){
-        return setY((f)->
+        return setY((scaleFactor)->
                 (int)(GTWClient.settings.getStringEvaluated(jsonPath,
                         Lists.newArrayList(
                                 new Pair<>(
                                         "%scale_factor%",
-                                        ()->String.valueOf(getGuiMenu().getSavedScaleFactor())
+                                        ()->String.valueOf(scaleFactor)
                                 ),
                                 new Pair<>(
                                         "%screen_height%",
@@ -60,12 +60,12 @@ public interface GuiElementBuilder {
         );
     }
     default GuiElementBuilder setWidth(String jsonPath){
-        return setWidth((f)->
+        return setWidth((scaleFactor)->
                 (int)(GTWClient.settings.getStringEvaluated(jsonPath,
                         Lists.newArrayList(
                                 new Pair<>(
                                         "%scale_factor%",
-                                        ()->String.valueOf(getGuiMenu().getSavedScaleFactor())
+                                        ()->String.valueOf(scaleFactor)
                                 ),
                                 new Pair<>(
                                         "%screen_height%",
@@ -80,12 +80,12 @@ public interface GuiElementBuilder {
         );
     }
     default GuiElementBuilder setHeight(String jsonPath){
-        return setHeight((f)->
+        return setHeight((scaleFactor)->
                 (int)(GTWClient.settings.getStringEvaluated(jsonPath,
                         Lists.newArrayList(
                                 new Pair<>(
                                         "%scale_factor%",
-                                        ()->String.valueOf(getGuiMenu().getSavedScaleFactor())
+                                        ()->String.valueOf(scaleFactor)
                                 ),
                                 new Pair<>(
                                         "%screen_height%",

@@ -40,15 +40,15 @@ public abstract class BaseGuiElement implements GuiElement {
     }
 
     @Override
-    public final void draw(int scaleFactor, float windowRationX, float windowRationY) {
-        updateX(windowRationX / scaleFactor);
-        updateY(windowRationY / scaleFactor);
+    public final void draw(float scaleFactor, float scaleX, float scaleY, int mouseX, int mouseY) {
+        updateX(scaleX);
+        updateY(scaleY);
         GL11.glPushMatrix();
-        handleDraw(scaleFactor, windowRationX, windowRationY);
+        handleDraw(scaleFactor, scaleX, scaleY, mouseX, mouseY);
         GL11.glPopMatrix();
     }
 
-    protected abstract void handleDraw(int scaleFactor, float windowRationX, float windowRationY);
+    protected abstract void handleDraw(float scaleFactor, float scaleX, float scaleY, int mouseX, int mouseY);
     private void updateX(float scaleFactor){
         if(savedX == null || savedX.getFirst() != scaleFactor){
             savedX = new Pair<>(scaleFactor, functionX.getValue(scaleFactor));

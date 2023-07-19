@@ -22,6 +22,11 @@ public class CustomFontRenderer {
      * Current Y coordinate at which to draw the next character.
      */
     private float posY;
+
+    private float width;
+    private float height;
+    private float scaleX = 1;
+    private float scaleY = 1;
     /**
      * Array of RGB triplets defining the 16 standard chat colors followed by 16 darker version of the same colors for
      * drop shadows.
@@ -43,10 +48,6 @@ public class CustomFontRenderer {
      * Used to speify new alpha value for the current color.
      */
     private float alpha;
-    /**
-     * Text color of the currently rendering string.
-     */
-    private int textColor;
 
     /**
      * Set if the "k" style (random) is active in currently rendering string
@@ -142,29 +143,32 @@ public class CustomFontRenderer {
     }
 
 
+    public void setScaleX(float value) {
+        this.scaleX = value;
+    }
+    public void setScaleY(float value) {
+        this.scaleY = value;
+    }
     /**
      * Draws the specified string.
      */
-    public int drawString(String text, float x, float y, float width, float height, int color, boolean dropShadow) {
+    public void drawString(String text, float x, float y, float width, float height, int color, boolean dropShadow) {
         GlStateManager.enableAlpha();
-        this.resetStyles();
-        int i;
-        GL11.glScalef(width/80,height/80,1f);
         if (dropShadow) {
-            i = this.renderString(text, x + 1.0F, y + 1.0F, color, true);
-            i = Math.max(i, this.renderString(text, x, y, color, false));
+            this.renderString(text, x + 1.0F, y + 1.0F,width, height, color, true);
+            this.renderString(text, x, y, width, height, color, false);
         } else {
-            i = this.renderString(text, x, y, color, false);
+            this.renderString(text, x, y, width, height, color, false);
         }
-        return i;
+        return;
     }
 
     /**
      * Render single line string by setting GL color, current (posX,posY), and calling renderStringAtPos()
      */
-    private int renderString(String text, float x, float y, int color, boolean dropShadow) {
+    private void renderString(String text, float x, float y, float width, float height, int color, boolean dropShadow) {
         if (text == null) {
-            return 0;
+            return;
         } else {
 
             if ((color & -67108864) == 0) {
@@ -175,15 +179,17 @@ public class CustomFontRenderer {
                 color = (color & 16579836) >> 2 | color & -16777216;
             }
 
-            this.red = (float) (color >> 16 & 255) / 255.0F;
-            this.blue = (float) (color >> 8 & 255) / 255.0F;
-            this.green = (float) (color & 255) / 255.0F;
-            this.alpha = (float) (color >> 24 & 255) / 255.0F;
-            GlStateManager.color(this.red, this.blue, this.green, this.alpha);
+            this.red = (color >> 16 & 255) / 255.0F;
+            this.green = (color >> 8 & 255) / 255.0F;
+            this.blue = (color & 255) / 255.0F;
+            this.alpha = (color >> 24 & 255) / 255.0F;
+            GlStateManager.color(this.red, this.green, this.blue, this.alpha);
             this.posX = x * 2.0f;
             this.posY = y * 2.0f;
+            this.width = width;
+            this.height = height;
             this.renderStringAtPos(text, dropShadow);
-            return (int) (this.posX / 4.0f);
+            this.resetStyles();
         }
     }
 
@@ -193,23 +199,20 @@ public class CustomFontRenderer {
     private void renderStringAtPos(String text, boolean shadow) {
         GlyphPage glyphPage = getCurrentGlyphPage();
 
-        glPushMatrix();
-
-        glScaled(0.5, 0.5, 0.5);
+        glScaled( scaleX*(width/80),  scaleY*(height/80), 0.5);
 
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         GlStateManager.enableTexture2D();
-
         glyphPage.bindTexture();
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        char[] lowercaseChars = text.toLowerCase().toCharArray();
 
         for (int i = 0; i < text.length(); ++i) {
             char c0 = text.charAt(i);
 
             if (c0 == 167 && i + 1 < text.length()) {
-                int i1 = "0123456789abcdefklmnor".indexOf(text.toLowerCase(Locale.ENGLISH).charAt(i + 1));
+                int i1 = "0123456789abcdefklmnor".indexOf(lowercaseChars[i + 1]);
 
                 if (i1 < 16) {
                     this.randomStyle = false;
@@ -227,7 +230,6 @@ public class CustomFontRenderer {
                     }
 
                     int j1 = this.colorCode[i1];
-                    this.textColor = j1;
 
                     GlStateManager.color((float) (j1 >> 16) / 255.0F, (float) (j1 >> 8 & 255) / 255.0F, (float) (j1 & 255) / 255.0F, this.alpha);
                 } else if (i1 == 16) {
@@ -247,14 +249,12 @@ public class CustomFontRenderer {
                     this.underlineStyle = false;
                     this.italicStyle = false;
 
-                    GlStateManager.color(this.red, this.blue, this.green, this.alpha);
+                    GlStateManager.color(this.red, this.green, this.blue, this.alpha);
                 }
-
+                glyphPage = getCurrentGlyphPage();
+                glyphPage.bindTexture();
                 ++i;
             } else {
-                glyphPage = getCurrentGlyphPage();
-
-                glyphPage.bindTexture();
 
                 float f = glyphPage.drawChar(c0, posX, posY);
 
@@ -262,9 +262,6 @@ public class CustomFontRenderer {
             }
         }
 
-        glyphPage.unbindTexture();
-
-        glPopMatrix();
     }
 
     private void doDraw(float f, GlyphPage glyphPage) {
@@ -273,10 +270,10 @@ public class CustomFontRenderer {
             BufferBuilder buffer = tessellator.getBuffer();
             GlStateManager.disableTexture2D();
             buffer.begin(7, DefaultVertexFormats.POSITION);
-            buffer.pos((double) this.posX, (double) (this.posY + (float) (glyphPage.getMaxFontHeight() / 2)), 0.0D).endVertex();
-            buffer.pos((double) (this.posX + f), (double) (this.posY + (float) (glyphPage.getMaxFontHeight() / 2)), 0.0D).endVertex();
-            buffer.pos((double) (this.posX + f), (double) (this.posY + (float) (glyphPage.getMaxFontHeight() / 2) - 1.0F), 0.0D).endVertex();
-            buffer.pos((double) this.posX, (double) (this.posY + (float) (glyphPage.getMaxFontHeight() / 2) - 1.0F), 0.0D).endVertex();
+            buffer.pos(this.posX, this.posY + (float) (glyphPage.getMaxFontHeight() / 2), 0.0D).endVertex();
+            buffer.pos(this.posX + f, this.posY + (float) (glyphPage.getMaxFontHeight() / 2), 0.0D).endVertex();
+            buffer.pos(this.posX + f, this.posY + (float) (glyphPage.getMaxFontHeight() / 2) - 1.0F, 0.0D).endVertex();
+            buffer.pos(this.posX, this.posY + (float) (glyphPage.getMaxFontHeight() / 2) - 1.0F, 0.0D).endVertex();
             tessellator.draw();
             GlStateManager.enableTexture2D();
         }
@@ -287,10 +284,10 @@ public class CustomFontRenderer {
             GlStateManager.disableTexture2D();
             buffer.begin(7, DefaultVertexFormats.POSITION);
             int l = this.underlineStyle ? -1 : 0;
-            buffer.pos((double) (this.posX + (float) l), (double) (this.posY + (float) glyphPage.getMaxFontHeight()), 0.0D).endVertex();
-            buffer.pos((double) (this.posX + f), (double) (this.posY + (float) glyphPage.getMaxFontHeight()), 0.0D).endVertex();
-            buffer.pos((double) (this.posX + f), (double) (this.posY + (float) glyphPage.getMaxFontHeight() - 1.0F), 0.0D).endVertex();
-            buffer.pos((double) (this.posX + (float) l), (double) (this.posY + (float) glyphPage.getMaxFontHeight() - 1.0F), 0.0D).endVertex();
+            buffer.pos(this.posX + (float) l, this.posY + (float) glyphPage.getMaxFontHeight(), 0.0D).endVertex();
+            buffer.pos(this.posX + f, this.posY + (float) glyphPage.getMaxFontHeight(), 0.0D).endVertex();
+            buffer.pos(this.posX + f, this.posY + (float) glyphPage.getMaxFontHeight() - 1.0F, 0.0D).endVertex();
+            buffer.pos(this.posX + (float) l, this.posY + (float) glyphPage.getMaxFontHeight() - 1.0F, 0.0D).endVertex();
             tessellator.draw();
             GlStateManager.enableTexture2D();
         }

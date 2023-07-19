@@ -9,6 +9,7 @@ import me.phoenixra.gtwclient.api.gui.functions.PositionFunction;
 import me.phoenixra.gtwclient.utils.Pair;
 import me.phoenixra.gtwclient.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
@@ -68,6 +69,9 @@ public class GuiElementButton extends GuiButton implements GuiElement {
     @Override
     public void mouseReleased(int mouseX, int mouseY) {
         pressed = false;
+        if(isMouseOver()) {
+            actionOnClick.run();
+        }
         if(System.currentTimeMillis()-lastClick>500) {
             lastClick = System.currentTimeMillis();
         }
@@ -77,7 +81,6 @@ public class GuiElementButton extends GuiButton implements GuiElement {
     public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
         if(this.visible && isMouseOver()) {
             pressed = true;
-            actionOnClick.run();
             return true;
         }
         return false;
@@ -85,32 +88,27 @@ public class GuiElementButton extends GuiButton implements GuiElement {
 
     @Override
     public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+       //empty
+    }
+
+    @Override
+    public void draw(float scaleFactor, float scaleX, float scaleY, int mouseX, int mouseY) {
         if (this.visible)
         {
-            updateX(savedWindowRationX/savedScaleFactor);
-            updateY(savedWindowRationY/savedScaleFactor);
-            GL11.glPushMatrix();
+            updateX(scaleX);
+            updateY(scaleY);
             imageBinder.run();
             this.hovered = isHovered(mouseX, mouseY);
             //GL color
             if(pressed){
-                GlStateManager.color(1.8F, 1.8F, 1.8F);
-            }
-            else if(hovered) {
+                GlStateManager.color(20F, 20F, 20F);
+            } else if(hovered) {
                 GlStateManager.color(0.9f, 0.9F, 0.9F);
             } else {
                 GlStateManager.color(1.0F, 1.0F, 1.0F);
             }
             RenderUtils.drawCompleteImage(x, y, width, height);
-            GL11.glPopMatrix();
         }
-    }
-
-    @Override
-    public void draw(int scaleFactor, float windowRationX, float windowRationY) {
-        savedScaleFactor = scaleFactor;
-        savedWindowRationX = windowRationX;
-        savedWindowRationY = windowRationY;
     }
     private void updateX(float scaleFactor){
         if(savedX == null || savedX.getFirst() != scaleFactor){

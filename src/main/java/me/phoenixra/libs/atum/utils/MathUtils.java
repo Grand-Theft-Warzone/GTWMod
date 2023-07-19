@@ -1,4 +1,4 @@
-package me.phoenixra.gtwclient.utils;
+package me.phoenixra.libs.atum.utils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;

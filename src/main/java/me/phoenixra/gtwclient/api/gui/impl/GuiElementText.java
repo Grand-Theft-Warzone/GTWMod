@@ -5,6 +5,9 @@ import me.phoenixra.gtwclient.GTWClient;
 import me.phoenixra.gtwclient.api.gui.*;
 import me.phoenixra.gtwclient.api.gui.functions.PositionFunction;
 import me.phoenixra.gtwclient.api.font.CustomFontRenderer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.util.function.Supplier;
@@ -30,8 +33,9 @@ public class GuiElementText extends BaseGuiElement {
     }
 
     @Override
-    public void handleDraw(int scaleFactor, float windowRationX, float windowRationY) {
-        GL11.glPushMatrix();
+    public void handleDraw(float scaleFactor, float scaleX, float scaleY, int mouseX, int mouseY) {
+        fontRenderer.setScaleX(scaleX);
+        fontRenderer.setScaleY(scaleY);
         fontRenderer.drawString(
                 text.get(),
                 getX(),
@@ -41,7 +45,6 @@ public class GuiElementText extends BaseGuiElement {
                 color.toInt(),
                 false
         );
-        GL11.glPopMatrix();
     }
 
     public static Builder builder(GtwGuiMenu guiMenu) {

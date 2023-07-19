@@ -6,6 +6,7 @@ import me.phoenixra.gtwclient.utils.Pair;
 import me.phoenixra.gtwclient.utils.RenderUtils;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,9 +20,10 @@ public class GtwGuiMenu extends GuiScreen {
     private int savedScaleFactor;
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        long time = System.currentTimeMillis();
         savedScaleFactor = RenderUtils.getScaleFactor();
-        float windowRationWidth = (float) RenderUtils.getWindowRatioWidth();
-        float windowRationY = (float) RenderUtils.getWindowRatioHeight();
+        float windowRatioX = (float) (savedScaleFactor / RenderUtils.getWindowRatioWidth() );
+        float windowRatioY = (float) (savedScaleFactor / RenderUtils.getWindowRatioHeight());
 
         for (int layer = 0; layer < GuiElementLayer.values().length; layer++) {
             List<GuiElement> list = elements.get(GuiElementLayer.getLayer(layer));
@@ -29,12 +31,10 @@ public class GtwGuiMenu extends GuiScreen {
                 continue;
             }
             for (GuiElement element : list) {
-                element.draw(savedScaleFactor, windowRationWidth, windowRationY);
+                element.draw(savedScaleFactor, windowRatioX, windowRatioY, mouseX, mouseY);
             }
         }
-        for(GuiButton button : buttonList){
-            button.drawButton(mc, mouseX, mouseY, partialTicks);
-        }
+        System.out.println("Draw time: " + (System.currentTimeMillis() - time));
     }
 
 

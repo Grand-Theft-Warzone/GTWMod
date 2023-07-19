@@ -15,58 +15,58 @@
       "player_name": {
         "layer": "MIDDLE",
         "x": "270 / %scale_factor%",
-        "y": "80 / %scale_factor%",
-        "width": "80 / %scale_factor%",
-        "height": "80 / %scale_factor%",
-        "color": "#A24D37"
+        "y": "120 / %scale_factor%",
+        "width": "20 / %scale_factor%",
+        "height": "20 / %scale_factor%",
+        "color": "#631664"
       },
       "rank": {
         "layer": "MIDDLE",
         "x": "210 / %scale_factor%",
-        "y": "135 / %scale_factor%",
-        "width": "80 / %scale_factor%",
-        "height": "80 / %scale_factor%",
-        "color": "#A24D37"
+        "y": "270 / %scale_factor%",
+        "width": "20 / %scale_factor%",
+        "height": "20 / %scale_factor%",
+        "color": "#631664"
       },
       "gang_name": {
         "layer": "MIDDLE",
         "x": "210 / %scale_factor%",
-        "y": "180 / %scale_factor%",
-        "width": "80 / %scale_factor%",
-        "height": "80 / %scale_factor%",
-        "color": "#A24D37"
+        "y": "360 / %scale_factor%",
+        "width": "20 / %scale_factor%",
+        "height": "20 / %scale_factor%",
+        "color": "#631664"
       },
       "level": {
         "layer": "MIDDLE",
         "x": "225 / %scale_factor%",
-        "y": "219 / %scale_factor%",
-        "width": "80 / %scale_factor%",
-        "height": "80 / %scale_factor%",
-        "color": "#A24D37"
+        "y": "438 / %scale_factor%",
+        "width": "20 / %scale_factor%",
+        "height": "20 / %scale_factor%",
+        "color": "#631664"
       },
       "money": {
         "layer": "MIDDLE",
         "x": "245 / %scale_factor%",
-        "y": "267 / %scale_factor%",
-        "width": "80 / %scale_factor%",
-        "height": "80 / %scale_factor%",
-        "color": "#A24D37"
+        "y": "534 / %scale_factor%",
+        "width": "20 / %scale_factor%",
+        "height": "20 / %scale_factor%",
+        "color": "#631664"
       },
       "kills": {
         "layer": "MIDDLE",
         "x": "215 / %scale_factor%",
-        "y": "307 / %scale_factor%",
-        "width": "80 / %scale_factor%",
-        "height": "80 / %scale_factor%",
-        "color": "#A24D37"
+        "y": "614 / %scale_factor%",
+        "width": "20 / %scale_factor%",
+        "height": "20 / %scale_factor%",
+        "color": "#631664"
       },
       "deaths": {
         "layer": "MIDDLE",
         "x": "245 / %scale_factor%",
-        "y": "350 / %scale_factor%",
-        "width": "80 / %scale_factor%",
-        "height": "80 / %scale_factor%",
-        "color": "#A24D37"
+        "y": "700 / %scale_factor%",
+        "width": "20 / %scale_factor%",
+        "height": "20 / %scale_factor%",
+        "color": "#631664"
       }
     },
     "buttons": {

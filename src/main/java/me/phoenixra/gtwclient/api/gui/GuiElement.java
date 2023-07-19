@@ -2,7 +2,7 @@ package me.phoenixra.gtwclient.api.gui;
 
 public interface GuiElement {
 
-    void draw(int scaleFactor, float windowRationX, float windowRationY);
+    void draw(float scaleFactor, float scaleX, float scaleY, int mouseX, int mouseY);
 
     default boolean isHovered(int mouseX, int mouseY){
         GtwGuiMenu menu = getGuiMenu();

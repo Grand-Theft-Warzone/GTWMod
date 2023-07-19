@@ -39,8 +39,7 @@ public class GuiElementImage extends BaseGuiElement {
         this.color = color;
     }
     @Override
-    public void handleDraw(int scaleFactor, float windowRationX, float windowRationY) {
-        GL11.glPushMatrix();
+    public void handleDraw(float scaleFactor, float scaleX, float scaleY, int mouseX, int mouseY) {
         color.useColor();
         imageBinder.run();
         if(textureHeight==-1){
@@ -62,7 +61,6 @@ public class GuiElementImage extends BaseGuiElement {
                     textureHeight
             );
         }
-        GL11.glPopMatrix();
     }
     public static Builder builder(GtwGuiMenu guiMenu) {
         return new Builder(guiMenu);

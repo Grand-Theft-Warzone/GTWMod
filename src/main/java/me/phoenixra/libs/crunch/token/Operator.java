@@ -1,7 +1,7 @@
 package me.phoenixra.libs.crunch.token;
 
 
-import me.phoenixra.gtwclient.utils.MathUtils;
+import me.phoenixra.libs.atum.utils.MathUtils;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.DoubleBinaryOperator;
