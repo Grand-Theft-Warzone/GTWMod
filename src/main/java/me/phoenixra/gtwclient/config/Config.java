@@ -19,16 +19,13 @@ public class Config {
     private File file;
 
     public Config(@NotNull File file) {
-        if(!file.getName().matches("\\w+\\.json")) throw new IllegalArgumentException("File must be a .json file");
+        if(!file.getName().matches("\\w+\\.json")) throw new IllegalArgumentException("File have to be a .json file");
         this.id = file.getName().split("\\.json")[0];
         this.file = file;
         JsonParser jsonParser = new JsonParser();
         try(JsonReader reader = new JsonReader(new FileReader(file))) {
 
             this.jsonElement = Objects.requireNonNull(jsonParser.parse(reader));
-
-            JsonElement jsonElement = jsonParser.parse(reader);
-            JsonObject jsonObject = jsonElement.getAsJsonObject();
 
         } catch (Exception e) {
             e.printStackTrace();

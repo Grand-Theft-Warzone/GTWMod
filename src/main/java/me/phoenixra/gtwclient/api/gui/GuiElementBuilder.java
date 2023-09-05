@@ -1,9 +1,9 @@
 package me.phoenixra.gtwclient.api.gui;
 
 import com.google.common.collect.Lists;
+import me.phoenixra.atumodcore.api.tuples.Pair;
 import me.phoenixra.gtwclient.GTWClient;
 import me.phoenixra.gtwclient.api.gui.functions.PositionFunction;
-import me.phoenixra.gtwclient.utils.Pair;
 
 
 public interface GuiElementBuilder {

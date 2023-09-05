@@ -24,7 +24,8 @@ public class HudElementFood extends HudElement {
         int staminaMax = 20;
 
         GlStateManager.disableLighting();
-        drawCustomBar(posXLocal,
+        drawCustomBar(
+                posXLocal,
                 posYLocal,
                 80,
                 8,

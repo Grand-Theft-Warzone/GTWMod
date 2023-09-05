@@ -10,14 +10,12 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.spongepowered.mixin'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -48,30 +46,19 @@ minecraft {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
     compileOnly 'javazoom:jlayer:1.0.1'
-
-    implementation('org.spongepowered:mixin:0.8.4') {
-        exclude module: 'guava'
-        exclude module: 'commons-io'
-        exclude module: 'gson'
-    }
+    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
 
     //annotations
     compileOnly 'org.projectlombok:lombok:1.18.24'
     compileOnly 'org.jetbrains:annotations:23.0.0'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.jetbrains:annotations:23.0.0'
-    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
-    testAnnotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
-}
-mixin {
-    add sourceSets.main, "gtwclient-mixin-refmap.json"
 }
 jar {
     manifest {
         attributes "ForceLoadAsMod": "true"
         attributes "FMLCorePluginContainsFMLMod": "true"
-        attributes "FMLCorePlugin": "de.keksuccino.konkrete.core.KonkreteCore"
-        attributes "TweakClass": "org.spongepowered.asm.launch.MixinTweaker"
+        attributes "FMLCorePlugin": "me.phoenixra.gtwclient.fml.FMLCore"
         attributes "TweakOrder": "0"
     }
 }

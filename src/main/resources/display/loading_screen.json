@@ -1,0 +1,47 @@
+{
+  "type": "canvas",
+  "config_version": 3.0,
+  "layer": "MIDDLE",
+  "elements": {
+    "image_main": {
+      "settings": {
+        "image": "gtwclient:textures/loadingscreen/background.png",
+        "color": "#ffffff"
+      },
+      "type": "image",
+      "layer": "BACKGROUND",
+      "posX": 0,
+      "posY": 0,
+      "width": 1920,
+      "height": 1080
+    },
+    "progressBar_main": {
+      "settings": {
+        "color-light": "#000eef",
+        "outlined": true,
+        "color-dark": "#000eef"
+      },
+      "type": "progress_bar",
+      "layer": "FOREGROUND",
+      "posX": 1486,
+      "posY": 1012,
+      "width": 400,
+      "height": 50
+    },
+    "text_main": {
+      "posX": 539,
+      "settings": {
+        "fontSize": 50.0,
+        "text": "HELLO WORLD!",
+        "font": "loading.ttf"
+      },
+      "posY": 55,
+      "width": 806,
+      "type": "text",
+      "layer": "MIDDLE",
+      "height": 116
+    }
+  },
+  "width": 1920.0,
+  "height": 1080.0
+}

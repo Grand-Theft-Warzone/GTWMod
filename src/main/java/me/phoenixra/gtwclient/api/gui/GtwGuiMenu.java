@@ -1,9 +1,9 @@
 package me.phoenixra.gtwclient.api.gui;
 
 import lombok.Getter;
+import me.phoenixra.atumodcore.api.tuples.Pair;
 import me.phoenixra.gtwclient.api.gui.impl.GuiElementButton;
-import me.phoenixra.gtwclient.utils.Pair;
-import me.phoenixra.gtwclient.utils.RenderUtils;
+import me.phoenixra.atumodcore.api.utils.RenderUtils;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.opengl.GL11;

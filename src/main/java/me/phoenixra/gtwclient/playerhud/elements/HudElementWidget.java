@@ -2,7 +2,7 @@ package me.phoenixra.gtwclient.playerhud.elements;
 
 import me.phoenixra.gtwclient.playerhud.HudElement;
 import me.phoenixra.gtwclient.playerhud.HudElementType;
-import me.phoenixra.gtwclient.utils.RenderUtils;
+import me.phoenixra.atumodcore.api.utils.RenderUtils;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;

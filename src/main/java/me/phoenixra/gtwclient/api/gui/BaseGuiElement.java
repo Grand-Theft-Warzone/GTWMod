@@ -1,9 +1,9 @@
 package me.phoenixra.gtwclient.api.gui;
 
 import lombok.Getter;
+import me.phoenixra.atumodcore.api.tuples.Pair;
 import me.phoenixra.gtwclient.api.font.CustomFontRenderer;
 import me.phoenixra.gtwclient.api.gui.functions.PositionFunction;
-import me.phoenixra.gtwclient.utils.Pair;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;

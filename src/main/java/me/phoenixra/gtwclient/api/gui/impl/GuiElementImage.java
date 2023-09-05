@@ -3,7 +3,7 @@ package me.phoenixra.gtwclient.api.gui.impl;
 import lombok.Getter;
 import me.phoenixra.gtwclient.api.gui.*;
 import me.phoenixra.gtwclient.api.gui.functions.PositionFunction;
-import me.phoenixra.gtwclient.utils.RenderUtils;
+import me.phoenixra.atumodcore.api.utils.RenderUtils;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 

@@ -1,13 +1,13 @@
 package me.phoenixra.gtwclient.api.gui.impl;
 
 import lombok.Getter;
+import me.phoenixra.atumodcore.api.tuples.Pair;
 import me.phoenixra.gtwclient.api.gui.GuiElement;
 import me.phoenixra.gtwclient.api.gui.GtwGuiMenu;
 import me.phoenixra.gtwclient.api.gui.GuiElementBuilder;
 import me.phoenixra.gtwclient.api.gui.GuiElementLayer;
 import me.phoenixra.gtwclient.api.gui.functions.PositionFunction;
-import me.phoenixra.gtwclient.utils.Pair;
-import me.phoenixra.gtwclient.utils.RenderUtils;
+import me.phoenixra.atumodcore.api.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;

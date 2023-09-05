@@ -5,21 +5,29 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import lombok.Getter;
+import me.phoenixra.atumodcore.api.AtumMod;
+import me.phoenixra.atumodcore.api.config.ConfigType;
+import me.phoenixra.atumodcore.api.misc.crunch.Crunch;
+import me.phoenixra.atumodcore.api.tuples.Pair;
+import me.phoenixra.atumodcore.api.utils.StringUtils;
 import me.phoenixra.gtwclient.api.gui.GuiElementColor;
+import me.phoenixra.gtwclient.fml.test.MainSplashRenderer;
 import me.phoenixra.gtwclient.proxy.CommonProxy;
+import me.phoenixra.gtwclient.screen.ModLoadingListener;
 import me.phoenixra.gtwclient.sounds.SoundsHandler;
-import me.phoenixra.gtwclient.utils.Pair;
-import me.phoenixra.gtwclient.utils.StringUtils;
-import me.phoenixra.libs.crunch.Crunch;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.InputStream;
@@ -27,16 +35,12 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.function.Supplier;
 
-@Mod(modid = GTWClient.MOD_ID,
-        version = GTWClient.VERSION,
-        name = GTWClient.NAME)
-public class GTWClient {
-    /** The mod ID of this mod */
-    public static final String MOD_ID = "gtwclient";
-    /** The mod name of this mod */
-    public static final String NAME = "Player-HUD";
-    /** The mod version of this mod */
-    public static final String VERSION = "1.0.0";
+@Mod(modid = "gtwclient",
+        version = "1.0.0",
+        name = "GTWClient")
+public class GTWClient extends AtumMod {
+
+    public static final boolean IS_DEV_ENVIRONMENT = false;
 
     public static Settings settings;
 
@@ -52,10 +56,20 @@ public class GTWClient {
     public static CommonProxy proxy;
 
 
+    public GTWClient(){
+        if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+            getApi().createLoadableConfig(this,
+                    "settings",
+                    "",
+                    ConfigType.JSON,
+                    false
+            );
+        }
+    }
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         resourcesFolder = event.getModConfigurationDirectory();
-        settings = new Settings(getClass().getResourceAsStream("/assets/gtwclient/settings.json"));
+        settings = new Settings(getClass().getResourceAsStream("/settings.json"));
         proxy.preInit(event);
         SoundsHandler.registerSounds();
         MinecraftForge.EVENT_BUS.register(this);
@@ -78,6 +92,26 @@ public class GTWClient {
         event.getRegistry().registerAll(SoundsHandler.getAllSounds());
     }
 
+    @Mod.EventHandler
+    public static void construct(FMLConstructionEvent event) {
+        ModLoadingListener.setup();
+        MainSplashRenderer.onReachConstruct();
+    }
+
+    @Override
+    public @NotNull String getName() {
+        return NAME;
+    }
+
+    @Override
+    public @NotNull String getModID() {
+        return MOD_ID;
+    }
+
+    @Override
+    public boolean isDebugEnabled() {
+        return false;
+    }
 
     public static class Settings{
         @Getter
@@ -95,6 +129,7 @@ public class GTWClient {
             JsonParser jsonParser = new JsonParser();
             try(JsonReader reader = new JsonReader(new InputStreamReader(stream))) {
                 JsonElement jsonElement = jsonParser.parse(reader);
+
                 baseObject = jsonElement.getAsJsonObject();
                 String serverAddress = baseObject.getAsJsonPrimitive("serverAddress").getAsString();
 

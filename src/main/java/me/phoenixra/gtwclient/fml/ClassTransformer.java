@@ -6,6 +6,7 @@ import java.util.ListIterator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.Sys;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -45,21 +46,15 @@ public class ClassTransformer implements IClassTransformer, Opcodes {
         if (name.equals("net.minecraftforge.fml.client.SplashProgress")) {
             return transformSplashProgress(basicClass);
         }
-        if (name.equals("net.minecraftforge.fml.client.SplashProgress$Texture")) {
+        else if (name.equals("net.minecraftforge.fml.client.SplashProgress$Texture")) {
             return transformSplashProgress_Texture(basicClass);
         }
-        if (name.startsWith("net.minecraftforge.fml.client.SplashProgress$")) {
+        else if (name.startsWith("net.minecraftforge.fml.client.SplashProgress$") || transformedName.startsWith("net.minecraftforge.fml.client.SplashProgress$")) {
             return transformSplashProgress_3(basicClass);
         }
-        if (name.equals("alexiil.mc.mod.load.render.MainSplashRenderer")) {
+        else if (name.equals("me.phoenixra.gtwclient.fml.test.MainSplashRenderer")) {
 
             return transformMainSplashRenderer(basicClass);
-        }
-        if (name.equals("alexiil.mc.mod.load.render.FontRendererSeparate")) {
-            return transformFontRendererSeparate(basicClass);
-        }
-        if (transformedName.equals(MC_FONT_RENDERER)) {
-            return transformFontRenderer(basicClass);
         }
         return basicClass;
     }
@@ -144,6 +139,7 @@ public class ClassTransformer implements IClassTransformer, Opcodes {
 
         for (MethodNode m : classNode.methods) {
             if (m.name.equals("run")) {
+                System.out.println("YAY Found run method");
 
                 ListIterator<AbstractInsnNode> iter = m.instructions.iterator();
                 boolean found = false;
@@ -167,6 +163,11 @@ public class ClassTransformer implements IClassTransformer, Opcodes {
                 String desc = "Lnet/minecraftforge/fml/client/SplashProgress$Texture;";
 
                 m.instructions.add(new FieldInsnNode(GETSTATIC, owner, name, desc));
+
+                owner = OWNER_MAIN_SPLASH_RENDERER;
+                name = "mojangLogoTex";
+
+                m.instructions.add(new FieldInsnNode(PUTSTATIC, owner, name, desc));
 
                 m.instructions.add(new VarInsnNode(ALOAD, 0));
 

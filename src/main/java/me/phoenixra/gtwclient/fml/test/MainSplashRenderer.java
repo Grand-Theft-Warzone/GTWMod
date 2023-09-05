@@ -7,25 +7,26 @@ import java.util.Iterator;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 
-import me.phoenixra.gtwclient.fml.test.frame.FrameDisplayer;
+import me.phoenixra.gtwclient.fml.test.backed.LoadingScreenRenderer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.ProgressManager;
 import org.lwjgl.LWJGLException;
-import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fml.client.SplashProgress;
-import net.minecraftforge.fml.common.ProgressManager;
 import net.minecraftforge.fml.common.ProgressManager.ProgressBar;
+
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glEnable;
 
 
 public class MainSplashRenderer {
-    private static volatile boolean enableCustom = false;
+    private static LoadingScreenRenderer renderer;
 
-    // These are all written to by the transformed ClsTransformer
     public static ResourceLocation fontLoc;
     public static volatile boolean pause = false;
     public static DummyTexture mojangLogoTex;
@@ -56,9 +57,7 @@ public class MainSplashRenderer {
     private static volatile int blockedState = 0;
     private static volatile boolean inDisplayUpdate = false;
 
-    private static FrameDisplayer displayer;
     static {
-        System.out.println("GTWClient: Loading splash renderer AAAAAAAAAAAAAAA");
         lock = get(SplashProgress.class, "lock", Lock.class);
         mutex = get(SplashProgress.class, "mutex", Semaphore.class);
 
@@ -90,8 +89,7 @@ public class MainSplashRenderer {
         __SPLASH_ANIMATION_COMPAT__RUN = run;
         __SPLASH_ANIMATION_COMPAT__FINISH = finish;
         enableSplashAnimationCompat = stage != null && run != null && finish != null;
-
-        displayer = new FrameDisplayer();
+        renderer = new LoadingScreenRenderer();
     }
 
     public static long getTotalTime() {
@@ -127,7 +125,7 @@ public class MainSplashRenderer {
             try {
                 __SPLASH_ANIMATION_COMPAT__RUN.invoke(null);
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                return;
+                e.printStackTrace();
             }
         }
     }
@@ -137,13 +135,12 @@ public class MainSplashRenderer {
             try {
                 __SPLASH_ANIMATION_COMPAT__FINISH.invoke(null);
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                return;
+                e.printStackTrace();
             }
         }
     }
 
     public static void onReachConstruct() {
-        System.out.println("FFFFFFFFF GTWClient: REACH CONSTRUCT");
         if (!reachedConstruct) {
             mainThread = Thread.currentThread();
             monitorThread = new Thread("CLS Monitor") {
@@ -166,19 +163,12 @@ public class MainSplashRenderer {
             };
             monitorThread.setDaemon(true);
             monitorThread.start();
-            try {
-                enableCustom = ClsManager.load();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             reachedConstruct = true;
         }
     }
 
     // This is called by SplashProgress.finish
     public static void finish() {
-        System.out.println("SplashAnimationCompat: finish() called");
-        displayer.finish();
         finishedLoading = true;
         lock.lock();
         mainThread = null;
@@ -187,16 +177,41 @@ public class MainSplashRenderer {
 
     // This is called instead of SplashProgress$3.run
     public static void run() {
-        System.out.println("FFFFFFFFF SplashAnimationCompat: run() called");
         fontRenderer = get(SplashProgress.class, "fontRenderer", FontRenderer.class);
 
         boolean transitionOutDone = false;
         start = System.currentTimeMillis();
 
         while (!transitionOutDone) {
-            System.out.println("run() loop");
-            //dark
-            GL11.glClearColor(0, 0, 0, 1);
+            GL11.glClearColor(1, 1, 1, 1);
+            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+
+            // matrix setup -- similar as SplashProgress
+            int w = Display.getWidth();
+            int h = Display.getHeight();
+            GL11.glViewport(0, 0, w, h);
+            GL11.glMatrixMode(GL11.GL_PROJECTION);
+            GL11.glLoadIdentity();
+            GL11.glOrtho(0, w, h, 0, -1, 1);
+            GL11.glMatrixMode(GL11.GL_MODELVIEW);
+            GL11.glLoadIdentity();
+            glEnable(GL_TEXTURE_2D);
+
+            diff = System.currentTimeMillis() - start;
+            if (diff < 2500 || !reachedConstruct) {
+
+            } else if (!finishedLoading) {
+                int splashAnimationStage = getSplashAnimationStage();
+                if (splashAnimationStage >= 3) {
+                    renderer.render();
+                } else {
+                    invokeSplashAnimationRun();
+                }
+            } else {
+                transitionOutDone = renderTransitionFrame();
+            }
+          /*  //dark
+            GL11.glClearColor(1, 1, 1, 1);
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
             // matrix setup -- similar as SplashProgress
@@ -211,7 +226,7 @@ public class MainSplashRenderer {
 
             diff = System.currentTimeMillis() - start;
             if (diff < 2500 || !reachedConstruct) {
-                renderMojangFrame();
+
             } else if (!finishedLoading) {
                 int splashAnimationStage = getSplashAnimationStage();
                 if (splashAnimationStage >= 3) {
@@ -221,7 +236,7 @@ public class MainSplashRenderer {
                 }
             } else {
                 transitionOutDone = renderTransitionFrame();
-            }
+            }*/
 
             // GL11.glPushMatrix();
             // GL11.glScalef(4, 4, 1);
@@ -239,13 +254,6 @@ public class MainSplashRenderer {
                 fpsLimit = 24;
             }
 
-            // String text = "" + blockedState / 1000 + " - max " + fpsLimit + "fps";
-            // while (text.length() < 5) {
-            // text = "0" + text;
-            // }
-            // fontRenderer.drawString(text, 0, 30, 0xFF_FF_FF_00);
-            // glDisable(GL_TEXTURE_2D);
-            // glPopMatrix();
 
             mutex.acquireUninterruptibly();
             inDisplayUpdate = true;
@@ -275,7 +283,7 @@ public class MainSplashRenderer {
 
     private static void renderMojangFrame() {
         GL11.glColor4f(1, 1, 1, 1);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        glEnable(GL_TEXTURE_2D);
         mojangLogoTex.bind();
         GL11.glBegin(GL11.GL_QUADS);
         mojangLogoTex.texCoord(0, 0, 0);
@@ -287,78 +295,73 @@ public class MainSplashRenderer {
         mojangLogoTex.texCoord(0, 1, 0);
         GL11.glVertex2f(256, -256);
         GL11.glEnd();
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL_TEXTURE_2D);
     }
 
     private static void renderFrame() {
-        System.out.println("AAAAAAAAAA SplashAnimationCompat: renderFrame() called");
-       /* if (enableCustom) {
-            ClsManager.renderFrame();
-        } else {
-            String status;
-            String subStatus;
-            double progress;
-            try (SingleProgressBarTracker.LockUnlocker u = SingleProgressBarTracker.lockUpdate()) {
-                status = SingleProgressBarTracker.getStatusText();
-                subStatus = SingleProgressBarTracker.getSubStatus();
-                progress = SingleProgressBarTracker.getProgress() / SingleProgressBarTracker.MAX_PROGRESS_D;
-            }
+        String status;
+        String subStatus;
+        double progress;
+        try (SingleProgressBarTracker.LockUnlocker u = SingleProgressBarTracker.lockUpdate()) {
+            status = SingleProgressBarTracker.getStatusText();
+            subStatus = SingleProgressBarTracker.getSubStatus();
+            progress = SingleProgressBarTracker.getProgress() / SingleProgressBarTracker.MAX_PROGRESS_D;
+        }
 
-            // Actual drawing
-            int y = 0;
-            GL11.glColor3d(0, 0, 0);
-            GL11.glPushMatrix();
-            GL11.glScalef(2, 2, 1);
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
+        // Actual drawing
+        int y = 0;
+        GL11.glColor3d(0, 0, 0);
+        GL11.glPushMatrix();
+        GL11.glScalef(2, 2, 1);
+        glEnable(GL_TEXTURE_2D);
 
-            //dark
-            int fontColour = 0xFF_FF_FF_FF;
+        //dark
+        int fontColour = 0xFF_FF_FF_FF;
 
-            String s = ((diff / 100L) / 10.0) + "s";
-            fontRenderer.drawString(s, 0, -10, fontColour);
+        String s = ((diff / 100L) / 10.0) + "s";
+        fontRenderer.drawString(s, 0, -10, fontColour);
 
-            s = status + " - " + subStatus;
-            fontRenderer.drawString(s, -fontRenderer.getStringWidth(s) / 2, -40, fontColour);
-            String bar = getProgress(12, progress);
-            fontRenderer.drawString(bar, -fontRenderer.getStringWidth(bar) / 2, -30, fontColour);
+        s = status + " - " + subStatus;
+        fontRenderer.drawString(s, -fontRenderer.getStringWidth(s) / 2, -40, fontColour);
+        String bar = getProgress(12, progress);
+        fontRenderer.drawString(bar, -fontRenderer.getStringWidth(bar) / 2, -30, fontColour);
 
-            Iterator<ProgressBar> i = ProgressManager.barIterator();
-            while (i.hasNext()) {
-                ProgressBar b = i.next();
+        Iterator<ProgressBar> i = ProgressManager.barIterator();
+        while (i.hasNext()) {
+            ProgressBar b = i.next();
 
-                int startWidth = fontRenderer.getStringWidth(b.getTitle() + " ");
+            int startWidth = fontRenderer.getStringWidth(b.getTitle() + " ");
 
-                fontRenderer.drawString(b.getTitle() + " ", -startWidth, y, fontColour);
-                fontRenderer.drawString("- " + b.getMessage(), 0, y, fontColour);
-                bar = getProgress(b);
-                fontRenderer.drawString(bar, -fontRenderer.getStringWidth(bar) / 2, y + 14, fontColour);
+            fontRenderer.drawString(b.getTitle() + " ", -startWidth, y, fontColour);
+            fontRenderer.drawString("- " + b.getMessage(), 0, y, fontColour);
+            bar = getProgress(b);
+            fontRenderer.drawString(bar, -fontRenderer.getStringWidth(bar) / 2, y + 14, fontColour);
 
-                y += 30;
-            }
+            y += 30;
+        }
 
-            long max = Runtime.getRuntime().maxMemory();
-            long total = Runtime.getRuntime().totalMemory();
-            long free = Runtime.getRuntime().freeMemory();
-            long used = total - free;
+        long max = Runtime.getRuntime().maxMemory();
+        long total = Runtime.getRuntime().totalMemory();
+        long free = Runtime.getRuntime().freeMemory();
+        long used = total - free;
 
-            String[] list = { //
+        String[] list = { //
                 String.format("Mem: % 2d%% %03d/%03dMB", used * 100L / max, bytesToMb(used), bytesToMb(max)), //
                 String.format("Allocated: % 2d%% %03dMB", total * 100L / max, bytesToMb(total)) //
-            };
+        };
 
-            int w = Display.getWidth();
-            int h = Display.getHeight();
+        int w = Display.getWidth();
+        int h = Display.getHeight();
 
-            int x = -w / 4;
-            y = -h / 4;
-            for (String s2 : list) {
-                fontRenderer.drawString(s2, x, y, fontColour);
-                y += 20;
-            }
+        int x = -w / 4;
+        y = -h / 4;
+        for (String s2 : list) {
+            fontRenderer.drawString(s2, x, y, fontColour);
+            y += 20;
+        }
 
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
-            GL11.glPopMatrix();
-        }*/
+        GL11.glDisable(GL_TEXTURE_2D);
+        GL11.glPopMatrix();
     }
 
     private static long bytesToMb(long bytes) {
@@ -366,12 +369,8 @@ public class MainSplashRenderer {
     }
 
     private static boolean renderTransitionFrame() {
-        if (enableCustom) {
-            return ClsManager.renderTransitionFrame();
-        } else {
-            renderFrame();
-            return true;
-        }
+        renderer.render();
+        return true;
     }
 
     private static String getProgress(ProgressBar bar) {
@@ -408,7 +407,7 @@ public class MainSplashRenderer {
         GL11.glClearColor(1, 1, 1, 1);
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
+        glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
     }
 
@@ -418,9 +417,9 @@ public class MainSplashRenderer {
         mc.displayHeight = Display.getHeight();
         mc.resize(mc.displayWidth, mc.displayHeight);
         GL11.glClearColor(1, 1, 1, 1);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        glEnable(GL11.GL_ALPHA_TEST);
         GL11.glAlphaFunc(GL11.GL_GREATER, .1f);
         try {
             Display.getDrawable().releaseContext();
