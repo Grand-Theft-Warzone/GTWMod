@@ -25,6 +25,9 @@ public class PacketHandlerPlayerData implements IMessageHandler<PacketPlayerData
         if(!message.rank.equals("null")) {
             pd.setRank(message.rank);
         }
+        if(!message.gang.equals("null")) {
+            pd.setGang(message.gang);
+        }
         return null;
     }
 }

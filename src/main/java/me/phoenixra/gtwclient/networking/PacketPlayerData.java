@@ -13,7 +13,9 @@ public class PacketPlayerData implements IMessage {
     protected double experienceCap;
     protected double money;
 
-    protected String rank;
+    protected String rank = "null";
+    protected String gang = "null";
+
 
     public PacketPlayerData(){
         this.level=1;
@@ -31,12 +33,26 @@ public class PacketPlayerData implements IMessage {
         this.money = money;
         this.rank = rank;
     }
+    public PacketPlayerData(int level,
+                            double experience,
+                            double experienceCap,
+                            double money,
+                            String rank,
+                            String gang){
+        this.level=level;
+        this.experience=experience;
+        this.experienceCap =experienceCap;
+        this.money = money;
+        this.rank = rank;
+        this.gang = gang;
+    }
     public PacketPlayerData(PlayerData pd){
         this.level=pd.getLevel();
         this.experience=pd.getExperience();
         this.experienceCap =pd.getExperienceCap();
         this.money = pd.getMoney();
         this.rank = pd.getRank();
+        this.gang = pd.getGang();
     }
 
     @Override
@@ -47,6 +63,10 @@ public class PacketPlayerData implements IMessage {
         buf.writeDouble(money);
 
         byte[] bytes = rank.getBytes(StandardCharsets.UTF_8);
+        buf.writeInt(bytes.length);
+        buf.writeBytes(bytes);
+
+        bytes = gang.getBytes(StandardCharsets.UTF_8);
         buf.writeInt(bytes.length);
         buf.writeBytes(bytes);
     }
@@ -62,5 +82,10 @@ public class PacketPlayerData implements IMessage {
         byte[] bytes = new byte[rankSize];
         buf.readBytes(bytes);
         rank = new String(bytes, StandardCharsets.UTF_8);
+
+        int gangSize = buf.readInt();
+        bytes = new byte[gangSize];
+        buf.readBytes(bytes);
+        gang = new String(bytes, StandardCharsets.UTF_8);
     }
 }
