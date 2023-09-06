@@ -6,8 +6,9 @@
     "version": "1.0.0",
     "mcversion": "1.12",
     "authorList": ["PhoenixRa"],
+    "url": "https://github.com/Phoenix-Ra",
     "credits": "PhoenixRa",
-    "logoFile": "",
+    "logoFile": "/gtw_logo.png",
     "screenshots": [],
     "dependencies": []
   }
