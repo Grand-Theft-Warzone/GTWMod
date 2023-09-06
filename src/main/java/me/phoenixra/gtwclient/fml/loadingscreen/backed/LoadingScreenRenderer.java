@@ -30,7 +30,7 @@ public class LoadingScreenRenderer {
         lastTime = System.currentTimeMillis();
 
         elements.add(new SlideshowRenderer(
-                0, 0, 100,
+                0, 0, 70,
                 new ResourceLocation[]{
                         new ResourceLocation("config:textures/loadingscreen/1.jpg"),
                         new ResourceLocation("config:textures/loadingscreen/2.jpg"),
