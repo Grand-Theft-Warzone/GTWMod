@@ -6,11 +6,15 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CircleRenderer  implements ElementRenderer{
 
 
     private final int posX, posY,width,height;
     protected final ResourceLocation[] res;
+    private final List<TextureLoader.PreScannedImageData> preScannedImageData = new ArrayList<>();
     private int currentImage;
     public CircleRenderer(int posX,
                              int posY,
@@ -27,7 +31,9 @@ public class CircleRenderer  implements ElementRenderer{
 
     @Override
     public void preLoad() {
-
+        for(ResourceLocation r : res){
+            preScannedImageData.add(TextureLoader.preScan(r));
+        }
     }
 
     @Override
@@ -47,6 +53,10 @@ public class CircleRenderer  implements ElementRenderer{
         }else{
             currentImage = 0;
         }
-        TextureLoader.bindTexture(renderer.textureManager, res[currentImage]);
+        if(preScannedImageData.get(currentImage) != null){
+            preScannedImageData.get(currentImage).bind(renderer.textureManager);
+        }else {
+            TextureLoader.bindTexture(renderer.textureManager, res[currentImage]);
+        }
     }
 }

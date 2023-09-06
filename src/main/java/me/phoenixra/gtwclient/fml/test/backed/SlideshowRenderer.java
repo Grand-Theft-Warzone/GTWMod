@@ -7,12 +7,16 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SlideshowRenderer implements ElementRenderer{
 
     private final int frameRate;
 
     private final int posX, posY;
     protected final ResourceLocation[] res;
+    private final List<TextureLoader.PreScannedImageData> preScannedImageData = new ArrayList<>();
 
     private int frameCounter = 0;
     private int currentImage;
@@ -34,7 +38,9 @@ public class SlideshowRenderer implements ElementRenderer{
 
     @Override
     public void preLoad() {
-
+        for(ResourceLocation r : res){
+            preScannedImageData.add(TextureLoader.preScan(r));
+        }
     }
 
     @Override
@@ -54,7 +60,11 @@ public class SlideshowRenderer implements ElementRenderer{
                 float f = (float) 1/20;
                 float decr = f*frameCounter;
                 GL11.glColor4f(1-decr, 1-decr, 1-decr, 1);
-                TextureLoader.bindTexture(renderer.textureManager, res[oldImage]);
+                if(preScannedImageData.get(oldImage) != null){
+                    preScannedImageData.get(oldImage).bind(renderer.textureManager);
+                }else {
+                    TextureLoader.bindTexture(renderer.textureManager, res[oldImage]);
+                }
                 return;
             }else if(frameCounter <= 40){
                 float f = (float) 1/20;
@@ -64,7 +74,11 @@ public class SlideshowRenderer implements ElementRenderer{
                 transit = false;
                 frameCounter = 0;
             }
-            TextureLoader.bindTexture(renderer.textureManager, res[currentImage]);
+            if(preScannedImageData.get(currentImage) != null){
+                preScannedImageData.get(currentImage).bind(renderer.textureManager);
+            }else {
+                TextureLoader.bindTexture(renderer.textureManager, res[currentImage]);
+            }
             return;
         }
         if(frameCounter >= frameRate){
@@ -77,6 +91,10 @@ public class SlideshowRenderer implements ElementRenderer{
                 currentImage = 0;
             }
         }
-        TextureLoader.bindTexture(renderer.textureManager, res[currentImage]);
+        if(preScannedImageData.get(currentImage) != null){
+            preScannedImageData.get(currentImage).bind(renderer.textureManager);
+        }else {
+            TextureLoader.bindTexture(renderer.textureManager, res[currentImage]);
+        }
     }
 }
