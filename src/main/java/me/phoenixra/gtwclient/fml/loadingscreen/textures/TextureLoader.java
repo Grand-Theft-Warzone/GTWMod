@@ -1,4 +1,4 @@
-package me.phoenixra.gtwclient.fml.test.textures;
+package me.phoenixra.gtwclient.fml.loadingscreen.textures;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,6 +9,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -16,7 +19,8 @@ import java.util.zip.ZipFile;
 
 import javax.annotation.Nullable;
 
-import me.phoenixra.gtwclient.fml.test.ResourceWrappingInputStream;
+import me.phoenixra.gtwclient.GTWClient;
+import me.phoenixra.gtwclient.fml.loadingscreen.ResourceWrappingInputStream;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.opengl.KHRDebug;
@@ -93,16 +97,31 @@ public final class TextureLoader {
         System.out.println("[debug] Opening resource " + location);
 
         if ("config".equals(location.getResourceDomain())) {
-            File fle = new File("config/customloadingscreen/" + location.getResourcePath());
-            if (fle.exists()) {
-                System.out.println("[debug]   - Found resource file at " + fle);
+            File file = new File("config/GTWClient/" + location.getResourcePath());
+            if (file.exists()) {
+                System.out.println("[debug]   - Found resource file at " + file);
                 try {
-                    return new FileInputStream(fle);
+                    return new FileInputStream(file);
                 } catch (FileNotFoundException fnfe) {
                     System.out.println("[debug]   x Missing file!!");
                 }
             } else {
-                System.out.println("[debug]   x Missing file at " + fle + ", falling back to resources.");
+                try(InputStream inputStream = GTWClient.class.getResourceAsStream(
+                        "/assets/gtwclient/" + location.getResourcePath())) {
+
+                    if(inputStream == null){
+                        System.out.println("STREAM IS NULL");
+                    }else {
+                        System.out.println("STREAM IS GOOOD");
+                        file.getParentFile().mkdirs();
+                        Files.copy(inputStream,
+                                Paths.get(file.toURI()), StandardCopyOption.REPLACE_EXISTING);
+                        return Files.newInputStream(file.toPath());
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                System.out.println("[debug]   x Missing file at " + file + ", falling back to resources.");
 
             }
         }

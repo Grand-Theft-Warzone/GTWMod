@@ -1,4 +1,4 @@
-package me.phoenixra.gtwclient.fml.test;
+package me.phoenixra.gtwclient.fml.loadingscreen;
 
 import java.io.File;
 import java.io.FileInputStream;

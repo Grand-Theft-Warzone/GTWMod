@@ -1,7 +1,7 @@
-package me.phoenixra.gtwclient.fml.test.backed;
+package me.phoenixra.gtwclient.fml.loadingscreen.backed;
 
 import me.phoenixra.atumodcore.api.utils.RenderUtils;
-import me.phoenixra.gtwclient.fml.test.textures.TextureLoader;
+import me.phoenixra.gtwclient.fml.loadingscreen.textures.TextureLoader;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;

@@ -1,4 +1,4 @@
-package me.phoenixra.gtwclient.fml.test;
+package me.phoenixra.gtwclient.fml.loadingscreen;
 
 
 import me.phoenixra.gtwclient.screen.ModLoadingListener;

@@ -1,4 +1,4 @@
-package me.phoenixra.gtwclient.fml.test;
+package me.phoenixra.gtwclient.fml.loadingscreen;
 
 import java.util.ArrayList;
 import java.util.Arrays;

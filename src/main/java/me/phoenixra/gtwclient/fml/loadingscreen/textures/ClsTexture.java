@@ -1,4 +1,4 @@
-package me.phoenixra.gtwclient.fml.test.textures;
+package me.phoenixra.gtwclient.fml.loadingscreen.textures;
 
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;

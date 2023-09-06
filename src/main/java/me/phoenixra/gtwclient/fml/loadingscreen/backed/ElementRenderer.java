@@ -1,4 +1,4 @@
-package me.phoenixra.gtwclient.fml.test.backed;
+package me.phoenixra.gtwclient.fml.loadingscreen.backed;
 
 public interface ElementRenderer {
     void preLoad();

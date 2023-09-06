@@ -1,4 +1,4 @@
-package me.phoenixra.gtwclient.fml.test;
+package me.phoenixra.gtwclient.fml.loadingscreen;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 
-import me.phoenixra.gtwclient.fml.test.backed.LoadingScreenRenderer;
+import me.phoenixra.gtwclient.fml.loadingscreen.backed.LoadingScreenRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ProgressManager;
 import org.lwjgl.LWJGLException;

@@ -1,8 +1,7 @@
-package me.phoenixra.gtwclient.fml.test.backed;
+package me.phoenixra.gtwclient.fml.loadingscreen.backed;
 
-import me.phoenixra.atumodcore.api.misc.AtumColor;
 import me.phoenixra.atumodcore.api.utils.RenderUtils;
-import me.phoenixra.gtwclient.fml.test.textures.TextureLoader;
+import me.phoenixra.gtwclient.fml.loadingscreen.textures.TextureLoader;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -24,7 +23,6 @@ public class SlideshowRenderer implements ElementRenderer{
 
     private boolean transit;
 
-    private boolean postInit;
     public SlideshowRenderer(int posX,
                              int posY,
                              int frameRate,
@@ -90,6 +88,12 @@ public class SlideshowRenderer implements ElementRenderer{
             }else{
                 currentImage = 0;
             }
+            if(preScannedImageData.get(oldImage) != null){
+                preScannedImageData.get(oldImage).bind(renderer.textureManager);
+            }else {
+                TextureLoader.bindTexture(renderer.textureManager, res[oldImage]);
+            }
+            return;
         }
         if(preScannedImageData.get(currentImage) != null){
             preScannedImageData.get(currentImage).bind(renderer.textureManager);

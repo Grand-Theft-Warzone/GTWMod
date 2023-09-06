@@ -6,7 +6,6 @@ import java.util.ListIterator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lwjgl.Sys;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -38,7 +37,7 @@ public class ClassTransformer implements IClassTransformer, Opcodes {
     private static String fontRendererStrikethroughName = "ClsWentWrong_Strikethrough";
 
     static {
-        OWNER_MAIN_SPLASH_RENDERER = "me/phoenixra/gtwclient/fml/test/MainSplashRenderer";
+        OWNER_MAIN_SPLASH_RENDERER = "me/phoenixra/gtwclient/fml/loadingscreen/MainSplashRenderer";
     }
 
     @Override
@@ -52,7 +51,7 @@ public class ClassTransformer implements IClassTransformer, Opcodes {
         else if (name.startsWith("net.minecraftforge.fml.client.SplashProgress$") || transformedName.startsWith("net.minecraftforge.fml.client.SplashProgress$")) {
             return transformSplashProgress_3(basicClass);
         }
-        else if (name.equals("me.phoenixra.gtwclient.fml.test.MainSplashRenderer")) {
+        else if (name.equals("me.phoenixra.gtwclient.fml.loadingscreen.MainSplashRenderer")) {
 
             return transformMainSplashRenderer(basicClass);
         }
