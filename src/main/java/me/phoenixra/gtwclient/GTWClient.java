@@ -1,16 +1,12 @@
 package me.phoenixra.gtwclient;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 import lombok.Getter;
 import me.phoenixra.atumodcore.api.AtumMod;
+import me.phoenixra.atumodcore.api.config.Config;
 import me.phoenixra.atumodcore.api.config.ConfigType;
-import me.phoenixra.atumodcore.api.misc.crunch.Crunch;
-import me.phoenixra.atumodcore.api.tuples.Pair;
-import me.phoenixra.atumodcore.api.utils.StringUtils;
-import me.phoenixra.gtwclient.api.gui.GuiElementColor;
+import me.phoenixra.atumodcore.api.config.category.ConfigCategory;
+import me.phoenixra.atumodcore.api.display.DisplayElement;
+import me.phoenixra.atumodcore.mod.PostLoadingHandler;
 import me.phoenixra.gtwclient.fml.test.MainSplashRenderer;
 import me.phoenixra.gtwclient.proxy.CommonProxy;
 import me.phoenixra.gtwclient.screen.ModLoadingListener;
@@ -30,10 +26,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 @Mod(modid = "gtwclient",
         version = "1.0.0",
@@ -42,7 +36,8 @@ public class GTWClient extends AtumMod {
 
     public static final boolean IS_DEV_ENVIRONMENT = false;
 
-    public static Settings settings;
+    @Getter
+    private Config settings;
 
     @Getter
     public File resourcesFolder;
@@ -58,18 +53,52 @@ public class GTWClient extends AtumMod {
 
     public GTWClient(){
         if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-            getApi().createLoadableConfig(this,
+            settings = getApi().createLoadableConfig(this,
                     "settings",
                     "",
                     ConfigType.JSON,
                     false
             );
+            getConfigManager().addConfigCategory(new ConfigCategory(
+                    this,
+                    ConfigType.JSON,
+                    "display",
+                    "display",
+                    true) {
+                private List<String> elements = new ArrayList<>();
+
+                @Override
+                protected void clear() {
+                    elements.forEach(it->getDisplayElementRegistry().unregister(it));
+                }
+
+                @Override
+                protected void acceptConfig(@NotNull String id, @NotNull Config config) {
+                    getAtumMod().getLogger().info("Loading display element with id " + id);
+                    if(getDisplayElementRegistry().getElementById(id) != null) {
+                        getAtumMod().getLogger().warn("Display element with id " + id + " already added or is a default element!");
+                        return;
+                    }
+
+                    DisplayElement element = getDisplayElementRegistry().compile(config);
+                    if (element != null) {
+                        getDisplayElementRegistry().register(id, element);
+                        elements.add(id);
+                    }
+                }
+            });
+        }
+    }
+    @Mod.EventHandler
+    private void onClientSetup(FMLPostInitializationEvent e) {
+
+        if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+            getConfigManager().reloadAllConfigCategories();
         }
     }
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         resourcesFolder = event.getModConfigurationDirectory();
-        settings = new Settings(getClass().getResourceAsStream("/settings.json"));
         proxy.preInit(event);
         SoundsHandler.registerSounds();
         MinecraftForge.EVENT_BUS.register(this);
@@ -94,79 +123,24 @@ public class GTWClient extends AtumMod {
 
     @Mod.EventHandler
     public static void construct(FMLConstructionEvent event) {
-        ModLoadingListener.setup();
-        MainSplashRenderer.onReachConstruct();
+        if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+            ModLoadingListener.setup();
+            MainSplashRenderer.onReachConstruct();
+        }
     }
 
     @Override
     public @NotNull String getName() {
-        return NAME;
+        return "GTWClient";
     }
 
     @Override
     public @NotNull String getModID() {
-        return MOD_ID;
+        return "gtwclient";
     }
 
     @Override
     public boolean isDebugEnabled() {
         return false;
-    }
-
-    public static class Settings{
-        @Getter
-        private String serverHost;
-        @Getter
-        private int serverPort;
-        @Getter
-        private String discordLink;
-        @Getter
-        private String websiteLink;
-
-        private JsonObject baseObject;
-
-        private Settings(InputStream stream){
-            JsonParser jsonParser = new JsonParser();
-            try(JsonReader reader = new JsonReader(new InputStreamReader(stream))) {
-                JsonElement jsonElement = jsonParser.parse(reader);
-
-                baseObject = jsonElement.getAsJsonObject();
-                String serverAddress = baseObject.getAsJsonPrimitive("serverAddress").getAsString();
-
-                serverHost = serverAddress.split(":")[0];
-                serverPort = Integer.parseInt(serverAddress.split(":")[1]);
-
-                discordLink = baseObject.getAsJsonPrimitive("discordLink").getAsString();
-                websiteLink = baseObject.getAsJsonPrimitive("websiteLink").getAsString();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        public String getStringValue(String key){
-            if(key.contains(".")){
-                String[] keys = key.split("\\.");
-                JsonObject object = baseObject.getAsJsonObject(keys[0]);
-                for(int i = 1; i < keys.length - 1; i++){
-                    object = object.getAsJsonObject(keys[i]);
-                }
-                return object.getAsJsonPrimitive(keys[keys.length - 1]).getAsString();
-            }
-            return baseObject.getAsJsonPrimitive(key).getAsString();
-        }
-        public GuiElementColor getColorValue(String key){
-            String value = getStringValue(key);
-            return GuiElementColor.fromHex(value.replace("#", ""));
-        }
-        public double getStringEvaluated(String key, List<Pair<String, Supplier<String>>> placeholders){
-            String value = getStringValue(key);
-            for(Pair<String, Supplier<String>> replacement : placeholders){
-                value = StringUtils.replaceFast(
-                        value,
-                        replacement.getFirst(),
-                        replacement.getSecond().get()
-                );
-            }
-            return Crunch.compileExpression(value).evaluate();
-        }
     }
 }

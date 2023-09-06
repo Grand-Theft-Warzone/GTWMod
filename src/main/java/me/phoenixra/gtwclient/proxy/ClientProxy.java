@@ -1,5 +1,6 @@
 package me.phoenixra.gtwclient.proxy;
 
+import me.phoenixra.atumodcore.api.placeholders.types.SimplePlaceholder;
 import me.phoenixra.gtwclient.GTWClient;
 import me.phoenixra.gtwclient.playerhud.listeners.RenderOverlay;
 import me.phoenixra.gtwclient.data.PlayerData;
@@ -69,6 +70,29 @@ public class ClientProxy extends CommonProxy{
     @Override
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        new SimplePlaceholder(GTWClient.instance,"player_kills",
+                ()->playerData.getOtherOrDefault("kills","0")
+        ).register();
+        new SimplePlaceholder(GTWClient.instance,"player_deaths",
+                ()->playerData.getOtherOrDefault("deaths","0")
+        ).register();
+        new SimplePlaceholder(GTWClient.instance,"player_name",
+                ()-> Minecraft.getMinecraft().getSession().getUsername()
+        ).register();
+        new SimplePlaceholder(GTWClient.instance,"player_money",
+                ()-> String.valueOf(playerData.getMoney())
+        ).register();
+        new SimplePlaceholder(GTWClient.instance,"player_level",
+                ()-> String.valueOf(playerData.getLevel())
+        ).register();
+        new SimplePlaceholder(GTWClient.instance,"player_rank",
+                ()-> playerData.getRank()
+        ).register();
+        new SimplePlaceholder(GTWClient.instance,"player_gang",
+                ()-> playerData.getGang()
+        ).register();
+
+
         new RenderOverlay();
     }
 

@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static net.minecraft.client.renderer.GlStateManager.*;
 public abstract class BaseGUI extends GuiScreen {
@@ -83,13 +84,13 @@ public abstract class BaseGUI extends GuiScreen {
                 sizeY
         );
 
-        for(BaseGuiText text : textList){
+        for(BaseGuiText text : new ArrayList<>(textList)){
             text.drawText(mc,x,y);
         }
-        for(BaseGuiBar bar : barList){
+        for(BaseGuiBar bar : new ArrayList<>(barList)){
             bar.drawBar(x,y);
         }
-        for(BaseGuiButton button : guiButtonList){
+        for(BaseGuiButton button : new ArrayList<>(guiButtonList)){
             button.guiX = x;
             button.guiY = y;
             if(button.pressed){
