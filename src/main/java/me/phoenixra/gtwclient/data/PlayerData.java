@@ -54,6 +54,7 @@ public class PlayerData {
         this.experienceCap = experienceCap;
         money = 0;
         rank = "";
+        gang = "";
         notificationQueue = new ArrayList<>();
     }
 
@@ -106,6 +107,9 @@ public class PlayerData {
     }
 
 
+    public static PlayerData asEmptyPacket(){
+        return new PlayerData(0,0,0).setMoney(-0.0001).setRank("null").setGang("null");
+    }
     public String toPlainText(){
         StringBuilder sb = new StringBuilder();
         for(String key : other.keySet()){
