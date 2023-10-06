@@ -35,6 +35,7 @@ public class RenderOverlay {
             case FOOD:
             case HEALTH:
             case EXPERIENCE:
+            case ARMOR:
             case POTION_ICONS:
                 event.setCanceled(true);
                 break;
@@ -50,6 +51,7 @@ public class RenderOverlay {
             case FOOD:
             case HEALTH:
             case EXPERIENCE:
+            case ARMOR:
             case POTION_ICONS:
                 event.setCanceled(true);
                 break;
@@ -64,10 +66,12 @@ public class RenderOverlay {
         this.drawElement(HudElementType.WIDGET, partialTicks);
         this.drawElement(HudElementType.HEALTH, partialTicks);
         this.drawElement(HudElementType.FOOD, partialTicks);
+        this.drawElement(HudElementType.ARMOR, partialTicks);
         this.drawElement(HudElementType.EXPERIENCE, partialTicks);
         this.drawElement(HudElementType.LEVEL, partialTicks);
         this.drawElement(HudElementType.MONEY, partialTicks);
         this.drawElement(HudElementType.RANK, partialTicks);
+        this.drawElement(HudElementType.GANG_PREFIX,partialTicks);
         this.drawElement(HudElementType.NOTIFICATION,partialTicks);
     }
 

@@ -1,5 +1,8 @@
 package me.phoenixra.gtwclient.playerhud.elements;
 
+import me.phoenixra.atumodcore.api.display.font.DisplayFont;
+import me.phoenixra.atumodcore.api.misc.AtumColor;
+import me.phoenixra.atumodcore.api.utils.RenderUtils;
 import me.phoenixra.gtwclient.playerhud.Hud;
 import me.phoenixra.gtwclient.playerhud.HudElement;
 import me.phoenixra.gtwclient.playerhud.HudElementType;
@@ -9,7 +12,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 
+import java.awt.*;
+import java.util.HashMap;
+
 public class HudElementNotification extends HudElement {
+    private HashMap<Integer, DisplayFont> fonts = new HashMap<>();
     public HudElementNotification() {
         super(HudElementType.MONEY, 0, 0, 0, 0);
         parent = HudElementType.WIDGET;
@@ -32,24 +39,21 @@ public class HudElementNotification extends HudElement {
                 if(notification==null) return;
             }
         }
-
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(
-                scaledWidth / notification.getSizeX(),
-                scaledHeight / notification.getSizeY(),
-                0
-        );
-        GlStateManager.scale(
-                notification.getSizeX(),
-                notification.getSizeY(),
-                1
-        );
-        mc.fontRenderer.drawStringWithShadow(
+        GlStateManager.disableBlend();
+        int[] coords = RenderUtils.fixCoordinates(notification.getPositionX(),
+                notification.getPositionY());
+        int fontSize = notification.getFontSize();
+        DisplayFont font = fonts.get(fontSize);
+        if(font==null){
+            font = new DisplayFont(new Font("Arial", Font.BOLD, fontSize));
+            fonts.put(fontSize, font);
+        }
+        font.drawString(
                 notification.getText(),
-                notification.getPositionX(),
-                notification.getPositionY(),
-                0xFFFFFF
+                coords[0],
+                coords[1],
+                AtumColor.BLACK
         );
-        GlStateManager.popMatrix();
+        GlStateManager.enableBlend();
     }
 }

@@ -35,7 +35,6 @@ public class ClientProxy extends CommonProxy{
 
     public static PlayerData playerData = new PlayerData();
     private static File dataFile;
-    private static File skinFile;
     private static ISound theme_music;
 
     @Override
@@ -58,10 +57,6 @@ public class ClientProxy extends CommonProxy{
 
         // Define the file path
         dataFile = new File(modDir, "data.txt");
-
-
-        // Define the file path
-        skinFile = new File(modDir, "saved_skin.png");
 
         loadPlayerData();
 

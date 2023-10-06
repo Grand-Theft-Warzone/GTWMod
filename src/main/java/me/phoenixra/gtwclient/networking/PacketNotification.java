@@ -8,11 +8,10 @@ public class PacketNotification implements IMessage {
     protected String text;
     protected long displayTime;
 
-    protected float positionX;
-    protected float positionY;
+    protected int positionX;
+    protected int positionY;
 
-    protected double sizeX;
-    protected double sizeY;
+    protected int fontSize;
 
     protected boolean playSound;
 
@@ -21,34 +20,30 @@ public class PacketNotification implements IMessage {
         this.text = "test";
         positionX = 0;
         positionY = 0;
-        sizeX = 1;
-        sizeY = 1;
+        fontSize = 0;
     }
     public PacketNotification(String text,
                               boolean playSound,
                               long displayTime,
-                              float positionX,
-                              float positionY,
-                              double sizeX,
-                              double sizeY
+                              int positionX,
+                              int positionY,
+                              int fontSize
     ){
         this.text = text;
         this.displayTime = displayTime;
 
         this.positionX = positionX;
         this.positionY = positionY;
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
+        this.fontSize = fontSize;
 
         this.playSound = playSound;
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        buf.writeFloat(positionX);
-        buf.writeFloat(positionY);
-        buf.writeDouble(sizeX);
-        buf.writeDouble(sizeY);
+        buf.writeInt(positionX);
+        buf.writeInt(positionY);
+        buf.writeInt(fontSize);
 
         buf.writeLong(displayTime);
 
@@ -61,10 +56,9 @@ public class PacketNotification implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        positionX = buf.readFloat();
-        positionY = buf.readFloat();
-        sizeX = buf.readDouble();
-        sizeY = buf.readDouble();
+        positionX = buf.readInt();
+        positionY = buf.readInt();
+        fontSize = buf.readInt();
 
         displayTime = buf.readLong();
 

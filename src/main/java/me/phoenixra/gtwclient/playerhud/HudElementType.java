@@ -8,9 +8,11 @@ public enum HudElementType {
     HEALTH,
     FOOD,
     EXPERIENCE,
+    ARMOR,
     WIDGET,
     MONEY,
     RANK,
+    GANG_PREFIX,
     NOTIFICATION,
     LEVEL;
 

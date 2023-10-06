@@ -17,7 +17,7 @@ public class HudElementFood extends HudElement {
                             float partialTicks,
                             int scaledWidth,
                             int scaledHeight) {
-        int posXLocal = scaledWidth - 80;
+        int posXLocal = scaledWidth - 80 - 15;
         int posYLocal = 23;
         EntityPlayerSP player = mc.player;
         int stamina = player.getFoodStats().getFoodLevel();
@@ -27,7 +27,7 @@ public class HudElementFood extends HudElement {
         drawCustomBar(
                 posXLocal,
                 posYLocal,
-                80,
+                95,
                 8,
                 stamina / (double) staminaMax * 100.0D,
                 COLOR_BROWN,

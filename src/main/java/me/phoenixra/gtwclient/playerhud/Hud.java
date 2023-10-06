@@ -33,9 +33,11 @@ public class Hud {
         this.elements.put(HudElementType.WIDGET,new HudElementWidget());
         this.elements.put(HudElementType.HEALTH, new HudElementHealth());
         this.elements.put(HudElementType.FOOD, new HudElementFood());
+        this.elements.put(HudElementType.ARMOR, new HudElementArmor());
         this.elements.put(HudElementType.MONEY, new HudElementMoney());
         this.elements.put(HudElementType.RANK, new HudElementRank());
         this.elements.put(HudElementType.NOTIFICATION,new HudElementNotification());
+        this.elements.put(HudElementType.GANG_PREFIX,new HudElementGangPrefix());
     }
 
 

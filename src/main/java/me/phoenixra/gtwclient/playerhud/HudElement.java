@@ -2,7 +2,13 @@ package me.phoenixra.gtwclient.playerhud;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -402,5 +408,48 @@ public abstract class HudElement {
         mc.fontRenderer.drawString(text, posX, posY - 1, colorBackground);
         mc.fontRenderer.drawString(text, posX, posY, colorMain);
         GlStateManager.enableBlend();
+    }
+
+
+    public void renderItemIntoGUI(ItemStack stack, int x, int y, float xScale, float yScale)
+    {
+        this.renderItemModelIntoGUI(stack, x, y, xScale,yScale, mc.getRenderItem().getItemModelWithOverrides(stack, null, null));
+    }
+    protected void renderItemModelIntoGUI(ItemStack stack, int x, int y, float xScale, float yScale, IBakedModel bakedmodel)
+    {
+        GlStateManager.pushMatrix();
+        mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        mc.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.enableAlpha();
+        GlStateManager.alphaFunc(516, 0.1F);
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        this.setupGuiTransform(x, y, xScale, yScale, bakedmodel.isGui3d());
+        bakedmodel = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(bakedmodel, ItemCameraTransforms.TransformType.GUI, false);
+        mc.getRenderItem().renderItem(stack, bakedmodel);
+        GlStateManager.disableAlpha();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.disableLighting();
+        GlStateManager.popMatrix();
+        mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        mc.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+    }
+    private void setupGuiTransform(int xPosition, int yPosition, float xScale, float yScale, boolean isGui3d)
+    {
+        GlStateManager.translate((float)xPosition, (float)yPosition, 100.0F + mc.getRenderItem().zLevel);
+        GlStateManager.translate(8.0F, 8.0F, 0.0F);
+        GlStateManager.scale(1.0F, -1.0F, 1.0F);
+        GlStateManager.scale(xScale, yScale, 16.0F);
+
+        if (isGui3d)
+        {
+            GlStateManager.enableLighting();
+        }
+        else
+        {
+            GlStateManager.disableLighting();
+        }
     }
 }

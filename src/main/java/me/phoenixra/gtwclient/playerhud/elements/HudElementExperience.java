@@ -17,8 +17,8 @@ public class HudElementExperience extends HudElement {
                             float partialTicks,
                             int scaledWidth,
                             int scaledHeight) {
-         int posXLocal = scaledWidth - 80;
-         int posYLocal = 50;
+         int posXLocal = scaledWidth - 80 - 15;
+         int posYLocal = 65;
         PlayerData pd = Hud.instance.playerData;
         double exp = pd.getExperience();
         double expCap = pd.getExperienceCap();
@@ -26,7 +26,7 @@ public class HudElementExperience extends HudElement {
         GlStateManager.disableLighting();
         drawCustomBar(posXLocal,
                  posYLocal,
-                80,
+                95,
                 8,
                 exp * full,
                 0xAEED7A,

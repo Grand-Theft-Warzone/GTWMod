@@ -1,69 +1,40 @@
 package me.phoenixra.gtwclient.playerhud.notification;
 
 
+import lombok.Getter;
+
 public class NotificationRequest {
+    @Getter
     private String text;
-
+    @Getter
     private long displayTime;
+    @Getter
+    private int positionX;
+    @Getter
+    private int positionY;
+    @Getter
+    private int fontSize;
 
-    private float positionX;
-    private float positionY;
-
-    private double sizeX;
-    private double sizeY;
-
+    @Getter
     private boolean playSound;
-
+    @Getter
     private boolean started;
     private long finishTime;
     public NotificationRequest(String text,
                                boolean playSound,
                                long displayTime,
-                               float positionX,
-                               float positionY,
-                               double sizeX,
-                               double sizeY
+                               int positionX,
+                               int positionY,
+                               int fontSize
     ){
         this.text = text;
         this.displayTime = displayTime;
 
         this.positionX = positionX;
         this.positionY = positionY;
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
+        this.fontSize = fontSize;
 
         this.playSound = playSound;
-    }
-
-
-    public long getDisplayTime() {
-        return displayTime;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public float getPositionX() {
-        return positionX;
-    }
-    public float getPositionY() {
-        return positionY;
-    }
-
-    public double getSizeX() {
-        return sizeX;
-    }
-    public double getSizeY() {
-        return sizeY;
-    }
-
-    public long getFinishTime() {
-        return finishTime;
-    }
-
-    public boolean isStarted() {
-        return started;
     }
 
     public void start(){
@@ -73,9 +44,5 @@ public class NotificationRequest {
     public boolean isFinished(){
         if(!started) return false;
         return System.currentTimeMillis() >= finishTime;
-    }
-
-    public boolean isPlaySound() {
-        return playSound;
     }
 }

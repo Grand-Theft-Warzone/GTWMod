@@ -15,8 +15,8 @@ public class HudElementMoney extends HudElement {
 
     @Override
     public void drawElement(Gui gui, float zLevel, float partialTicks, int scaledWidth, int scaledHeight) {
-        float posXLocal = scaledWidth-80;
-        float posYLocal = 60;
+        float posXLocal = scaledWidth-80 - 15;
+        float posYLocal = 75;
         GlStateManager.disableBlend();
         PlayerData pd = Hud.instance.playerData;
         String money = "$ "+pd.getMoney();

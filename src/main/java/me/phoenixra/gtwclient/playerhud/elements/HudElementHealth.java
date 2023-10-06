@@ -18,7 +18,7 @@ public class HudElementHealth extends HudElement {
                             float partialTicks,
                             int scaledWidth,
                             int scaledHeight) {
-        int posXLocal = scaledWidth - 80;
+        int posXLocal = scaledWidth - 80 - 15;
         int posYLocal = 10;
         EntityPlayerSP player = mc.player;
         int health = MathHelper.ceil(this.mc.player.getHealth());
@@ -29,7 +29,7 @@ public class HudElementHealth extends HudElement {
         if(absorption > 1)
             drawCustomBar(posXLocal,
                     posYLocal,
-                    80,
+                    95,
                     8,
                     (double) (health + absorption) / (double) (healthMax + absorption) * 100D,
                     COLOR_ORANGE,
@@ -40,7 +40,7 @@ public class HudElementHealth extends HudElement {
         if(player.isPotionActive(MobEffects.POISON)) {
             drawCustomBar(posXLocal,
                     posYLocal,
-                    80,
+                    95,
                     8,
                     (double) health / (double) (healthMax + absorption) * 100D,
                     COLOR_PURPLE,
@@ -50,7 +50,7 @@ public class HudElementHealth extends HudElement {
         } else if(player.isPotionActive(MobEffects.WITHER)) {
             drawCustomBar(posXLocal,
                     posYLocal,
-                    80,
+                    95,
                     8,
                     (double) health / (double) (healthMax + absorption) * 100D,
                     COLOR_BLACK,
@@ -60,7 +60,7 @@ public class HudElementHealth extends HudElement {
         } else {
             drawCustomBar(posXLocal,
                     posYLocal,
-                    80,
+                    95,
                     8,
                     (double) health / (double) (healthMax + absorption) * 100D,
                     COLOR_RED,

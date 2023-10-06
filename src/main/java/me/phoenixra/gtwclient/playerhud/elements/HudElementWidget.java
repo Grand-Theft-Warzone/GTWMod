@@ -11,6 +11,8 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import org.lwjgl.opengl.GL11;
 
 public class HudElementWidget extends HudElement {
     public HudElementWidget() {
@@ -20,7 +22,7 @@ public class HudElementWidget extends HudElement {
 
     @Override
     public void drawElement(Gui gui, float zLevel, float partialTicks, int scaledWidth, int scaledHeight) {
-        int posXLocal = scaledWidth-125;
+        int posXLocal = scaledWidth-125 - 15;
         int posYLocal = 10;
         EntityPlayer player = mc.player;
 
@@ -28,15 +30,15 @@ public class HudElementWidget extends HudElement {
         if (!heldItemStack.isEmpty()) {
             // Get the item's icon texture
             try {
-                TextureAtlasSprite icon = mc.getRenderItem().getItemModelWithOverrides(heldItemStack,
-                        null,
-                        null).getParticleTexture();
-                mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-                mc.ingameGUI.drawTexturedModalRect(
-                        posXLocal + 6,
-                        posYLocal + 6,
-                        icon, 30, 39);
-            }catch (Exception e){
+                ResourceLocation key = ForgeRegistries.ITEMS.getKey(heldItemStack.getItem());
+                float scaleX = 60/2.0f;
+                float scaleY = 60/2.0f;
+                renderItemIntoGUI(heldItemStack,
+                        posXLocal+13,
+                        posYLocal+20,
+                        scaleX,scaleY
+                );
+            }catch (Throwable e){
                 Tessellator tessellator = Tessellator.getInstance();
                 tessellator.getBuffer().finishDrawing();
                 bind(FIST_ICON);

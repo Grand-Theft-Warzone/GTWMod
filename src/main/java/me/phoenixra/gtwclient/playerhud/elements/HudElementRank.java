@@ -15,8 +15,8 @@ public class HudElementRank extends HudElement {
 
     @Override
     public void drawElement(Gui gui, float zLevel, float partialTicks, int scaledWidth, int scaledHeight) {
-        float posXLocal = scaledWidth-40;
-        float posYLocal = 41;
+        float posXLocal = scaledWidth-80 - 15;
+        float posYLocal = 46;
         GlStateManager.disableBlend();
         PlayerData pd = Hud.instance.playerData;
         String rank = pd.getRank();

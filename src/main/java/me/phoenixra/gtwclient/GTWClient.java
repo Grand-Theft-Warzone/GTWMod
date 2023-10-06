@@ -10,6 +10,7 @@ import me.phoenixra.gtwclient.fml.loadingscreen.MainSplashRenderer;
 import me.phoenixra.gtwclient.proxy.CommonProxy;
 import me.phoenixra.gtwclient.screen.ModLoadingListener;
 import me.phoenixra.gtwclient.sounds.SoundsHandler;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -126,6 +127,7 @@ public class GTWClient extends AtumMod {
             ModLoadingListener.setup();
             MainSplashRenderer.onReachConstruct();
         }
+        EntityPlayerSP player;
     }
 
     @Override

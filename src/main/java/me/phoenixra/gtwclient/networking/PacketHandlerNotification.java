@@ -17,8 +17,8 @@ public class PacketHandlerNotification implements IMessageHandler<PacketNotifica
                 message.displayTime,
                 message.positionX,
                 message.positionY,
-                message.sizeX,
-                message.sizeY)
+                message.fontSize
+                )
         );
         return null;
     }
