@@ -24,11 +24,11 @@ public class PropertyApp implements PhoneApp {
 
     @Override
     public @NotNull String getAppName() {
-        return null;
+        return "Property";
     }
 
     @Override
     public @NotNull String getId() {
-        return null;
+        return "property";
     }
 }
