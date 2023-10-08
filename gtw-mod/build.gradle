@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+group = mod_group
+
+repositories {
+
+}
+
+dependencies {
+    compileOnly project(':gtw-api')
+    compileOnly project(':gtw-core')
+}
+

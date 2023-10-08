@@ -1,2 +1,11 @@
 rootProject.name = 'GTWClient'
+include 'gtw-api'
+include 'gtw-mod'
+include 'gtw-core'
+include 'gtw-core:display'
+findProject(':gtw-core:display')?.name = 'display'
+include 'gtw-core:network'
+findProject(':gtw-core:network')?.name = 'network'
+include 'gtw-core:misc'
+findProject(':gtw-core:misc')?.name = 'misc'
 

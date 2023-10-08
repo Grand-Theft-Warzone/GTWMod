@@ -1,4 +1,3 @@
-
 buildscript {
     repositories {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
@@ -12,57 +11,81 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
+plugins{
+    id 'java'
+    id 'java-library'
+    id "com.github.johnrengelman.shadow" version "7.1.0"
+}
+group mod_group
+version mod_version
+archivesBaseName = mod_name
 
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+
 apply plugin: 'net.minecraftforge.gradle'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    apply plugin: 'eclipse'
+    apply plugin: 'maven-publish'
+    apply plugin: 'net.minecraftforge.gradle'
 
+    sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+    repositories {
+        mavenCentral()
+    }
+    minecraft {
+        mappings channel: 'snapshot', version: '20171003-1.12'
+    }
+    dependencies {
+        minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
+        //global libs
+        compileOnly project(":").fileTree(dir: 'libs', include: ['*.jar'])
+        //local libs
+        compileOnly fileTree(dir: 'libs', include: ['*.jar'])
+
+        //annotations
+        compileOnly 'org.projectlombok:lombok:1.18.24'
+        compileOnly 'org.jetbrains:annotations:23.0.0'
+        annotationProcessor 'org.projectlombok:lombok:1.18.24'
+        annotationProcessor 'org.jetbrains:annotations:23.0.0'
+    }
+}
 minecraft {
     mappings channel: 'snapshot', version: '20171003-1.12'
-    runs {
-        client {
-            workingDirectory project.file('run')
+}
+dependencies {
+    implementation(project(":gtw-api"))
+    implementation(project(":gtw-core"))
+    implementation(project(":gtw-mod"))
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
+}
 
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+shadowJar {
+    dependencies {
+        exclude(dependency ->
+                !dependency.moduleGroup.startsWith(mod_group)
+        )
+    }
+    duplicatesStrategy DuplicatesStrategy.EXCLUDE //prevent duplicates
+    archiveBaseName.set(mod_name)
+    classifier "" //prevent creation of unshadowed jar
+}
 
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-        }
-
-        server {
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-        }
+reobf {
+    shadowJar {
     }
 }
 
-dependencies {
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
-    compileOnly 'javazoom:jlayer:1.0.1'
-    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
-
-    //annotations
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    compileOnly 'org.jetbrains:annotations:23.0.0'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.jetbrains:annotations:23.0.0'
-}
-jar {
+jar.finalizedBy('reobfJar')
+jar{
+    manifest.attributes.clear()
     manifest {
         attributes "ForceLoadAsMod": "true"
         attributes "FMLCorePluginContainsFMLMod": "true"
-        attributes "FMLCorePlugin": "me.phoenixra.gtwclient.fml.FMLCore"
+        attributes "FMLCorePlugin": "com.grandtheftwarzone.gtwclient.mod.fml.FMLCore"
         attributes "TweakOrder": "0"
     }
 }
-jar.finalizedBy('reobfJar')
 
-group 'me.phoenixRa'
-version '1.0-SNAPSHOT'
