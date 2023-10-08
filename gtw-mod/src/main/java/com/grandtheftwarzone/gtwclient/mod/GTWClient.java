@@ -3,6 +3,7 @@ package com.grandtheftwarzone.gtwclient.mod;
 import com.grandtheftwarzone.gtwclient.api.GtwAPI;
 import com.grandtheftwarzone.gtwclient.api.GtwProperties;
 import com.grandtheftwarzone.gtwclient.api.gui.FactoryGuiHandler;
+import com.grandtheftwarzone.gtwclient.api.gui.phone.PhoneGui;
 import com.grandtheftwarzone.gtwclient.api.hud.PlayerHUD;
 import com.grandtheftwarzone.gtwclient.api.networking.NetworkManager;
 import com.grandtheftwarzone.gtwclient.api.player.PlayerData;
@@ -14,6 +15,7 @@ import com.grandtheftwarzone.gtwclient.core.display.GtwScreensManager;
 import com.grandtheftwarzone.gtwclient.core.display.loadingscreen.MainSplashRenderer;
 import com.grandtheftwarzone.gtwclient.core.display.loadingscreen.listener.ModLoadingListener;
 import com.grandtheftwarzone.gtwclient.core.misc.GtwSoundsManager;
+import com.grandtheftwarzone.gtwclient.core.phone.core.GtwPhoneGui;
 import com.grandtheftwarzone.gtwclient.mod.proxy.CommonProxy;
 import lombok.Getter;
 import lombok.Setter;
@@ -61,6 +63,8 @@ public class GTWClient extends AtumMod {
     @Getter
     private FactoryGuiHandler factoryGuiHandler;
     @Getter
+    private PhoneGui phoneGui;
+    @Getter
     private ScreensManager screensManager;
     @Getter
     private PlayerData playerData;
@@ -83,6 +87,7 @@ public class GTWClient extends AtumMod {
             playerData = new PlayerData();
             playerHUD = new GtwPlayerHUD();
             factoryGuiHandler = new GtwFactoryGuiHandler();
+            phoneGui = new GtwPhoneGui();
             screensManager = new GtwScreensManager();
 
         }

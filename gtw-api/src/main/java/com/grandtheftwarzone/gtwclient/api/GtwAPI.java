@@ -1,6 +1,7 @@
 package com.grandtheftwarzone.gtwclient.api;
 
 import com.grandtheftwarzone.gtwclient.api.gui.FactoryGuiHandler;
+import com.grandtheftwarzone.gtwclient.api.gui.phone.PhoneGui;
 import com.grandtheftwarzone.gtwclient.api.networking.NetworkManager;
 import com.grandtheftwarzone.gtwclient.api.hud.PlayerHUD;
 import com.grandtheftwarzone.gtwclient.api.player.PlayerData;
@@ -66,6 +67,16 @@ public interface GtwAPI {
      */
     @SideOnly(Side.CLIENT)
     @NotNull FactoryGuiHandler getFactoryGuiHandler();
+
+    /**
+     * Get the phone gui
+     *
+     * <p>CLIENT SIDE!</p>
+     *
+     * @return The phone gui
+     */
+    @SideOnly(Side.CLIENT)
+    @NotNull PhoneGui getPhoneGui();
 
     /**
      * Get GTW mod instance

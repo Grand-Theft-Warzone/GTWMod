@@ -1,14 +1,12 @@
-package com.grandtheftwarzone.gtwclient.core.phone.apps.notifications;
+package com.grandtheftwarzone.gtwclient.core.phone.apps.property;
 
-import com.grandtheftwarzone.gtwclient.api.GtwAPI;
 import com.grandtheftwarzone.gtwclient.api.gui.phone.PhoneApp;
 import com.grandtheftwarzone.gtwclient.api.gui.phone.PhoneGui;
 import com.grandtheftwarzone.gtwclient.api.gui.phone.annotations.RegisterPhoneApp;
 import org.jetbrains.annotations.NotNull;
 
 @RegisterPhoneApp
-public class NotificationsApp implements PhoneApp {
-
+public class PropertyApp implements PhoneApp {
     @Override
     public void draw(PhoneGui parent) {
 
@@ -26,11 +24,11 @@ public class NotificationsApp implements PhoneApp {
 
     @Override
     public @NotNull String getAppName() {
-        return "Notifications";
+        return null;
     }
 
     @Override
     public @NotNull String getId() {
-        return "notifications";
+        return null;
     }
 }

@@ -14,4 +14,6 @@ include 'gtw-core:phone:core'
 findProject(':gtw-core:phone:core')?.name = 'core'
 include 'gtw-core:phone:app-notifications'
 findProject(':gtw-core:phone:app-notifications')?.name = 'app-notifications'
+include 'gtw-core:phone:app-property'
+findProject(':gtw-core:phone:app-property')?.name = 'app-property'
 
