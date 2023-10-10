@@ -24,6 +24,7 @@ public class GtwPhoneGui implements PhoneGui {
 
 
     private void registerApps(){
+        // EXAMPLE OF A CHANGE
         GtwAPI.getInstance().getGtwMod().getLogger().info("Registering phone apps");
         try (ScanResult scanResult = new ClassGraph()
                 .enableAllInfo()
