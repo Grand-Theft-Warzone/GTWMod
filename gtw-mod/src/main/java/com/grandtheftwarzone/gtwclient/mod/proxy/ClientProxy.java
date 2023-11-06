@@ -56,6 +56,9 @@ public class ClientProxy extends CommonProxy{
         new SimplePlaceholder(GTWClient.instance,"player_deaths",
                 ()->playerData.getOtherOrDefault("deaths","0")
         ).register();
+        new SimplePlaceholder(GTWClient.instance,"kdr",
+                ()->playerData.getOtherOrDefault("kdr","0")
+        ).register();
         new SimplePlaceholder(GTWClient.instance,"player_name",
                 ()-> Minecraft.getMinecraft().getSession().getUsername()
         ).register();

@@ -1,6 +1,5 @@
 package com.grandtheftwarzone.gtwclient.core.phone.apps.notifications;
 
-import com.grandtheftwarzone.gtwclient.api.GtwAPI;
 import com.grandtheftwarzone.gtwclient.api.gui.phone.PhoneApp;
 import com.grandtheftwarzone.gtwclient.api.gui.phone.PhoneGui;
 import com.grandtheftwarzone.gtwclient.api.gui.phone.annotations.RegisterPhoneApp;

@@ -23,4 +23,13 @@ public enum GuiAction {
     GuiAction(int id) {
         this.id = id;
     }
+
+    public static GuiAction getById(int id) {
+        for (GuiAction action : values()) {
+            if (action.getId() == id) {
+                return action;
+            }
+        }
+        return null;
+    }
 }
