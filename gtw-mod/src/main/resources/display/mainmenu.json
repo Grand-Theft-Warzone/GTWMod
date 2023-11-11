@@ -1,8 +1,36 @@
 {
   "type": "canvas",
-  "config_version": 4.0,
+  "config_version": 5.0,
   "layer": "MIDDLE",
   "elements": {
+    "image_main": {
+      "settings": {
+        "image": "gtwclient:textures/main_menu/background.png",
+        "color": "#ffffff"
+      },
+      "type": "image",
+      "layer": "BACKGROUND",
+      "posX": 0.0,
+      "posY": 4.0,
+      "width": 1920.0,
+      "height": 1076.0
+    },
+    "image_playerHead": {
+      "settings": {
+        "image": "playerSkin",
+        "textureX": 8.0,
+        "textureY": 8.0,
+        "color": "#ffffff",
+        "textureWidth": 8.0,
+        "textureHeight": 8.0
+      },
+      "type": "image",
+      "layer": "FOREGROUND",
+      "posX": 1287.0,
+      "posY": 172.0,
+      "width": 123.0,
+      "height": 127.0
+    },
     "text_playerName": {
       "settings": {
         "fontSize": 20.0,
@@ -15,6 +43,97 @@
       "posY": 203.0,
       "width": 194.0,
       "height": 52.0
+    },
+    "text_playerRank": {
+      "settings": {
+        "fontSize": 20.0,
+        "text": "%player_rank%",
+        "font": "main_menu.otf"
+      },
+      "type": "text",
+      "layer": "MIDDLE",
+      "posX": 1415,
+      "posY": 324,
+      "width": 256,
+      "height": 37
+    },
+    "text_playerGang": {
+      "settings": {
+        "fontSize": 20.0,
+        "text": "%player_gang%",
+        "font": "main_menu.otf"
+      },
+      "type": "text",
+      "layer": "MIDDLE",
+      "posX": 1415.0,
+      "posY": 370.0,
+      "width": 255.0,
+      "height": 47.0
+    },
+    "text_playerLevel": {
+      "settings": {
+        "fontSize": 20.0,
+        "text": "%player_level%",
+        "font": "main_menu.otf"
+      },
+      "type": "text",
+      "layer": "MIDDLE",
+      "posX": 1422,
+      "posY": 419,
+      "width": 237,
+      "height": 30
+    },
+    "text_playerMoney": {
+      "settings": {
+        "fontSize": 20.0,
+        "text": "%player_money%",
+        "font": "main_menu.otf"
+      },
+      "type": "text",
+      "layer": "MIDDLE",
+      "posX": 1440,
+      "posY": 472,
+      "width": 238,
+      "height": 32
+    },
+    "text_playerKills": {
+      "settings": {
+        "fontSize": 20.0,
+        "text": "%player_kills%",
+        "font": "main_menu.otf"
+      },
+      "type": "text",
+      "layer": "MIDDLE",
+      "posX": 1412,
+      "posY": 520,
+      "width": 241,
+      "height": 37
+    },
+    "text_playerDeaths": {
+      "settings": {
+        "fontSize": 20.0,
+        "text": "%player_deaths%",
+        "font": "main_menu.otf"
+      },
+      "type": "text",
+      "layer": "MIDDLE",
+      "posX": 1432,
+      "posY": 570,
+      "width": 211,
+      "height": 36
+    },
+    "text_playerKdr": {
+      "settings": {
+        "fontSize": 20.0,
+        "text": "%player_kdr%",
+        "font": "main_menu.otf"
+      },
+      "type": "text",
+      "layer": "MIDDLE",
+      "posX": 1472,
+      "posY": 620,
+      "width": 211,
+      "height": 36
     },
     "button_discord": {
       "settings": {
@@ -48,35 +167,6 @@
       "width": 148.0,
       "height": 149.0
     },
-    "text_playerDeaths": {
-      "settings": {
-        "fontSize": 20.0,
-        "text": "%player_deaths%",
-        "font": "main_menu.otf"
-      },
-      "type": "text",
-      "layer": "MIDDLE",
-      "posX": 1452,
-      "posY": 570,
-      "width": 211,
-      "height": 36
-    },
-    "image_playerHead": {
-      "settings": {
-        "image": "playerSkin",
-        "textureX": 8.0,
-        "textureY": 8.0,
-        "color": "#ffffff",
-        "textureWidth": 8.0,
-        "textureHeight": 8.0
-      },
-      "type": "image",
-      "layer": "FOREGROUND",
-      "posX": 1287.0,
-      "posY": 172.0,
-      "width": 123.0,
-      "height": 127.0
-    },
     "button_singleplayer": {
       "settings": {
         "brightness-onClick": "20.0;20.0;20.0",
@@ -109,57 +199,6 @@
       "width": 148.0,
       "height": 149.0
     },
-    "text_playerLevel": {
-      "settings": {
-        "fontSize": 20.0,
-        "text": "%player_level%",
-        "font": "main_menu.otf"
-      },
-      "type": "text",
-      "layer": "MIDDLE",
-      "posX": 1422,
-      "posY": 419,
-      "width": 237,
-      "height": 30
-    },
-    "text_playerRank": {
-      "settings": {
-        "fontSize": 20.0,
-        "text": "%player_rank%",
-        "font": "main_menu.otf"
-      },
-      "type": "text",
-      "layer": "MIDDLE",
-      "posX": 1415,
-      "posY": 324,
-      "width": 256,
-      "height": 37
-    },
-    "image_main": {
-      "settings": {
-        "image": "gtwclient:textures/main_menu/background.png",
-        "color": "#ffffff"
-      },
-      "type": "image",
-      "layer": "BACKGROUND",
-      "posX": 0.0,
-      "posY": 4.0,
-      "width": 1920.0,
-      "height": 1076.0
-    },
-    "text_playerKills": {
-      "settings": {
-        "fontSize": 20.0,
-        "text": "%player_kills%",
-        "font": "main_menu.otf"
-      },
-      "type": "text",
-      "layer": "MIDDLE",
-      "posX": 1412,
-      "posY": 520,
-      "width": 241,
-      "height": 37
-    },
     "button_multiplayer": {
       "settings": {
         "brightness-onClick": "20.0;20.0;20.0",
@@ -176,19 +215,6 @@
       "width": 176.0,
       "height": 172.0
     },
-    "text_playerMoney": {
-      "settings": {
-        "fontSize": 20.0,
-        "text": "%player_money%",
-        "font": "main_menu.otf"
-      },
-      "type": "text",
-      "layer": "MIDDLE",
-      "posX": 1440,
-      "posY": 472,
-      "width": 238,
-      "height": 32
-    },
     "button_website": {
       "settings": {
         "brightness-onClick": "20.0;20.0;20.0",
@@ -204,19 +230,6 @@
       "posY": 632.0,
       "width": 124.0,
       "height": 126.0
-    },
-    "text_playerGang": {
-      "settings": {
-        "fontSize": 20.0,
-        "text": "%player_gang%",
-        "font": "main_menu.otf"
-      },
-      "type": "text",
-      "layer": "MIDDLE",
-      "posX": 1415.0,
-      "posY": 365.0,
-      "width": 255.0,
-      "height": 47.0
     },
     "button_play": {
       "settings": {
