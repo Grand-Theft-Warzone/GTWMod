@@ -14,6 +14,7 @@ import com.grandtheftwarzone.gtwclient.core.display.GtwPlayerHUD;
 import com.grandtheftwarzone.gtwclient.core.display.GtwScreensManager;
 import com.grandtheftwarzone.gtwclient.core.display.loadingscreen.MainSplashRenderer;
 import com.grandtheftwarzone.gtwclient.core.display.loadingscreen.listener.ModLoadingListener;
+import com.grandtheftwarzone.gtwclient.core.minimap.GTWMinimap;
 import com.grandtheftwarzone.gtwclient.core.misc.GtwSoundsManager;
 import com.grandtheftwarzone.gtwclient.core.phone.core.GtwPhoneGui;
 import com.grandtheftwarzone.gtwclient.mod.proxy.CommonProxy;
@@ -69,8 +70,9 @@ public class GTWClient extends AtumMod {
     @Getter
     private PlayerData playerData;
 
+    @Getter GTWMinimap minimap;
 
-    public GTWClient(){
+    public GTWClient() {
         instance = this;
         GtwAPI.Instance.set(new GtwAPIImpl());
         soundsManager = new GtwSoundsManager();
@@ -89,10 +91,11 @@ public class GTWClient extends AtumMod {
             factoryGuiHandler = new GtwFactoryGuiHandler();
             phoneGui = new GtwPhoneGui();
             screensManager = new GtwScreensManager();
-
+            minimap = new GTWMinimap();
         }
     }
-    private void registerConfigCategory(){
+
+    private void registerConfigCategory() {
         getConfigManager().addConfigCategory(new ConfigCategory(
                 this,
                 ConfigType.JSON,
@@ -103,13 +106,13 @@ public class GTWClient extends AtumMod {
 
             @Override
             protected void clear() {
-                elements.forEach(it->getDisplayElementRegistry().unregister(it));
+                elements.forEach(it -> getDisplayElementRegistry().unregister(it));
             }
 
             @Override
             protected void acceptConfig(@NotNull String id, @NotNull Config config) {
                 getAtumMod().getLogger().info("Loading display element with id " + id);
-                if(getDisplayElementRegistry().getElementById(id) != null) {
+                if (getDisplayElementRegistry().getElementById(id) != null) {
                     getAtumMod().getLogger().warn("Display element with id " + id + " already added or is a default element!");
                     return;
                 }
@@ -122,6 +125,7 @@ public class GTWClient extends AtumMod {
             }
         });
     }
+
     @Mod.EventHandler
     private void onClientSetup(FMLPostInitializationEvent e) {
 
@@ -129,6 +133,7 @@ public class GTWClient extends AtumMod {
             getConfigManager().reloadAllConfigCategories();
         }
     }
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);
