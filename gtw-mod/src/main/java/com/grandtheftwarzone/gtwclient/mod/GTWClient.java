@@ -131,6 +131,7 @@ public class GTWClient extends AtumMod {
 
         if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
             getConfigManager().reloadAllConfigCategories();
+            getMinimap().initClient();
         }
     }
 
