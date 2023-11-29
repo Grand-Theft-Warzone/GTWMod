@@ -8,9 +8,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.Chunk;
 
+@Getter
 public class Minimap {
 
-    @Getter private int startX, startZ, endX, endZ;
+    private int startX, startZ, endX, endZ;
 
     public void update() {
         BlockPos playerPos = Minecraft.getMinecraft().player.getPosition();
@@ -24,7 +25,7 @@ public class Minimap {
 
         int textureIndex = 0;
 
-        for (int x = startX; x < endX; x++) {
+        for (int x = endX; x > startX; x--) { // For some reason, the map is flipped in the x axis
             for (int z = startZ; z < endZ; z++) {
                 Chunk chunk = Minecraft.getMinecraft().world.getChunkFromBlockCoords(new BlockPos(x, playerPos.getY(), z));
                 if (!chunk.isLoaded()) continue;
@@ -35,22 +36,21 @@ public class Minimap {
                 IBlockState state = Minecraft.getMinecraft().world.getBlockState(block.down());
                 MapColor mapColor = state.getMapColor(Minecraft.getMinecraft().world, block.down());
 
-                //Get RBG values from MapColor
-                int color = mapColor.colorValue;
-                int red = (color & 0x00ff0000) >> 16;
-                int green = (color & 0x0000ff00) >> 8;
-                int blue = color & 0x000000ff;
-
-                //Set alpha to 255
-                color = (255 << 24) | (red << 16) | (green << 8) | blue;
-
-                //Get correct color taking in account biome and etc
-
-                GTWMinimap.getInstance().getMapTexture().setIndex(textureIndex++, color);
+                GTWMinimap.getInstance().getMapTexture().setIndex(textureIndex++, mapColorToRGB(mapColor));
             }
         }
 
         GTWMinimap.getInstance().getMapTexture().update();
+    }
+
+    public int mapColorToRGB(MapColor mapColor) {
+        int color = mapColor.colorValue;
+        int red = (color & 0x00ff0000) >> 16;
+        int green = (color & 0x0000ff00) >> 8;
+        int blue = color & 0x000000ff;
+
+        //Set alpha to 255
+        return (255 << 24) | (red << 16) | (green << 8) | blue;
     }
 
 }

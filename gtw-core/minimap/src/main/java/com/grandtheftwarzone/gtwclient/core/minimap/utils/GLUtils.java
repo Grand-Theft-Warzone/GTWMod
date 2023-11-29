@@ -49,10 +49,10 @@ public class GLUtils {
         postDrawConstants();
     }
 
-    public static void drawCircle(double x, double y, double radius) {
+    public static void drawCircle(double x, double y, double radius, boolean filled) {
         preDrawConstants();
 
-        GlStateManager.glBegin(GL11.GL_TRIANGLE_FAN);
+        GlStateManager.glBegin(filled ? GL11.GL_POLYGON : GL11.GL_TRIANGLE_FAN);
         GlStateManager.glVertex3f((float) x, (float) y, 1);
 
         double doublePi = Math.PI * 2;
@@ -78,7 +78,7 @@ public class GLUtils {
 
 
         setHexColor(0xFFFFFFFF);
-        drawCircle(x, y, radius);
+        drawCircle(x, y, radius, false);
 
         GlStateManager.colorMask(true, true, true, true);
         GlStateManager.depthMask(false);

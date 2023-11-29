@@ -42,33 +42,20 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod(modid = GtwProperties.MOD_ID,
-        version = GtwProperties.VERSION,
-        name = GtwProperties.MOD_NAME)
+@Mod(modid = GtwProperties.MOD_ID, version = GtwProperties.VERSION, name = GtwProperties.MOD_NAME)
 public class GTWClient extends AtumMod {
-    @Mod.Instance
-    public static GTWClient instance;
+    @Mod.Instance public static GTWClient instance;
 
-    @SidedProxy(clientSide = "com.grandtheftwarzone.gtwclient.mod.proxy.ClientProxy",
-            serverSide = "com.grandtheftwarzone.gtwclient.mod.proxy.CommonProxy")
-    public static CommonProxy proxy;
+    @SidedProxy(clientSide = "com.grandtheftwarzone.gtwclient.mod.proxy.ClientProxy", serverSide = "com.grandtheftwarzone.gtwclient.mod.proxy.CommonProxy") public static CommonProxy proxy;
 
-    @Getter
-    private Config settings;
-    @Getter @Setter
-    private NetworkManager networkManager;
-    @Getter
-    private SoundsManager soundsManager;
-    @Getter
-    private PlayerHUD playerHUD;
-    @Getter
-    private FactoryGuiHandler factoryGuiHandler;
-    @Getter
-    private PhoneGui phoneGui;
-    @Getter
-    private ScreensManager screensManager;
-    @Getter
-    private PlayerData playerData;
+    @Getter private Config settings;
+    @Getter @Setter private NetworkManager networkManager;
+    @Getter private SoundsManager soundsManager;
+    @Getter private PlayerHUD playerHUD;
+    @Getter private FactoryGuiHandler factoryGuiHandler;
+    @Getter private PhoneGui phoneGui;
+    @Getter private ScreensManager screensManager;
+    @Getter private PlayerData playerData;
 
     @Getter GTWMinimap minimap;
 
@@ -76,14 +63,10 @@ public class GTWClient extends AtumMod {
         instance = this;
         GtwAPI.Instance.set(new GtwAPIImpl());
         soundsManager = new GtwSoundsManager();
+        minimap = new GTWMinimap();
 
         if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-            settings = getApi().createLoadableConfig(this,
-                    "settings",
-                    "",
-                    ConfigType.JSON,
-                    false
-            );
+            settings = getApi().createLoadableConfig(this, "settings", "", ConfigType.JSON, false);
             registerConfigCategory();
 
             playerData = new PlayerData();
@@ -91,17 +74,11 @@ public class GTWClient extends AtumMod {
             factoryGuiHandler = new GtwFactoryGuiHandler();
             phoneGui = new GtwPhoneGui();
             screensManager = new GtwScreensManager();
-            minimap = new GTWMinimap();
         }
     }
 
     private void registerConfigCategory() {
-        getConfigManager().addConfigCategory(new ConfigCategory(
-                this,
-                ConfigType.JSON,
-                "display",
-                "display",
-                true) {
+        getConfigManager().addConfigCategory(new ConfigCategory(this, ConfigType.JSON, "display", "display", true) {
             private List<String> elements = new ArrayList<>();
 
             @Override
@@ -131,7 +108,6 @@ public class GTWClient extends AtumMod {
 
         if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
             getConfigManager().reloadAllConfigCategories();
-            getMinimap().initClient();
         }
     }
 
@@ -145,6 +121,7 @@ public class GTWClient extends AtumMod {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         proxy.init(event);
+       getMinimap().init(networkManager);
     }
 
 
