@@ -14,7 +14,6 @@ public class PlayerJoinListener {
 
     @SubscribeEvent
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        event.player.sendMessage(new TextComponentString("Welcome to the server!"));
         markerManager.sendMarkers(event.player);
     }
 }

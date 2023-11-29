@@ -20,7 +20,6 @@ public class MinimapRenderer {
         ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
         float y = scaledResolution.getScaledHeight() - GTWMinimap.getInstance().getCornerDistance() - (GTWMinimap.getInstance().getRadius() * 2);
 
-
         //TODO: Scale according to screen size
         // GlStateManager.scale(0.5, 0.5, 0.5);
 
@@ -82,9 +81,6 @@ public class MinimapRenderer {
             double x = (double) (marker.getPosX() - GTWMinimap.getInstance().getMinimap().getStartX()) / (GTWMinimap.getInstance().getMinimap().getEndX() - GTWMinimap.getInstance().getMinimap().getStartX()) * GTWMinimap.getInstance().getRadius() * 2;
             double y = (double) (marker.getPosZ() - GTWMinimap.getInstance().getMinimap().getStartZ()) / (GTWMinimap.getInstance().getMinimap().getEndZ() - GTWMinimap.getInstance().getMinimap().getStartZ()) * GTWMinimap.getInstance().getRadius() * 2;
 
-//            double x = (double) GTWMinimap.getInstance().getRadius() + (marker.getPosX() - playerX);
-//            double y = (double) GTWMinimap.getInstance().getRadius() + (marker.getPosZ() - playerZ);
-//
             float size = GTWMinimap.getInstance().getMarkerSize();
 
             double distance = Math.sqrt(Math.pow(marker.getPosX() - playerX, 2) + Math.pow(marker.getPosZ() - playerZ, 2));

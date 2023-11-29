@@ -39,7 +39,6 @@ public class GTWMinimap {
         if (FMLCommonHandler.instance().getSide() == Side.CLIENT) initClient();
         else initServer(networkManager);
 
-        //TODO: Sync markers with clients
         networkManager.registerMessage(PacketHandlerMarkerData.class, PacketMarkerData.class, Side.CLIENT);
     }
 
@@ -59,9 +58,6 @@ public class GTWMinimap {
         minimapRenderer = new MinimapRenderer();
         markerManager = new MarkerManager(null);
 
-    /*    markerManager.insertMarker(new Marker(10, 10, Marker.MarkerType.HOUSE));
-        markerManager.insertMarker(new Marker(25, 25, Marker.MarkerType.HOSPITAL));
-        markerManager.insertMarker(new Marker(-5, 10, Marker.MarkerType.PLAYER));*/
         MinecraftForge.EVENT_BUS.register(new MinimapListener());
     }
 }
