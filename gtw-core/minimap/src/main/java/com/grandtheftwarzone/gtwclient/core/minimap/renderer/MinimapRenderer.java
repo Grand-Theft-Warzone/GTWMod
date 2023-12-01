@@ -67,7 +67,7 @@ public class MinimapRenderer {
     }
 
     private void drawMarkers() {
-        List<Marker> markers = GTWMinimap.getInstance().getMarkerManager().queryMinimap(GTWMinimap.getInstance().getMinimap());
+        List<Marker> markers = GTWMinimap.getInstance().getClientMarkerManager().getMinimapMarkers(GTWMinimap.getInstance().getMinimap());
 
         if (GTWMinimap.getInstance().isRotating()) {
             float angle = 180 - Minecraft.getMinecraft().player.rotationYaw;
@@ -87,8 +87,15 @@ public class MinimapRenderer {
             if (distance > GTWMinimap.getInstance().getRadius() - size / 2)
                 continue; // Check if marker is outside minimap (circle)
 
-            GlStateManager.color(marker.getType().getRed(), marker.getType().getGreen(), marker.getType().getBlue(), 1);
-            GLUtils.drawCircle(x, y, GTWMinimap.getInstance().getMarkerSize(), true);
+            boolean overlap = GTWMinimap.getInstance().getClientMarkerManager().hasMarkerOverlap(marker);
+
+            if (overlap) GlStateManager.color(1f, 1f, 1f, 0.25f);
+
+            //TODO: Render marker texture
+//            GlStateManager.color(marker.getType().getRed(), marker.getType().getGreen(), marker.getType().getBlue(), 1);
+//            GLUtils.drawCircle(x, y, GTWMinimap.getInstance().getMarkerSize(), true);
+
+            if (overlap) GlStateManager.color(1f, 1f, 1f, 1f);
         }
     }
 }

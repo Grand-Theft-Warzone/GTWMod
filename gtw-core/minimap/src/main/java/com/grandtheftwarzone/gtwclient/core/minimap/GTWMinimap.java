@@ -2,9 +2,11 @@ package com.grandtheftwarzone.gtwclient.core.minimap;
 
 import com.grandtheftwarzone.gtwclient.api.networking.NetworkManager;
 import com.grandtheftwarzone.gtwclient.core.minimap.listener.MinimapListener;
-import com.grandtheftwarzone.gtwclient.core.minimap.listener.PlayerJoinListener;
+import com.grandtheftwarzone.gtwclient.core.minimap.listener.PlayerMarkerListener;
+import com.grandtheftwarzone.gtwclient.core.minimap.markers.ClientMarkerManager;
 import com.grandtheftwarzone.gtwclient.core.minimap.markers.Marker;
-import com.grandtheftwarzone.gtwclient.core.minimap.markers.MarkerManager;
+import com.grandtheftwarzone.gtwclient.core.minimap.markers.MarkerType;
+import com.grandtheftwarzone.gtwclient.core.minimap.markers.ServerMarkerManager;
 import com.grandtheftwarzone.gtwclient.core.minimap.packets.PacketHandlerMarkerData;
 import com.grandtheftwarzone.gtwclient.core.minimap.packets.PacketMarkerData;
 import com.grandtheftwarzone.gtwclient.core.minimap.renderer.MinimapRenderer;
@@ -27,7 +29,8 @@ public class GTWMinimap {
     private MapTexture mapTexture;
     private MinimapRenderer minimapRenderer;
 
-    private MarkerManager markerManager;
+    private ServerMarkerManager serverMarkerManager;
+    private ClientMarkerManager clientMarkerManager;
 
     @Getter private static GTWMinimap instance;
 
@@ -43,20 +46,19 @@ public class GTWMinimap {
     }
 
     private void initServer(NetworkManager networkManager) {
-        markerManager = new MarkerManager(networkManager);
-        markerManager.insertMarker(new Marker(10, 10, Marker.MarkerType.HOUSE));
-        markerManager.insertMarker(new Marker(25, 25, Marker.MarkerType.HOSPITAL));
-        markerManager.insertMarker(new Marker(-5, 10, Marker.MarkerType.PLAYER));
-//        markerManager.syncMarkers();
+        serverMarkerManager = new ServerMarkerManager(networkManager);
+        serverMarkerManager.insert(new Marker(0, 0, MarkerType.HOME));
+        serverMarkerManager.insert(new Marker(10, 10, MarkerType.GARAGE));
+        serverMarkerManager.insert(new Marker(25, 25, MarkerType.FACTORY));
 
-        MinecraftForge.EVENT_BUS.register(new PlayerJoinListener(markerManager));
+        MinecraftForge.EVENT_BUS.register(new PlayerMarkerListener(serverMarkerManager));
     }
 
     private void initClient() {
         minimap = new Minimap();
         mapTexture = new MapTexture();
         minimapRenderer = new MinimapRenderer();
-        markerManager = new MarkerManager(null);
+        clientMarkerManager = new ClientMarkerManager();
 
         MinecraftForge.EVENT_BUS.register(new MinimapListener());
     }
