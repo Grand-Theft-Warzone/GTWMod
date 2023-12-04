@@ -53,6 +53,36 @@ allprojects {
         annotationProcessor 'org.projectlombok:lombok:1.18.24'
         annotationProcessor 'org.jetbrains:annotations:23.0.0'
     }
+    //replace placeholders from gradle.properties
+    processResources {
+        filesMatching('**/*.yml') {
+            project.properties.each { propertyKey, propertyValue ->
+                if (propertyValue instanceof String) {
+                    filter {
+                        it.replace("\${${propertyKey}}", propertyValue)
+                    }
+                }
+            }
+        }
+        filesMatching('**/*.json') {
+            project.properties.each { propertyKey, propertyValue ->
+                if (propertyValue instanceof String) {
+                    filter {
+                        it.replace("\${${propertyKey}}", propertyValue)
+                    }
+                }
+            }
+        }
+        filesMatching('**/*.info') {
+            project.properties.each { propertyKey, propertyValue ->
+                if (propertyValue instanceof String) {
+                    filter {
+                        it.replace("\${${propertyKey}}", propertyValue)
+                    }
+                }
+            }
+        }
+    }
 }
 minecraft {
     mappings channel: 'snapshot', version: '20171003-1.12'
@@ -65,6 +95,8 @@ dependencies {
 
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
 }
+
+
 
 shadowJar {
     dependencies {

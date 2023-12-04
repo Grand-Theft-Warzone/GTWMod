@@ -1,6 +1,6 @@
 {
   "type": "canvas",
-  "config_version": 5.0,
+  "config_version": 6.0,
   "layer": "MIDDLE",
   "elements": {
     "image_main": {
@@ -13,7 +13,7 @@
       "posX": 0.0,
       "posY": 4.0,
       "width": 1920.0,
-      "height": 1076.0
+      "height": 1080.0
     },
     "image_playerHead": {
       "settings": {
@@ -141,7 +141,7 @@
         "image": "gtwclient:textures/main_menu/discord_button.png",
         "brightness": "1.0;1.0;1.0",
         "brightness-onHover": "0.85;0.85;0.85",
-        "action-onRelease": "open_link@https://discord.gg/pasteHereYourDiscordLink"
+        "action-onRelease": "open_link@${discord_link}"
       },
       "fixRatio": true,
       "type": "button",
@@ -221,7 +221,7 @@
         "image": "gtwclient:textures/main_menu/website_button.png",
         "brightness": "1.0;1.0;1.0",
         "brightness-onHover": "0.85;0.85;0.85",
-        "action-onRelease": "open_link@https://google.com"
+        "action-onRelease": "open_link@${website_link}"
       },
       "fixRatio": true,
       "type": "button",
@@ -237,7 +237,7 @@
         "image": "gtwclient:textures/main_menu/play_button.png",
         "brightness": "1.0;1.0;1.0",
         "brightness-onHover": "0.85;0.85;0.85",
-        "action-onRelease": "connect_to_server@130.61.203.254:2002"
+        "action-onRelease": "connect_to_server@${server_address}"
       },
       "fixRatio": true,
       "type": "button",

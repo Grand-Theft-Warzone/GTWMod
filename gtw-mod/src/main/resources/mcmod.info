@@ -1,9 +1,9 @@
 [
   {
-    "modid": "gtwclient",
-    "name": "GTW Client",
+    "modid": "${mod_id}",
+    "name": "${mod_name}",
     "description": "This is the mod of the Grand Theft Warzone project",
-    "version": "1.0.0",
+    "version": "${mod_version}",
     "mcversion": "1.12",
     "authorList": ["PhoenixRa"],
     "url": "https://github.com/Phoenix-Ra",
