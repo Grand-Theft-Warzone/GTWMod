@@ -1,6 +1,6 @@
 {
   "type": "canvas",
-  "config_version": 6.0,
+  "config_version": 7.0,
   "layer": "MIDDLE",
   "elements": {
     "image_main": {
@@ -11,7 +11,7 @@
       "type": "image",
       "layer": "BACKGROUND",
       "posX": 0.0,
-      "posY": 4.0,
+      "posY": 0.0,
       "width": 1920.0,
       "height": 1080.0
     },
@@ -26,8 +26,8 @@
       },
       "type": "image",
       "layer": "FOREGROUND",
-      "posX": 1287.0,
-      "posY": 172.0,
+      "posX": 1264.0,
+      "posY": 160.0,
       "width": 123.0,
       "height": 127.0
     },
