@@ -17,12 +17,14 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 @Getter
 public class GTWMinimap {
 
     private final int radius = 45;
     private final int cornerDistance = 20;
-    @Setter private float markerSize = 2f;
     @Setter private boolean rotating = true;
 
     private Minimap minimap;
@@ -48,8 +50,8 @@ public class GTWMinimap {
     private void initServer(NetworkManager networkManager) {
         serverMarkerManager = new ServerMarkerManager(networkManager);
         serverMarkerManager.insert(new Marker(0, 0, MarkerType.HOME));
-        serverMarkerManager.insert(new Marker(10, 10, MarkerType.GARAGE));
-        serverMarkerManager.insert(new Marker(25, 25, MarkerType.FACTORY));
+        serverMarkerManager.insert(new Marker(10, 10, MarkerType.HOME));
+        serverMarkerManager.insert(new Marker(25, 25, MarkerType.HOME));
 
         MinecraftForge.EVENT_BUS.register(new PlayerMarkerListener(serverMarkerManager));
     }
@@ -59,6 +61,12 @@ public class GTWMinimap {
         mapTexture = new MapTexture();
         minimapRenderer = new MinimapRenderer();
         clientMarkerManager = new ClientMarkerManager();
+
+        clientMarkerManager.syncMarkers(Arrays.asList(
+                new Marker(0, 0, MarkerType.HOME),
+                new Marker(10, 10, MarkerType.CLOTHES_SHOP),
+                new Marker(-25, -25, MarkerType.WEAPONS_SHOP)
+        ));
 
         MinecraftForge.EVENT_BUS.register(new MinimapListener());
     }

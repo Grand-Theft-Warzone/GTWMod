@@ -7,7 +7,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Arrays;
 
-@SideOnly(Side.CLIENT)
 public class MapTexture {
     private final DynamicTexture texture;
 

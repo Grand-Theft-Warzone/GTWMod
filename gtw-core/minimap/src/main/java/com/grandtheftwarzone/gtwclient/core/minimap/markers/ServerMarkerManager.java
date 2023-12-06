@@ -23,7 +23,7 @@ public class ServerMarkerManager {
     }
 
     public void remove(Marker marker) {
-        markers.remove(marker.getHash());
+        markers.remove(marker);
     }
 
     public void sync() {

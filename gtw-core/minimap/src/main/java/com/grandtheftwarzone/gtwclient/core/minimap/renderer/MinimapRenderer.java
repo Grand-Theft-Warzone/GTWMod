@@ -6,7 +6,12 @@ import com.grandtheftwarzone.gtwclient.core.minimap.utils.GLUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentString;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -24,7 +29,6 @@ public class MinimapRenderer {
         // GlStateManager.scale(0.5, 0.5, 0.5);
 
         GlStateManager.translate(GTWMinimap.getInstance().getCornerDistance(), y, 1);
-
 
         drawMap();
         drawPlayer();
@@ -67,35 +71,60 @@ public class MinimapRenderer {
     }
 
     private void drawMarkers() {
-        List<Marker> markers = GTWMinimap.getInstance().getClientMarkerManager().getMinimapMarkers(GTWMinimap.getInstance().getMinimap());
+        GlStateManager.pushMatrix();
+        GlStateManager.color(1, 1, 1, 1);
 
-        if (GTWMinimap.getInstance().isRotating()) {
-            float angle = 180 - Minecraft.getMinecraft().player.rotationYaw;
+        List<Marker> markers = GTWMinimap
+                .getInstance()
+                .getClientMarkerManager()
+                .getMinimapMarkers(GTWMinimap.getInstance().getMinimap());
+
+        float angle = 180 - Minecraft.getMinecraft().player.rotationYaw;
+
+        if (GTWMinimap.getInstance().isRotating())
             GLUtils.rotateFixed(GTWMinimap.getInstance().getRadius(), GTWMinimap.getInstance().getRadius(), angle);
-        }
 
-        double playerX = Minecraft.getMinecraft().player.posX;
-        double playerZ = Minecraft.getMinecraft().player.posZ;
 
+//        GLUtils.enableCircleStencil(GTWMinimap.getInstance().getRadius(), GTWMinimap.getInstance().getRadius(), GTWMinimap.getInstance().getRadius());
         for (Marker marker : markers) {
-            double x = (double) (marker.getPosX() - GTWMinimap.getInstance().getMinimap().getStartX()) / (GTWMinimap.getInstance().getMinimap().getEndX() - GTWMinimap.getInstance().getMinimap().getStartX()) * GTWMinimap.getInstance().getRadius() * 2;
-            double y = (double) (marker.getPosZ() - GTWMinimap.getInstance().getMinimap().getStartZ()) / (GTWMinimap.getInstance().getMinimap().getEndZ() - GTWMinimap.getInstance().getMinimap().getStartZ()) * GTWMinimap.getInstance().getRadius() * 2;
+            GlStateManager.pushMatrix();
 
-            float size = GTWMinimap.getInstance().getMarkerSize();
-
-            double distance = Math.sqrt(Math.pow(marker.getPosX() - playerX, 2) + Math.pow(marker.getPosZ() - playerZ, 2));
-            if (distance > GTWMinimap.getInstance().getRadius() - size / 2)
-                continue; // Check if marker is outside minimap (circle)
+            double x = GTWMinimap.getInstance().getRadius() + (marker.getPosX() - Minecraft.getMinecraft().player.posX);
+            double y = GTWMinimap.getInstance().getRadius() + (marker.getPosZ() - Minecraft.getMinecraft().player.posZ);
 
             boolean overlap = GTWMinimap.getInstance().getClientMarkerManager().hasMarkerOverlap(marker);
-
             if (overlap) GlStateManager.color(1f, 1f, 1f, 0.25f);
 
-            //TODO: Render marker texture
-//            GlStateManager.color(marker.getType().getRed(), marker.getType().getGreen(), marker.getType().getBlue(), 1);
-//            GLUtils.drawCircle(x, y, GTWMinimap.getInstance().getMarkerSize(), true);
+            ResourceLocation texture = marker.getType().getTexture();
+            Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder buffer = tessellator.getBuffer();
+            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+
+            double uMin = marker.getType().getAtlas().getUMin();
+            double uMax = marker.getType().getAtlas().getUMax();
+            double vMin = marker.getType().getAtlas().getVMin();
+            double vMax = marker.getType().getAtlas().getVMax();
+
+            double z = 0;
+            double width = marker.getType().getAtlas().getWidth();
+            double height = marker.getType().getAtlas().getHeight();
+
+            if (GTWMinimap.getInstance().isRotating())
+                GLUtils.rotateFixed(x + width / 2, y + height / 2, -angle); // Rotate marker to always face the player
+
+            buffer.pos(x, y + height, z).tex(uMin, vMax).endVertex();
+            buffer.pos(x + width, y + height, z).tex(uMax, vMax).endVertex();
+            buffer.pos(x + width, y, z).tex(uMax, vMin).endVertex();
+            buffer.pos(x, y, z).tex(uMin, vMin).endVertex();
+
+            tessellator.draw();
 
             if (overlap) GlStateManager.color(1f, 1f, 1f, 1f);
+            GlStateManager.popMatrix();
         }
+//        GLUtils.disableStencil(); // Disable clipping
+        GlStateManager.popMatrix();
     }
 }

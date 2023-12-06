@@ -5,39 +5,46 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class ClientMarkerManager {
-    private final HashMap<Integer, Marker> markers = new HashMap<>();
+    //TODO: Check the best way to store markers
+    private final ArrayList<Marker> markers = new ArrayList<>();
 
     public void syncMarkers(List<Marker> newMarkers) {
         this.markers.clear();
-
-        for (Marker marker : newMarkers) markers.put(marker.getHash(), marker);
+        this.markers.addAll(newMarkers);
     }
 
     public ArrayList<Marker> getMinimapMarkers(Minimap minimap) {
         return getMarkers(minimap.getStartX(), minimap.getStartZ(), minimap.getEndX(), minimap.getEndZ());
     }
 
-    public ArrayList<Marker> getMarkers(int startX, int startZ, int endX, int endZ) {
+    public ArrayList<Marker> getMarkers(double startX, double startZ, double endX, double endZ) {
         ArrayList<Marker> m = new ArrayList<>();
-        for (int i = startX; i <= endX; i++)
-            for (int j = startZ; j <= endZ; j++)
-                if (markers.containsKey(Marker.getHash(i, j)))
-                    m.add(markers.get(Marker.getHash(i, j)));
+
+        for (Marker marker : markers)
+            if (marker.getPosX() >= startX && marker.getPosX() <= endX)
+                if (marker.getPosZ() >= startZ && marker.getPosZ() <= endZ)
+                    m.add(marker);
 
         return m;
     }
 
     public boolean hasMarkerOverlap(Marker marker) {
-        for (int x = marker.getPosX() - marker.getType().getTextureWidth(); x <= marker.getPosX() + marker.getType().getTextureWidth(); x++)
-            for (int z = marker.getPosZ() - marker.getType().getTextureHeight(); z <= marker.getPosZ() + marker.getType().getTextureHeight(); z++)
-                if (markers.containsKey(Marker.getHash(x, z)))
-                    if (markers.get(Marker.getHash(x, z)).getType().isGlobal())
+        int hW = marker.getType().getAtlas().getWidth() / 2;
+        int hH = marker.getType().getAtlas().getHeight() / 2;
+
+        for (Marker m : markers)
+            if (m != null && !m.getType().isGlobal() && m != marker) {
+                int hW2 = m.getType().getAtlas().getWidth() / 2;
+                int hH2 = m.getType().getAtlas().getHeight() / 2;
+
+                if (marker.getPosX() - hW <= m.getPosX() + hW2 && marker.getPosX() + hW >= m.getPosX() - hW2)
+                    if (marker.getPosZ() - hH <= m.getPosZ() + hH2 && marker.getPosZ() + hH >= m.getPosZ() - hH2)
                         return true;
+            }
 
         return false;
     }

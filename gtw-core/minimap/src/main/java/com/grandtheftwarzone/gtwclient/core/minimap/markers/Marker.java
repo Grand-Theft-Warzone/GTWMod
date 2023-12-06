@@ -2,6 +2,9 @@ package com.grandtheftwarzone.gtwclient.core.minimap.markers;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.minecraft.util.math.Vec2f;
+
+import java.util.Objects;
 
 @Getter
 @AllArgsConstructor
@@ -10,11 +13,8 @@ public class Marker {
     private final int posZ;
     private final MarkerType type;
 
-    public int getHash() {
-        return getHash(posX, posZ);
+    public Vec2f getVec() {
+        return new Vec2f(posX, posZ);
     }
 
-    public static int getHash(double x, double z) {
-        return (int) (x * 31 + z * 17); //TODO: Improve hash
-    }
 }

@@ -2,6 +2,7 @@ package com.grandtheftwarzone.gtwclient.core.minimap.packets;
 
 import com.grandtheftwarzone.gtwclient.core.minimap.markers.Marker;
 import com.grandtheftwarzone.gtwclient.core.minimap.markers.MarkerType;
+import com.grandtheftwarzone.gtwclient.core.minimap.utils.TextureAtlas;
 import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,18 +28,21 @@ public class PacketMarkerData implements IMessage {
             int posX = buf.readInt();
             int posZ = buf.readInt();
 
+            //TODO: Find a way to tell the client which marker to use (they should already been created)
             String texturePath = buf.readCharSequence(buf.readInt(), StandardCharsets.UTF_8).toString();
             String textureDomain = buf.readCharSequence(buf.readInt(), StandardCharsets.UTF_8).toString();
             boolean global = buf.readBoolean();
-            int textureX = buf.readInt();
-            int textureY = buf.readInt();
             int textureWidth = buf.readInt();
             int textureHeight = buf.readInt();
+            int atlasWidth = buf.readInt();
+            int atlasHeight = buf.readInt();
+            int atlasIndex = buf.readInt();
+
 
             markers.add(new Marker(posX, posZ,
                     new MarkerType(
                             new ResourceLocation(textureDomain, texturePath),
-                            global, textureX, textureY, textureWidth, textureHeight))
+                            new TextureAtlas(atlasIndex, textureWidth, textureHeight, atlasWidth, atlasHeight), global))
             );
         }
     }
@@ -60,10 +64,11 @@ public class PacketMarkerData implements IMessage {
             buf.writeCharSequence(textureDomain, StandardCharsets.UTF_8);
 
             buf.writeBoolean(marker.getType().isGlobal());
-            buf.writeInt(marker.getType().getTextureX());
-            buf.writeInt(marker.getType().getTextureY());
-            buf.writeInt(marker.getType().getTextureWidth());
-            buf.writeInt(marker.getType().getTextureHeight());
+            buf.writeInt(marker.getType().getAtlas().getTextureWidth());
+            buf.writeInt(marker.getType().getAtlas().getTextureHeight());
+            buf.writeInt(marker.getType().getAtlas().getWidth());
+            buf.writeInt(marker.getType().getAtlas().getHeight());
+            buf.writeInt(marker.getType().getAtlas().getIndex());
         }
     }
 }
