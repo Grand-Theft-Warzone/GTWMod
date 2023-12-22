@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
 
 public class ClientProxy extends CommonProxy{
 
-    public static PlayerData playerData = new PlayerData();
+    public static PlayerData playerData = GTWClient.instance.getPlayerData();
 
     //@TODO replace it with a config from atumModCore
     private static File dataFile;
