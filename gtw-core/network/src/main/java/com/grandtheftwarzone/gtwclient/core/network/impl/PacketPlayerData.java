@@ -16,6 +16,8 @@ public class PacketPlayerData implements IMessage {
     protected String rank = "null";
     protected String gang = "null";
 
+    protected String other = "null";
+
 
     public PacketPlayerData(){
         this.level=1;
@@ -53,6 +55,8 @@ public class PacketPlayerData implements IMessage {
         this.money = pd.getMoney();
         this.rank = pd.getRank();
         this.gang = pd.getGang();
+        this.other = pd.parseOtherDataToString();
+
     }
 
     @Override
@@ -67,6 +71,10 @@ public class PacketPlayerData implements IMessage {
         buf.writeBytes(bytes);
 
         bytes = gang.getBytes(StandardCharsets.UTF_8);
+        buf.writeInt(bytes.length);
+        buf.writeBytes(bytes);
+
+        bytes = other.getBytes(StandardCharsets.UTF_8);
         buf.writeInt(bytes.length);
         buf.writeBytes(bytes);
     }
@@ -87,5 +95,10 @@ public class PacketPlayerData implements IMessage {
         bytes = new byte[gangSize];
         buf.readBytes(bytes);
         gang = new String(bytes, StandardCharsets.UTF_8);
+
+        int otherSize = buf.readInt();
+        bytes = new byte[otherSize];
+        buf.readBytes(bytes);
+        other = new String(bytes, StandardCharsets.UTF_8);
     }
 }

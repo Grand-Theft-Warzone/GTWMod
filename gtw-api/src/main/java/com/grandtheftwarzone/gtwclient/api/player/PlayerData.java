@@ -51,6 +51,7 @@ public class PlayerData {
         rank = "";
         gang = "";
         notificationQueue = new ArrayList<>();
+        other = new ConcurrentHashMap<>();
     }
 
     public NotificationRequest getQueuedNotification(){
@@ -75,6 +76,22 @@ public class PlayerData {
         return new PlayerData(0,0,0).setMoney(-0.0001).setRank("null").setGang("null");
     }
 
+
+    public String parseOtherDataToString(){
+        if(other.isEmpty()) return "null";
+        StringBuilder sb = new StringBuilder();
+        for(String key : other.keySet()){
+            sb.append(key).append(":").append(other.get(key)).append("_");
+        }
+        return sb.toString();
+    }
+    public void insertOtherDataFromString(String data){
+        String[] split = data.split("_");
+        for (String s : split) {
+            String[] otherSplit = s.split(":");
+            other.put(otherSplit[0], otherSplit[1]);
+        }
+    }
     public void fromString(String data){
         String[] split = data.split("_");
         rank = split[0];
