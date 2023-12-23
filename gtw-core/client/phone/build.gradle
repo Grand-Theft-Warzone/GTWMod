@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+group = mod_group
+version = mod_version
+
+repositories {
+}
+
+dependencies {
+    api project(':gtw-core:client:phone:core')
+    api project(':gtw-core:client:phone:app-notifications')
+    api project(':gtw-core:client:phone:app-property')
+}

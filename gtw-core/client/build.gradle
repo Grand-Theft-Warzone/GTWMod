@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+group = mod_group
+version = mod_version
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api project(':gtw-core:client:display')
+    api project(':gtw-core:client:phone')
+    api project(':gtw-core:client:misc')
+
+}

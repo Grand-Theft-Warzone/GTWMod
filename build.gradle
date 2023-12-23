@@ -11,16 +11,8 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
-plugins{
-    id 'java'
-    id 'java-library'
-    id "com.github.johnrengelman.shadow" version "7.1.0"
-}
 group mod_group
 version mod_version
-archivesBaseName = mod_name
-
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 apply plugin: 'net.minecraftforge.gradle'
 
@@ -30,6 +22,9 @@ allprojects {
     apply plugin: 'eclipse'
     apply plugin: 'maven-publish'
     apply plugin: 'net.minecraftforge.gradle'
+
+    group mod_group
+    version mod_version
 
     sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
     repositories {
@@ -84,48 +79,22 @@ allprojects {
         }
     }
 }
-minecraft {
-    mappings channel: 'snapshot', version: '20171003-1.12'
-}
-dependencies {
-    implementation(project(":gtw-api"))
-    implementation(project(":gtw-core"))
-    implementation(project(":gtw-mod"))
-    implementation 'io.github.classgraph:classgraph:4.8.104'
-
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
-}
-
-
-
-shadowJar {
-    dependencies {
-        exclude(dependency ->
-                !dependency.moduleGroup.startsWith(mod_group)&&
-                        !dependency.moduleGroup.startsWith("io.github.classgraph")
-        )
+task copyOutputJars(type: Copy) {
+    doFirst {
+        // Delete existing JARs in the destination folder
+        delete "$buildDir/OUTPUT"
     }
-    duplicatesStrategy DuplicatesStrategy.EXCLUDE //prevent duplicates
-    archiveBaseName.set(mod_name)
-    classifier "" //prevent creation of unshadowed jar
+    // Ensure this task runs after the submodule's jar is built
+    dependsOn ':gtw-mod-client:build'
+    dependsOn ':gtw-mod-server:build'
 
-    //remove unsupported meta-inf staff from newer java versions
-    exclude 'META-INF/versions/**'
+    // Define the source and destination of the copy
+    from "$projectDir/gtw-mod-client/build/libs", "$projectDir/gtw-mod-server/build/libs"
+    into "$buildDir/OUTPUT"
+
+    // Optionally, you can specify a pattern to copy only specific JARs
+    include "${mod_name}-client-${mod_version}.jar"
+    include "${mod_name}-server-${mod_version}.jar"
 }
 
-reobf {
-    shadowJar {
-    }
-}
-
-jar.finalizedBy('reobfJar')
-jar{
-    manifest.attributes.clear()
-    manifest {
-        attributes "ForceLoadAsMod": "true"
-        attributes "FMLCorePluginContainsFMLMod": "true"
-        attributes "FMLCorePlugin": "com.grandtheftwarzone.gtwclient.mod.fml.FMLCore"
-        attributes "TweakOrder": "0"
-    }
-}
-
+tasks.build.dependsOn(copyOutputJars)
