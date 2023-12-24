@@ -37,9 +37,9 @@ allprojects {
         minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
         //global libs
         compileOnly project(":").fileTree(dir: 'libs', include: ['*.jar'])
+        api project(":").fileTree(dir: 'libs-impl', include: ['.jar'])
         //local libs
-        compileOnly fileTree(dir: 'libs', include: ['*.jar'])
-
+        api fileTree(dir: 'libs-impl', include: ['.jar'])
         implementation 'io.github.classgraph:classgraph:4.8.104'
 
         //annotations

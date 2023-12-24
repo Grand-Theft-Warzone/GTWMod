@@ -1,5 +1,6 @@
 package com.grandtheftwarzone.gtwmod.client;
 
+import com.grandtheftwarzone.core.emoji.GTWEmoji;
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwProperties;
 import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
@@ -73,6 +74,8 @@ public class GTWModClient extends AtumMod {
     private ScreensManager screensManager;
     @Getter
     private PlayerData playerData;
+    @Getter
+    private GTWEmoji emoji;
 
     // + Emoji
 //    public static final Map<String, List<Emoji>> EMOJI_MAP = new HashMap<>();
@@ -100,6 +103,7 @@ public class GTWModClient extends AtumMod {
         factoryGuiHandler = new GtwFactoryGuiHandler();
         phoneGui = new GtwPhoneGui();
         screensManager = new GtwScreensManager();
+        emoji = new GTWEmoji();
     }
     private void registerConfigCategory(){
         getConfigManager().addConfigCategory(new ConfigCategory(

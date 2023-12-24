@@ -21,7 +21,9 @@ shadowJar {
     dependencies {
         exclude(dependency ->
                 !dependency.moduleGroup.startsWith(mod_group)&&
-                        !dependency.moduleGroup.startsWith("io.github.classgraph")
+                        !dependency.moduleGroup.startsWith("io.github.classgraph")&&
+                            !dependency.moduleGroup.startsWith("com.esotericsoftware.yamlbeans")&&
+                                !dependency.moduleGroup.startsWith("org.cyclops")
         )
     }
     duplicatesStrategy DuplicatesStrategy.EXCLUDE //prevent duplicates
