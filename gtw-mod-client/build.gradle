@@ -38,6 +38,10 @@ reobf {
     }
 }
 
+minecraft {
+    accessTransformer = file('src/main/resources/META-INF/gtwemoji_at.cfg')
+}
+
 jar.finalizedBy('reobfJar')
 jar{
     manifest.attributes.clear()
@@ -48,3 +52,4 @@ jar{
         attributes "TweakOrder": "0"
     }
 }
+

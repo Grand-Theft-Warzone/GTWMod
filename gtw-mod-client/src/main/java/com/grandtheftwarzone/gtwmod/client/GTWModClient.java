@@ -27,7 +27,9 @@ import me.phoenixra.atumodcore.api.display.DisplayElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -40,11 +42,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Mod(modid = GtwProperties.MOD_ID,
         version = GtwProperties.VERSION,
-        name = GtwProperties.MOD_NAME)
+        name = GtwProperties.MOD_NAME,
+        clientSideOnly = true)
 public class GTWModClient extends AtumMod {
     @Mod.Instance
     public static GTWModClient instance;
@@ -70,6 +74,10 @@ public class GTWModClient extends AtumMod {
     private ScreensManager screensManager;
     @Getter
     private PlayerData playerData;
+
+    // + Emoji
+//    public static final Map<String, List<Emoji>> EMOJI_MAP = new HashMap<>();
+//    public static final List<Emoji> EMOJI_LIST = new ArrayList<>();
 
 
     public GTWModClient(){
@@ -126,6 +134,9 @@ public class GTWModClient extends AtumMod {
             }
         });
     }
+
+    // Emoji
+
     @Mod.EventHandler
     private void onClientSetup(FMLPostInitializationEvent e) {
 

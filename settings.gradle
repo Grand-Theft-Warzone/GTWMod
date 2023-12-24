@@ -21,4 +21,6 @@ include 'gtw-core:client'
 findProject(':gtw-core:client')?.name = 'client'
 include 'gtw-core:server'
 findProject(':gtw-core:server')?.name = 'server'
+include 'gtw-core:client:emoji'
+findProject(':gtw-core:client:emoji')?.name = 'emoji'
 
