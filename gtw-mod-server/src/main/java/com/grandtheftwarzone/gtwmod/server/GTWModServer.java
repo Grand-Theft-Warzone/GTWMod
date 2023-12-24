@@ -34,6 +34,8 @@ public class GTWModServer extends AtumMod {
         if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
             throw new RuntimeException("This mod is server side only!");
         }
+        System.out.println(GtwAPI.getGtwAsciiArt());
+        System.out.println("Initializing GTWMod[server]...");
         instance = this;
         GtwAPI.Instance.set(new GtwAPIServer());
 

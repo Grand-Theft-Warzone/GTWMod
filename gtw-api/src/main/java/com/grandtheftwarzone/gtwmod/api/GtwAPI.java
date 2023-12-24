@@ -87,6 +87,17 @@ public interface GtwAPI {
 
 
 
+    static @NotNull String getGtwAsciiArt(){
+        return "\n\n" +
+                " ██████╗     ████████╗    ██╗    ██╗\n" +
+                "██╔════╝     ╚══██╔══╝    ██║    ██║\n" +
+                "██║  ███╗       ██║       ██║ █╗ ██║\n" +
+                "██║   ██║       ██║       ██║███╗██║\n" +
+                "╚██████╔╝       ██║       ╚███╔███╔╝\n" +
+                " ╚═════╝        ╚═╝        ╚══╝╚══╝ " +
+                "\n                                 --- Grand Theft Warzone project\n";
+    }
+
 
 
 

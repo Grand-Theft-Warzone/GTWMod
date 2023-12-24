@@ -25,6 +25,7 @@ import me.phoenixra.atumodcore.api.config.Config;
 import me.phoenixra.atumodcore.api.config.ConfigType;
 import me.phoenixra.atumodcore.api.config.category.ConfigCategory;
 import me.phoenixra.atumodcore.api.display.DisplayElement;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.ConfigManager;
@@ -86,6 +87,8 @@ public class GTWModClient extends AtumMod {
         if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
             throw new RuntimeException("This mod is client only!");
         }
+        System.out.println(GtwAPI.getGtwAsciiArt());
+        System.out.println("Initializing GTWMod[client]...");
         instance = this;
         GtwAPI.Instance.set(new GtwAPIClient());
         soundsManager = new GtwSoundsManager();

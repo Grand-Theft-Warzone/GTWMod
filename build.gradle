@@ -26,6 +26,10 @@ allprojects {
     group mod_group
     version mod_version
 
+    //encoding
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
     sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
     repositories {
         mavenCentral()
