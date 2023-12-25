@@ -119,20 +119,20 @@ public class GTWModClient extends AtumMod {
 
             @Override
             protected void clear() {
-                elements.forEach(it->getDisplayElementRegistry().unregister(it));
+                elements.forEach(it->getDisplayElementRegistry().unregisterTemplate(it));
             }
 
             @Override
             protected void acceptConfig(@NotNull String id, @NotNull Config config) {
                 getAtumMod().getLogger().info("Loading display element with id " + id);
-                if(getDisplayElementRegistry().getElementById(id) != null) {
+                if(getDisplayElementRegistry().getElementTemplate(id) != null) {
                     getAtumMod().getLogger().warn("Display element with id " + id + " already added or is a default element!");
                     return;
                 }
 
-                DisplayElement element = getDisplayElementRegistry().compile(config);
+                DisplayElement element = getDisplayElementRegistry().compileCanvasTemplate(id,config);
                 if (element != null) {
-                    getDisplayElementRegistry().register(id, element);
+                    getDisplayElementRegistry().registerTemplate(id, element);
                     elements.add(id);
                 }
             }

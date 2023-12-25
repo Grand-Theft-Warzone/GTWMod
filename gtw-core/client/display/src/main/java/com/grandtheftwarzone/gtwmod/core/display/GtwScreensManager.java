@@ -7,6 +7,8 @@ import me.phoenixra.atumodcore.api.display.impl.BaseScreen;
 import net.minecraft.client.gui.GuiScreen;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class GtwScreensManager implements ScreensManager {
     private CustomMainMenu customMainMenu;
 
@@ -24,11 +26,11 @@ public class GtwScreensManager implements ScreensManager {
 
         public CustomMainMenu() {
             super(GtwAPI.getInstance().getGtwMod(),
-                    (DisplayCanvas)( GtwAPI.getInstance().getGtwMod().getDisplayElementRegistry().getCanvasById(
-                            GtwAPI.getInstance().getGtwMod().
-                                    getConfigManager().getConfig("settings")
+                    (DisplayCanvas)(Objects.requireNonNull(GtwAPI.getInstance().getGtwMod().getDisplayElementRegistry().getDrawableCanvas(
+                            Objects.requireNonNull(GtwAPI.getInstance().getGtwMod().
+                                            getConfigManager().getConfig("settings"))
                                     .getString("main_menu")
-                    ).clone()));
+                    ))));
         }
     }
 }
