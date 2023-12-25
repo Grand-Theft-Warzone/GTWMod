@@ -24,9 +24,9 @@ import static com.grandtheftwarzone.core.emoji.GTWEmoji.GITHUB_URL;
 
 
 public class Emoji implements Predicate<String> {
-    public static final ResourceLocation loading_texture = new ResourceLocation(GtwProperties.MOD_ID, "assets/gtwmod/textures/emoji/26a0.png");
-    public static final ResourceLocation noSignal_texture = new ResourceLocation(GtwProperties.MOD_ID, "assets/gtwmod/textures/emoji/26d4.png");
-    public static final ResourceLocation error_texture = new ResourceLocation(GtwProperties.MOD_ID, "assets/gtwmod/textures/emoji/26d4.png");
+    public static final ResourceLocation loading_texture = new ResourceLocation(GtwProperties.MOD_ID, "textures/emoji/26a0.png");
+    public static final ResourceLocation noSignal_texture = new ResourceLocation(GtwProperties.MOD_ID, "textures/emoji/26d4.png");
+    public static final ResourceLocation error_texture = new ResourceLocation(GtwProperties.MOD_ID, "textures/emoji/26d4.png");
 
     private static final AtomicInteger threadDownloadCounter = new AtomicInteger(0);
     public String name;
@@ -44,8 +44,8 @@ public class Emoji implements Predicate<String> {
         if (img != null)
             return;
 
-        img = new DownloadImageData(new File("gtwemoji/cache/" + name + "-" + version), GITHUB_URL + location, loading_texture);
-        resourceLocation = new ResourceLocation(GtwProperties.MOD_ID, "texures/emoji/" + name + "-" + version);
+        img = new DownloadImageData(new File("gtwdata/cache/emoji/" + name + "-" + version), GITHUB_URL + location, loading_texture);
+        resourceLocation = new ResourceLocation(GtwProperties.MOD_ID, "textures/emoji/" + name + "-" + version);
         Minecraft.getMinecraft().renderEngine.loadTexture(resourceLocation, img);
     }
 

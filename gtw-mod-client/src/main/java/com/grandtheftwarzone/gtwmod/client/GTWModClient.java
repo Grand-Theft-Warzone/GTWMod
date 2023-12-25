@@ -149,13 +149,22 @@ public class GTWModClient extends AtumMod {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);
+        emoji.onPreInit(event);
+        System.out.println("BlaBlaBla x2");
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    @SubscribeEvent
+    public void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
+        if (event.getModID().equals(GtwProperties.MOD_ID)) {
+            ConfigManager.sync(GtwProperties.MOD_ID, net.minecraftforge.common.config.Config.Type.INSTANCE);
+        }
+    }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         proxy.init(event);
+        emoji.onInit(event);
     }
 
 

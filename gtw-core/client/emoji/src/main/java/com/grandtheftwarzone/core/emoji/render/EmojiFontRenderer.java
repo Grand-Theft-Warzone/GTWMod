@@ -46,14 +46,14 @@ public class EmojiFontRenderer extends FontRenderer {
                 Emoji wordEmoji = null;
 
                 if ((word.startsWith("!StartExportAllItem_scale:") && word.endsWith("!")) && Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.capabilities.isCreativeMode) {                    try {
-                        Integer scale = Integer.valueOf(word.replaceAll(".*_scale:(\\d+).*", "$1").trim());
+                    Integer scale = Integer.valueOf(word.replaceAll(".*_scale:(\\d+).*", "$1").trim());
 
-                        GuiIconExporter exporter = new GuiIconExporter(scale); // Adjusted scale here
-                        Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().displayGuiScreen(exporter));
-                    } catch (NumberFormatException e) {
-                        // Обработка ошибок при преобразовании строки в число
-                        e.printStackTrace();
-                    }
+                    GuiIconExporter exporter = new GuiIconExporter(scale); // Adjusted scale here
+                    Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().displayGuiScreen(exporter));
+                } catch (NumberFormatException e) {
+                    // Обработка ошибок при преобразовании строки в число
+                    e.printStackTrace();
+                }
 
                 } else {
                     for (Emoji emoji : GTWEmoji.EMOJI_LIST) {

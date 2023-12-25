@@ -27,6 +27,7 @@ import java.util.Queue;
 
 import static com.grandtheftwarzone.core.emoji.GTWEmoji.minecraftDir;
 
+
 /**
  * A temporary gui for exporting icons.
  *
@@ -70,7 +71,7 @@ public class GuiIconExporter extends GuiScreen {
     private void generateItemsYml() {
         try {
 
-            File baseDir = new File(minecraftDir, "gtwemoji/export" + (this.scale * 2) + "/");
+            File baseDir = new File(minecraftDir, "gtwdata/exportItem" + (this.scale * 2) + "/");
             Path itemsYmlPath = baseDir.toPath().resolve("items.yml");
 
             try (BufferedWriter writer = Files.newBufferedWriter(itemsYmlPath)) {
@@ -133,11 +134,11 @@ public class GuiIconExporter extends GuiScreen {
     }
 
     public Queue<IExportTask> createExportTasks() {
-        File newDir = new File(minecraftDir, "/gtwemoji/");
+        File newDir = new File(minecraftDir, "gtwdata/");
         newDir.mkdir();
-        File newDir1 = new File(minecraftDir + "/gtwemoji/", "export" + (this.scale * 2));
+        File newDir1 = new File(minecraftDir + "gtwdata/", "exportItem" + (this.scale * 2));
         newDir1.mkdir();
-        File baseDir = new File(minecraftDir + "/gtwemoji/export" + (this.scale * 2), "item/");
+        File baseDir = new File(minecraftDir + "gtwdata/exportItem" + (this.scale * 2), "item/");
         baseDir.mkdir();
 
         // Create a list of tasks

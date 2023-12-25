@@ -11,6 +11,7 @@ repositories {
 dependencies {
     compileOnly project(':gtw-core:client:misc')
     api 'com.esotericsoftware.yamlbeans:yamlbeans:1.13'
+
 }
 
 minecraft {

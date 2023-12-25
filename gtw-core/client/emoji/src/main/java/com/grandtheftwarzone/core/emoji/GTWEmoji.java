@@ -27,12 +27,13 @@ import net.minecraftforge.common.MinecraftForge;
 import org.cyclops.cyclopscore.Reference;
 import org.cyclops.cyclopscore.init.ModBase;
 
+import javax.swing.*;
+
 
 public class GTWEmoji {
 
     private static final Logger LOGGER = Logger.getLogger(GTWEmoji.class.getName());
 
-    public static final Map<String, List<Emoji>> EMOJI_MAP = new HashMap<>();
     public static final List<Emoji> EMOJI_LIST = new ArrayList<>();
 
     public static String GITHUB_URL = "https://raw.githubusercontent.com/Grand-Theft-Warzone/.github/main/emoji/";
@@ -45,18 +46,27 @@ public class GTWEmoji {
 
 
     public GTWEmoji() {
-        LOGGER.log(Level.INFO, "Main method is called.");
-        MinecraftForge.EVENT_BUS.register(this);
+        System.out.println("Main method is called.");
         generateEmojiList();
     }
 
     public static List<Emoji> readCategory(String cat) throws YamlException {
-        LOGGER.log(Level.INFO, "Reading category: {0}", cat);
+        System.out.println("Reading category: " + cat);
 
-        YamlReader categoryReader = new YamlReader(new StringReader(readStringFromURL(GITHUB_URL + cat)));
-        return Lists.newArrayList(categoryReader.read(Emoji[].class));
+        String yamlContent = readStringFromURL(GITHUB_URL + cat);
+        System.out.println("Received YAML content:\n" + yamlContent);
+
+        YamlReader categoryReader = new YamlReader(new StringReader(yamlContent));
+
+        try {
+            Emoji[] emojis = categoryReader.read(Emoji[].class);
+            System.out.println("Successfully read emojis from category: " + cat);
+            return Lists.newArrayList(emojis);
+        } catch (YamlException e) {
+            System.err.println("Error reading YAML content for category " + cat + ": " + e.getMessage());
+            throw e;
+        }
     }
-
     public static String readStringFromURL(String requestURL) {
         try {
             try (Scanner scanner = new Scanner(new URL(requestURL).openStream(),
@@ -65,7 +75,7 @@ public class GTWEmoji {
                 return scanner.hasNext() ? scanner.next() : "";
             }
         } catch (IOException e) {
-            // Log the exception
+            // Log the exceptionz
             LOGGER.log(Level.SEVERE, "Error reading from URL", e);
         }
         return "";
@@ -75,18 +85,17 @@ public class GTWEmoji {
     private static void generateEmojiList() {
 
         try {
-            LOGGER.log(Level.INFO, "Pre-Initialization Event is called.");
+            LOGGER.log(Level.INFO, "Generate Emoji List start.");
 
             YamlReader reader = new YamlReader(new StringReader(readStringFromURL(GITHUB_URL + "Categories.yml")));
             ArrayList<String> categories = (ArrayList<String>) reader.read();
             for (String category : categories) {
                 List<Emoji> emojis = readCategory(category);
                 EMOJI_LIST.addAll(emojis);
-                EMOJI_MAP.put(category, emojis);
             }
         } catch (YamlException e) {
-            LOGGER.log(Level.SEVERE, "YAML Exception", e);
-            LOGGER.log(Level.SEVERE, "Error!");
+            System.out.println("YAML Exception "+ e);
+            System.out.println("Error!");
             error = true;
         }
     }
@@ -97,24 +106,18 @@ public class GTWEmoji {
     public void onPreInit(FMLPreInitializationEvent event) {
         System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-        File minecraftDir = event.getModConfigurationDirectory().getParentFile();
+        minecraftDir = event.getModConfigurationDirectory().getParentFile();
 
         generateEmojiList();
-        MinecraftForge.EVENT_BUS.register(this);
+//        MinecraftForge.EVENT_BUS.register(this);
         ConfigManager.sync(GtwProperties.MOD_ID, Config.Type.INSTANCE);
     }
 
-    @SubscribeEvent
-    public void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.getModID().equals(GtwProperties.MOD_ID)) {
-            ConfigManager.sync(GtwProperties.MOD_ID, Config.Type.INSTANCE);
-        }
-    }
 
     @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) {
         // Log information about the method being called
-        LOGGER.log(Level.INFO, "Initialization Event is called.");
+        System.out.println("Initialization Event is called.");
 
         if (!error) {
             Minecraft.getMinecraft().fontRenderer = new EmojiFontRenderer(Minecraft.getMinecraft());
@@ -125,16 +128,3 @@ public class GTWEmoji {
 
 
 }
-
-//package com.grandtheftwarzone.gtwemoji;
-//
-//        import net.minecraftforge.common.config.Config;
-//
-//@Config(modid = GTWEmoji.MODID,name = "GTWConfig")
-//public class GTWEmojiConfig {
-//
-//    @Config.Name("emoji_render")
-//    @Config.LangKey("config.gtwemoji.emoji_render")
-//    public static boolean renderEmoji = false;
-//
-//}
