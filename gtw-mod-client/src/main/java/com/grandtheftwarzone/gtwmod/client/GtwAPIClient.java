@@ -4,7 +4,7 @@ import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneGui;
 import com.grandtheftwarzone.gtwmod.api.hud.PlayerHUD;
-import com.grandtheftwarzone.gtwmod.api.networking.NetworkManager;
+import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import com.grandtheftwarzone.gtwmod.api.screen.ScreensManager;
 import com.grandtheftwarzone.gtwmod.api.sound.SoundsManager;
@@ -18,8 +18,8 @@ public class GtwAPIClient implements GtwAPI {
     }
 
     @Override
-    public @NotNull NetworkManager getNetworkManager() {
-        return GTWModClient.instance.getNetworkManager();
+    public @NotNull NetworkAPI getNetworkManager() {
+        return GTWModClient.instance.getNetworkAPI();
     }
 
     @Override

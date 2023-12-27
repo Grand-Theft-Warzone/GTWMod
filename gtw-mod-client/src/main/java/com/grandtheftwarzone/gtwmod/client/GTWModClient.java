@@ -6,7 +6,7 @@ import com.grandtheftwarzone.gtwmod.api.GtwProperties;
 import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneGui;
 import com.grandtheftwarzone.gtwmod.api.hud.PlayerHUD;
-import com.grandtheftwarzone.gtwmod.api.networking.NetworkManager;
+import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import com.grandtheftwarzone.gtwmod.api.screen.ScreensManager;
 import com.grandtheftwarzone.gtwmod.api.sound.SoundsManager;
@@ -25,7 +25,6 @@ import me.phoenixra.atumodcore.api.config.Config;
 import me.phoenixra.atumodcore.api.config.ConfigType;
 import me.phoenixra.atumodcore.api.config.category.ConfigCategory;
 import me.phoenixra.atumodcore.api.display.DisplayElement;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.ConfigManager;
@@ -43,7 +42,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Mod(modid = GtwProperties.MOD_ID,
@@ -62,7 +60,7 @@ public class GTWModClient extends AtumMod {
     @Getter
     private Config settings;
     @Getter @Setter
-    private NetworkManager networkManager;
+    private NetworkAPI networkAPI;
     @Getter
     private SoundsManager soundsManager;
     @Getter
@@ -119,20 +117,20 @@ public class GTWModClient extends AtumMod {
 
             @Override
             protected void clear() {
-                elements.forEach(it->getDisplayElementRegistry().unregisterTemplate(it));
+                elements.forEach(it->getDisplayManager().getElementRegistry().unregisterTemplate(it));
             }
 
             @Override
             protected void acceptConfig(@NotNull String id, @NotNull Config config) {
                 getAtumMod().getLogger().info("Loading display element with id " + id);
-                if(getDisplayElementRegistry().getElementTemplate(id) != null) {
+                if(getDisplayManager().getElementRegistry().getElementTemplate(id) != null) {
                     getAtumMod().getLogger().warn("Display element with id " + id + " already added or is a default element!");
                     return;
                 }
 
-                DisplayElement element = getDisplayElementRegistry().compileCanvasTemplate(id,config);
+                DisplayElement element = getDisplayManager().getElementRegistry().compileCanvasTemplate(id,config);
                 if (element != null) {
-                    getDisplayElementRegistry().registerTemplate(id, element);
+                    getDisplayManager().getElementRegistry().registerTemplate(id, element);
                     elements.add(id);
                 }
             }

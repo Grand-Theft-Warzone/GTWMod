@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public interface NetworkManager {
+public interface NetworkAPI {
 
     /**
      * Send player data to the client.

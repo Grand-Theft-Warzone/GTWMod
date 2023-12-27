@@ -2,7 +2,7 @@ package com.grandtheftwarzone.gtwmod.api;
 
 import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneGui;
-import com.grandtheftwarzone.gtwmod.api.networking.NetworkManager;
+import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 import com.grandtheftwarzone.gtwmod.api.hud.PlayerHUD;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import com.grandtheftwarzone.gtwmod.api.screen.ScreensManager;
@@ -29,7 +29,7 @@ public interface GtwAPI {
      *
      * @return The network manager
      */
-    @NotNull NetworkManager getNetworkManager();
+    @NotNull NetworkAPI getNetworkManager();
 
     /**
      * Get the player hud handler

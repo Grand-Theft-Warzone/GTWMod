@@ -2,12 +2,11 @@ package com.grandtheftwarzone.gtwmod.server;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwProperties;
-import com.grandtheftwarzone.gtwmod.api.networking.NetworkManager;
+import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 import com.grandtheftwarzone.gtwmod.server.proxy.CommonProxy;
 import lombok.Getter;
 import lombok.Setter;
 import me.phoenixra.atumodcore.api.AtumMod;
-import me.phoenixra.atumodcore.api.config.Config;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -27,7 +26,7 @@ public class GTWModServer extends AtumMod {
     public static CommonProxy proxy;
 
     @Getter @Setter
-    private NetworkManager networkManager;
+    private NetworkAPI networkAPI;
 
 
     public GTWModServer(){

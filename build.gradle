@@ -42,8 +42,6 @@ allprojects {
         //global libs
         compileOnly project(":").fileTree(dir: 'libs', include: ['*.jar'])
         //local libs
-        compileOnly fileTree(dir: 'libs', include: ['*.jar'])
-        //local libs
 //        api fileTree(dir: 'libs_impl', include: ['.jar'])
         implementation 'io.github.classgraph:classgraph:4.8.104'
 

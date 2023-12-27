@@ -2,7 +2,7 @@ package com.grandtheftwarzone.gtwmod.server.proxy;
 
 import com.grandtheftwarzone.gtwmod.api.event.EntityDamagedEvent;
 
-import com.grandtheftwarzone.gtwmod.core.network.GtwNetworkManager;
+import com.grandtheftwarzone.gtwmod.core.network.GtwNetworkAPI;
 import com.grandtheftwarzone.gtwmod.server.GTWModServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -23,7 +23,7 @@ public class CommonProxy {
     public CommonProxy(){
         MinecraftForge.EVENT_BUS.register(this);
 
-        GTWModServer.instance.setNetworkManager(new GtwNetworkManager());
+        GTWModServer.instance.setNetworkAPI(new GtwNetworkAPI());
     }
 
     @Mod.EventHandler

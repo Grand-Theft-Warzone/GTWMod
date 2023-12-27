@@ -2,8 +2,7 @@ Java Launcher: C:\Users\fenix\.jdks\corretto-1.8.0_392\bin\java.exe
 Arguments: '--in-jar, C:\1\Projects\IntelijIdea\Grand Theft Warzone\GTWMod\gtw-mod-server\build\libs\GTWMod-server-0.2alpha.jar, --out-jar, C:\1\Projects\IntelijIdea\Grand Theft Warzone\GTWMod\gtw-mod-server\build\reobfShadowJar\output.jar, --srg-in, C:\1\Projects\IntelijIdea\Grand Theft Warzone\GTWMod\gtw-mod-server\build\createMcpToSrg\output.tsrg, --live'
 Classpath:
  - C:\Users\fenix\.gradle\caches\forge_gradle\maven_downloader\net\md-5\SpecialSource\1.11.0\SpecialSource-1.11.0-shaded.jar
- - C:\1\Projects\IntelijIdea\Grand Theft Warzone\GTWMod\libs\AtumModCore-1.0.0.jar
- - C:\1\Projects\IntelijIdea\Grand Theft Warzone\GTWMod\libs\CyclopsCore-1.12.2-1.5.0.jar
+ - C:\1\Projects\IntelijIdea\Grand Theft Warzone\GTWMod\libs\AtumModCore-1.1.1.jar
  - C:\Users\fenix\.gradle\caches\modules-2\files-2.1\org.projectlombok\lombok\1.18.24\13a394eed5c4f9efb2a6d956e2086f1d81e857d9\lombok-1.18.24.jar
  - C:\Users\fenix\.gradle\caches\modules-2\files-2.1\org.jetbrains\annotations\23.0.0\8cc20c07506ec18e0834947b84a864bfc094484e\annotations-23.0.0.jar
  - C:\Users\fenix\.gradle\caches\modules-2\files-2.1\io.github.classgraph\classgraph\4.8.104\6a40ced7ec6898f6046f0b04415fa2b1578f4457\classgraph-4.8.104.jar

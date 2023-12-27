@@ -1,7 +1,7 @@
 package com.grandtheftwarzone.gtwmod.core.network;
 
 import com.grandtheftwarzone.gtwmod.api.gui.GuiAction;
-import com.grandtheftwarzone.gtwmod.api.networking.NetworkManager;
+import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 import com.grandtheftwarzone.gtwmod.api.player.NotificationRequest;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import com.grandtheftwarzone.gtwmod.core.network.impl.PacketHandlerNotification;
@@ -26,11 +26,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class GtwNetworkManager implements NetworkManager {
+public class GtwNetworkAPI implements NetworkAPI {
     private final  SimpleNetworkWrapper NETWORK_CHANNEL;
     private int discriminator = 1;
 
-    public GtwNetworkManager() {
+    public GtwNetworkAPI() {
         NETWORK_CHANNEL = NetworkRegistry.INSTANCE.newSimpleChannel("gtwclient");
 
         registerMessage(PacketHandlerPlayerData.class, PacketPlayerData.class, Side.CLIENT);

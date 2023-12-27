@@ -3,7 +3,7 @@ package com.grandtheftwarzone.gtwmod.client.proxy;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import com.grandtheftwarzone.gtwmod.client.GTWModClient;
 import com.grandtheftwarzone.gtwmod.core.display.hud.render.GtwHudRenderer;
-import com.grandtheftwarzone.gtwmod.core.network.GtwNetworkManager;
+import com.grandtheftwarzone.gtwmod.core.network.GtwNetworkAPI;
 import me.phoenixra.atumodcore.api.placeholders.types.SimplePlaceholder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -30,7 +30,7 @@ public class ClientProxy {
 
     public ClientProxy(){
         MinecraftForge.EVENT_BUS.register(this);
-        GTWModClient.instance.setNetworkManager(new GtwNetworkManager());
+        GTWModClient.instance.setNetworkAPI(new GtwNetworkAPI());
     }
 
     @Mod.EventHandler
