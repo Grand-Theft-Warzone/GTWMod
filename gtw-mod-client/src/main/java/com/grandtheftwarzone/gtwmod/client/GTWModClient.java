@@ -2,6 +2,7 @@ package com.grandtheftwarzone.gtwmod.client;
 
 import com.grandtheftwarzone.core.emoji.GTWEmoji;
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
+import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.GtwProperties;
 import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneGui;
@@ -38,6 +39,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 
@@ -165,6 +167,11 @@ public class GTWModClient extends AtumMod {
         emoji.onInit(event);
     }
 
+    @SubscribeEvent
+    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        GtwLog.info("Login to server/world registered");
+        emoji.generateEmojiList();
+    }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {

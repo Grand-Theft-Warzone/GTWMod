@@ -39,6 +39,7 @@ public class GTWEmoji {
 
     public static String GITHUB_URL = "https://raw.githubusercontent.com/Grand-Theft-Warzone/.github/main/emoji/";
     static boolean error = false;
+    static boolean emoji_full = false;
 
     public static File minecraftDir;
 
@@ -83,24 +84,42 @@ public class GTWEmoji {
     }
 
 
-    private static void generateEmojiList() {
-
+    public void generateEmojiList() {
+        if (error) {
+            GtwLog.error("Emoji List is not generated. See the error above.");
+            return;
+        }
+        if (emoji_full) {
+            GtwLog.error("The Emoji List is already fully formed. Skip regeneration.");
+            return;
+        }
         try {
             GtwLog.info("Generate Emoji List start.");
 
+            EMOJI_LIST.clear();
             YamlReader reader = new YamlReader(new StringReader(readStringFromURL(GITHUB_URL + "Categories.yml")));
             ArrayList<String> categories = (ArrayList<String>) reader.read();
             for (String category : categories) {
                 List<Emoji> emojis = readCategory(category);
                 EMOJI_LIST.addAll(emojis);
             }
+            emoji_full = true;
         } catch (YamlException e) {
-            GtwLog.info("YAML Exception "+ e);
+            GtwLog.info("YAML Exception: " + e);
             GtwLog.info("Error!");
             error = true;
+        } catch (NullPointerException e) {
+            GtwLog.error("-> NullPointerException: " + e.getMessage());
+            GtwLog.error("-> Error loading Emoji List. Please check your internet connection.");
+            GtwLog.error("Details about the error: ");
+            e.printStackTrace();
+            //error = true;
+        } catch (Exception e) {
+            GtwLog.error("An unknown error has occurred: " + e.getMessage());
+            error = true;
+            e.printStackTrace();
         }
     }
-
 
 
     @Mod.EventHandler
@@ -109,7 +128,7 @@ public class GTWEmoji {
 
         minecraftDir = event.getModConfigurationDirectory().getParentFile();
 
-        generateEmojiList();
+//        generateEmojiList();
 //        MinecraftForge.EVENT_BUS.register(this);
         ConfigManager.sync(GtwProperties.MOD_ID, Config.Type.INSTANCE);
     }
