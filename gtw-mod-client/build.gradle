@@ -7,16 +7,7 @@ group = mod_group
 archivesBaseName = mod_name
 
 repositories {
-    exclusiveContent {
-        forRepository {
-            maven {
-                url "https://cursemaven.com"
-            }
-        }
-        filter {
-            includeGroup "curse.maven"
-        }
-    }
+
 }
 
 dependencies {
@@ -24,7 +15,6 @@ dependencies {
     implementation(project(":gtw-core:client"))
     implementation(project(":gtw-core:network"))
     implementation 'io.github.classgraph:classgraph:4.8.104'
-    implementation "curse.maven:cyclopscore-232758:2753297"
 
 }
 
@@ -33,8 +23,7 @@ shadowJar {
         exclude(dependency ->
                 !dependency.moduleGroup.startsWith(mod_group)&&
                         !dependency.moduleGroup.startsWith("io.github.classgraph")&&
-                        !dependency.moduleGroup.startsWith("com.esotericsoftware.yamlbeans")&&
-                        !dependency.moduleGroup.startsWith("org.cyclops.cyclopscore")
+                        !dependency.moduleGroup.startsWith("com.esotericsoftware.yamlbeans")
         )
         exclude 'META-INF/versions/**'
     }
