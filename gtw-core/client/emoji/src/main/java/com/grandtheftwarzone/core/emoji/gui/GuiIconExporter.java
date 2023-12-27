@@ -136,9 +136,9 @@ public class GuiIconExporter extends GuiScreen {
     public Queue<IExportTask> createExportTasks() {
         File newDir = new File(minecraftDir, "gtwdata/");
         newDir.mkdir();
-        File newDir1 = new File(minecraftDir + "gtwdata/", "exportItem" + (this.scale * 2));
+        File newDir1 = new File(minecraftDir + "/gtwdata/", "exportItem" + (this.scale * 2));
         newDir1.mkdir();
-        File baseDir = new File(minecraftDir + "gtwdata/exportItem" + (this.scale * 2), "item/");
+        File baseDir = new File(minecraftDir + "/gtwdata/exportItem" + (this.scale * 2), "item/");
         baseDir.mkdir();
 
         // Create a list of tasks
