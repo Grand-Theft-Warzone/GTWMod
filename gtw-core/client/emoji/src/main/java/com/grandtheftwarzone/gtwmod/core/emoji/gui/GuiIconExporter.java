@@ -1,6 +1,7 @@
-package com.grandtheftwarzone.core.emoji.gui;
+package com.grandtheftwarzone.gtwmod.core.emoji.gui;
 
 import com.google.common.collect.Queues;
+import com.grandtheftwarzone.gtwmod.core.emoji.GTWEmoji;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.creativetab.CreativeTabs;
@@ -22,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-
-import static com.grandtheftwarzone.core.emoji.GTWEmoji.minecraftDir;
 
 
 /**
@@ -73,7 +72,7 @@ public class GuiIconExporter extends GuiScreen {
     private void generateItemsYml() {
         try {
 
-            File baseDir = new File(minecraftDir, "gtwdata/exportItem" + (this.scale * 2) + "/");
+            File baseDir = new File(GTWEmoji.minecraftDir, "gtwdata/exportItem" + (this.scale * 2) + "/");
             Path itemsYmlPath = baseDir.toPath().resolve("items.yml");
 
             try (BufferedWriter writer = Files.newBufferedWriter(itemsYmlPath)) {
@@ -132,11 +131,11 @@ public class GuiIconExporter extends GuiScreen {
     }
 
     public Queue<IExportTask> createExportTasks() {
-        File newDir = new File(minecraftDir, "gtwdata/");
+        File newDir = new File(GTWEmoji.minecraftDir, "gtwdata/");
         newDir.mkdir();
-        File newDir1 = new File(minecraftDir + "/gtwdata/", "exportItem" + (this.scale * 2));
+        File newDir1 = new File(GTWEmoji.minecraftDir + "/gtwdata/", "exportItem" + (this.scale * 2));
         newDir1.mkdir();
-        File baseDir = new File(minecraftDir + "/gtwdata/exportItem" + (this.scale * 2), "item/");
+        File baseDir = new File(GTWEmoji.minecraftDir + "/gtwdata/exportItem" + (this.scale * 2), "item/");
         baseDir.mkdir();
 
         // Create a list of tasks

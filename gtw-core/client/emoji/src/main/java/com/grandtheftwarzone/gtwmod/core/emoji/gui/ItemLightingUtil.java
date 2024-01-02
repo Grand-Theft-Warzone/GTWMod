@@ -1,4 +1,4 @@
-package com.grandtheftwarzone.core.emoji.gui;
+package com.grandtheftwarzone.gtwmod.core.emoji.gui;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;

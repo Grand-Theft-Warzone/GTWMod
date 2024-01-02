@@ -6,10 +6,8 @@ group = mod_group
 version = mod_version
 
 repositories {
-    mavenCentral()
 }
 
 dependencies {
-    api project(':gtw-core:server:killFeed')
-
+    compileOnly project(':gtw-core:client:misc')
 }

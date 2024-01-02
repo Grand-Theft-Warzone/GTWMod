@@ -1,10 +1,10 @@
-package com.grandtheftwarzone.core.emoji;
+package com.grandtheftwarzone.gtwmod.core.emoji;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
 import com.google.common.collect.Lists;
-import com.grandtheftwarzone.core.emoji.api.Emoji;
-import com.grandtheftwarzone.core.emoji.render.EmojiFontRenderer;
+import com.grandtheftwarzone.gtwmod.core.emoji.api.Emoji;
+import com.grandtheftwarzone.gtwmod.core.emoji.render.EmojiFontRenderer;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.GtwProperties;
 import net.minecraft.client.Minecraft;
@@ -36,7 +36,7 @@ public class GTWEmoji {
 
 
     public GTWEmoji() {
-        GtwLog.info("Main method is called.");
+        GtwLog.info("Main method Emoji is called.");
         generateEmojiList();
     }
 

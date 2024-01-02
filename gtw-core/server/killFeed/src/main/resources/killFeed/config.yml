@@ -1,0 +1,50 @@
+# Example
+
+# =============== Variables: ========================
+# $killer - the player who killed
+# $player - player who was killed
+# $mod_name - the name of the mod that was used to kill the player.
+# $item - the item with which the player was killed
+# $full_item - full path of the item. $mod_name:$item (Example: minecraft:diamond)
+# ===================================================
+
+default_killText: ""
+
+# Custom variables
+variable:
+  sword: "$player died from $killer sword"
+  vistrel: "$player died in a shootout"
+
+
+
+# ===================================
+# mods:
+#   {mod_name}:
+#      - {item}: {death message}
+#
+# "other" - other items in this mod
+# ===================================
+
+# ===================================
+# !!! In the key, instead of the symbol "." the symbol "♪" is used!! (Also in regexp)
+# ===================================
+mods:
+  minecraft:
+    "diamond": "~minecraft__diamond_sword__0~ $player was stabbed to death with a diamond"
+  modularwarfare:
+    "prototype♪mg42": "{pistol} $vistrel from $item weapon"
+    "other": "{sms} $vistrel"
+
+# If full_item matches the regular expression, then replace the message
+regexp:
+  "♪*sword♪*": "{sword_kill} $sword"
+
+
+# If you want to process additional item data (let's say a certain color of wool/glass), set it to true
+# Explanation: If true, appends __{metadata} at the end of item_id
+metadata: false
+
+debug: false
+
+
+

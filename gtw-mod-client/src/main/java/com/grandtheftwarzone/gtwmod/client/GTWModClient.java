@@ -1,6 +1,6 @@
 package com.grandtheftwarzone.gtwmod.client;
 
-import com.grandtheftwarzone.core.emoji.GTWEmoji;
+import com.grandtheftwarzone.gtwmod.core.emoji.GTWEmoji;
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.GtwProperties;

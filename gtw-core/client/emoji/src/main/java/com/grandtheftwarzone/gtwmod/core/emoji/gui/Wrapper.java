@@ -1,4 +1,4 @@
-package com.grandtheftwarzone.core.emoji.gui;
+package com.grandtheftwarzone.gtwmod.core.emoji.gui;
 
 public class Wrapper<T> {
 

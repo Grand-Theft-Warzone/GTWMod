@@ -1,4 +1,4 @@
-package com.grandtheftwarzone.core.emoji.api;
+package com.grandtheftwarzone.gtwmod.core.emoji.api;
 
 import com.grandtheftwarzone.gtwmod.api.GtwProperties;
 import net.minecraft.client.Minecraft;
@@ -20,7 +20,7 @@ import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.grandtheftwarzone.core.emoji.GTWEmoji.GITHUB_URL;
+import static com.grandtheftwarzone.gtwmod.core.emoji.GTWEmoji.GITHUB_URL;
 
 
 public class Emoji implements Predicate<String> {
