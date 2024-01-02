@@ -11,9 +11,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.cyclops.cyclopscore.datastructure.Wrapper;
-import org.cyclops.cyclopscore.helper.Helpers;
+
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -37,7 +35,11 @@ import static com.grandtheftwarzone.core.emoji.GTWEmoji.minecraftDir;
  */
 public class GuiIconExporter extends GuiScreen {
 
-    private static final int BACKGROUND_COLOR = Helpers.RGBAToInt(1, 0, 0, 255);
+    public static int RGBAToInt(int r, int g, int b, int a) {
+        return a << 24 | r << 16 | g << 8 | b;
+    }
+
+    private static final int BACKGROUND_COLOR = RGBAToInt(1, 0, 0, 255);
     private final List<ItemInfo> itemInfoList;
 
     private final int scale;
@@ -126,11 +128,7 @@ public class GuiIconExporter extends GuiScreen {
     }
 
     public String serializeNbtTag(NBTTagCompound tag) {
-        if (GeneralConfig.fileNameHashTag) {
-            return DigestUtils.md5Hex(tag.toString());
-        } else {
-            return tag.toString();
-        }
+        return tag.toString();
     }
 
     public Queue<IExportTask> createExportTasks() {
@@ -181,7 +179,7 @@ public class GuiIconExporter extends GuiScreen {
                     subKey.replace("\"", "@");
                     strings.add("~" + subKey + "~");
                     itemInfoList.add(new ItemInfo(subKey, "assets/item/" + subKey + ".png", strings));
-                    if (subItem.hasTagCompound() && GeneralConfig.fileNameHashTag) {
+                    if (subItem.hasTagCompound()) {
                         ImageExportUtil.exportNbtFile(baseDir, subKey, subItem.getTagCompound());
                     }
                 });
