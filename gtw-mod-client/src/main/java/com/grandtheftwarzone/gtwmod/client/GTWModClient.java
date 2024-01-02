@@ -5,14 +5,12 @@ import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwProperties;
 import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneGui;
-import com.grandtheftwarzone.gtwmod.api.hud.PlayerHUD;
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import com.grandtheftwarzone.gtwmod.api.screen.ScreensManager;
 import com.grandtheftwarzone.gtwmod.api.sound.SoundsManager;
 import com.grandtheftwarzone.gtwmod.client.proxy.ClientProxy;
 import com.grandtheftwarzone.gtwmod.core.display.GtwFactoryGuiHandler;
-import com.grandtheftwarzone.gtwmod.core.display.GtwPlayerHUD;
 import com.grandtheftwarzone.gtwmod.core.display.GtwScreensManager;
 import com.grandtheftwarzone.gtwmod.core.display.loadingscreen.MainSplashRenderer;
 import com.grandtheftwarzone.gtwmod.core.display.loadingscreen.listener.ModLoadingListener;
@@ -64,8 +62,6 @@ public class GTWModClient extends AtumMod {
     @Getter
     private SoundsManager soundsManager;
     @Getter
-    private PlayerHUD playerHUD;
-    @Getter
     private FactoryGuiHandler factoryGuiHandler;
     @Getter
     private PhoneGui phoneGui;
@@ -100,7 +96,6 @@ public class GTWModClient extends AtumMod {
         registerConfigCategory();
 
         playerData = new PlayerData();
-        playerHUD = new GtwPlayerHUD();
         factoryGuiHandler = new GtwFactoryGuiHandler();
         phoneGui = new GtwPhoneGui();
         screensManager = new GtwScreensManager();
@@ -196,6 +191,6 @@ public class GTWModClient extends AtumMod {
 
     @Override
     public boolean isDebugEnabled() {
-        return false;
+        return true;
     }
 }

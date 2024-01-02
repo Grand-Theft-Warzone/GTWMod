@@ -15,7 +15,7 @@ public class GtwScreensManager implements ScreensManager {
     @Override
     public @NotNull GuiScreen getMainMenuGuiScreen() {
         if(customMainMenu != null){
-            customMainMenu.getCanvas().onRemove();
+            customMainMenu.getRenderer().closeRenderer();
         }
 
         customMainMenu = new CustomMainMenu();
@@ -26,11 +26,11 @@ public class GtwScreensManager implements ScreensManager {
 
         public CustomMainMenu() {
             super(GtwAPI.getInstance().getGtwMod(),
-                    (DisplayCanvas)(Objects.requireNonNull(GtwAPI.getInstance().getGtwMod().getDisplayManager().getElementRegistry().getDrawableCanvas(
+                    Objects.requireNonNull(GtwAPI.getInstance().getGtwMod().getDisplayManager().getElementRegistry().getDrawableCanvas(
                             Objects.requireNonNull(GtwAPI.getInstance().getGtwMod().
                                             getConfigManager().getConfig("settings"))
                                     .getString("main_menu")
-                    ))));
+                    )));
         }
     }
 }

@@ -1,7 +1,8 @@
 package com.grandtheftwarzone.gtwmod.core.display.gui.api;
 
 
-import com.grandtheftwarzone.gtwmod.core.display.hud.HudElement;
+import me.phoenixra.atumodcore.api.misc.AtumColor;
+import me.phoenixra.atumodcore.api.utils.RenderUtils;
 
 import java.util.function.Supplier;
 
@@ -37,15 +38,14 @@ public class BaseGuiBar {
 
 
     public void drawBar(int guiX, int guiY) {
-        HudElement.drawCustomBar(
+        RenderUtils.drawCustomBar(
                 guiX+x,
                 guiY+y,
                 width,
                 height,
                 value.get(),
-                color,
-                color,
-                outlined
+                AtumColor.from(color,false),
+                AtumColor.from(color,false)
         );
 
     }

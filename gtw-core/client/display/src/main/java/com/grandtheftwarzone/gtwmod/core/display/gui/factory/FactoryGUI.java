@@ -8,7 +8,7 @@ import com.grandtheftwarzone.gtwmod.core.display.gui.api.BaseGUI;
 import com.grandtheftwarzone.gtwmod.core.display.gui.api.BaseGuiBar;
 import com.grandtheftwarzone.gtwmod.core.display.gui.api.BaseGuiButton;
 import com.grandtheftwarzone.gtwmod.core.display.gui.api.BaseGuiText;
-import com.grandtheftwarzone.gtwmod.core.display.hud.HudElement;
+import me.phoenixra.atumodcore.api.misc.AtumColor;
 import net.minecraft.util.ResourceLocation;
 
 
@@ -40,7 +40,7 @@ public class FactoryGUI extends BaseGUI {
         addGuiText(new BaseGuiText(
                 this,
                 () -> getGuiSession().getData("factoryOwner"),
-                HudElement.COLOR_WHITE,
+                AtumColor.WHITE.toInt(),
                 129,
                 54
         ));
@@ -48,7 +48,7 @@ public class FactoryGUI extends BaseGUI {
         addGuiText(new BaseGuiText(
                 this,
                 () -> getGuiSession().getData("level"),
-                HudElement.COLOR_WHITE,
+                AtumColor.WHITE.toInt(),
                 129,
                 81
         ));
@@ -56,7 +56,7 @@ public class FactoryGUI extends BaseGUI {
         addGuiText(new BaseGuiText(
                 this,
                 () -> getGuiSession().getData("productionInfo"),
-                HudElement.COLOR_WHITE,
+                AtumColor.WHITE.toInt(),
                 55,
                 152
         ));
@@ -64,7 +64,7 @@ public class FactoryGUI extends BaseGUI {
         addGuiText(new BaseGuiText(
                 this,
                 () -> getGuiSession().getData("storageInfo"),
-                HudElement.COLOR_WHITE,
+                AtumColor.WHITE.toInt(),
                 182,
                 152
         ));
@@ -72,7 +72,7 @@ public class FactoryGUI extends BaseGUI {
         addGuiText(new BaseGuiText(
                 this,
                 () -> getGuiSession().getData("productionEfficiency"),
-                HudElement.COLOR_WHITE,
+                AtumColor.WHITE.toInt(),
                 55,
                 172
         ));
@@ -80,7 +80,7 @@ public class FactoryGUI extends BaseGUI {
         addGuiText(new BaseGuiText(
                 this,
                 () -> getGuiSession().getData("storageEfficiency"),
-                HudElement.COLOR_WHITE,
+                AtumColor.WHITE.toInt(),
                 182,
                 172
         ));

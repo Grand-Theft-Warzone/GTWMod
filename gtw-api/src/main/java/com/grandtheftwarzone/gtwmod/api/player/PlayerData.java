@@ -1,5 +1,6 @@
 package com.grandtheftwarzone.gtwmod.api.player;
 
+import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -93,16 +94,20 @@ public class PlayerData {
         }
     }
     public void fromString(String data){
-        String[] split = data.split("_");
-        rank = split[0];
-        gang = split[1];
-        level = Integer.parseInt(split[2]);
-        experience = Double.parseDouble(split[3]);
-        experienceCap = Double.parseDouble(split[4]);
-        money = Double.parseDouble(split[5]);
-        for(int i = 6; i<split.length; i++){
-            String[] otherSplit = split[i].split(":");
-            other.put(otherSplit[0], otherSplit[1]);
+        try {
+            String[] split = data.split("_");
+            rank = split[0];
+            gang = split[1];
+            level = Integer.parseInt(split[2]);
+            experience = Double.parseDouble(split[3]);
+            experienceCap = Double.parseDouble(split[4]);
+            money = Double.parseDouble(split[5]);
+            for (int i = 6; i < split.length; i++) {
+                String[] otherSplit = split[i].split(":");
+                other.put(otherSplit[0], otherSplit[1]);
+            }
+        }catch (Exception e){
+            GtwAPI.getInstance().getGtwMod().getLogger().error("Error while parsing player data: "+data);
         }
     }
     @Override

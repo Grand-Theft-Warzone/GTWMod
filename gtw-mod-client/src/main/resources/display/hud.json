@@ -1,0 +1,28 @@
+{
+  "type": "canvas",
+  "config_version": 1.0,
+  "layer": "MIDDLE",
+  "elements": {
+    "image_heldItem": {
+      "settings": {
+        "image": "heldItem",
+        "color": "#ffffff",
+        "defaultImage": {
+          "location": "gtwmod:textures/hud/fist_icon.png",
+          "textureX": 0.0,
+          "textureY": 0.0,
+          "textureWidth": 40.0,
+          "textureHeight": 50.0
+        }
+      },
+      "type": "image",
+      "layer": "FOREGROUND",
+      "posX": 1800.0,
+      "posY": 20.0,
+      "width": 123.0,
+      "height": 127.0
+    }
+  },
+  "width": 1920.0,
+  "height": 1080.0
+}

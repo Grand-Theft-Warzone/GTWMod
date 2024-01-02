@@ -3,7 +3,7 @@ package com.grandtheftwarzone.gtwmod.api;
 import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneGui;
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
-import com.grandtheftwarzone.gtwmod.api.hud.PlayerHUD;
+
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import com.grandtheftwarzone.gtwmod.api.screen.ScreensManager;
 import com.grandtheftwarzone.gtwmod.api.sound.SoundsManager;
@@ -31,15 +31,7 @@ public interface GtwAPI {
      */
     @NotNull NetworkAPI getNetworkManager();
 
-    /**
-     * Get the player hud handler
-     *
-     * <p>CLIENT SIDE!</p>
-     *
-     * @return The player hud
-     */
-    @SideOnly(Side.CLIENT)
-    @NotNull PlayerHUD getPlayerHUD();
+
 
     /**
      * Get the sounds manager

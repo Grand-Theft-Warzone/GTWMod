@@ -3,7 +3,7 @@ package com.grandtheftwarzone.gtwmod.server;
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneGui;
-import com.grandtheftwarzone.gtwmod.api.hud.PlayerHUD;
+
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import com.grandtheftwarzone.gtwmod.api.screen.ScreensManager;
@@ -22,10 +22,6 @@ public class GtwAPIServer implements GtwAPI {
         return GTWModServer.instance.getNetworkAPI();
     }
 
-    @Override
-    public @NotNull PlayerHUD getPlayerHUD() {
-        throw new RuntimeException("Client side only!");
-    }
 
     @Override
     public @NotNull SoundsManager getSoundsManager() {

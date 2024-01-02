@@ -5,7 +5,7 @@ import com.grandtheftwarzone.gtwmod.core.display.gui.GuiID;
 import com.grandtheftwarzone.gtwmod.core.display.gui.api.BaseGUI;
 import com.grandtheftwarzone.gtwmod.core.display.gui.api.BaseGuiButton;
 import com.grandtheftwarzone.gtwmod.core.display.gui.api.BaseGuiText;
-import com.grandtheftwarzone.gtwmod.core.display.hud.HudElement;
+import me.phoenixra.atumodcore.api.misc.AtumColor;
 import net.minecraft.util.ResourceLocation;
 
 public class FactoryUpgradeGUI extends BaseGUI {
@@ -100,7 +100,7 @@ public class FactoryUpgradeGUI extends BaseGUI {
         addGuiText(new BaseGuiText(
                 this,
                 () -> getGuiSession().getData("productionUpgradePrice"),
-                HudElement.COLOR_WHITE,
+                AtumColor.WHITE.toInt(),
                 93,
                 75
         ));
@@ -108,7 +108,7 @@ public class FactoryUpgradeGUI extends BaseGUI {
         addGuiText(new BaseGuiText(
                 this,
                 () -> getGuiSession().getData("storageUpgradePrice"),
-                HudElement.COLOR_WHITE,
+                AtumColor.WHITE.toInt(),
                 105,
                 108
         ));

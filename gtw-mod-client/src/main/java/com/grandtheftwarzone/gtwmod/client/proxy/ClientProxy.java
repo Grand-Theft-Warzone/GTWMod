@@ -2,11 +2,12 @@ package com.grandtheftwarzone.gtwmod.client.proxy;
 
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import com.grandtheftwarzone.gtwmod.client.GTWModClient;
-import com.grandtheftwarzone.gtwmod.core.display.hud.render.GtwHudRenderer;
+import com.grandtheftwarzone.gtwmod.core.display.hud.GtwHudRenderer;
 import com.grandtheftwarzone.gtwmod.core.network.GtwNetworkAPI;
 import me.phoenixra.atumodcore.api.placeholders.types.SimplePlaceholder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -79,6 +80,63 @@ public class ClientProxy {
         ).register();
         new SimplePlaceholder(GTWModClient.instance,"player_gang",
                 ()-> playerData.getGang()
+        ).register();
+
+
+        new SimplePlaceholder(GTWModClient.instance,"player_health",
+                ()-> {
+                    if(Minecraft.getMinecraft().player == null) return String.valueOf(0);
+                    return String.valueOf(MathHelper.ceil(
+                            Minecraft.getMinecraft().player.getHealth())
+                    );
+                }
+        ).register();
+        new SimplePlaceholder(GTWModClient.instance,"player_health_max",
+                ()-> {
+                    if(Minecraft.getMinecraft().player == null) return String.valueOf(0);
+                    return String.valueOf(MathHelper.ceil(
+                            Minecraft.getMinecraft().player.getMaxHealth())
+                    );
+                }
+        ).register();
+        new SimplePlaceholder(GTWModClient.instance,"player_health_absorption",
+                ()-> {
+                    if(Minecraft.getMinecraft().player == null) return String.valueOf(0);
+                    return String.valueOf(MathHelper.ceil(
+                            Minecraft.getMinecraft().player.getAbsorptionAmount())
+                    );
+                }
+        ).register();
+
+        new SimplePlaceholder(GTWModClient.instance,"player_food_level",
+                ()-> {
+                    if(Minecraft.getMinecraft().player == null) return String.valueOf(0);
+                    return String.valueOf(MathHelper.ceil(
+                            Minecraft.getMinecraft().player.getFoodStats().getFoodLevel())
+                    );
+                }
+        ).register();
+        new SimplePlaceholder(GTWModClient.instance,"player_food_level_max",
+                ()-> String.valueOf(20)
+        ).register();
+
+        new SimplePlaceholder(GTWModClient.instance,"player_armor",
+                ()-> {
+                    if(Minecraft.getMinecraft().player == null) return String.valueOf(0);
+                    return String.valueOf(MathHelper.ceil(
+                            Minecraft.getMinecraft().player.getTotalArmorValue())
+                    );
+                }
+        ).register();
+        new SimplePlaceholder(GTWModClient.instance,"player_armor_max",
+                ()-> String.valueOf(20)
+        ).register();
+
+        new SimplePlaceholder(GTWModClient.instance,"player_experience",
+                ()-> String.valueOf(playerData.getExperience())
+        ).register();
+        new SimplePlaceholder(GTWModClient.instance,"player_experience_max",
+                ()-> String.valueOf(playerData.getExperienceCap())
         ).register();
 
         //@TODO move that to the PlayerHUD for better organization
