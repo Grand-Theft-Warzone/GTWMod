@@ -7,20 +7,159 @@
       "settings": {
         "image": "heldItem",
         "color": "#ffffff",
+        "testX": 13,
+        "testY": 13,
         "defaultImage": {
           "location": "gtwmod:textures/hud/fist_icon.png",
+          "color": "#ffffff",
           "textureX": 0.0,
           "textureY": 0.0,
           "textureWidth": 40.0,
           "textureHeight": 50.0
         }
       },
+      "outline": {
+        "color": "#000000",
+        "size": 3
+      },
       "type": "image",
-      "layer": "FOREGROUND",
-      "posX": 1800.0,
-      "posY": 20.0,
-      "width": 123.0,
-      "height": 127.0
+      "layer": "LOW",
+      "posX": 1490.0,
+      "posY": 40.0,
+      "width": 110.0,
+      "height": 110.0
+    },
+    "health_bar": {
+      "settings": {
+        "color-filled": "#880808",
+        "color-empty": "#4c4c4c",
+        "progress-expression": "(%player_health%/%player_health_max%) * 100"
+
+      },
+      "outline":{
+        "color": "#000000",
+        "size": 1
+      },
+      "type": "progress_bar",
+      "layer": "MIDDLE",
+      "posX": 1620.0,
+      "posY": 35.0,
+      "width": 270.0,
+      "height": 19.0
+
+    },
+    "food_bar": {
+      "settings": {
+        "color-filled": "#8b4513",
+        "color-empty": "#4c4c4c",
+        "progress-expression": "(%player_food_level%/%player_food_level_max%) * 100"
+
+      },
+      "outline":{
+        "color": "#000000",
+        "size": 1
+      },
+      "type": "progress_bar",
+      "layer": "MIDDLE",
+      "posX": 1620.0,
+      "posY": 70.0,
+      "width": 270.0,
+      "height": 19.0
+
+    },
+    "armor_bar": {
+      "settings": {
+        "color-filled": "#D3D3D3",
+        "color-empty": "#4c4c4c",
+        "progress-expression": "(%player_armor%/%player_armor_max%) * 100"
+
+      },
+      "outline":{
+        "color": "#000000",
+        "size": 1
+      },
+      "type": "progress_bar",
+      "layer": "MIDDLE",
+      "posX": 1620.0,
+      "posY": 105.0,
+      "width": 270.0,
+      "height": 19.0
+
+    },
+    "experience_bar": {
+      "settings": {
+        "color-filled": "#32CD32",
+        "color-empty": "#4c4c4c",
+        "progress-expression": "(%player_experience%/%player_experience_max%) * 100"
+
+      },
+      "outline":{
+        "color": "#000000",
+        "size": 1
+      },
+      "type": "progress_bar",
+      "layer": "MIDDLE",
+      "posX": 1620.0,
+      "posY": 200.0,
+      "width": 270.0,
+      "height": 19.0
+
+    },
+    "playerRank_text": {
+      "settings": {
+        "fontSize": 15.0,
+        "text": "%player_rank%",
+        "font": "minecraft.otf"
+      },
+      "type": "text",
+      "layer": "MIDDLE",
+      "posX": 1620.0,
+      "posY": 140.0,
+      "width": 160.0,
+      "height": 19.0
+
+    },
+    "playerGang_text": {
+      "settings": {
+        "fontSize": 15.0,
+        "text": "&a%player_gang%",
+        "font": "minecraft.otf"
+      },
+      "type": "text",
+      "layer": "MIDDLE",
+      "posX": 1870.0,
+      "posY": 140.0,
+      "width": 2.0,
+      "height": 19.0
+
+    },
+    "playerLevel_text": {
+      "settings": {
+        "fontSize": 15.0,
+        "text": " &eLvl %player_level%",
+        "font": "minecraft.otf"
+      },
+      "type": "text",
+      "layer": "MIDDLE",
+      "posX": 1660.0,
+      "posY": 180.0,
+      "width": 2.0,
+      "height": 19.0
+
+    },
+    "playerMoney_text": {
+      "settings": {
+        "fontSize": 15.0,
+        "text": "&a$%player_money%",
+        "font": "minecraft.otf"
+      },
+      "type": "text",
+      "layer": "MIDDLE",
+      "posX": 1675.0,
+      "posY": 240.0,
+      "width": 2.0,
+      "height": 19.0
+
     }
   },
   "width": 1920.0,
