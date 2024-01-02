@@ -1,6 +1,6 @@
 {
   "type": "canvas",
-  "config_version": 1.0,
+  "config_version": 2.0,
   "layer": "MIDDLE",
   "elements": {
     "image_heldItem": {
@@ -22,6 +22,7 @@
         "color": "#000000",
         "size": 3
       },
+      "fixRatio": true,
       "type": "image",
       "layer": "LOW",
       "posX": 1490.0,
@@ -40,6 +41,7 @@
         "color": "#000000",
         "size": 1
       },
+      "fixRatio": true,
       "type": "progress_bar",
       "layer": "MIDDLE",
       "posX": 1620.0,
@@ -59,6 +61,7 @@
         "color": "#000000",
         "size": 1
       },
+      "fixRatio": true,
       "type": "progress_bar",
       "layer": "MIDDLE",
       "posX": 1620.0,
@@ -78,6 +81,7 @@
         "color": "#000000",
         "size": 1
       },
+      "fixRatio": true,
       "type": "progress_bar",
       "layer": "MIDDLE",
       "posX": 1620.0,
@@ -97,6 +101,7 @@
         "color": "#000000",
         "size": 1
       },
+      "fixRatio": true,
       "type": "progress_bar",
       "layer": "MIDDLE",
       "posX": 1620.0,
@@ -111,6 +116,7 @@
         "text": "%player_rank%",
         "font": "minecraft.otf"
       },
+      "fixRatio": true,
       "type": "text",
       "layer": "MIDDLE",
       "posX": 1620.0,
@@ -125,6 +131,7 @@
         "text": "&a%player_gang%",
         "font": "minecraft.otf"
       },
+      "fixRatio": true,
       "type": "text",
       "layer": "MIDDLE",
       "posX": 1870.0,
@@ -139,6 +146,7 @@
         "text": " &eLvl %player_level%",
         "font": "minecraft.otf"
       },
+      "fixRatio": true,
       "type": "text",
       "layer": "MIDDLE",
       "posX": 1660.0,
@@ -153,6 +161,7 @@
         "text": "&a$%player_money%",
         "font": "minecraft.otf"
       },
+      "fixRatio": true,
       "type": "text",
       "layer": "MIDDLE",
       "posX": 1675.0,
