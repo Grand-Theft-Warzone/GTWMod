@@ -1,6 +1,6 @@
 {
   "type": "canvas",
-  "config_version": 7.0,
+  "config_version": 8.0,
   "layer": "MIDDLE",
   "elements": {
     "image_main": {
@@ -52,8 +52,8 @@
       },
       "type": "text",
       "layer": "MIDDLE",
-      "posX": 1415,
-      "posY": 324,
+      "posX": 1410,
+      "posY": 320,
       "width": 256,
       "height": 37
     },
@@ -141,7 +141,9 @@
         "image": "gtwmod:textures/main_menu/discord_button.png",
         "brightness": "1.0;1.0;1.0",
         "brightness-onHover": "0.85;0.85;0.85",
-        "action-onRelease": "open_link@${discord_link}"
+        "actions-onRelease": {
+          "1": "open_link@https://discord.gg/WE5W43ev73"
+        }
       },
       "fixRatio": true,
       "type": "button",
@@ -157,7 +159,9 @@
         "image": "gtwmod:textures/main_menu/settings_button.png",
         "brightness": "1.0;1.0;1.0",
         "brightness-onHover": "0.85;0.85;0.85",
-        "action-onRelease": "open_settings"
+        "actions-onRelease": {
+          "1": "open_settings"
+        }
       },
       "fixRatio": true,
       "type": "button",
@@ -173,7 +177,9 @@
         "image": "gtwmod:textures/main_menu/singleplayer_button.png",
         "brightness": "1.0;1.0;1.0",
         "brightness-onHover": "0.85;0.85;0.85",
-        "action-onRelease": "open_singleplayer"
+        "actions-onRelease": {
+          "1": "open_singleplayer"
+        }
       },
       "fixRatio": true,
       "type": "button",
@@ -189,7 +195,9 @@
         "image": "gtwmod:textures/main_menu/quit_button.png",
         "brightness": "1.0;1.0;1.0",
         "brightness-onHover": "0.85;0.85;0.85",
-        "action-onRelease": "quit"
+        "actions-onRelease": {
+          "1": "quit"
+        }
       },
       "fixRatio": true,
       "type": "button",
@@ -205,7 +213,9 @@
         "image": "gtwmod:textures/main_menu/multiplayer_button.png",
         "brightness": "1.0;1.0;1.0",
         "brightness-onHover": "0.85;0.85;0.85",
-        "action-onRelease": "open_multiplayer"
+        "actions-onRelease": {
+          "1": "open_multiplayer"
+        }
       },
       "fixRatio": true,
       "type": "button",
@@ -221,7 +231,9 @@
         "image": "gtwmod:textures/main_menu/website_button.png",
         "brightness": "1.0;1.0;1.0",
         "brightness-onHover": "0.85;0.85;0.85",
-        "action-onRelease": "open_link@${website_link}"
+        "actions-onRelease": {
+          "1": "open_link@https://google.com"
+        }
       },
       "fixRatio": true,
       "type": "button",
@@ -237,7 +249,9 @@
         "image": "gtwmod:textures/main_menu/play_button.png",
         "brightness": "1.0;1.0;1.0",
         "brightness-onHover": "0.85;0.85;0.85",
-        "action-onRelease": "connect_to_server@${server_address}"
+        "actions-onRelease": {
+          "1": "connect_to_server@play.grandtheftwarzone.com"
+        }
       },
       "fixRatio": true,
       "type": "button",

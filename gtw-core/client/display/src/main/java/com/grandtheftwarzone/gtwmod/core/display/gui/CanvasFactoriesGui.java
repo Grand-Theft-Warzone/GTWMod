@@ -1,15 +1,15 @@
 package com.grandtheftwarzone.gtwmod.core.display.gui;
 
-import me.phoenixra.atumodcore.api.AtumMod;
+import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import me.phoenixra.atumodcore.api.display.DisplayCanvas;
 import me.phoenixra.atumodcore.api.display.DisplayLayer;
 import me.phoenixra.atumodcore.api.display.impl.BaseCanvas;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CanvasFactory extends BaseCanvas {
-    public CanvasFactory(@NotNull AtumMod atumMod, @NotNull DisplayLayer layer, int x, int y, int width, int height, @Nullable DisplayCanvas elementOwner) {
-        super(atumMod, layer, x, y, width, height, elementOwner);
+public class CanvasFactoriesGui extends BaseCanvas {
+    public CanvasFactoriesGui(@NotNull DisplayLayer layer, int x, int y, int width, int height, @Nullable DisplayCanvas elementOwner) {
+        super(GtwAPI.getInstance().getGtwMod(), layer, x, y, width, height, elementOwner);
     }
 
     @Override

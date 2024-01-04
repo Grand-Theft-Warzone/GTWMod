@@ -26,7 +26,8 @@ public class GtwScreensManager implements ScreensManager {
 
         public CustomMainMenu() {
             super(GtwAPI.getInstance().getGtwMod(),
-                    Objects.requireNonNull(GtwAPI.getInstance().getGtwMod().getDisplayManager().getElementRegistry().getDrawableCanvas(
+                    Objects.requireNonNull(GtwAPI.getInstance().getGtwMod().getDisplayManager()
+                            .getElementRegistry().getDrawableCanvas(
                             Objects.requireNonNull(GtwAPI.getInstance().getGtwMod().
                                             getConfigManager().getConfig("settings"))
                                     .getString("main_menu")
