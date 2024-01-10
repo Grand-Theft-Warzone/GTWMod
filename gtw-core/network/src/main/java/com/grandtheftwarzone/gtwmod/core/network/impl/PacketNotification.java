@@ -23,20 +23,10 @@ public class PacketNotification implements IMessage {
         fontSize = 0;
     }
     public PacketNotification(String text,
-                              boolean playSound,
-                              long displayTime,
-                              int positionX,
-                              int positionY,
-                              int fontSize
+                              long displayTime
     ){
         this.text = text;
         this.displayTime = displayTime;
-
-        this.positionX = positionX;
-        this.positionY = positionY;
-        this.fontSize = fontSize;
-
-        this.playSound = playSound;
     }
 
     @Override

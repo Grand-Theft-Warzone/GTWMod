@@ -53,11 +53,7 @@ public class GtwNetworkAPI implements NetworkAPI {
         if(player == null) return;
         sendTo(new PacketNotification(
                 notification.getText(),
-                notification.isPlaySound(),
-                notification.getDisplayTime(),
-                notification.getPositionX(),
-                notification.getPositionY(),
-                notification.getFontSize()
+                notification.getDisplayTime()
         ), player);
     }
     public void sendPacketFactoryGUI(@NotNull UUID playerUUID,

@@ -11,15 +11,15 @@ public class PacketHandlerNotification implements IMessageHandler<PacketNotifica
     @Override
     public IMessage onMessage(PacketNotification message, MessageContext ctx) {
         PlayerData pd = GtwAPI.getInstance().getPlayerData();
-        pd.getNotificationQueue().add(new NotificationRequest(
-                message.text,
-                message.playSound,
-                message.displayTime,
-                message.positionX,
-                message.positionY,
-                message.fontSize
-                )
-        );
+        GtwAPI.getInstance().getGtwMod().getDisplayManager()
+                        .getHUDCanvas().getDisplayRenderer()
+                        .getDisplayData()
+                .setTemporaryData(
+                        "notification",
+                        message.text,
+                        message.displayTime,
+                        true
+                );
         return null;
     }
 }

@@ -31,9 +31,6 @@ public class PlayerData {
     private ConcurrentHashMap<String,String> other;
 
 
-    @Getter
-    private final List<NotificationRequest> notificationQueue;
-
     public PlayerData(){
         level = 1;
         experience = 0;
@@ -41,7 +38,6 @@ public class PlayerData {
         money = 0;
         rank = "";
         gang = "";
-        notificationQueue = Collections.synchronizedList(new ArrayList<>());
         other = new ConcurrentHashMap<>();
     }
     public PlayerData(int level, double experience, double experienceCap){
@@ -51,18 +47,9 @@ public class PlayerData {
         money = 0;
         rank = "";
         gang = "";
-        notificationQueue = new ArrayList<>();
         other = new ConcurrentHashMap<>();
     }
 
-    public NotificationRequest getQueuedNotification(){
-        return notificationQueue.size()>0 ? notificationQueue.get(0) : null;
-    }
-    public NotificationRequest nextQueuedNotification(){
-        if(notificationQueue.size()<1) return null;
-        notificationQueue.remove(0);
-        return getQueuedNotification();
-    }
 
     public String getOtherOrDefault(String key, String defaultValue){
         return other.getOrDefault(key, defaultValue);

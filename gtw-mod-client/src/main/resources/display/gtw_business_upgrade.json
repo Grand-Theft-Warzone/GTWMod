@@ -1,0 +1,103 @@
+{
+  "type": "canvas",
+  "config_version": 1.0,
+  "layer": "MIDDLE",
+  "elements": {
+    "image_main": {
+      "settings": {
+        "image": "gtwmod:textures/gui/business/cakes/image_upgrade.png",
+        "color": "#ffffff"
+      },
+      "type": "image",
+      "layer": "BACKGROUND",
+      "posX": 550.0,
+      "posY": 50.0,
+      "width": 800.0,
+      "height": 900.0
+    },
+    "productionSpeedCost_text": {
+      "settings": {
+        "fontSize": 20.0,
+        "text": "%data_production_speed_cost%",
+        "font": "minecraft.otf"
+      },
+      "type": "text",
+      "layer": "MIDDLE",
+      "posX": 1020.0,
+      "posY": 330.0,
+      "width": 160.0,
+      "height": 19.0
+
+    },
+    "storageCost_text": {
+      "settings": {
+        "fontSize": 20.0,
+        "text": "%data_storage_cost%",
+        "font": "minecraft.otf"
+      },
+      "type": "text",
+      "layer": "MIDDLE",
+      "posX": 965.0,
+      "posY": 445.0,
+      "width": 160.0,
+      "height": 19.0
+
+    },
+    "button_production": {
+      "settings": {
+        "brightness-onClick": "20.0;20.0;20.0",
+        "image": "gtwmod:textures/gui/business/button_upgrade_production.png",
+        "brightness": "1.0;1.0;1.0",
+        "brightness-onHover": "0.85;0.85;0.85",
+        "actions-onRelease": {
+          "1": "open_settings"
+        }
+      },
+      "fixRatio": true,
+      "type": "button",
+      "layer": "FOREGROUND",
+      "posX": 650.0,
+      "posY": 800.0,
+      "width": 228.0,
+      "height": 100.0
+    },
+    "button_storage": {
+      "settings": {
+        "brightness-onClick": "20.0;20.0;20.0",
+        "image": "gtwmod:textures/gui/business/button_upgrade_storage.png",
+        "brightness": "1.0;1.0;1.0",
+        "brightness-onHover": "0.85;0.85;0.85",
+        "actions-onRelease": {
+          "1": "open_settings"
+        }
+      },
+      "fixRatio": true,
+      "type": "button",
+      "layer": "FOREGROUND",
+      "posX": 1050.0,
+      "posY": 800.0,
+      "width": 228.0,
+      "height": 100.0
+    },
+    "button_back": {
+      "settings": {
+        "brightness-onClick": "20.0;20.0;20.0",
+        "image": "gtwmod:textures/gui/business/button_back.png",
+        "brightness": "1.0;1.0;1.0",
+        "brightness-onHover": "0.85;0.85;0.85",
+        "actions-onRelease": {
+          "1": "change_base_canvas@gtw_business"
+        }
+      },
+      "fixRatio": true,
+      "type": "button",
+      "layer": "FOREGROUND",
+      "posX": 1250.0,
+      "posY": 70.0,
+      "width": 80.0,
+      "height": 80.0
+    }
+  },
+  "width": 1920.0,
+  "height": 1080.0
+}

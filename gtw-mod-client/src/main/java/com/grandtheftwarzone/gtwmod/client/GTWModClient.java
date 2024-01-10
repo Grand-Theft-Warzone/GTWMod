@@ -95,12 +95,13 @@ public class GTWModClient extends AtumMod {
                 ConfigType.JSON,
                 false
         );
+        screensManager = new GtwScreensManager();
+
         registerConfigCategory();
 
         playerData = new PlayerData();
         factoryGuiHandler = new GtwFactoryGuiHandler();
         phoneGui = new GtwPhoneGui();
-        screensManager = new GtwScreensManager();
         emoji = new GTWEmoji();
     }
     private void registerConfigCategory(){
@@ -125,7 +126,8 @@ public class GTWModClient extends AtumMod {
                     return;
                 }
 
-                DisplayElement element = getDisplayManager().getElementRegistry().compileCanvasTemplate(id,config);
+                DisplayElement element = getDisplayManager().getElementRegistry()
+                        .compileCanvasTemplate(id,config);
                 if (element != null) {
                     getDisplayManager().getElementRegistry().registerTemplate(id, element);
                     elements.add(id);
@@ -200,4 +202,7 @@ public class GTWModClient extends AtumMod {
     public boolean isDebugEnabled() {
         return true;
     }
+
+
+
 }

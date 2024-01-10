@@ -1,8 +1,10 @@
 package com.grandtheftwarzone.gtwmod.core.misc;
 
 import com.grandtheftwarzone.gtwmod.api.sound.SoundsManager;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -16,9 +18,10 @@ public class GtwSoundsManager implements SoundsManager {
 
     @Override
     public void registerSound(@NotNull String id) {
-        ResourceLocation location = new ResourceLocation("gtwclient",id);
+        ResourceLocation location = new ResourceLocation("gtwmod",id);
         SoundEvent event = new SoundEvent(location);
         event.setRegistryName(location);
+        ForgeRegistries.SOUND_EVENTS.register(event);
         sounds.put(id, event);
     }
 
