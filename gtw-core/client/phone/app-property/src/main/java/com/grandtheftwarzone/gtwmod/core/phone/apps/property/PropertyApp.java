@@ -1,34 +1,51 @@
 package com.grandtheftwarzone.gtwmod.core.phone.apps.property;
 
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneApp;
-import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneGui;
+import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneManager;
+import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneShape;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.annotations.RegisterPhoneApp;
+import me.phoenixra.atumodcore.api.display.impl.BaseCanvas;
 import org.jetbrains.annotations.NotNull;
 
 @RegisterPhoneApp
 public class PropertyApp implements PhoneApp {
     @Override
-    public void draw(PhoneGui parent) {
+    public void draw(BaseCanvas parent) {
 
     }
 
     @Override
-    public void onOpen(PhoneGui parent) {
+    public void drawIcon(@NotNull BaseCanvas parent, int x, int y, int width, int height) {
 
     }
 
     @Override
-    public void onClosed(PhoneGui parent) {
+    public void onOpen(PhoneManager parent) {
 
+    }
+
+    @Override
+    public void onClosed(PhoneManager parent) {
+
+    }
+
+    @Override
+    public @NotNull PhoneShape getShapeRequired() {
+        return null;
+    }
+
+    @Override
+    public int getAppPriority() {
+        return 0;
     }
 
     @Override
     public @NotNull String getAppName() {
-        return "Property";
+        return null;
     }
 
     @Override
     public @NotNull String getId() {
-        return "property";
+        return null;
     }
 }

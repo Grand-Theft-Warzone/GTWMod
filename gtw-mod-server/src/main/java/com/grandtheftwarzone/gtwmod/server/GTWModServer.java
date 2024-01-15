@@ -13,8 +13,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,24 +48,46 @@ public class GTWModServer extends AtumMod {
     }
 
 
+
+
+
     @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-        proxy.preInit(event);
-//        Configuration config = new Configuration(event.getSuggestedConfigurationFile());
-//        killFeed.syncConfig(config);
-        MinecraftForge.EVENT_BUS.register(this);
+    public void construct(FMLConstructionEvent event) {
+        provideModService(proxy);
+
+        notifyModServices(event);
     }
 
+    @Mod.EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+        MinecraftForge.EVENT_BUS.register(this);
+        notifyModServices(event);
+    }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        proxy.init(event);
-        killFeed.initConfig();
+        notifyModServices(event);
     }
 
+    @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        notifyModServices(event);
+    }
 
+    @Mod.EventHandler
+    public void loadComplete(FMLLoadCompleteEvent event) {
+        notifyModServices(event);
+    }
 
+    @Mod.EventHandler
+    public void serverStarting(FMLServerStartingEvent event) {
+        notifyModServices(event);
+    }
 
+    @Mod.EventHandler
+    public void serverStarted(FMLServerStartedEvent event) {
+        notifyModServices(event);
+    }
 
     @Override
     public @NotNull String getName() {

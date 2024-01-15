@@ -4,26 +4,32 @@ import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import com.grandtheftwarzone.gtwmod.client.GTWModClient;
 import com.grandtheftwarzone.gtwmod.core.display.hud.GtwHudRenderer;
 import com.grandtheftwarzone.gtwmod.core.network.GtwNetworkAPI;
+import lombok.Getter;
 import me.phoenixra.atumodcore.api.placeholders.types.SimplePlaceholder;
+import me.phoenixra.atumodcore.api.service.AtumModService;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.apache.commons.io.FileUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-public class ClientProxy {
+public class ClientProxy implements AtumModService {
 
+    @Getter
+    private final String id = "proxy";
     public static PlayerData playerData = GTWModClient.instance.getPlayerData();
 
     //@TODO replace it with a config from atumModCore
@@ -32,9 +38,19 @@ public class ClientProxy {
     public ClientProxy(){
         MinecraftForge.EVENT_BUS.register(this);
         GTWModClient.instance.setNetworkAPI(new GtwNetworkAPI());
+
     }
 
-    @Mod.EventHandler
+    @Override
+    public void handleFmlEvent(@NotNull FMLEvent fmlEvent) {
+        if(fmlEvent instanceof FMLPreInitializationEvent){
+            preInit((FMLPreInitializationEvent) fmlEvent);
+        }else if(fmlEvent instanceof FMLInitializationEvent){
+            init((FMLInitializationEvent) fmlEvent);
+        }
+    }
+
+
     public void preInit(FMLPreInitializationEvent event) {
 
         NetworkRegistry.INSTANCE.registerGuiHandler(
@@ -55,7 +71,6 @@ public class ClientProxy {
     }
 
 
-    @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         new SimplePlaceholder(GTWModClient.instance,"player_kills",
                 ()->playerData.getOtherOrDefault("kills","0")
@@ -172,4 +187,8 @@ public class ClientProxy {
         }
     }
 
+    @Override
+    public void onRemove() {
+
+    }
 }

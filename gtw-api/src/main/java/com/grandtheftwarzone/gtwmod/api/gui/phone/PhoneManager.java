@@ -4,7 +4,9 @@ import me.phoenixra.atumodcore.api.display.impl.BaseScreen;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface PhoneGui {
+import java.util.List;
+
+public interface PhoneManager {
 
 
     /**
@@ -27,9 +29,6 @@ public interface PhoneGui {
     @Nullable
     PhoneApp getApp(@NotNull String id);
 
-    /**
-     * Get the gui screen attached to the phone
-     */
-     @NotNull
-     BaseScreen getGuiScreen();
+    @NotNull List<PhoneApp> getAppDrawingOrder();
+
 }

@@ -2,7 +2,7 @@ package com.grandtheftwarzone.gtwmod.server;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
-import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneGui;
+import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneManager;
 
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
@@ -39,7 +39,7 @@ public class GtwAPIServer implements GtwAPI {
     }
 
     @Override
-    public @NotNull PhoneGui getPhoneGui() {
+    public @NotNull PhoneManager getPhoneGui() {
         throw new RuntimeException("Client side only!");
     }
 

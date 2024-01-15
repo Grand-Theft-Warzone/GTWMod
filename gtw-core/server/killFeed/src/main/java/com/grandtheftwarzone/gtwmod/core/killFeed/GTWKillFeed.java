@@ -5,6 +5,7 @@ import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import me.phoenixra.atumodcore.api.AtumAPI;
 import me.phoenixra.atumodcore.api.config.Config;
 import me.phoenixra.atumodcore.api.config.ConfigType;
+import me.phoenixra.atumodcore.api.service.AtumModService;
 import me.phoenixra.atumodcore.api.tuples.PairRecord;
 import me.phoenixra.atumodcore.api.utils.StringUtils;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,11 +17,15 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
+import net.minecraftforge.fml.common.event.FMLEvent;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class GTWKillFeed {
+public class GTWKillFeed implements AtumModService {
 
     private Map<String, Map<String, String>> mods;
 
@@ -37,9 +42,16 @@ public class GTWKillFeed {
         GtwLog.info("The killFeed module is starting...");
 
         MinecraftForge.EVENT_BUS.register(this);
+        GtwAPI.getInstance().getGtwMod().provideModService(this);
 
     }
 
+    @Override
+    public void handleFmlEvent(@NotNull FMLEvent fmlEvent) {
+        if(fmlEvent instanceof FMLInitializationEvent) {
+            initConfig();
+        }
+    }
 
     public void initConfig() {
         config = AtumAPI.getInstance().createLoadableConfig(GtwAPI.getInstance().getGtwMod(), "config", "killFeed", ConfigType.YAML, true);
@@ -168,5 +180,16 @@ public class GTWKillFeed {
                 }
             }
         }
+    }
+
+
+    @Override
+    public void onRemove() {
+
+    }
+
+    @Override
+    public @NotNull String getId() {
+        return "killfeed";
     }
 }

@@ -3,16 +3,20 @@ package com.grandtheftwarzone.gtwmod.core.emoji;
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
 import com.google.common.collect.Lists;
+import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.core.emoji.api.Emoji;
 import com.grandtheftwarzone.gtwmod.core.emoji.render.EmojiFontRenderer;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.GtwProperties;
+import me.phoenixra.atumodcore.api.service.AtumModService;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +28,7 @@ import java.util.List;
 import java.util.Scanner;
 
 
-public class GTWEmoji {
+public class GTWEmoji implements AtumModService {
 
     public static final List<Emoji> EMOJI_LIST = new ArrayList<>();
 
@@ -37,7 +41,9 @@ public class GTWEmoji {
 
     public GTWEmoji() {
         GtwLog.info("Main method Emoji is called.");
-        generateEmojiList();
+        GtwAPI.getInstance().getGtwMod().provideModService(
+                this
+        );
     }
 
     public static List<Emoji> readCategory(String cat) throws YamlException {
@@ -110,20 +116,24 @@ public class GTWEmoji {
     }
 
 
-    @Mod.EventHandler
+
+    @Override
+    public void handleFmlEvent(@NotNull FMLEvent fmlEvent) {
+        if(fmlEvent instanceof FMLPreInitializationEvent){
+            onPreInit((FMLPreInitializationEvent) fmlEvent);
+        }else if(fmlEvent instanceof FMLInitializationEvent){
+            onInit((FMLInitializationEvent)fmlEvent);
+        }
+    }
     public void onPreInit(FMLPreInitializationEvent event) {
-        GtwLog.info("Pre-Initialization Event is called. (Emoji)");
-
         minecraftDir = event.getModConfigurationDirectory().getParentFile();
-
-//        generateEmojiList();
-//        MinecraftForge.EVENT_BUS.register(this);
-        ConfigManager.sync(GtwProperties.MOD_ID, Config.Type.INSTANCE);
+        GtwLog.info("Pre-Initialization Event is called. (Emoji)");
     }
 
-
-    @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) {
+        generateEmojiList();
+        ConfigManager.sync(GtwProperties.MOD_ID, Config.Type.INSTANCE);
+
         // Log information about the method being called
         GtwLog.info("Initialization Event is called. (Emoji)");
 
@@ -131,8 +141,13 @@ public class GTWEmoji {
             Minecraft.getMinecraft().fontRenderer = new EmojiFontRenderer(Minecraft.getMinecraft());
         }
     }
+    @Override
+    public void onRemove() {
 
+    }
 
-
-
+    @Override
+    public @NotNull String getId() {
+        return "emoji";
+    }
 }

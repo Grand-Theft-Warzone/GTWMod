@@ -4,20 +4,23 @@ import com.grandtheftwarzone.gtwmod.api.event.EntityDamagedEvent;
 
 import com.grandtheftwarzone.gtwmod.core.network.GtwNetworkAPI;
 import com.grandtheftwarzone.gtwmod.server.GTWModServer;
+import me.phoenixra.atumodcore.api.service.AtumModService;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class CommonProxy {
+public class CommonProxy implements AtumModService {
 
     private List<Consumer<EntityDamagedEvent>> eventDamageObserver = new ArrayList<>();
     public CommonProxy(){
@@ -26,13 +29,8 @@ public class CommonProxy {
         GTWModServer.instance.setNetworkAPI(new GtwNetworkAPI());
     }
 
-    @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-    }
-
-
-    @Mod.EventHandler
-    public void init(FMLInitializationEvent event) {
+    @Override
+    public void handleFmlEvent(@NotNull FMLEvent fmlEvent) {
 
     }
 
@@ -67,4 +65,13 @@ public class CommonProxy {
         eventDamageObserver.remove(observer);
     }
 
+    @Override
+    public void onRemove() {
+
+    }
+
+    @Override
+    public @NotNull String getId() {
+        return "proxy";
+    }
 }
