@@ -17,7 +17,6 @@ import com.grandtheftwarzone.gtwmod.core.display.loadingscreen.MainSplashRendere
 import com.grandtheftwarzone.gtwmod.core.display.loadingscreen.listener.ModLoadingListener;
 import com.grandtheftwarzone.gtwmod.core.misc.GtwSoundsManager;
 import com.grandtheftwarzone.gtwmod.core.phone.core.GtwPhoneManager;
-import com.grandtheftwarzone.gtwmod.core.phone.core.canvas.CanvasPhone;
 import lombok.Getter;
 import lombok.Setter;
 import me.phoenixra.atumodcore.api.AtumMod;
@@ -25,7 +24,6 @@ import me.phoenixra.atumodcore.api.config.Config;
 import me.phoenixra.atumodcore.api.config.ConfigType;
 import me.phoenixra.atumodcore.api.config.category.ConfigCategory;
 import me.phoenixra.atumodcore.api.display.DisplayElement;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.ConfigManager;
@@ -39,9 +37,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.opengl.Display;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

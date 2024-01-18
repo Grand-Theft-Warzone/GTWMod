@@ -39,7 +39,7 @@ public class GtwAPIServer implements GtwAPI {
     }
 
     @Override
-    public @NotNull PhoneManager getPhoneGui() {
+    public @NotNull PhoneManager getPhoneManager() {
         throw new RuntimeException("Client side only!");
     }
 

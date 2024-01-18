@@ -4,25 +4,30 @@ import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneApp;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneManager;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.annotations.RegisterPhoneApp;
+import com.grandtheftwarzone.gtwmod.core.phone.core.canvas.CanvasPhoneImpl;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
 import lombok.Getter;
 import me.phoenixra.atumodcore.api.AtumMod;
-import me.phoenixra.atumodcore.api.input.InputType;
-import me.phoenixra.atumodcore.api.input.event.InputPressEvent;
+import me.phoenixra.atumodcore.api.display.DisplayElementRegistry;
 import me.phoenixra.atumodcore.api.service.AtumModService;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.common.event.FMLConstructionEvent;
+import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class GtwPhoneManager implements PhoneManager, AtumModService {
     @Getter
@@ -41,11 +46,15 @@ public class GtwPhoneManager implements PhoneManager, AtumModService {
     @Override
     public void handleFmlEvent(@NotNull FMLEvent fmlEvent) {
         if(fmlEvent instanceof FMLInitializationEvent){
-            //open phone on middle mouse click
-            atumMod.getInputHandler().addListenerOnPress("phone",
-                    this::onMouseWheelPressed
+            DisplayElementRegistry registry = GtwAPI.getInstance().
+                    getGtwMod().getDisplayManager().getElementRegistry();
+
+            registry.registerTemplate("canvas_phone",
+                    new CanvasPhoneImpl(atumMod)
             );
+
             registerApps();
+            MinecraftForge.EVENT_BUS.register(this);
         }
     }
 
@@ -60,10 +69,9 @@ public class GtwPhoneManager implements PhoneManager, AtumModService {
         try (ScanResult scanResult = new ClassGraph()
                 .enableAllInfo()
                 .acceptPackages(
-                        "com.grandtheftwarzone.gtwclient" +
-                                ".core.phone.apps..*")
-                .scan()) { // Begin the scan
-
+                        "com.grandtheftwarzone.gtwmod" +
+                                ".core.phone..*")
+                .scan()) {// Begin the scan
             ClassInfoList classInfos = scanResult.getClassesWithAnnotation(RegisterPhoneApp.class.getName());
             //log
             GtwAPI.getInstance().getGtwMod().getLogger().info("Found " + classInfos.size() + " phone apps");
@@ -108,24 +116,39 @@ public class GtwPhoneManager implements PhoneManager, AtumModService {
         return apps.get(id);
     }
 
+    @SubscribeEvent
+    public void onMouseClicked(MouseEvent e) {
+        int i = Mouse.getEventButton();
 
-    private void onMouseWheelPressed(InputPressEvent event){
-        if(event.getType() != InputType.MOUSE_MIDDLE){
-            return;
-        }
-        Minecraft mc = Minecraft.getMinecraft();
-        if(mc.player == null){
-            return;
-        }
-        if(!mc.inGameHasFocus){
-
-            if(mc.currentScreen instanceof GtwPhoneScreen){
-                ((GtwPhoneScreen) mc.currentScreen).closeAnimated();
+        if(Mouse.getEventButtonState() && i == 2){
+            Minecraft mc = Minecraft.getMinecraft();
+            if(mc.player == null || mc.currentScreen instanceof GtwPhoneScreen){
+                return;
             }
-            return;
+            String phoneId = Objects.requireNonNull(GtwAPI.getInstance().getGtwMod().
+                            getConfigManager().getConfig("settings"))
+                    .getString("phone");
+            Minecraft.getMinecraft().displayGuiScreen(
+                    new GtwPhoneScreen(atumMod,phoneId)
+            );
         }
-        Minecraft.getMinecraft().displayGuiScreen(
-            new GtwPhoneScreen(atumMod)
-        );
+    }
+    @SubscribeEvent
+    public void onMouseClicked(GuiScreenEvent.MouseInputEvent.Pre e) {
+        int i = Mouse.getEventButton();
+
+        if(Mouse.getEventButtonState() && i == 2){
+            Minecraft mc = Minecraft.getMinecraft();
+            if(mc.currentScreen instanceof GtwPhoneScreen){
+                ((GtwPhoneScreen)mc.currentScreen).closeAnimated();
+                return;
+            }
+            String phoneId = Objects.requireNonNull(GtwAPI.getInstance().getGtwMod().
+                            getConfigManager().getConfig("settings"))
+                    .getString("phone");
+            Minecraft.getMinecraft().displayGuiScreen(
+                    new GtwPhoneScreen(atumMod,phoneId)
+            );
+        }
     }
 }

@@ -68,7 +68,7 @@ public interface GtwAPI {
      * @return The phone gui
      */
     @SideOnly(Side.CLIENT)
-    @NotNull PhoneManager getPhoneGui();
+    @NotNull PhoneManager getPhoneManager();
 
     /**
      * Get GTW mod instance

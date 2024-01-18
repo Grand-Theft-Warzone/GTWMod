@@ -1,4 +1,4 @@
-package com.grandtheftwarzone.gtwmod.core.phone.apps.notifications;
+package com.grandtheftwarzone.gtwmod.core.phone.core.apps.test;
 
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneApp;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneShape;
@@ -12,12 +12,16 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 @RegisterPhoneApp
-public class NotificationsApp implements PhoneApp {
-    private ResourceLocation icon = new ResourceLocation("gtwmod", "textures/main_menu/discord_button.png");
+public class TestApp implements PhoneApp {
 
+    private ResourceLocation icon = new ResourceLocation("gtwmod", "textures/gui/phone/apps/test.png");
 
     @Override
-    public void draw(@NotNull CanvasPhone parent, @NotNull DisplayResolution resolution, int displayX, int displayY, int displayWidth, int displayHeight, int mouseX, int mouseY) {
+    public void draw(@NotNull CanvasPhone parent,
+                     @NotNull DisplayResolution resolution,
+                     int displayX, int displayY,
+                     int displayWidth, int displayHeight,
+                     int mouseX, int mouseY) {
         RenderUtils.fill(
                 displayX,
                 displayY,
@@ -26,6 +30,7 @@ public class NotificationsApp implements PhoneApp {
                 AtumColor.ORANGE.toInt(),
                 1.0f
         );
+
     }
 
     @Override
@@ -64,21 +69,21 @@ public class NotificationsApp implements PhoneApp {
 
     @Override
     public @NotNull PhoneShape getShapeRequired() {
-        return PhoneShape.VERTICAL;
+        return PhoneShape.HORIZONTAL;
     }
 
     @Override
     public int getAppPriority() {
-        return 1;
+        return 0;
     }
 
     @Override
     public @NotNull String getAppName() {
-        return "Notifications";
+        return "Test";
     }
 
     @Override
     public @NotNull String getId() {
-        return "notifications";
+        return "test";
     }
 }

@@ -1,51 +1,84 @@
 package com.grandtheftwarzone.gtwmod.core.phone.apps.property;
 
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneApp;
-import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneManager;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneShape;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.annotations.RegisterPhoneApp;
-import me.phoenixra.atumodcore.api.display.impl.BaseCanvas;
+import com.grandtheftwarzone.gtwmod.api.gui.phone.canvas.CanvasPhone;
+import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
+import me.phoenixra.atumodcore.api.misc.AtumColor;
+import me.phoenixra.atumodcore.api.utils.RenderUtils;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 @RegisterPhoneApp
 public class PropertyApp implements PhoneApp {
+    private ResourceLocation icon = new ResourceLocation("gtwmod", "textures/main_menu/website_button.png");
+
     @Override
-    public void draw(BaseCanvas parent) {
+    public void draw(@NotNull CanvasPhone parent, @NotNull DisplayResolution resolution, int displayX, int displayY, int displayWidth, int displayHeight, int mouseX, int mouseY) {
+        RenderUtils.fill(
+                displayX,
+                displayY,
+                displayX+displayWidth,
+                displayY+displayHeight,
+                AtumColor.ORANGE.toInt(),
+                1.0f
+        );
+    }
+
+    @Override
+    public void drawIcon(@NotNull CanvasPhone parent,
+                         @NotNull DisplayResolution resolution,
+                         int x, int y, int size,
+                         boolean isHovered) {
+        RenderUtils.bindTexture(icon);
+        AtumColor.WHITE.useColor();
+        if(isHovered) {
+            GlStateManager.color(
+                    0.85f,
+                    0.85f,
+                    0.85f,
+                    1.0f
+            );
+        }
+        RenderUtils.drawCompleteImage(
+                x,
+                y,
+                size,
+                size
+        );
+    }
+
+
+    @Override
+    public void onOpen(CanvasPhone parent) {
 
     }
 
     @Override
-    public void drawIcon(@NotNull BaseCanvas parent, int x, int y, int width, int height) {
-
+    public boolean onPressedBack(CanvasPhone parent) {
+        return true;
     }
 
-    @Override
-    public void onOpen(PhoneManager parent) {
-
-    }
-
-    @Override
-    public void onClosed(PhoneManager parent) {
-
-    }
 
     @Override
     public @NotNull PhoneShape getShapeRequired() {
-        return null;
+        return PhoneShape.FULL_SCREEN;
     }
 
     @Override
     public int getAppPriority() {
-        return 0;
+        return 2;
     }
 
     @Override
     public @NotNull String getAppName() {
-        return null;
+        return "Property";
     }
 
     @Override
     public @NotNull String getId() {
-        return null;
+        return "property";
     }
 }

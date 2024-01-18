@@ -37,7 +37,7 @@ public class GtwAPIClient implements GtwAPI {
     }
 
     @Override
-    public @NotNull PhoneManager getPhoneGui() {
+    public @NotNull PhoneManager getPhoneManager() {
         return GTWModClient.instance.getPhoneManager();
     }
 

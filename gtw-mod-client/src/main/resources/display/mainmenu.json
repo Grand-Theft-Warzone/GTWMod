@@ -1,6 +1,6 @@
 {
   "type": "canvas",
-  "config_version": 8.0,
+  "config_version": 9.0,
   "layer": "MIDDLE",
   "elements": {
     "image_main": {
@@ -263,5 +263,113 @@
     }
   },
   "width": 1920.0,
-  "height": 1080.0
+  "height": 1080.0,
+  "resolution_optimization": {
+    "RES_1024x728": {
+      "elements": {
+        "text_playerName": {
+          "settings": {
+            "fontSize": 15,
+            "font": "main_menu.otf"
+          },
+          "posX": 1435
+        },
+        "text_playerRank": {
+          "settings": {
+            "fontSize": 15,
+            "font": "main_menu.otf"
+          }
+        },
+        "text_playerGang": {
+          "settings": {
+            "fontSize": 15,
+            "font": "main_menu.otf"
+          }
+        },
+        "text_playerLevel": {
+          "settings": {
+            "fontSize": 15,
+            "font": "main_menu.otf"
+          }
+        },
+        "text_playerMoney": {
+          "settings": {
+            "fontSize": 15,
+            "font": "main_menu.otf"
+          }
+        },
+        "text_playerKills": {
+          "settings": {
+            "fontSize": 15,
+            "font": "main_menu.otf"
+          }
+        },
+        "text_playerDeaths": {
+          "settings": {
+            "fontSize": 15,
+            "font": "main_menu.otf"
+          }
+        },
+        "text_playerKdr": {
+          "settings": {
+            "fontSize": 15,
+            "font": "main_menu.otf"
+          }
+        }
+      }
+    },
+    "RES_1280x720": {
+      "elements": {
+        "text_playerName": {
+          "settings": {
+            "fontSize": 16,
+            "font": "main_menu.otf"
+          },
+          "posX": 1435
+        },
+        "text_playerRank": {
+          "settings": {
+            "fontSize": 16,
+            "font": "main_menu.otf"
+          }
+        },
+        "text_playerGang": {
+          "settings": {
+            "fontSize": 16,
+            "font": "main_menu.otf"
+          }
+        },
+        "text_playerLevel": {
+          "settings": {
+            "fontSize": 16,
+            "font": "main_menu.otf"
+          }
+        },
+        "text_playerMoney": {
+          "settings": {
+            "fontSize": 16,
+            "font": "main_menu.otf"
+          }
+        },
+        "text_playerKills": {
+          "settings": {
+            "fontSize": 16,
+            "font": "main_menu.otf"
+          }
+        },
+        "text_playerDeaths": {
+          "settings": {
+            "fontSize": 16,
+            "font": "main_menu.otf"
+          }
+        },
+        "text_playerKdr": {
+          "settings": {
+            "fontSize": 16,
+            "font": "main_menu.otf"
+          }
+        }
+      }
+    }
+  }
 }

@@ -4,6 +4,8 @@ import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import me.phoenixra.atumodcore.api.display.DisplayCanvas;
 import me.phoenixra.atumodcore.api.display.DisplayLayer;
 import me.phoenixra.atumodcore.api.display.impl.BaseCanvas;
+import me.phoenixra.atumodcore.api.display.impl.BaseElement;
+import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +15,7 @@ public class CanvasFactoriesGui extends BaseCanvas {
     }
 
     @Override
-    protected BaseCanvas onClone(BaseCanvas baseCanvas) {
+    protected BaseElement onClone(BaseElement baseCanvas) {
         return null;
     }
 
@@ -28,7 +30,7 @@ public class CanvasFactoriesGui extends BaseCanvas {
     }
 
     @Override
-    protected void onDraw(float v, float v1, float v2, int i, int i1) {
+    protected void onDraw(DisplayResolution displayResolution, float v, int i, int i1) {
 
     }
 }

@@ -1,25 +1,44 @@
 package com.grandtheftwarzone.gtwmod.api.gui.phone;
 
+import com.grandtheftwarzone.gtwmod.api.gui.phone.canvas.CanvasPhone;
 import me.phoenixra.atumodcore.api.display.impl.BaseCanvas;
+import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
 import org.jetbrains.annotations.NotNull;
 
 public interface PhoneApp {
 
     /**
-     * Draw the app on the phone
+     * Draw an app on the phone
+     * IMPORTANT: the app is drawn on the phone display,
+     * so, use the displayX, displayY, displayWidth and displayHeight
+     * to have an app properly displayed within edges
+     *
      * @param parent the phone gui
+     * @param resolution the phone resolution
+     * @param displayX the x position of the phone display
+     * @param displayY the y position of the phone display
+     * @param displayWidth the width of the phone display
+     * @param displayHeight the height of the phone display
+     * @param mouseX the mouse x position
+     * @param mouseY the mouse y position
      */
-    void draw(BaseCanvas parent);
+    void draw(@NotNull CanvasPhone parent,
+              @NotNull DisplayResolution resolution,
+              int displayX, int displayY,
+              int displayWidth, int displayHeight,
+              int mouseX, int mouseY);
 
     /**
      * Draw the app icon
      * @param x the x position
      * @param y the y position
-     * @param width the icon width
-     * @param height the icon height
+     * @param size the icon size
      * @param parent the phone gui
      */
-    void drawIcon(@NotNull BaseCanvas parent, int x, int y, int width, int height);
+    void drawIcon(@NotNull CanvasPhone parent,
+                  @NotNull DisplayResolution resolution,
+                  int x, int y, int size,
+                  boolean isHovered);
 
 
     /**
@@ -29,15 +48,16 @@ public interface PhoneApp {
      *
      * @param parent the phone gui
      */
-    void onOpen(PhoneManager parent);
+    void onOpen(CanvasPhone parent);
 
     /**
      * Called when the app is closed
      * <p>Use it to clear cache</p>
      *
      * @param parent the phone gui
+     * @return true if the app can be closed
      */
-    void onClosed(PhoneManager parent);
+    boolean onPressedBack(CanvasPhone parent);
 
 
     /**
