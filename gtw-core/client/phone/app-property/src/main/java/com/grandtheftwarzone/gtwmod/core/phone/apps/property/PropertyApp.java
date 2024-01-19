@@ -17,12 +17,15 @@ public class PropertyApp implements PhoneApp {
     private ResourceLocation icon = new ResourceLocation("gtwmod", "textures/main_menu/website_button.png");
 
     @Override
-    public void draw(@NotNull CanvasPhone parent, @NotNull DisplayResolution resolution, int displayX, int displayY, int displayWidth, int displayHeight, int mouseX, int mouseY) {
+    public void draw(@NotNull CanvasPhone parent,
+                     @NotNull DisplayResolution resolution,
+                     int displayWidth, int displayHeight,
+                     int mouseX, int mouseY) {
         RenderUtils.fill(
-                displayX,
-                displayY,
-                displayX+displayWidth,
-                displayY+displayHeight,
+                0,
+                0,
+                displayWidth,
+                displayHeight,
                 AtumColor.ORANGE.toInt(),
                 1.0f
         );

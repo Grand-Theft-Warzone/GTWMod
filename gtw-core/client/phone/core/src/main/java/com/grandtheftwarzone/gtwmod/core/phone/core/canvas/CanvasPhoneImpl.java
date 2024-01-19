@@ -1,6 +1,5 @@
 package com.grandtheftwarzone.gtwmod.core.phone.core.canvas;
 
-import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneApp;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneShape;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneState;
@@ -26,6 +25,8 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
 import java.util.List;
+
+import static org.lwjgl.opengl.GL11.GL_SCISSOR_TEST;
 
 public class CanvasPhoneImpl extends CanvasPhone {
 
@@ -98,12 +99,14 @@ public class CanvasPhoneImpl extends CanvasPhone {
 
                 //calculated phone display location depending on a shape
                 if (shape == PhoneShape.VERTICAL) {
-                    openedApp.draw(this, resolution,
+                    drawApp(resolution,
+                            scaleFactor,
                             displayX,
                             displayY,
                             displayWidth,
                             displayHeight,
-                            mouseX, mouseY);
+                            mouseX, mouseY
+                    );
 
                 } else if (shape == PhoneShape.HORIZONTAL) {
                     int centerX = phoneDisplay.getX() + (phoneDisplay.getWidth() / 2);
@@ -116,7 +119,8 @@ public class CanvasPhoneImpl extends CanvasPhone {
                     displayHeight = phoneDisplay.getWidth();
                     int widthScaled = (int) (displayWidth * horizontalShapeScale);
                     int heightScaled = (int) (displayHeight * horizontalShapeScale);
-                    openedApp.draw(this, resolution,
+                    drawApp(resolution,
+                            scaleFactor,
                             displayX - (widthScaled - displayWidth) / 2,
                             displayY - (heightScaled - displayHeight) / 2,
                             widthScaled,
@@ -124,15 +128,40 @@ public class CanvasPhoneImpl extends CanvasPhone {
                             mouseX, mouseY);
 
                 } else {
+                    //separately drawnfor better perfomance, cause
+                    //such shape is used mostly by apps that require
+                    //performance
                     openedApp.draw(this, resolution,
-                            0,
-                            0,
                             Display.getWidth(),
                             Display.getHeight(),
                             mouseX, mouseY);
                 }
                 break;
         }
+    }
+    private void drawApp(DisplayResolution resolution,
+                         float scaleFactor,
+                         int displayX, int displayY,
+                         int displayWidth, int displayHeight,
+                         int mouseX, int mouseY){
+        GL11.glEnable(GL_SCISSOR_TEST);
+        GL11.glScissor((int) (displayX*scaleFactor),
+                (int) (Display.getHeight() - (displayY + displayHeight)*scaleFactor), //invert y, bcz scissor works in a bottom-left corner
+                (int) (displayWidth*scaleFactor),
+                (int) (displayHeight*scaleFactor)
+        );
+
+        GL11.glPushMatrix();
+        GL11.glTranslatef(displayX, displayY, 0);
+
+        openedApp.draw(this, resolution,
+                displayWidth,
+                displayHeight,
+                mouseX, mouseY);
+        GL11.glPopMatrix();
+
+        GL11.glDisable(GL_SCISSOR_TEST);
+
     }
 
     @Override

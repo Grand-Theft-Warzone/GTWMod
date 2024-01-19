@@ -15,8 +15,6 @@ public interface PhoneApp {
      *
      * @param parent the phone gui
      * @param resolution the phone resolution
-     * @param displayX the x position of the phone display
-     * @param displayY the y position of the phone display
      * @param displayWidth the width of the phone display
      * @param displayHeight the height of the phone display
      * @param mouseX the mouse x position
@@ -24,7 +22,6 @@ public interface PhoneApp {
      */
     void draw(@NotNull CanvasPhone parent,
               @NotNull DisplayResolution resolution,
-              int displayX, int displayY,
               int displayWidth, int displayHeight,
               int mouseX, int mouseY);
 
