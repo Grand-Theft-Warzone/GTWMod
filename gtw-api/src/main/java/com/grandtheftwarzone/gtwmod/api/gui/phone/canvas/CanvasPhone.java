@@ -55,7 +55,6 @@ public abstract class CanvasPhone extends BaseCanvas {
 
             } else {
                 setState(PhoneState.CLOSING);
-                Mouse.setGrabbed(true);
             }
         }
 

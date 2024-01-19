@@ -16,6 +16,7 @@ import me.phoenixra.atumodcore.api.utils.RenderUtils;
 import me.phoenixra.atumodcore.core.display.elements.ElementImage;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -245,6 +246,12 @@ public class CanvasPhoneImpl extends CanvasPhone {
         if (this.state == PhoneState.CLOSING) return;
         this.state = state;
         phoneShapeDrawer.animationTimer = 0;
+        //@TODO add later for better feel of the closing state
+        //But have to handle the case when
+        //other gui is opened while the phone is closing
+        //cause in that case the gui for some resoun do not
+        //set the mouse grabbed to false
+        //Mouse.setGrabbed(true);
     }
 
     @Override
@@ -322,6 +329,12 @@ public class CanvasPhoneImpl extends CanvasPhone {
         return canvasPhone;
     }
 
+    @SubscribeEvent
+    public void onDamageReceived(LivingDamageEvent event){
+        if(event.getEntityLiving() == Minecraft.getMinecraft().player){
+            Minecraft.getMinecraft().displayGuiScreen(null);
+        }
+    }
 
     private static class PhoneShapeDrawer {
         private CanvasPhoneImpl phone;
