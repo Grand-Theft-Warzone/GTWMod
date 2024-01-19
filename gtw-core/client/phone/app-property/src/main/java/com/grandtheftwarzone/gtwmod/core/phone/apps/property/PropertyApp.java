@@ -4,6 +4,7 @@ import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneApp;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneShape;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.annotations.RegisterPhoneApp;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.canvas.CanvasPhone;
+import me.phoenixra.atumodcore.api.config.Config;
 import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
 import me.phoenixra.atumodcore.api.utils.RenderUtils;
@@ -50,11 +51,12 @@ public class PropertyApp implements PhoneApp {
         );
     }
 
-
     @Override
-    public void onOpen(CanvasPhone parent) {
+    public void updateVariables(@NotNull Config config) {
 
     }
+
+
 
     @Override
     public boolean onPressedBack(CanvasPhone parent) {

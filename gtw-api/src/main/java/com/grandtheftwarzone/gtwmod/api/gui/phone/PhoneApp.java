@@ -1,7 +1,7 @@
 package com.grandtheftwarzone.gtwmod.api.gui.phone;
 
 import com.grandtheftwarzone.gtwmod.api.gui.phone.canvas.CanvasPhone;
-import me.phoenixra.atumodcore.api.display.impl.BaseCanvas;
+import me.phoenixra.atumodcore.api.config.Config;
 import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,13 +42,12 @@ public interface PhoneApp {
 
 
     /**
-     * Called when the client pressed
-     * the app button
-     * <p>Use it to load data</p>
+     * Called when the canvas phone updates its data
      *
-     * @param parent the phone gui
+     * @param config config section of the app
      */
-    void onOpen(CanvasPhone parent);
+    void updateVariables(@NotNull Config config);
+
 
     /**
      * Called when the app is closed

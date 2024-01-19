@@ -14,6 +14,7 @@ import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.display.DisplayElementRegistry;
 import me.phoenixra.atumodcore.api.service.AtumModService;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -122,15 +123,17 @@ public class GtwPhoneManager implements PhoneManager, AtumModService {
 
         if(Mouse.getEventButtonState() && i == 2){
             Minecraft mc = Minecraft.getMinecraft();
-            if(mc.player == null || mc.currentScreen instanceof GtwPhoneScreen){
+            if(mc.player == null || mc.currentScreen != null){
                 return;
             }
+            if(mc.player.isCreative()) return;
             String phoneId = Objects.requireNonNull(GtwAPI.getInstance().getGtwMod().
                             getConfigManager().getConfig("settings"))
                     .getString("phone");
             Minecraft.getMinecraft().displayGuiScreen(
                     new GtwPhoneScreen(atumMod,phoneId)
             );
+            e.setCanceled(true);
         }
     }
     @SubscribeEvent
@@ -141,14 +144,8 @@ public class GtwPhoneManager implements PhoneManager, AtumModService {
             Minecraft mc = Minecraft.getMinecraft();
             if(mc.currentScreen instanceof GtwPhoneScreen){
                 ((GtwPhoneScreen)mc.currentScreen).closeAnimated();
-                return;
+
             }
-            String phoneId = Objects.requireNonNull(GtwAPI.getInstance().getGtwMod().
-                            getConfigManager().getConfig("settings"))
-                    .getString("phone");
-            Minecraft.getMinecraft().displayGuiScreen(
-                    new GtwPhoneScreen(atumMod,phoneId)
-            );
         }
     }
 }

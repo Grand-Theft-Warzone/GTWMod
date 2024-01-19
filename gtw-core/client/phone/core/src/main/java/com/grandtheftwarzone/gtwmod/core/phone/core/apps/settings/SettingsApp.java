@@ -1,9 +1,10 @@
-package com.grandtheftwarzone.gtwmod.core.phone.core.apps.test;
+package com.grandtheftwarzone.gtwmod.core.phone.core.apps.settings;
 
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneApp;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneShape;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.annotations.RegisterPhoneApp;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.canvas.CanvasPhone;
+import me.phoenixra.atumodcore.api.config.Config;
 import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
 import me.phoenixra.atumodcore.api.utils.RenderUtils;
@@ -12,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 @RegisterPhoneApp
-public class TestApp implements PhoneApp {
+public class SettingsApp implements PhoneApp {
 
     private ResourceLocation icon = new ResourceLocation("gtwmod", "textures/gui/phone/apps/test.png");
 
@@ -57,9 +58,10 @@ public class TestApp implements PhoneApp {
     }
 
     @Override
-    public void onOpen(CanvasPhone parent) {
-
+    public void updateVariables(@NotNull Config config) {
     }
+
+
 
     @Override
     public boolean onPressedBack(CanvasPhone parent) {
@@ -69,7 +71,7 @@ public class TestApp implements PhoneApp {
 
     @Override
     public @NotNull PhoneShape getShapeRequired() {
-        return PhoneShape.HORIZONTAL;
+        return PhoneShape.VERTICAL;
     }
 
     @Override
@@ -79,11 +81,11 @@ public class TestApp implements PhoneApp {
 
     @Override
     public @NotNull String getAppName() {
-        return "Test";
+        return "Settings";
     }
 
     @Override
     public @NotNull String getId() {
-        return "test";
+        return "settings";
     }
 }

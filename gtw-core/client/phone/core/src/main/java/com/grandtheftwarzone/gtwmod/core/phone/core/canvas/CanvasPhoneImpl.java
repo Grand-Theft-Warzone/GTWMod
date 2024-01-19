@@ -10,6 +10,7 @@ import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.config.Config;
 import me.phoenixra.atumodcore.api.display.impl.BaseElement;
 import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
+import me.phoenixra.atumodcore.api.display.misc.variables.OptimizedVariableInt;
 import me.phoenixra.atumodcore.api.utils.MathUtils;
 import me.phoenixra.atumodcore.api.utils.RenderUtils;
 import me.phoenixra.atumodcore.core.display.elements.ElementImage;
@@ -28,17 +29,14 @@ import java.util.List;
 public class CanvasPhoneImpl extends CanvasPhone {
 
 
-    private List<PhoneApp> appDrawingOrder;
     private List<IconPosition> appIconPositions;
 
 
     protected ElementImage background;
     protected ElementImage phoneDisplay;
 
-    private HashMap<DisplayResolution, Integer> iconPadding = new HashMap<>();
-    private HashMap<DisplayResolution, Integer> iconsPerRow = new HashMap<>();
-    private int iconPaddingDefault = 10;
-    private int iconsPerRowDefault = 3;
+    private OptimizedVariableInt iconPadding;
+    private OptimizedVariableInt iconsPerRow;
 
     private float horizontalShapeScale = 1.5f;
 
@@ -49,9 +47,8 @@ public class CanvasPhoneImpl extends CanvasPhone {
 
     public CanvasPhoneImpl(AtumMod atumMod) {
         super(atumMod);
-        appDrawingOrder = GtwAPI.getInstance()
-                .getPhoneManager().getAppDrawingOrder();
-
+        iconPadding = new OptimizedVariableInt("iconPadding",10);
+        iconsPerRow = new OptimizedVariableInt("iconsPerRow",3);
 
     }
 
@@ -70,15 +67,15 @@ public class CanvasPhoneImpl extends CanvasPhone {
                             phoneDisplay.getY(),
                             phoneDisplay.getWidth(),
                             phoneDisplay.getHeight(),
-                            appDrawingOrder.size(),
-                            iconsPerRow.getOrDefault(resolution, iconsPerRowDefault),
-                            iconPadding.getOrDefault(resolution, iconPaddingDefault)
+                            getApps().size(),
+                            iconsPerRow.getValue(resolution),
+                            iconPadding.getValue(resolution)
                     );
                     init = true;
                 }
 
-                for (int i = 0; i < appDrawingOrder.size(); i++) {
-                    appDrawingOrder.get(i).drawIcon(this, resolution,
+                for (int i = 0; i < getApps().size(); i++) {
+                    getApps().get(i).drawIcon(this, resolution,
                             appIconPositions.get(i).x,
                             appIconPositions.get(i).y,
                             appIconPositions.get(i).size,
@@ -140,8 +137,6 @@ public class CanvasPhoneImpl extends CanvasPhone {
     @Override
     public void updateVariables(@NotNull Config config, @Nullable String configKey) {
         super.updateVariables(config, configKey);
-        appDrawingOrder = GtwAPI.getInstance()
-                .getPhoneManager().getAppDrawingOrder();
 
         HashMap<PhoneState, Integer> animationDuration = new HashMap<>();
         for (PhoneState phoneState : PhoneState.values()) {
@@ -158,8 +153,12 @@ public class CanvasPhoneImpl extends CanvasPhone {
                 animationDuration
         );
 
-        iconPaddingDefault = config.getIntOrDefault("iconPadding", 32);
-        iconsPerRowDefault = config.getIntOrDefault("iconsPerRow", 4);
+        iconPadding.setDefaultValue(
+                config.getIntOrDefault("iconPadding", 10)
+        );
+        iconsPerRow.setDefaultValue(
+                config.getIntOrDefault("iconsPerRow", 3)
+        );
 
         horizontalShapeScale = (float) config.getDoubleOrDefault("horizontalShapeScale", 1.5f);
 
@@ -183,18 +182,38 @@ public class CanvasPhoneImpl extends CanvasPhone {
                     this
             );
             phoneDisplay.updateVariables(config1, "phoneDisplay");
-            phoneDisplay.setOriginX(getOriginX() + phoneDisplay.getOriginX());
-            phoneDisplay.setOriginY(getOriginY() + phoneDisplay.getOriginY());
-            phoneDisplay.setOriginWidth(getOriginWidth() + phoneDisplay.getOriginWidth());
-            phoneDisplay.setOriginHeight(getOriginHeight() + phoneDisplay.getOriginHeight());
+            phoneDisplay.getOriginX().setDefaultValue(
+                    getOriginX().getDefaultValue() + phoneDisplay.getOriginX().getDefaultValue()
+            );
+            phoneDisplay.getOriginY().setDefaultValue(
+                    getOriginY().getDefaultValue() + phoneDisplay.getOriginY().getDefaultValue()
+            );
+            phoneDisplay.getOriginWidth().setDefaultValue(
+                    getOriginWidth().getDefaultValue() + phoneDisplay.getOriginWidth().getDefaultValue()
+            );
+            phoneDisplay.getOriginHeight().setDefaultValue(
+                    getOriginHeight().getDefaultValue() + phoneDisplay.getOriginHeight().getDefaultValue()
+            );
         }
     }
 
     @Override
     public void applyResolutionOptimizer(@NotNull DisplayResolution resolution, @NotNull Config config) {
         super.applyResolutionOptimizer(resolution, config);
-        iconPadding.put(resolution, config.getIntOrDefault("iconPadding", 10));
-        iconsPerRow.put(resolution, config.getIntOrDefault("iconsPerRow", 3));
+        if(config.hasPath("phoneDisplay")) {
+            phoneDisplay.getOriginX().addOptimizedValue(resolution,
+                    getOriginX().getValue(resolution) + config.getInt("phoneDisplay.posX")
+            );
+            phoneDisplay.getOriginY().addOptimizedValue(resolution,
+                    getOriginY().getValue(resolution) + config.getInt("phoneDisplay.posY")
+            );
+            phoneDisplay.getOriginWidth().addOptimizedValue(resolution,
+                    getOriginWidth().getValue(resolution) + config.getInt("phoneDisplay.width")
+            );
+            phoneDisplay.getOriginHeight().addOptimizedValue(resolution,
+                    getOriginHeight().getValue(resolution) + config.getInt("phoneDisplay.height")
+            );
+        }
     }
 
     private void updateState() {
@@ -243,8 +262,8 @@ public class CanvasPhoneImpl extends CanvasPhone {
             return;
         }
         if (Mouse.getEventButtonState() && pressed == 0) {
-            for (int i = 0; i < appDrawingOrder.size(); i++) {
-                PhoneApp app = appDrawingOrder.get(i);
+            for (int i = 0; i < getApps().size(); i++) {
+                PhoneApp app = getApps().get(i);
                 if (isAppHovered(
                         appIconPositions.get(i).x,
                         appIconPositions.get(i).y,
@@ -254,7 +273,6 @@ public class CanvasPhoneImpl extends CanvasPhone {
                 )) {
                     System.out.println("Opening app: " + app.getAppName());
                     openedApp = app;
-                    app.onOpen(this);
                     if (app.getShapeRequired() != PhoneShape.VERTICAL) {
                         changeShape(app.getShapeRequired());
                         return;
@@ -300,8 +318,6 @@ public class CanvasPhoneImpl extends CanvasPhone {
         if (phoneDisplay != null) {
             canvasPhone.phoneDisplay = (ElementImage) phoneDisplay.cloneWithRandomId();
         }
-        canvasPhone.iconPadding = new HashMap<>(iconPadding);
-        canvasPhone.iconsPerRow = new HashMap<>(iconsPerRow);
         canvasPhone.openedApp = null;
         return canvasPhone;
     }
@@ -383,7 +399,7 @@ public class CanvasPhoneImpl extends CanvasPhone {
                     animate = (int) (MathUtils.fastCos(
                             Math.PI * 0.5 *
                                     ((double) animationTimer / animationDuration)
-                    ) * (1920 - background.getOriginY())
+                    ) * (1920 - background.getOriginY().getValue(resolution))
                     );
                     background.setAdditionY(animate);
                     phoneDisplay.setAdditionY(animate);
@@ -394,7 +410,7 @@ public class CanvasPhoneImpl extends CanvasPhone {
                     animate = (int) (MathUtils.fastSin(
                             Math.PI * 0.5 *
                                     ((double) animationTimer / animationDuration)
-                    ) * (1920 - background.getOriginY())
+                    ) * (1920 - background.getOriginY().getValue(resolution))
                     );
                     background.setAdditionY(animate);
                     phoneDisplay.setAdditionY(animate);
