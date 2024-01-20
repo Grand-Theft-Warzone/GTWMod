@@ -10,10 +10,13 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Color;
 
+import java.awt.*;
 import java.util.List;
 
 public class MinimapRenderer {
@@ -31,8 +34,8 @@ public class MinimapRenderer {
         GlStateManager.translate(GTWMinimap.getInstance().getCornerDistance(), y, 1);
 
         drawMap();
-        drawPlayer();
         drawMarkers();
+        drawPlayer();
 
         //Draw border
         GlStateManager.color(0.2f, 0.2f, 0.2f, 1f);
@@ -41,24 +44,46 @@ public class MinimapRenderer {
         GlStateManager.popMatrix();
     }
 
-
     private void drawMap() {
         GlStateManager.pushMatrix();
         GlStateManager.color(1, 1, 1, 1);
 
         if (GTWMinimap.getInstance().isRotating()) {
-            float angle = 270 - Minecraft.getMinecraft().player.rotationYaw;
+            float angle = -Minecraft.getMinecraft().player.rotationYaw;
             GLUtils.rotateFixed(GTWMinimap.getInstance().getRadius(), GTWMinimap.getInstance().getRadius(), angle);
         }
 
-//        GlStateManager.enableTexture2D();
+        GlStateManager.bindTexture(GTWMinimap.getInstance().getMapTexture().getId());
+        GlStateManager.enableTexture2D();
         GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
         GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 
-        GlStateManager.bindTexture(GTWMinimap.getInstance().getMapTexture().getId());
-
         GLUtils.enableCircleStencil(GTWMinimap.getInstance().getRadius(), GTWMinimap.getInstance().getRadius(), GTWMinimap.getInstance().getRadius());
-        Gui.drawModalRectWithCustomSizedTexture(0, 0, 0, 0, GTWMinimap.getInstance().getRadius() * 2, GTWMinimap.getInstance().getRadius() * 2, GTWMinimap.getInstance().getRadius() * 2, GTWMinimap.getInstance().getRadius() * 2);
+
+        double mapSize = GTWMinimap.getInstance().getRadius() * 2;
+        double textureSize = GTWMinimap.getInstance().getTextureSize();
+
+        int mapCenterX = GTWMinimap.getInstance().getMinimap().getCenterX();
+        int mapCenterY = GTWMinimap.getInstance().getMinimap().getCenterZ();
+
+        double ratio = mapSize / textureSize;
+
+        EntityPlayer player = Minecraft.getMinecraft().player;
+
+        double subBlockX = mapCenterX - player.posX;
+        double subBlockZ = mapCenterY - player.posZ;
+
+        double centerX = 0.5 + (subBlockX / textureSize);
+        double centerY = 0.5 + (subBlockZ / textureSize);
+
+        double uMin = centerX - (ratio / 2);
+        double uMax = centerX + (ratio / 2);
+        double vMin = centerY - (ratio / 2);
+        double vMax = centerY + (ratio / 2);
+
+        drawTexturedRect(0, 0, mapSize, mapSize, uMin, vMin, uMax, vMax);
+
+
         GLUtils.disableStencil(); // Disable clipping
 
         GlStateManager.popMatrix();
@@ -84,13 +109,19 @@ public class MinimapRenderer {
         if (GTWMinimap.getInstance().isRotating())
             GLUtils.rotateFixed(GTWMinimap.getInstance().getRadius(), GTWMinimap.getInstance().getRadius(), angle);
 
+        GLUtils.enableCircleStencil(GTWMinimap.getInstance().getRadius(), GTWMinimap.getInstance().getRadius(), GTWMinimap.getInstance().getRadius());
 
-//        GLUtils.enableCircleStencil(GTWMinimap.getInstance().getRadius(), GTWMinimap.getInstance().getRadius(), GTWMinimap.getInstance().getRadius());
+        double playerX = Minecraft.getMinecraft().player.posX;
+        double playerZ = Minecraft.getMinecraft().player.posZ;
+
         for (Marker marker : markers) {
             GlStateManager.pushMatrix();
 
-            double x = GTWMinimap.getInstance().getRadius() + (marker.getPosX() - Minecraft.getMinecraft().player.posX);
-            double y = GTWMinimap.getInstance().getRadius() + (marker.getPosZ() - Minecraft.getMinecraft().player.posZ);
+            double offsetX = marker.getPosX() - playerX;
+            double offsetY = marker.getPosZ() - playerZ;
+
+            double x = GTWMinimap.getInstance().getRadius() + offsetX;
+            double y = GTWMinimap.getInstance().getRadius() + offsetY;
 
             boolean overlap = GTWMinimap.getInstance().getClientMarkerManager().hasMarkerOverlap(marker);
             if (overlap) GlStateManager.color(1f, 1f, 1f, 0.25f);
@@ -98,33 +129,44 @@ public class MinimapRenderer {
             ResourceLocation texture = marker.getType().getTexture();
             Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 
-            Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder buffer = tessellator.getBuffer();
-            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-
             double uMin = marker.getType().getAtlas().getUMin();
             double uMax = marker.getType().getAtlas().getUMax();
             double vMin = marker.getType().getAtlas().getVMin();
             double vMax = marker.getType().getAtlas().getVMax();
 
-            double z = 0;
             double width = marker.getType().getAtlas().getWidth();
             double height = marker.getType().getAtlas().getHeight();
 
+            x -= width / 2d;
+            y -= height / 2d;
+
             if (GTWMinimap.getInstance().isRotating())
-                GLUtils.rotateFixed(x + width / 2, y + height / 2, -angle); // Rotate marker to always face the player
+                GLUtils.rotateFixed(x + width / 2f, y + width / 2f, -angle); // Rotate marker to always face the player
 
-            buffer.pos(x, y + height, z).tex(uMin, vMax).endVertex();
-            buffer.pos(x + width, y + height, z).tex(uMax, vMax).endVertex();
-            buffer.pos(x + width, y, z).tex(uMax, vMin).endVertex();
-            buffer.pos(x, y, z).tex(uMin, vMin).endVertex();
+            drawTexturedRect(x, y, width, height, uMin, vMin, uMax, vMax);
 
-            tessellator.draw();
-
-            if (overlap) GlStateManager.color(1f, 1f, 1f, 1f);
             GlStateManager.popMatrix();
         }
-//        GLUtils.disableStencil(); // Disable clipping
+
+        GLUtils.disableStencil(); // Disable clipping
         GlStateManager.popMatrix();
     }
+
+    public static void drawTexturedRect(double x, double y, double w, double h, double u1, double v1, double u2, double v2) {
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder vertexbuffer = tessellator.getBuffer();
+        vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        vertexbuffer.pos(x + w, y, -1).tex(u2, v1).endVertex();
+        vertexbuffer.pos(x, y, -1).tex(u1, v1).endVertex();
+        vertexbuffer.pos(x, y + h, -1).tex(u1, v2).endVertex();
+        vertexbuffer.pos(x + w, y + h, -1).tex(u2, v2).endVertex();
+        // renderer.finishDrawing();
+        tessellator.draw();
+        GlStateManager.disableBlend();
+    }
+
+
 }

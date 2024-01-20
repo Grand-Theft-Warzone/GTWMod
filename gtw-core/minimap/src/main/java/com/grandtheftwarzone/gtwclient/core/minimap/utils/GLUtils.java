@@ -70,6 +70,24 @@ public class GLUtils {
         postDrawConstants();
     }
 
+    public static void drawCircle(double x, double y, double r) {
+        preDrawConstants();
+
+        GL11.glBegin(GL11.GL_TRIANGLE_FAN);
+        GL11.glVertex3d(x, y, 1);
+
+        double doublePi = Math.PI * 2.0;
+        double angleChange = doublePi / 180.0;
+
+        for (double angle = -angleChange; angle < doublePi; angle += angleChange) {
+            GL11.glVertex3d(x + (r * Math.cos(-angle)), y + (r * Math.sin(-angle)), 1);
+        }
+
+        GL11.glEnd();
+
+        postDrawConstants();
+    }
+
     public static void enableCircleStencil(double x, double y, double radius) {
         GlStateManager.enableDepth();
         GlStateManager.colorMask(false, false, false, false);
@@ -78,7 +96,7 @@ public class GLUtils {
 
 
         setHexColor(0xFFFFFFFF);
-        drawCircle(x, y, radius, false);
+        drawCircle(x, y, radius);
 
         GlStateManager.colorMask(true, true, true, true);
         GlStateManager.depthMask(false);
@@ -90,10 +108,11 @@ public class GLUtils {
         GlStateManager.depthMask(true);
         GlStateManager.depthFunc(GL11.GL_LEQUAL);
     }
+
     public static void rotateFixed(double x, double y, float angle) {
-        GlStateManager.translate(x, y, 1.0F);
-        GlStateManager.rotate(angle, 0, 0, 1.0F);
-        GlStateManager.translate(-x, -y, 1.0F);
+        GlStateManager.translate(x, y, -1.0F);
+        GlStateManager.rotate(angle, 0, 0, -1.0F);
+        GlStateManager.translate(-x, -y, -1.0F);
     }
 
 }

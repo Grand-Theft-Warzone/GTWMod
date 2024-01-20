@@ -8,11 +8,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Arrays;
 
 public class MapTexture {
+    private final int width;
+    private final int height;
     private final DynamicTexture texture;
 
-    public MapTexture() {
-        int radius = GTWMinimap.getInstance().getRadius();
-        texture = new DynamicTexture(radius * 2, radius * 2);
+    public MapTexture(int textureSize) {
+        this.width = textureSize;
+        this.height = textureSize;
+        texture = new DynamicTexture(width, height);
 
         Arrays.fill(texture.getTextureData(), 0xFF0000FF);
 

@@ -25,18 +25,18 @@ public class TextureAtlas {
     }
 
     public double getUMin() {
-        return (double) textureX / textureWidth;
+        return (double) textureX / (double) textureWidth;
     }
 
     public double getUMax() {
-        return (double) (textureX + width) / textureWidth;
+        return (double) (textureX + width) / (double) textureWidth;
     }
 
     public double getVMin() {
-        return (double) textureY / textureHeight;
+        return (double) textureY / (double) textureHeight;
     }
 
     public double getVMax() {
-        return (double) (textureY + height) / textureHeight;
+        return (double) (textureY + height) / (double) textureHeight;
     }
 }

@@ -1,5 +1,7 @@
 package com.grandtheftwarzone.gtwclient.core.minimap.markers;
 
+import com.grandtheftwarzone.gtwclient.api.GtwAPI;
+import com.grandtheftwarzone.gtwclient.core.minimap.GTWMinimap;
 import com.grandtheftwarzone.gtwclient.core.minimap.Minimap;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -18,7 +20,7 @@ public class ClientMarkerManager {
     }
 
     public ArrayList<Marker> getMinimapMarkers(Minimap minimap) {
-        return getMarkers(minimap.getStartX(), minimap.getStartZ(), minimap.getEndX(), minimap.getEndZ());
+        return getMarkers(minimap.getMinX(), minimap.getMinZ(), minimap.getMaxX(), minimap.getMaxZ());
     }
 
     public ArrayList<Marker> getMarkers(double startX, double startZ, double endX, double endZ) {
