@@ -7,12 +7,12 @@ import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneState;
 import lombok.Getter;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.config.Config;
+import me.phoenixra.atumodcore.api.display.DisplayCanvas;
 import me.phoenixra.atumodcore.api.display.impl.BaseCanvas;
 import me.phoenixra.atumodcore.api.display.impl.BaseElement;
 import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.input.Mouse;
 
 import java.util.List;
 
@@ -31,8 +31,8 @@ public abstract class CanvasPhone extends BaseCanvas {
     protected PhoneApp openedApp;
 
 
-    public CanvasPhone(@NotNull AtumMod atumMod) {
-        super(atumMod, null);
+    public CanvasPhone(@NotNull AtumMod atumMod, DisplayCanvas owner) {
+        super(atumMod, owner);
         apps = GtwAPI.getInstance()
                 .getPhoneManager().getAppDrawingOrder();
     }
@@ -61,8 +61,8 @@ public abstract class CanvasPhone extends BaseCanvas {
     }
 
     @Override
-    public void updateVariables(@NotNull Config config, @Nullable String configKey) {
-        super.updateVariables(config, configKey);
+    public void updateBaseVariables(@NotNull Config config, @Nullable String configKey) {
+        super.updateBaseVariables(config, configKey);
         apps = GtwAPI.getInstance()
                 .getPhoneManager().getAppDrawingOrder();
         for(PhoneApp app : apps){

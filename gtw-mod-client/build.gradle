@@ -22,7 +22,6 @@ shadowJar {
     dependencies {
         exclude(dependency ->
                 !dependency.moduleGroup.startsWith(mod_group)&&
-                        !dependency.moduleGroup.startsWith("io.github.classgraph")&&
                         !dependency.moduleGroup.startsWith("com.esotericsoftware.yamlbeans")
         )
         exclude 'META-INF/versions/**'

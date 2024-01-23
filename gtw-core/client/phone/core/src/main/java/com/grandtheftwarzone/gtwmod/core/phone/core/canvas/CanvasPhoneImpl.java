@@ -7,6 +7,8 @@ import com.grandtheftwarzone.gtwmod.api.gui.phone.canvas.CanvasPhone;
 import lombok.Getter;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.config.Config;
+import me.phoenixra.atumodcore.api.display.DisplayCanvas;
+import me.phoenixra.atumodcore.api.display.annotations.RegisterDisplayElement;
 import me.phoenixra.atumodcore.api.display.impl.BaseElement;
 import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
 import me.phoenixra.atumodcore.api.display.misc.variables.OptimizedVariableInt;
@@ -28,6 +30,7 @@ import java.util.List;
 
 import static org.lwjgl.opengl.GL11.GL_SCISSOR_TEST;
 
+@RegisterDisplayElement(templateId = "canvas_phone")
 public class CanvasPhoneImpl extends CanvasPhone {
 
 
@@ -47,8 +50,8 @@ public class CanvasPhoneImpl extends CanvasPhone {
 
     private boolean init;
 
-    public CanvasPhoneImpl(AtumMod atumMod) {
-        super(atumMod);
+    public CanvasPhoneImpl(AtumMod atumMod, DisplayCanvas owner) {
+        super(atumMod,owner);
         iconPadding = new OptimizedVariableInt("iconPadding",10);
         iconsPerRow = new OptimizedVariableInt("iconsPerRow",3);
 
@@ -165,8 +168,8 @@ public class CanvasPhoneImpl extends CanvasPhone {
     }
 
     @Override
-    public void updateVariables(@NotNull Config config, @Nullable String configKey) {
-        super.updateVariables(config, configKey);
+    public void updateBaseVariables(@NotNull Config config, @Nullable String configKey) {
+        super.updateBaseVariables(config, configKey);
 
         HashMap<PhoneState, Integer> animationDuration = new HashMap<>();
         for (PhoneState phoneState : PhoneState.values()) {

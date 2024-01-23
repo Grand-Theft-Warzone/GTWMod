@@ -205,6 +205,11 @@ public class GTWModClient extends AtumMod {
     }
 
     @Override
+    public @NotNull String getPackagePath() {
+        return "com.grandtheftwarzone.gtwmod";
+    }
+
+    @Override
     public boolean isDebugEnabled() {
         return true;
     }

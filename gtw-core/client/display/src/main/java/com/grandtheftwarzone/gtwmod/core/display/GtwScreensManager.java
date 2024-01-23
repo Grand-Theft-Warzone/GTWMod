@@ -26,12 +26,7 @@ public class GtwScreensManager implements ScreensManager, AtumModService {
     }
     @Override
     public void handleFmlEvent(@NotNull FMLEvent fmlEvent) {
-        if(fmlEvent instanceof FMLInitializationEvent){
-            DisplayActionRegistry registry = GtwAPI.getInstance().
-                    getGtwMod().getDisplayManager().getActionRegistry();
-
-            registry.register("play_sound", new ActionPlaySound());
-        }
+       // empty
     }
 
     @Override

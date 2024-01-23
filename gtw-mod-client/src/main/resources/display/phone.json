@@ -2,6 +2,62 @@
   "type": "canvas_phone",
   "config_version": 1.0,
   "layer": "MIDDLE",
-  "width": 1920.0,
-  "height": 1080.0
+  "posX": 705,
+  "posY": 100,
+  "width": 480.0,
+  "height": 880.0,
+  "iconPadding": 7,
+  "iconsPerRow": 4,
+  "animationDuration": {
+    "OPENING": 25,
+    "CLOSING": 15,
+    "VERTICAL_TO_HORIZONTAL": 25,
+    "HORIZONTAL_TO_VERTICAL": 25
+
+  },
+  "background": {
+    "settings": {
+      "image": "gtwmod:textures/gui/phone/phone_background.png",
+      "color": "#ffffff"
+    },
+    "type": "image",
+    "layer": "FOREGROUND"
+
+  },
+  "phoneDisplay": {
+    "settings": {
+      "image": "gtwmod:textures/gui/phone/phone_display.png",
+      "color": "#ffffff"
+    },
+    "type": "image",
+    "layer": "FOREGROUND",
+    "posX": 40.0,
+    "posY": 125.0,
+    "width": -75.0,
+    "height": -258.0
+
+  },
+
+  "resolution_optimization": {
+    "RES_1024x728": {
+      "iconPadding": 7,
+      "iconsPerRow": 4,
+      "width": 580,
+      "posX": 655,
+      "phoneDisplay": {
+        "posX": 40.0,
+        "posY": 125.0,
+        "width": -75.0,
+        "height": -258.0
+      }
+    },
+    "RES_1280x720": {
+      "iconPadding": 7,
+      "iconsPerRow": 4
+    },
+    "RES_1280x720": {
+      "iconPadding": 7,
+      "iconsPerRow": 4
+    }
+  }
 }

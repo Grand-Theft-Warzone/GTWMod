@@ -47,13 +47,6 @@ public class GtwPhoneManager implements PhoneManager, AtumModService {
     @Override
     public void handleFmlEvent(@NotNull FMLEvent fmlEvent) {
         if(fmlEvent instanceof FMLInitializationEvent){
-            DisplayElementRegistry registry = GtwAPI.getInstance().
-                    getGtwMod().getDisplayManager().getElementRegistry();
-
-            registry.registerTemplate("canvas_phone",
-                    new CanvasPhoneImpl(atumMod)
-            );
-
             registerApps();
             MinecraftForge.EVENT_BUS.register(this);
         }

@@ -2,10 +2,11 @@ package com.grandtheftwarzone.gtwmod.core.display.actions;
 
 import me.phoenixra.atumodcore.api.display.actions.ActionData;
 import me.phoenixra.atumodcore.api.display.actions.DisplayAction;
+import me.phoenixra.atumodcore.api.display.annotations.RegisterDisplayAction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-
+@RegisterDisplayAction(templateId = "play_sound")
 public class ActionPlaySound implements DisplayAction {
     @Override
     public void perform(ActionData actionData) {

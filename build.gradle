@@ -43,7 +43,7 @@ allprojects {
         compileOnly project(":").fileTree(dir: 'libs', include: ['*.jar'])
         //local libs
 //        api fileTree(dir: 'libs_impl', include: ['.jar'])
-        implementation 'io.github.classgraph:classgraph:4.8.104'
+        compileOnly 'io.github.classgraph:classgraph:4.8.104'
 
         //annotations
         compileOnly 'org.projectlombok:lombok:1.18.24'
