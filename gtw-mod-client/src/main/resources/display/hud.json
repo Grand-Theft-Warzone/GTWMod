@@ -125,7 +125,7 @@
     },
     "text_playerRank": {
       "settings": {
-        "fontSize": 15,
+        "fontSize": 50,
         "text": "%player_rank%",
         "font": "minecraft.otf"
       },
@@ -140,14 +140,14 @@
     },
     "text_playerGang": {
       "settings": {
-        "fontSize": 15,
+        "fontSize": 50,
         "text": "&a%player_gang%",
         "font": "minecraft.otf"
       },
       "fixRatio": true,
       "type": "text",
       "layer": "MIDDLE",
-      "posX": 1860,
+      "posX": 1848,
       "posY": 140,
       "width": 2,
       "height": 19
@@ -155,7 +155,7 @@
     },
     "text_playerLevel": {
       "settings": {
-        "fontSize": 14,
+        "fontSize": 40,
         "text": " &eLvl %player_level%",
         "font": "minecraft.otf"
       },
@@ -163,14 +163,14 @@
       "type": "text",
       "layer": "MIDDLE",
       "posX": 1610,
-      "posY": 177,
+      "posY": 176,
       "width": 400,
       "height": 19
 
     },
     "text_playerMoney": {
       "settings": {
-        "fontSize": 15,
+        "fontSize": 50,
         "text": "&a$%player_money%",
         "font": "minecraft.otf"
       },
@@ -185,7 +185,7 @@
     },
     "text_notification": {
       "settings": {
-        "fontSize": 15,
+        "fontSize": 50,
         "text": "%data_notification%",
         "font": "minecraft.otf"
       },
@@ -235,31 +235,31 @@
         },
         "text_playerRank": {
           "settings": {
-            "fontSize": 14,
+            "fontSize": 40,
             "font": "minecraft.otf"
           },
-          "posX": 1530,
+          "posX": 1520,
           "posY": 165
         },
         "text_playerGang": {
           "settings": {
-            "fontSize": 14,
+            "fontSize": 40,
             "font": "minecraft.otf"
           },
-          "posX": 1870,
+          "posX": 1840,
           "posY": 165
         },
         "text_playerLevel": {
           "settings": {
-            "fontSize": 12,
+            "fontSize": 35,
             "font": "minecraft.otf"
           },
           "posX": 1510,
-          "posY": 220
+          "posY": 225
         },
         "text_playerMoney": {
           "settings": {
-            "fontSize": 13,
+            "fontSize": 40,
             "font": "minecraft.otf"
           },
           "posX": 1510,
@@ -277,7 +277,7 @@
         },
         "text_playerRank": {
           "settings": {
-            "fontSize": 13,
+            "fontSize": 40,
             "font": "minecraft.otf"
           },
           "posX": 1620,
@@ -285,15 +285,15 @@
         },
         "text_playerGang": {
           "settings": {
-            "fontSize": 13,
+            "fontSize": 40,
             "font": "minecraft.otf"
           },
-          "posX": 1880,
+          "posX": 1845,
           "posY": 140
         },
         "text_playerLevel": {
           "settings": {
-            "fontSize": 11,
+            "fontSize": 35,
             "font": "minecraft.otf"
           },
           "posX": 1610,
@@ -301,7 +301,7 @@
         },
         "text_playerMoney": {
           "settings": {
-            "fontSize": 13,
+            "fontSize": 40,
             "font": "minecraft.otf"
           },
           "posX": 1610,
@@ -313,28 +313,67 @@
       "elements": {
         "text_playerRank": {
           "settings": {
-            "fontSize": 14,
+            "fontSize": 40,
             "font": "minecraft.otf"
-          }
+          },
+          "posY": 135
         },
         "text_playerGang": {
           "settings": {
-            "fontSize": 14,
+            "fontSize": 40,
             "font": "minecraft.otf"
           },
-          "posX": 1875
+          "posX": 1850,
+          "posY": 135
         },
         "text_playerLevel": {
           "settings": {
-            "fontSize": 13,
+            "fontSize": 30,
             "font": "minecraft.otf"
-          }
+          },
+          "posX": 1610,
+          "posY": 180
         },
         "text_playerMoney": {
           "settings": {
-            "fontSize": 14,
+            "fontSize": 40,
             "font": "minecraft.otf"
-          }
+          },
+          "posX": 1615
+        }
+      }
+    },
+    "RES_1600x900": {
+      "elements": {
+        "text_playerRank": {
+          "settings": {
+            "fontSize": 42,
+            "font": "minecraft.otf"
+          },
+          "posY": 135
+        },
+        "text_playerGang": {
+          "settings": {
+            "fontSize": 42,
+            "font": "minecraft.otf"
+          },
+          "posX": 1850,
+          "posY": 135
+        },
+        "text_playerLevel": {
+          "settings": {
+            "fontSize": 35,
+            "font": "minecraft.otf"
+          },
+          "posX": 1610,
+          "posY": 175
+        },
+        "text_playerMoney": {
+          "settings": {
+            "fontSize": 42,
+            "font": "minecraft.otf"
+          },
+          "posX": 1615
         }
       }
     }
