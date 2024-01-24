@@ -1,6 +1,6 @@
 {
   "type": "canvas",
-  "config_version": 9.0,
+  "config_version": 10,
   "layer": "MIDDLE",
   "elements": {
     "image_main": {
@@ -10,136 +10,136 @@
       },
       "type": "image",
       "layer": "BACKGROUND",
-      "posX": 0.0,
-      "posY": 0.0,
-      "width": 1920.0,
-      "height": 1080.0
+      "posX": 0,
+      "posY": 0,
+      "width": 1920,
+      "height": 1080
     },
     "image_playerHead": {
       "settings": {
         "image": "playerSkin",
-        "textureX": 8.0,
-        "textureY": 8.0,
+        "textureX": 8,
+        "textureY": 8,
         "color": "#ffffff",
-        "textureWidth": 8.0,
-        "textureHeight": 8.0
+        "textureWidth": 8,
+        "textureHeight": 8
       },
       "type": "image",
       "layer": "FOREGROUND",
-      "posX": 1264.0,
-      "posY": 160.0,
-      "width": 123.0,
-      "height": 127.0
+      "posX": 1264,
+      "posY": 160,
+      "width": 123,
+      "height": 127
     },
     "text_playerName": {
       "settings": {
-        "fontSize": 20.0,
+        "fontSize": 80,
         "text": "%player_name%",
         "font": "main_menu.otf"
       },
       "type": "text",
       "layer": "MIDDLE",
-      "posX": 1413.0,
-      "posY": 203.0,
-      "width": 194.0,
-      "height": 52.0
+      "posX": 1413,
+      "posY": 203,
+      "width": 194,
+      "height": 52
     },
     "text_playerRank": {
       "settings": {
-        "fontSize": 20.0,
+        "fontSize": 55,
         "text": "%player_rank%",
         "font": "main_menu.otf"
       },
       "type": "text",
       "layer": "MIDDLE",
-      "posX": 1410,
-      "posY": 320,
+      "posX": 1400,
+      "posY": 334,
       "width": 256,
-      "height": 37
+      "height": 1
     },
     "text_playerGang": {
       "settings": {
-        "fontSize": 20.0,
+        "fontSize": 55,
         "text": "%player_gang%",
         "font": "main_menu.otf"
       },
       "type": "text",
       "layer": "MIDDLE",
-      "posX": 1415.0,
-      "posY": 370.0,
-      "width": 255.0,
-      "height": 47.0
+      "posX": 1405,
+      "posY": 385,
+      "width": 255,
+      "height": 1
     },
     "text_playerLevel": {
       "settings": {
-        "fontSize": 20.0,
+        "fontSize": 55,
         "text": "%player_level%",
         "font": "main_menu.otf"
       },
       "type": "text",
       "layer": "MIDDLE",
-      "posX": 1422,
-      "posY": 419,
+      "posX": 1415,
+      "posY": 435,
       "width": 237,
-      "height": 30
+      "height": 1
     },
     "text_playerMoney": {
       "settings": {
-        "fontSize": 20.0,
+        "fontSize": 55,
         "text": "%player_money%",
         "font": "main_menu.otf"
       },
       "type": "text",
       "layer": "MIDDLE",
-      "posX": 1440,
-      "posY": 472,
+      "posX": 1430,
+      "posY": 485,
       "width": 238,
-      "height": 32
+      "height": 1
     },
     "text_playerKills": {
       "settings": {
-        "fontSize": 20.0,
+        "fontSize": 55,
         "text": "%player_kills%",
         "font": "main_menu.otf"
       },
       "type": "text",
       "layer": "MIDDLE",
-      "posX": 1412,
-      "posY": 520,
+      "posX": 1405,
+      "posY": 535,
       "width": 241,
-      "height": 37
+      "height": 1
     },
     "text_playerDeaths": {
       "settings": {
-        "fontSize": 20.0,
+        "fontSize": 55,
         "text": "%player_deaths%",
         "font": "main_menu.otf"
       },
       "type": "text",
       "layer": "MIDDLE",
-      "posX": 1432,
-      "posY": 570,
+      "posX": 1435,
+      "posY": 580,
       "width": 211,
-      "height": 36
+      "height": 1
     },
     "text_playerKdr": {
       "settings": {
-        "fontSize": 20.0,
+        "fontSize": 55,
         "text": "%player_kdr%",
         "font": "main_menu.otf"
       },
       "type": "text",
       "layer": "MIDDLE",
       "posX": 1472,
-      "posY": 620,
+      "posY": 635,
       "width": 211,
-      "height": 36
+      "height": 1
     },
     "button_discord": {
       "settings": {
-        "brightness-onClick": "20.0;20.0;20.0",
+        "brightness-onClick": "20;20;20",
         "image": "gtwmod:textures/main_menu/discord_button.png",
-        "brightness": "1.0;1.0;1.0",
+        "brightness": "1;1;1",
         "brightness-onHover": "0.85;0.85;0.85",
         "actions-onRelease": {
           "1": "open_link@https://discord.gg/WE5W43ev73"
@@ -148,16 +148,16 @@
       "fixRatio": true,
       "type": "button",
       "layer": "FOREGROUND",
-      "posX": 1775.0,
-      "posY": 153.0,
-      "width": 122.0,
-      "height": 118.0
+      "posX": 1775,
+      "posY": 153,
+      "width": 122,
+      "height": 118
     },
     "button_settings": {
       "settings": {
-        "brightness-onClick": "20.0;20.0;20.0",
+        "brightness-onClick": "20;20;20",
         "image": "gtwmod:textures/main_menu/settings_button.png",
-        "brightness": "1.0;1.0;1.0",
+        "brightness": "1;1;1",
         "brightness-onHover": "0.85;0.85;0.85",
         "actions-onRelease": {
           "1": "open_settings"
@@ -166,16 +166,16 @@
       "fixRatio": true,
       "type": "button",
       "layer": "FOREGROUND",
-      "posX": 7.0,
-      "posY": 769.0,
-      "width": 148.0,
-      "height": 149.0
+      "posX": 7,
+      "posY": 769,
+      "width": 148,
+      "height": 149
     },
     "button_singleplayer": {
       "settings": {
-        "brightness-onClick": "20.0;20.0;20.0",
+        "brightness-onClick": "20;20;20",
         "image": "gtwmod:textures/main_menu/singleplayer_button.png",
-        "brightness": "1.0;1.0;1.0",
+        "brightness": "1;1;1",
         "brightness-onHover": "0.85;0.85;0.85",
         "actions-onRelease": {
           "1": "open_singleplayer"
@@ -184,16 +184,16 @@
       "fixRatio": true,
       "type": "button",
       "layer": "FOREGROUND",
-      "posX": 220.0,
-      "posY": 730.0,
-      "width": 167.0,
-      "height": 174.0
+      "posX": 220,
+      "posY": 730,
+      "width": 167,
+      "height": 174
     },
     "button_quit": {
       "settings": {
-        "brightness-onClick": "20.0;20.0;20.0",
+        "brightness-onClick": "20;20;20",
         "image": "gtwmod:textures/main_menu/quit_button.png",
-        "brightness": "1.0;1.0;1.0",
+        "brightness": "1;1;1",
         "brightness-onHover": "0.85;0.85;0.85",
         "actions-onRelease": {
           "1": "quit"
@@ -202,16 +202,16 @@
       "fixRatio": true,
       "type": "button",
       "layer": "FOREGROUND",
-      "posX": 6.0,
-      "posY": 919.0,
-      "width": 148.0,
-      "height": 149.0
+      "posX": 6,
+      "posY": 919,
+      "width": 148,
+      "height": 149
     },
     "button_multiplayer": {
       "settings": {
-        "brightness-onClick": "20.0;20.0;20.0",
+        "brightness-onClick": "20;20;20",
         "image": "gtwmod:textures/main_menu/multiplayer_button.png",
-        "brightness": "1.0;1.0;1.0",
+        "brightness": "1;1;1",
         "brightness-onHover": "0.85;0.85;0.85",
         "actions-onRelease": {
           "1": "open_multiplayer"
@@ -220,16 +220,16 @@
       "fixRatio": true,
       "type": "button",
       "layer": "FOREGROUND",
-      "posX": 725.0,
-      "posY": 733.0,
-      "width": 176.0,
-      "height": 172.0
+      "posX": 725,
+      "posY": 733,
+      "width": 176,
+      "height": 172
     },
     "button_website": {
       "settings": {
-        "brightness-onClick": "20.0;20.0;20.0",
+        "brightness-onClick": "20;20;20",
         "image": "gtwmod:textures/main_menu/website_button.png",
-        "brightness": "1.0;1.0;1.0",
+        "brightness": "1;1;1",
         "brightness-onHover": "0.85;0.85;0.85",
         "actions-onRelease": {
           "1": "open_link@https://google.com"
@@ -238,16 +238,16 @@
       "fixRatio": true,
       "type": "button",
       "layer": "FOREGROUND",
-      "posX": 14.0,
-      "posY": 632.0,
-      "width": 124.0,
-      "height": 126.0
+      "posX": 14,
+      "posY": 632,
+      "width": 124,
+      "height": 126
     },
     "button_play": {
       "settings": {
-        "brightness-onClick": "20.0;20.0;20.0",
+        "brightness-onClick": "20;20;20",
         "image": "gtwmod:textures/main_menu/play_button.png",
-        "brightness": "1.0;1.0;1.0",
+        "brightness": "1;1;1",
         "brightness-onHover": "0.85;0.85;0.85",
         "actions-onRelease": {
           "1": "connect_to_server@play.grandtheftwarzone.com"
@@ -256,65 +256,72 @@
       "fixRatio": true,
       "type": "button",
       "layer": "FOREGROUND",
-      "posX": 408.0,
-      "posY": 735.0,
-      "width": 294.0,
-      "height": 291.0
+      "posX": 408,
+      "posY": 735,
+      "width": 294,
+      "height": 291
     }
   },
-  "width": 1920.0,
-  "height": 1080.0,
+  "width": 1920,
+  "height": 1080,
   "resolution_optimization": {
-    "RES_1024x728": {
+    "RES_1366x768": {
       "elements": {
         "text_playerName": {
           "settings": {
-            "fontSize": 15,
+            "fontSize": 60,
             "font": "main_menu.otf"
           },
           "posX": 1435
         },
         "text_playerRank": {
           "settings": {
-            "fontSize": 15,
+            "fontSize": 40,
             "font": "main_menu.otf"
-          }
+          },
+          "posY": 330
         },
         "text_playerGang": {
           "settings": {
-            "fontSize": 15,
+            "fontSize": 40,
             "font": "main_menu.otf"
-          }
+          },
+          "posY": 380
         },
         "text_playerLevel": {
           "settings": {
-            "fontSize": 15,
+            "fontSize": 40,
             "font": "main_menu.otf"
-          }
+          },
+          "posY": 430
         },
         "text_playerMoney": {
           "settings": {
-            "fontSize": 15,
+            "fontSize": 40,
             "font": "main_menu.otf"
-          }
+          },
+          "posY": 480
         },
         "text_playerKills": {
           "settings": {
-            "fontSize": 15,
+            "fontSize": 40,
             "font": "main_menu.otf"
-          }
+          },
+          "posY": 530
         },
         "text_playerDeaths": {
           "settings": {
-            "fontSize": 15,
+            "fontSize": 40,
             "font": "main_menu.otf"
-          }
+          },
+          "posY": 578
         },
         "text_playerKdr": {
           "settings": {
-            "fontSize": 15,
+            "fontSize": 40,
             "font": "main_menu.otf"
-          }
+          },
+          "posY": 630
         }
       }
     },
@@ -322,52 +329,119 @@
       "elements": {
         "text_playerName": {
           "settings": {
-            "fontSize": 16,
+            "fontSize": 60,
             "font": "main_menu.otf"
           },
-          "posX": 1435
+          "posX": 1430
         },
         "text_playerRank": {
           "settings": {
-            "fontSize": 16,
+            "fontSize": 40,
             "font": "main_menu.otf"
-          }
+          },
+          "posY": 330
         },
         "text_playerGang": {
           "settings": {
-            "fontSize": 16,
+            "fontSize": 40,
             "font": "main_menu.otf"
-          }
+          },
+          "posY": 380
         },
         "text_playerLevel": {
           "settings": {
-            "fontSize": 16,
+            "fontSize": 40,
             "font": "main_menu.otf"
-          }
+          },
+          "posY": 430
         },
         "text_playerMoney": {
           "settings": {
-            "fontSize": 16,
+            "fontSize": 40,
             "font": "main_menu.otf"
-          }
+          },
+          "posY": 480
         },
         "text_playerKills": {
           "settings": {
-            "fontSize": 16,
+            "fontSize": 40,
             "font": "main_menu.otf"
-          }
+          },
+          "posY": 530
         },
         "text_playerDeaths": {
           "settings": {
-            "fontSize": 16,
+            "fontSize": 40,
             "font": "main_menu.otf"
-          }
+          },
+          "posY": 578
         },
         "text_playerKdr": {
           "settings": {
-            "fontSize": 16,
+            "fontSize": 40,
             "font": "main_menu.otf"
-          }
+          },
+          "posY": 630
+        }
+      }
+    },
+    "RES_1024x728": {
+      "elements": {
+        "text_playerName": {
+          "settings": {
+            "fontSize": 50,
+            "font": "main_menu.otf"
+          },
+          "posX": 1430
+        },
+        "text_playerRank": {
+          "settings": {
+            "fontSize": 40,
+            "font": "main_menu.otf"
+          },
+          "posY": 330
+        },
+        "text_playerGang": {
+          "settings": {
+            "fontSize": 40,
+            "font": "main_menu.otf"
+          },
+          "posY": 380
+        },
+        "text_playerLevel": {
+          "settings": {
+            "fontSize": 40,
+            "font": "main_menu.otf"
+          },
+          "posY": 430
+        },
+        "text_playerMoney": {
+          "settings": {
+            "fontSize": 40,
+            "font": "main_menu.otf"
+          },
+          "posY": 480
+        },
+        "text_playerKills": {
+          "settings": {
+            "fontSize": 40,
+            "font": "main_menu.otf"
+          },
+          "posY": 530
+        },
+        "text_playerDeaths": {
+          "settings": {
+            "fontSize": 40,
+            "font": "main_menu.otf"
+          },
+          "posY": 578
+        },
+        "text_playerKdr": {
+          "settings": {
+            "fontSize": 40,
+            "font": "main_menu.otf"
+          },
+          "posY": 630
         }
       }
     }
