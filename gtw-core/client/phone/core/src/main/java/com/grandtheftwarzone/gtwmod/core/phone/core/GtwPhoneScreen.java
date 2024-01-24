@@ -11,6 +11,7 @@ public class GtwPhoneScreen extends BaseScreen {
         super(atumMod, Objects.requireNonNull(atumMod.getDisplayManager()
                 .getElementRegistry().getDrawableCanvas(id))
         );
+
     }
 
 

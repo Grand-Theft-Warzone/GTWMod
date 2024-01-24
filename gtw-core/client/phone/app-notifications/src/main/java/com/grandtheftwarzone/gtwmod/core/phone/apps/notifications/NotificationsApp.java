@@ -20,6 +20,7 @@ public class NotificationsApp implements PhoneApp {
     @Override
     public void draw(@NotNull CanvasPhone parent,
                      @NotNull DisplayResolution resolution,
+                     float scaleFactor,
                      int displayWidth, int displayHeight,
                      int mouseX, int mouseY) {
         RenderUtils.fill(
@@ -56,7 +57,13 @@ public class NotificationsApp implements PhoneApp {
     }
 
     @Override
-    public void updateVariables(@NotNull Config config) {
+    public void updateVariables(@NotNull CanvasPhone canvasPhone,
+                                @NotNull Config config) {
+
+    }
+
+    @Override
+    public void onPhoneOpen(@NotNull CanvasPhone parent) {
 
     }
 

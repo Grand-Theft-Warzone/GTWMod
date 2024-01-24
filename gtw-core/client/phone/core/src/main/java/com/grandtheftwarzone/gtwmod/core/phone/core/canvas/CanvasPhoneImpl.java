@@ -135,6 +135,7 @@ public class CanvasPhoneImpl extends CanvasPhone {
                     //such shape is used mostly by apps that require
                     //performance
                     openedApp.draw(this, resolution,
+                            scaleFactor,
                             Display.getWidth(),
                             Display.getHeight(),
                             mouseX, mouseY);
@@ -158,6 +159,7 @@ public class CanvasPhoneImpl extends CanvasPhone {
         GL11.glTranslatef(displayX, displayY, 0);
 
         openedApp.draw(this, resolution,
+                scaleFactor,
                 displayWidth,
                 displayHeight,
                 mouseX, mouseY);
@@ -636,4 +638,6 @@ public class CanvasPhoneImpl extends CanvasPhone {
             GL11.glPopMatrix();
         }
     }
+
+
 }

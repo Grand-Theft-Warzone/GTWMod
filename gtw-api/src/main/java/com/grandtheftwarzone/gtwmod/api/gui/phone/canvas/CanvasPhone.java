@@ -30,6 +30,8 @@ public abstract class CanvasPhone extends BaseCanvas {
     @Getter
     protected PhoneApp openedApp;
 
+    private boolean init;
+
 
     public CanvasPhone(@NotNull AtumMod atumMod, DisplayCanvas owner) {
         super(atumMod, owner);
@@ -40,6 +42,10 @@ public abstract class CanvasPhone extends BaseCanvas {
     @Override
     protected void onDraw(DisplayResolution displayResolution,
                           float scaleFactor, int mouseX, int mouseY) {
+        if(!init){
+            init = true;
+            apps.forEach(app -> app.onPhoneOpen(this));
+        }
         //if display data has 'close' record and it's true
         // -> call backPressed for an app, or close the phone
         if (getDisplayRenderer().getDisplayData().
@@ -66,7 +72,7 @@ public abstract class CanvasPhone extends BaseCanvas {
         apps = GtwAPI.getInstance()
                 .getPhoneManager().getAppDrawingOrder();
         for(PhoneApp app : apps){
-            app.updateVariables(
+            app.updateVariables(this,
                     config.getSubsection("apps." + app.getId())
             );
         }
@@ -94,6 +100,7 @@ public abstract class CanvasPhone extends BaseCanvas {
         CanvasPhone canvasPhone = (CanvasPhone) baseElement;
         canvasPhone.shape = PhoneShape.VERTICAL;
         canvasPhone.state = PhoneState.OPENING;
+        canvasPhone.init = false;
         return canvasPhone;
     }
 }

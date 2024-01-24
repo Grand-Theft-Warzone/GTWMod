@@ -15,6 +15,7 @@ public interface PhoneApp {
      *
      * @param parent the phone gui
      * @param resolution the phone resolution
+     * @param scaleFactor the scale factor
      * @param displayWidth the width of the phone display
      * @param displayHeight the height of the phone display
      * @param mouseX the mouse x position
@@ -22,6 +23,7 @@ public interface PhoneApp {
      */
     void draw(@NotNull CanvasPhone parent,
               @NotNull DisplayResolution resolution,
+              float scaleFactor,
               int displayWidth, int displayHeight,
               int mouseX, int mouseY);
 
@@ -41,9 +43,19 @@ public interface PhoneApp {
     /**
      * Called when the canvas phone updates its data
      *
+     * @param canvasPhone the phone gui
      * @param config config section of the app
      */
-    void updateVariables(@NotNull Config config);
+    void updateVariables(@NotNull CanvasPhone canvasPhone,
+                         @NotNull Config config);
+
+    /**
+     * Called when the phone is opened
+     * <p>Use it to load cache</p>
+     *
+     * @param parent the phone gui
+     */
+    void onPhoneOpen(@NotNull CanvasPhone parent);
 
 
     /**
