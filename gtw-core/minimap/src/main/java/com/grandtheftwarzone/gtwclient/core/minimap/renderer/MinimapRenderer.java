@@ -1,10 +1,10 @@
 package com.grandtheftwarzone.gtwclient.core.minimap.renderer;
 
 import com.grandtheftwarzone.gtwclient.core.minimap.GTWMinimap;
+import com.grandtheftwarzone.gtwclient.core.minimap.TexturedMinimap;
 import com.grandtheftwarzone.gtwclient.core.minimap.markers.Marker;
 import com.grandtheftwarzone.gtwclient.core.minimap.utils.GLUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -12,11 +12,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentString;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.Color;
 
-import java.awt.*;
 import java.util.List;
 
 public class MinimapRenderer {
@@ -53,36 +50,35 @@ public class MinimapRenderer {
             GLUtils.rotateFixed(GTWMinimap.getInstance().getRadius(), GTWMinimap.getInstance().getRadius(), angle);
         }
 
-        GlStateManager.bindTexture(GTWMinimap.getInstance().getMapTexture().getId());
+        Minecraft.getMinecraft().getTextureManager().bindTexture(GTWMinimap.getInstance().getMinimap().getTexture());
+//        GlStateManager.bindTexture(GTWMinimap.getInstance().getMinimap().getTexture().getId());
         GlStateManager.enableTexture2D();
         GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
         GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 
         GLUtils.enableCircleStencil(GTWMinimap.getInstance().getRadius(), GTWMinimap.getInstance().getRadius(), GTWMinimap.getInstance().getRadius());
 
-        double mapSize = GTWMinimap.getInstance().getRadius() * 2;
-        double textureSize = GTWMinimap.getInstance().getTextureSize();
-
-        int mapCenterX = GTWMinimap.getInstance().getMinimap().getCenterX();
-        int mapCenterY = GTWMinimap.getInstance().getMinimap().getCenterZ();
-
-        double ratio = mapSize / textureSize;
-
         EntityPlayer player = Minecraft.getMinecraft().player;
+        TexturedMinimap minimap = GTWMinimap.getInstance().getMinimap();
+        double mapSize = GTWMinimap.getInstance().getRadius() * 2;
 
-        double subBlockX = mapCenterX - player.posX;
-        double subBlockZ = mapCenterY - player.posZ;
+        int textureWidth = GTWMinimap.getInstance().getMinimap().getWidth();
+        int textureHeight = GTWMinimap.getInstance().getMinimap().getHeight();
 
-        double centerX = 0.5 + (subBlockX / textureSize);
-        double centerY = 0.5 + (subBlockZ / textureSize);
+        double centerX = 0.5 + (player.posX - minimap.getCenterX()) / textureWidth;
+        double centerZ = 0.5 + (player.posZ - minimap.getCenterZ()) / textureHeight;
 
-        double uMin = centerX - (ratio / 2);
-        double uMax = centerX + (ratio / 2);
-        double vMin = centerY - (ratio / 2);
-        double vMax = centerY + (ratio / 2);
+        double zoom = 1 / minimap.getZoom();
+
+        double width = (mapSize * zoom) / textureWidth;
+        double height = (mapSize * zoom) / textureHeight;
+
+        double uMin = centerX - width / 2d;
+        double uMax = centerX + width / 2d;
+        double vMin = centerZ - height / 2d;
+        double vMax = centerZ + height / 2d;
 
         drawTexturedRect(0, 0, mapSize, mapSize, uMin, vMin, uMax, vMax);
-
 
         GLUtils.disableStencil(); // Disable clipping
 
@@ -99,10 +95,19 @@ public class MinimapRenderer {
         GlStateManager.pushMatrix();
         GlStateManager.color(1, 1, 1, 1);
 
+        double playerX = Minecraft.getMinecraft().player.posX;
+        double playerZ = Minecraft.getMinecraft().player.posZ;
+
+        double zoom = 1 / GTWMinimap.getInstance().getMinimap().getZoom();
+        double radius = GTWMinimap.getInstance().getRadius() * 1.25;
+
+        TexturedMinimap minimap = GTWMinimap.getInstance().getMinimap();
+
+
         List<Marker> markers = GTWMinimap
                 .getInstance()
                 .getClientMarkerManager()
-                .getMinimapMarkers(GTWMinimap.getInstance().getMinimap());
+                .getMarkers(playerX - radius, playerZ - radius, playerX + radius, playerZ + radius);
 
         float angle = 180 - Minecraft.getMinecraft().player.rotationYaw;
 
@@ -111,17 +116,11 @@ public class MinimapRenderer {
 
         GLUtils.enableCircleStencil(GTWMinimap.getInstance().getRadius(), GTWMinimap.getInstance().getRadius(), GTWMinimap.getInstance().getRadius());
 
-        double playerX = Minecraft.getMinecraft().player.posX;
-        double playerZ = Minecraft.getMinecraft().player.posZ;
-
         for (Marker marker : markers) {
             GlStateManager.pushMatrix();
 
-            double offsetX = marker.getPosX() - playerX;
-            double offsetY = marker.getPosZ() - playerZ;
-
-            double x = GTWMinimap.getInstance().getRadius() + offsetX;
-            double y = GTWMinimap.getInstance().getRadius() + offsetY;
+            double x = (marker.getPosX() - minimap.getCenterX()) * zoom;
+            double y = (marker.getPosZ() - minimap.getCenterZ()) * zoom;
 
             boolean overlap = GTWMinimap.getInstance().getClientMarkerManager().hasMarkerOverlap(marker);
             if (overlap) GlStateManager.color(1f, 1f, 1f, 0.25f);
@@ -147,6 +146,7 @@ public class MinimapRenderer {
 
             GlStateManager.popMatrix();
         }
+
 
         GLUtils.disableStencil(); // Disable clipping
         GlStateManager.popMatrix();

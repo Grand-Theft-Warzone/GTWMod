@@ -10,12 +10,14 @@ import com.grandtheftwarzone.gtwclient.core.minimap.markers.ServerMarkerManager;
 import com.grandtheftwarzone.gtwclient.core.minimap.packets.PacketHandlerMarkerData;
 import com.grandtheftwarzone.gtwclient.core.minimap.packets.PacketMarkerData;
 import com.grandtheftwarzone.gtwclient.core.minimap.renderer.MinimapRenderer;
-import com.grandtheftwarzone.gtwclient.core.minimap.utils.MapTexture;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import org.lwjgl.input.Keyboard;
 
 import java.util.Arrays;
 
@@ -26,19 +28,17 @@ public class GTWMinimap {
     private final int cornerDistance = 20;
     @Setter private boolean rotating = true;
 
-    private final float scale = 1f;
-    private final int textureSize = 128;
-
-    private Minimap minimap;
-    private MapTexture mapTexture;
+    private TexturedMinimap minimap;
     private MinimapRenderer minimapRenderer;
-
-    private ChunkManager chunkManager;
 
     private ServerMarkerManager serverMarkerManager;
     private ClientMarkerManager clientMarkerManager;
 
     @Getter private static GTWMinimap instance;
+
+    public static KeyBinding zoomInBinding;
+    public static KeyBinding zoomOutBinding;
+
 
     public GTWMinimap() {
         instance = this;
@@ -63,17 +63,22 @@ public class GTWMinimap {
     }
 
     private void initClient() {
-        minimap = new Minimap();
-        mapTexture = new MapTexture(textureSize);
+        minimap = new TexturedMinimap(1046, 873, 0.25f);
         minimapRenderer = new MinimapRenderer();
-        chunkManager = new ChunkManager();
         clientMarkerManager = new ClientMarkerManager();
+
+        zoomInBinding = new KeyBinding("Zoom In", Keyboard.KEY_Z, "Minimap");
+        zoomOutBinding = new KeyBinding("Zoom out", Keyboard.KEY_X, "Minimao");
+
+        ClientRegistry.registerKeyBinding(zoomInBinding);
+        ClientRegistry.registerKeyBinding(zoomOutBinding);
+
 
         //To test only client
         clientMarkerManager.syncMarkers(Arrays.asList(
-                new Marker(185, -189, MarkerType.HOME),
-                new Marker(170, -190, MarkerType.CLOTHES_SHOP),
-                new Marker(180, -170, MarkerType.WEAPONS_SHOP)
+                new Marker(15, 19, MarkerType.HOME),
+                new Marker(30, -19, MarkerType.CLOTHES_SHOP),
+                new Marker(50, 7, MarkerType.WEAPONS_SHOP)
         ));
 
         MinecraftForge.EVENT_BUS.register(new MinimapListener());

@@ -2,9 +2,11 @@ package com.grandtheftwarzone.gtwclient.core.minimap.listener;
 
 import com.grandtheftwarzone.gtwclient.core.minimap.GTWMinimap;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -23,19 +25,23 @@ public class MinimapListener {
         }
     }*/
 
-    public int tickCount = 0;
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (Minecraft.getMinecraft().world == null || Minecraft.getMinecraft().player == null) return;
 
-        if (tickCount++ % 5 == 0) {
-            GTWMinimap.getInstance().getMinimap().update();
-            tickCount = 0;
-        }
 
-        tickCount++;
+        if (GTWMinimap.zoomInBinding.isKeyDown()) {
+            GTWMinimap.getInstance().getMinimap().setZoom(
+                    GTWMinimap.getInstance().getMinimap().getZoom() * 1.01f
+            );
+        } else if (GTWMinimap.zoomOutBinding.isKeyDown()) {
+            GTWMinimap.getInstance().getMinimap().setZoom(
+                    GTWMinimap.getInstance().getMinimap().getZoom() / 1.01f
+            );
+        }
     }
+
 
     @SubscribeEvent
     public void onRenderOverlay(RenderGameOverlayEvent.Post event) {
