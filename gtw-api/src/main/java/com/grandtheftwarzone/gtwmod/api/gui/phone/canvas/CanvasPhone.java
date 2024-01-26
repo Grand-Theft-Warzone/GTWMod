@@ -30,7 +30,6 @@ public abstract class CanvasPhone extends BaseCanvas {
     @Getter
     protected PhoneApp openedApp;
 
-    private boolean init;
 
 
     public CanvasPhone(@NotNull AtumMod atumMod, DisplayCanvas owner) {
@@ -42,10 +41,6 @@ public abstract class CanvasPhone extends BaseCanvas {
     @Override
     protected void onDraw(DisplayResolution displayResolution,
                           float scaleFactor, int mouseX, int mouseY) {
-        if(!init){
-            init = true;
-            apps.forEach(app -> app.onPhoneOpen(this));
-        }
         //if display data has 'close' record and it's true
         // -> call backPressed for an app, or close the phone
         if (getDisplayRenderer().getDisplayData().
@@ -78,6 +73,19 @@ public abstract class CanvasPhone extends BaseCanvas {
         }
     }
 
+    public void openApp(PhoneApp app){
+        if(openedApp!=null){
+            openedApp.onAppClose(this);
+        }
+        System.out.println("Opening app: " + app.getAppName());
+        openedApp = app;
+        app.onAppOpen(this);
+        if (app.getShapeRequired() != PhoneShape.VERTICAL) {
+            changeShape(app.getShapeRequired());
+            return;
+        }
+        setState(PhoneState.OPENED_APP);
+    }
     public void closeApp() {
         if (getOpenedApp() == null) return;
 
@@ -87,20 +95,40 @@ public abstract class CanvasPhone extends BaseCanvas {
         } else {
             setState(PhoneState.OPENED_DISPLAY);
         }
+        openedApp.onAppClose(this);
         openedApp = null;
+
     }
 
+    protected abstract int getPhoneDisplayX();
+    protected abstract int getPhoneDisplayY();
+
+    @Override
+    public int getGlobalX() {
+        return super.getGlobalX() + (getPhoneDisplayX() - super.getGlobalX());
+    }
+
+    @Override
+    public int getGlobalY() {
+        return super.getGlobalY() + (getPhoneDisplayY() - super.getGlobalY());
+    }
+
+    @Override
+    public void onRemove() {
+        super.onRemove();
+        apps.forEach(app -> app.onAppClose(this));
+    }
 
     protected abstract void setState(@NotNull PhoneState state);
 
     public abstract void changeShape(@NotNull PhoneShape shape);
+
 
     @Override
     protected BaseElement onClone(BaseElement baseElement) {
         CanvasPhone canvasPhone = (CanvasPhone) baseElement;
         canvasPhone.shape = PhoneShape.VERTICAL;
         canvasPhone.state = PhoneState.OPENING;
-        canvasPhone.init = false;
         return canvasPhone;
     }
 }

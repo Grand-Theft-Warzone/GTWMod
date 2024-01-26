@@ -9,6 +9,7 @@ import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.config.Config;
 import me.phoenixra.atumodcore.api.display.DisplayCanvas;
 import me.phoenixra.atumodcore.api.display.annotations.RegisterDisplayElement;
+import me.phoenixra.atumodcore.api.display.annotations.RegisterOptimizedVariable;
 import me.phoenixra.atumodcore.api.display.impl.BaseElement;
 import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
 import me.phoenixra.atumodcore.api.display.misc.variables.OptimizedVariableInt;
@@ -39,9 +40,12 @@ public class CanvasPhoneImpl extends CanvasPhone {
 
     protected ElementImage background;
     protected ElementImage phoneDisplay;
+    @RegisterOptimizedVariable
 
     private OptimizedVariableInt iconPadding;
+    @RegisterOptimizedVariable
     private OptimizedVariableInt iconsPerRow;
+
 
     private float horizontalShapeScale = 1.5f;
 
@@ -63,7 +67,6 @@ public class CanvasPhoneImpl extends CanvasPhone {
         super.onDraw(resolution, scaleFactor, mouseX, mouseY);
 
         phoneShapeDrawer.draw(resolution, scaleFactor, mouseX, mouseY);
-
         switch (state) {
             case OPENED_DISPLAY:
                 if (!init) {
@@ -217,6 +220,8 @@ public class CanvasPhoneImpl extends CanvasPhone {
                     this
             );
             phoneDisplay.updateVariables(config1, "phoneDisplay");
+
+
             phoneDisplay.getOriginX().setDefaultValue(
                     getOriginX().getDefaultValue() + phoneDisplay.getOriginX().getDefaultValue()
             );
@@ -229,13 +234,25 @@ public class CanvasPhoneImpl extends CanvasPhone {
             phoneDisplay.getOriginHeight().setDefaultValue(
                     getOriginHeight().getDefaultValue() + phoneDisplay.getOriginHeight().getDefaultValue()
             );
+
         }
+    }
+
+    @Override
+    protected int getPhoneDisplayX() {
+        return phoneDisplay.getX();
+    }
+
+    @Override
+    protected int getPhoneDisplayY() {
+        return phoneDisplay.getY();
     }
 
     @Override
     public void applyResolutionOptimizer(@NotNull DisplayResolution resolution, @NotNull Config config) {
         super.applyResolutionOptimizer(resolution, config);
         if(config.hasPath("phoneDisplay")) {
+
             phoneDisplay.getOriginX().addOptimizedValue(resolution,
                     getOriginX().getValue(resolution) + config.getInt("phoneDisplay.posX")
             );
@@ -248,6 +265,7 @@ public class CanvasPhoneImpl extends CanvasPhone {
             phoneDisplay.getOriginHeight().addOptimizedValue(resolution,
                     getOriginHeight().getValue(resolution) + config.getInt("phoneDisplay.height")
             );
+
         }
     }
 
@@ -281,11 +299,11 @@ public class CanvasPhoneImpl extends CanvasPhone {
         this.state = state;
         phoneShapeDrawer.animationTimer = 0;
         //@TODO add later for better feel of the closing state
+        //Mouse.setGrabbed(true);
         //But have to handle the case when
         //other gui is opened while the phone is closing
         //cause in that case the gui for some resoun do not
         //set the mouse grabbed to false
-        //Mouse.setGrabbed(true);
     }
 
     @Override
@@ -312,13 +330,7 @@ public class CanvasPhoneImpl extends CanvasPhone {
                         getLastMouseX(),
                         getLastMouseY()
                 )) {
-                    System.out.println("Opening app: " + app.getAppName());
-                    openedApp = app;
-                    if (app.getShapeRequired() != PhoneShape.VERTICAL) {
-                        changeShape(app.getShapeRequired());
-                        return;
-                    }
-                    setState(PhoneState.OPENED_APP);
+                    openApp(app);
                     return;
                 }
             }

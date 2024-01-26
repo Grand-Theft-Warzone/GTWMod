@@ -1,28 +1,19 @@
-package com.grandtheftwarzone.gtwmod.core.phone.core.canvas;
+package com.grandtheftwarzone.gtwmod.api.gui.phone.canvas;
 
-import com.grandtheftwarzone.gtwmod.api.gui.phone.canvas.CanvasPhone;
 import me.phoenixra.atumodcore.api.AtumMod;
-import me.phoenixra.atumodcore.api.display.DisplayElement;
 import me.phoenixra.atumodcore.api.display.impl.BaseCanvas;
 import me.phoenixra.atumodcore.api.display.impl.BaseElement;
 import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
 import org.jetbrains.annotations.NotNull;
 
+public class CanvasPhoneApp extends BaseCanvas {
+    private CanvasPhone canvasPhone;
 
-/**
- * Idea: have a canvas that might be used as an app drawer, that will be
- * linked with phone display
- *
- *
- */
-public class CanvasApp extends BaseCanvas {
-    private CanvasPhone phone;
-
-
-    public CanvasApp(@NotNull AtumMod atumMod,
-                     @NotNull CanvasPhone phone) {
-        super(atumMod);
-        this.phone = phone;
+    public CanvasPhoneApp(@NotNull AtumMod atumMod,
+                          @NotNull CanvasPhone canvasPhone) {
+        super(atumMod, null);
+        this.canvasPhone = canvasPhone;
+        setDisplayRenderer(canvasPhone.getDisplayRenderer());
     }
 
     @Override
@@ -32,9 +23,13 @@ public class CanvasApp extends BaseCanvas {
     }
 
     @Override
-    public void addElement(@NotNull DisplayElement element) {
-        //element.setAdditionX();
-        super.addElement(element);
+    public int getGlobalX() {
+        return super.getX() + canvasPhone.getGlobalX();
+    }
+
+    @Override
+    public int getGlobalY() {
+        return super.getY() + canvasPhone.getGlobalY();
     }
 
     @Override
@@ -46,9 +41,9 @@ public class CanvasApp extends BaseCanvas {
     public void setSetupState(boolean b) {
 
     }
-
     @Override
     protected BaseElement onClone(BaseElement baseElement) {
         return baseElement;
     }
+
 }

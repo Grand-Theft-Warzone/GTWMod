@@ -61,17 +61,6 @@ public class PropertyApp implements PhoneApp {
 
     }
 
-    @Override
-    public void onPhoneOpen(@NotNull CanvasPhone parent) {
-
-    }
-
-
-    @Override
-    public boolean onPressedBack(CanvasPhone parent) {
-        return true;
-    }
-
 
     @Override
     public @NotNull PhoneShape getShapeRequired() {

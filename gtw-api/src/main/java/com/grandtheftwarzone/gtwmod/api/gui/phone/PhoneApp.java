@@ -50,12 +50,24 @@ public interface PhoneApp {
                          @NotNull Config config);
 
     /**
-     * Called when the phone is opened
+     * Called when the app is opened but not yet displayed
      * <p>Use it to load cache</p>
      *
      * @param parent the phone gui
      */
-    void onPhoneOpen(@NotNull CanvasPhone parent);
+    default void onAppOpen(@NotNull CanvasPhone parent){
+
+    }
+
+    /**
+     * Called when the app is closed
+     * <p>Use it to clear cache</p>
+     *
+     * @param parent the phone gui
+     */
+    default void onAppClose(@NotNull CanvasPhone parent){
+
+    }
 
 
     /**
@@ -65,7 +77,9 @@ public interface PhoneApp {
      * @param parent the phone gui
      * @return true if the app can be closed
      */
-    boolean onPressedBack(CanvasPhone parent);
+    default boolean onPressedBack(CanvasPhone parent){
+        return true;
+    }
 
 
     /**
@@ -81,6 +95,8 @@ public interface PhoneApp {
      * @return the app priority
      */
     int getAppPriority();
+
+
     /**
      * Get the app name which will be
      * displayed below the app button
