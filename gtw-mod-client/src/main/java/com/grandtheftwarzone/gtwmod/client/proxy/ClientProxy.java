@@ -159,7 +159,7 @@ public class ClientProxy implements AtumModService {
     }
 
     @SubscribeEvent
-    public void onRenderOverlay(GuiOpenEvent event){
+    public void onGuiOpenOverlay(GuiOpenEvent event){
         if(event.getGui() instanceof GuiMainMenu){
             event.setGui(GTWModClient.instance.getScreensManager().getMainMenuGuiScreen());
         }

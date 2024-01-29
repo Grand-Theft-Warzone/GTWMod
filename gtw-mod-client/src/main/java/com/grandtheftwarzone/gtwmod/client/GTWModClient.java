@@ -79,7 +79,6 @@ public class GTWModClient extends AtumMod {
         System.out.println("Initializing GTWMod[client]...");
         instance = this;
         GtwAPI.Instance.set(new GtwAPIClient());
-
         settings = getApi().createLoadableConfig(this,
                 "settings",
                 "",
@@ -128,17 +127,16 @@ public class GTWModClient extends AtumMod {
                 "display",
                 true) {
             private List<String> elements = new ArrayList<>();
-
             @Override
             protected void clear() {
                 elements.forEach(it->getDisplayManager().getElementRegistry().unregisterTemplate(it));
             }
-
             @Override
             protected void acceptConfig(@NotNull String id, @NotNull Config config) {
                 getAtumMod().getLogger().info("Loading display element with id " + id);
                 if(getDisplayManager().getElementRegistry().getElementTemplate(id) != null) {
-                    getAtumMod().getLogger().warn("Display element with id " + id + " already added or is a default element!");
+                    getAtumMod().getLogger().warn("Display element with id " + id +
+                            " already added or is a default element!");
                     return;
                 }
 

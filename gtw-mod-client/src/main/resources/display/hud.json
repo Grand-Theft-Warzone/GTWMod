@@ -1,13 +1,13 @@
 {
-  "type": "canvas",
-  "config_version": 3,
+  "template": "canvas",
+  "config_version": 4,
   "layer": "MIDDLE",
   "default_data": {
     "notification": ""
   },
   "triggers": {
     "notifySound": {
-      "type": "data_changed",
+      "template": "data_changed",
       "filters": {
         "data_id": "notification",
         "change_type": "SET_TEMPORARY"
@@ -36,7 +36,7 @@
         "size": 3
       },
       "fixRatio": true,
-      "type": "image",
+      "template": "image",
       "layer": "LOW",
       "posX": 1490,
       "posY": 40,
@@ -55,7 +55,7 @@
         "size": 1
       },
       "fixRatio": true,
-      "type": "progress_bar",
+      "template": "progress_bar",
       "layer": "MIDDLE",
       "posX": 1620,
       "posY": 35,
@@ -75,7 +75,7 @@
         "size": 1
       },
       "fixRatio": true,
-      "type": "progress_bar",
+      "template": "progress_bar",
       "layer": "MIDDLE",
       "posX": 1620,
       "posY": 70,
@@ -95,7 +95,7 @@
         "size": 1
       },
       "fixRatio": true,
-      "type": "progress_bar",
+      "template": "progress_bar",
       "layer": "MIDDLE",
       "posX": 1620,
       "posY": 105,
@@ -115,7 +115,7 @@
         "size": 1
       },
       "fixRatio": true,
-      "type": "progress_bar",
+      "template": "progress_bar",
       "layer": "MIDDLE",
       "posX": 1620,
       "posY": 200,
@@ -130,7 +130,7 @@
         "font": "minecraft.otf"
       },
       "fixRatio": true,
-      "type": "text",
+      "template": "text",
       "layer": "MIDDLE",
       "posX": 1620,
       "posY": 140,
@@ -145,7 +145,7 @@
         "font": "minecraft.otf"
       },
       "fixRatio": true,
-      "type": "text",
+      "template": "text",
       "layer": "MIDDLE",
       "posX": 1848,
       "posY": 140,
@@ -160,7 +160,7 @@
         "font": "minecraft.otf"
       },
       "fixRatio": true,
-      "type": "text",
+      "template": "text",
       "layer": "MIDDLE",
       "posX": 1610,
       "posY": 176,
@@ -175,7 +175,7 @@
         "font": "minecraft.otf"
       },
       "fixRatio": true,
-      "type": "text",
+      "template": "text",
       "layer": "MIDDLE",
       "posX": 1610,
       "posY": 240,
@@ -189,7 +189,7 @@
         "text": "%data_notification%",
         "font": "minecraft.otf"
       },
-      "type": "text",
+      "template": "text",
       "layer": "MIDDLE",
       "posX": 1000,
       "posY": 50,

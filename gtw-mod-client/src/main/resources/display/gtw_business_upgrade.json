@@ -1,6 +1,6 @@
 {
-  "type": "canvas",
-  "config_version": 1.0,
+  "template": "canvas",
+  "config_version": 2.0,
   "layer": "MIDDLE",
   "elements": {
     "image_main": {
@@ -8,7 +8,7 @@
         "image": "gtwmod:textures/gui/business/cakes/image_upgrade.png",
         "color": "#ffffff"
       },
-      "type": "image",
+      "template": "image",
       "layer": "BACKGROUND",
       "posX": 550.0,
       "posY": 50.0,
@@ -21,7 +21,7 @@
         "text": "%data_production_speed_cost%",
         "font": "minecraft.otf"
       },
-      "type": "text",
+      "template": "text",
       "layer": "MIDDLE",
       "posX": 1020.0,
       "posY": 330.0,
@@ -35,7 +35,7 @@
         "text": "%data_storage_cost%",
         "font": "minecraft.otf"
       },
-      "type": "text",
+      "template": "text",
       "layer": "MIDDLE",
       "posX": 965.0,
       "posY": 445.0,
@@ -54,7 +54,7 @@
         }
       },
       "fixRatio": true,
-      "type": "button",
+      "template": "button",
       "layer": "FOREGROUND",
       "posX": 650.0,
       "posY": 800.0,
@@ -72,7 +72,7 @@
         }
       },
       "fixRatio": true,
-      "type": "button",
+      "template": "button",
       "layer": "FOREGROUND",
       "posX": 1050.0,
       "posY": 800.0,
@@ -90,7 +90,7 @@
         }
       },
       "fixRatio": true,
-      "type": "button",
+      "template": "button",
       "layer": "FOREGROUND",
       "posX": 1250.0,
       "posY": 70.0,

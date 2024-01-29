@@ -1,6 +1,6 @@
 {
-  "type": "canvas_phone",
-  "config_version": 1.0,
+  "template": "canvas_phone",
+  "config_version": 3.0,
   "layer": "MIDDLE",
   "posX": 705,
   "posY": 100,
@@ -20,7 +20,7 @@
       "image": "gtwmod:textures/gui/phone/phone_background.png",
       "color": "#ffffff"
     },
-    "type": "image",
+    "template": "image",
     "layer": "FOREGROUND"
 
   },
@@ -29,12 +29,52 @@
       "image": "gtwmod:textures/gui/phone/phone_display.png",
       "color": "#ffffff"
     },
-    "type": "image",
+    "template": "image",
     "layer": "FOREGROUND",
     "posX": 40.0,
     "posY": 125.0,
     "width": -75.0,
     "height": -258.0
+
+  },
+
+  "apps": {
+    "settings":{
+      "elements": {
+        "text_animate": {
+          "settings": {
+            "fontSize": 40,
+            "text": "&fTest mode:",
+            "font": "minecraft.otf"
+          },
+          "template": "text",
+          "layer": "MIDDLE",
+          "posX": 10,
+          "posY": 26,
+          "width": 200,
+          "height": 1
+        },
+        "choose_test": {
+          "settings": {
+            "displayType": "PHONE_LIKE",
+            "display-data-attached": "test",
+            "circleColor": "#4C4C4C",
+            "rectColorTrue": "#78D033",
+            "rectColorFalse": "#E93D3D",
+            "circleRadiusMultiplier": 0.8,
+            "circlePolygons": 40,
+            "maxAnimationTicks": 7
+          },
+          "template": "choose_bool",
+          "layer": "FOREGROUND",
+          "posX": 210,
+          "posY": 20,
+          "width": 150,
+          "height": 20
+        }
+      }
+
+    }
 
   },
 
@@ -50,10 +90,6 @@
         "width": -75.0,
         "height": -258.0
       }
-    },
-    "RES_1280x720": {
-      "iconPadding": 7,
-      "iconsPerRow": 4
     },
     "RES_1280x720": {
       "iconPadding": 7,

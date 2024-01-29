@@ -1,6 +1,6 @@
 {
-  "type": "canvas",
-  "config_version": 10,
+  "template": "canvas",
+  "config_version": 11,
   "layer": "MIDDLE",
   "elements": {
     "image_main": {
@@ -8,7 +8,7 @@
         "image": "gtwmod:textures/main_menu/background.png",
         "color": "#ffffff"
       },
-      "type": "image",
+      "template": "image",
       "layer": "BACKGROUND",
       "posX": 0,
       "posY": 0,
@@ -24,7 +24,7 @@
         "textureWidth": 8,
         "textureHeight": 8
       },
-      "type": "image",
+      "template": "image",
       "layer": "FOREGROUND",
       "posX": 1264,
       "posY": 160,
@@ -37,7 +37,7 @@
         "text": "%player_name%",
         "font": "main_menu.otf"
       },
-      "type": "text",
+      "template": "text",
       "layer": "MIDDLE",
       "posX": 1413,
       "posY": 203,
@@ -50,7 +50,7 @@
         "text": "%player_rank%",
         "font": "main_menu.otf"
       },
-      "type": "text",
+      "template": "text",
       "layer": "MIDDLE",
       "posX": 1400,
       "posY": 334,
@@ -63,7 +63,7 @@
         "text": "%player_gang%",
         "font": "main_menu.otf"
       },
-      "type": "text",
+      "template": "text",
       "layer": "MIDDLE",
       "posX": 1405,
       "posY": 385,
@@ -76,7 +76,7 @@
         "text": "%player_level%",
         "font": "main_menu.otf"
       },
-      "type": "text",
+      "template": "text",
       "layer": "MIDDLE",
       "posX": 1415,
       "posY": 435,
@@ -89,7 +89,7 @@
         "text": "%player_money%",
         "font": "main_menu.otf"
       },
-      "type": "text",
+      "template": "text",
       "layer": "MIDDLE",
       "posX": 1430,
       "posY": 485,
@@ -102,7 +102,7 @@
         "text": "%player_kills%",
         "font": "main_menu.otf"
       },
-      "type": "text",
+      "template": "text",
       "layer": "MIDDLE",
       "posX": 1405,
       "posY": 535,
@@ -115,7 +115,7 @@
         "text": "%player_deaths%",
         "font": "main_menu.otf"
       },
-      "type": "text",
+      "template": "text",
       "layer": "MIDDLE",
       "posX": 1435,
       "posY": 580,
@@ -128,7 +128,7 @@
         "text": "%player_kdr%",
         "font": "main_menu.otf"
       },
-      "type": "text",
+      "template": "text",
       "layer": "MIDDLE",
       "posX": 1472,
       "posY": 635,
@@ -146,7 +146,7 @@
         }
       },
       "fixRatio": true,
-      "type": "button",
+      "template": "button",
       "layer": "FOREGROUND",
       "posX": 1775,
       "posY": 153,
@@ -164,7 +164,7 @@
         }
       },
       "fixRatio": true,
-      "type": "button",
+      "template": "button",
       "layer": "FOREGROUND",
       "posX": 7,
       "posY": 769,
@@ -182,7 +182,7 @@
         }
       },
       "fixRatio": true,
-      "type": "button",
+      "template": "button",
       "layer": "FOREGROUND",
       "posX": 220,
       "posY": 730,
@@ -200,7 +200,7 @@
         }
       },
       "fixRatio": true,
-      "type": "button",
+      "template": "button",
       "layer": "FOREGROUND",
       "posX": 6,
       "posY": 919,
@@ -218,7 +218,7 @@
         }
       },
       "fixRatio": true,
-      "type": "button",
+      "template": "button",
       "layer": "FOREGROUND",
       "posX": 725,
       "posY": 733,
@@ -236,7 +236,7 @@
         }
       },
       "fixRatio": true,
-      "type": "button",
+      "template": "button",
       "layer": "FOREGROUND",
       "posX": 14,
       "posY": 632,
@@ -254,7 +254,7 @@
         }
       },
       "fixRatio": true,
-      "type": "button",
+      "template": "button",
       "layer": "FOREGROUND",
       "posX": 408,
       "posY": 735,
