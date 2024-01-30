@@ -1,0 +1,15 @@
+[
+  {
+    "modid": "${mod_id}",
+    "name": "${mod_name}",
+    "description": "This is the mod of the Grand Theft Warzone project",
+    "version": "${mod_version}",
+    "mcversion": "1.12",
+    "authorList": ["PhoenixRa"],
+    "url": "https://github.com/Phoenix-Ra",
+    "credits": "PhoenixRa",
+    "logoFile": "/gtw_logo.png",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
