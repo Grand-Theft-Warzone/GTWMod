@@ -2,16 +2,11 @@ package com.grandtheftwarzone.gtwmod.core.display;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.screen.ScreensManager;
-import com.grandtheftwarzone.gtwmod.core.display.actions.ActionPlaySound;
 import lombok.Getter;
-import me.phoenixra.atumodcore.api.display.DisplayElementRegistry;
-import me.phoenixra.atumodcore.api.display.actions.DisplayActionRegistry;
 import me.phoenixra.atumodcore.api.display.impl.BaseScreen;
 import me.phoenixra.atumodcore.api.service.AtumModService;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;

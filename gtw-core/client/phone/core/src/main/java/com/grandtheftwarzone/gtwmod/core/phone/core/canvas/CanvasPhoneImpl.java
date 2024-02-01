@@ -366,10 +366,10 @@ public class CanvasPhoneImpl extends CanvasPhone {
                 phoneShapeDrawer == null ? new HashMap<>() : phoneShapeDrawer.animationDuration
         );
         if (background != null) {
-            canvasPhone.background = (ElementImage) background.cloneWithRandomId();
+            canvasPhone.background = (ElementImage) background.clone();
         }
         if (phoneDisplay != null) {
-            canvasPhone.phoneDisplay = (ElementImage) phoneDisplay.cloneWithRandomId();
+            canvasPhone.phoneDisplay = (ElementImage) phoneDisplay.clone();
         }
         canvasPhone.openedApp = null;
         return canvasPhone;

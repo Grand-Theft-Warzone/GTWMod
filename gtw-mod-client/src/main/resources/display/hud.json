@@ -1,6 +1,6 @@
 {
   "template": "canvas",
-  "config_version": 4,
+  "config_version": 5,
   "layer": "MIDDLE",
   "default_data": {
     "notification": ""
@@ -20,7 +20,6 @@
   "elements": {
     "image_heldItem": {
       "settings": {
-        "image": "heldItem",
         "color": "#ffffff",
         "defaultImage": {
           "location": "gtwmod:textures/hud/fist_icon.png",
@@ -36,7 +35,7 @@
         "size": 3
       },
       "fixRatio": true,
-      "template": "image",
+      "template": "gtw_image_held_item",
       "layer": "LOW",
       "posX": 1490,
       "posY": 40,

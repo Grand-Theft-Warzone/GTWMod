@@ -1,6 +1,7 @@
 {
   "template": "canvas_phone",
-  "config_version": 3.0,
+  "config_version": 4.0,
+  "allow_sending_packets": true,
   "layer": "MIDDLE",
   "posX": 705,
   "posY": 100,
