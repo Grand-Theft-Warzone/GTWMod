@@ -4,16 +4,12 @@ import com.grandtheftwarzone.gtwmod.api.event.EntityDamagedEvent;
 
 import com.grandtheftwarzone.gtwmod.core.network.GtwNetworkAPI;
 import com.grandtheftwarzone.gtwmod.server.GTWModServer;
+import me.phoenixra.atumodcore.api.events.network.PlayerDisplayEvent;
 import me.phoenixra.atumodcore.api.service.AtumModService;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -23,6 +19,8 @@ import java.util.function.Consumer;
 public class CommonProxy implements AtumModService {
 
     private List<Consumer<EntityDamagedEvent>> eventDamageObserver = new ArrayList<>();
+
+    private List<Consumer<PlayerDisplayEvent>> eventPlayerDisplayObserver = new ArrayList<>();
     public CommonProxy(){
         MinecraftForge.EVENT_BUS.register(this);
 
@@ -35,7 +33,12 @@ public class CommonProxy implements AtumModService {
     }
 
     @SubscribeEvent
-    @SideOnly(Side.SERVER)
+    public void onDisplayEvent(PlayerDisplayEvent event){
+        eventPlayerDisplayObserver.forEach(listener-> {
+            listener.accept(event);
+        });
+    }
+    @SubscribeEvent
     public void onEntityDamaged(LivingDamageEvent event){
         if(event.getSource().getTrueSource() == null ||
         event.getSource().getImmediateSource() == null) return;
@@ -56,13 +59,18 @@ public class CommonProxy implements AtumModService {
             event.setAmount(e.getDamage());
         }
     }
-    @SideOnly(Side.SERVER)
     public void registerEventDamageListener(Consumer<EntityDamagedEvent> observer){
         eventDamageObserver.add(observer);
     }
-    @SideOnly(Side.SERVER)
     public void unregisterEventDamageListener(Consumer<EntityDamagedEvent> observer){
         eventDamageObserver.remove(observer);
+    }
+
+    public void registerPlayerDisplayListener(Consumer<PlayerDisplayEvent> observer){
+        eventPlayerDisplayObserver.add(observer);
+    }
+    public void unregisterPlayerDisplayListener(Consumer<PlayerDisplayEvent> observer){
+        eventPlayerDisplayObserver.remove(observer);
     }
 
     @Override

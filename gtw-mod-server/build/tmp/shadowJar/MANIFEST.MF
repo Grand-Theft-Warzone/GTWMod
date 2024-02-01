@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-TweakOrder: 0
-FMLCorePluginContainsFMLMod: true
-ForceLoadAsMod: true
-FMLCorePlugin: com.grandtheftwarzone.gtwmod.server.fml.FMLCore
-
