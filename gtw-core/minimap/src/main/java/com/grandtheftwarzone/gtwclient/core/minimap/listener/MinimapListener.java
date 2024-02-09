@@ -30,7 +30,6 @@ public class MinimapListener {
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (Minecraft.getMinecraft().world == null || Minecraft.getMinecraft().player == null) return;
 
-
         if (GTWMinimap.zoomInBinding.isKeyDown()) {
             GTWMinimap.getInstance().getMinimap().setZoom(
                     GTWMinimap.getInstance().getMinimap().getZoom() * 1.01f

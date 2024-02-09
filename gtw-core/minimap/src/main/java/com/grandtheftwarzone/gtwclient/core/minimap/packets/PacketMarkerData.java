@@ -25,8 +25,8 @@ public class PacketMarkerData implements IMessage {
 
         markers = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            int posX = buf.readInt();
-            int posZ = buf.readInt();
+            double posX = buf.readDouble();
+            double posZ = buf.readDouble();
 
             //TODO: Find a way to tell the client which marker to use (they should already been created)
             String texturePath = buf.readCharSequence(buf.readInt(), StandardCharsets.UTF_8).toString();
@@ -51,8 +51,8 @@ public class PacketMarkerData implements IMessage {
     public void toBytes(ByteBuf buf) {
         buf.writeInt(markers.size());
         for (Marker marker : markers) {
-            buf.writeInt(marker.getPosX());
-            buf.writeInt(marker.getPosZ());
+            buf.writeDouble(marker.getPosX());
+            buf.writeDouble(marker.getPosZ());
 
             //TODO: Check if this is the correct way to send the marker texture
             String texturePath = marker.getType().getTexture().getResourcePath();

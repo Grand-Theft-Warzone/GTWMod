@@ -13,6 +13,7 @@ import com.grandtheftwarzone.gtwclient.core.minimap.renderer.MinimapRenderer;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.client.shader.Shader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -38,6 +39,7 @@ public class GTWMinimap {
 
     public static KeyBinding zoomInBinding;
     public static KeyBinding zoomOutBinding;
+    public static KeyBinding goToMapCenterBinding;
 
 
     public GTWMinimap() {
@@ -63,7 +65,7 @@ public class GTWMinimap {
     }
 
     private void initClient() {
-        minimap = new TexturedMinimap(1046, 873, 0.25f);
+        minimap = new TexturedMinimap(2593, 2281, -512, -2080, 2080, 200,  1f);
         minimapRenderer = new MinimapRenderer();
         clientMarkerManager = new ClientMarkerManager();
 
@@ -72,6 +74,7 @@ public class GTWMinimap {
 
         ClientRegistry.registerKeyBinding(zoomInBinding);
         ClientRegistry.registerKeyBinding(zoomOutBinding);
+        ClientRegistry.registerKeyBinding(goToMapCenterBinding);
 
 
         //To test only client

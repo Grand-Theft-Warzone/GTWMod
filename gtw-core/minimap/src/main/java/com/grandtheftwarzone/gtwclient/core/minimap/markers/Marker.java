@@ -9,12 +9,12 @@ import java.util.Objects;
 @Getter
 @AllArgsConstructor
 public class Marker {
-    private final int posX;
-    private final int posZ;
+    private final double posX;
+    private final double posZ;
     private final MarkerType type;
 
     public Vec2f getVec() {
-        return new Vec2f(posX, posZ);
+        return new Vec2f((float) posX, (float) posZ);
     }
 
 }

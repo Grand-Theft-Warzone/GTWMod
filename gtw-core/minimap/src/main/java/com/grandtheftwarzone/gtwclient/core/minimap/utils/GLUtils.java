@@ -110,9 +110,9 @@ public class GLUtils {
     }
 
     public static void rotateFixed(double x, double y, float angle) {
-        GlStateManager.translate(x, y, -1.0F);
-        GlStateManager.rotate(angle, 0, 0, -1.0F);
-        GlStateManager.translate(-x, -y, -1.0F);
+        GlStateManager.translate(x, y, 0.0F);
+        GlStateManager.rotate(angle, 0, 0, 1.0F);
+        GlStateManager.translate(-x, -y, 0.0F);
     }
 
 }
