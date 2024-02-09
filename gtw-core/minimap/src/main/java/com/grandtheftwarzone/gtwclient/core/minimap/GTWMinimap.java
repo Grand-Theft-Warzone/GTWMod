@@ -29,6 +29,16 @@ public class GTWMinimap {
     private final int cornerDistance = 20;
     @Setter private boolean rotating = true;
 
+    private final long mapStartX = -512;
+    private final long mapStartY = -2080;
+    private final long mapEndX = 2080;
+    private final long mapEndY = 200;
+
+    private final int mapTextureWidth = 2593;
+    private final int mapTextureHeight = 2281;
+
+    private final float startZoom = 0.5f;
+
     private TexturedMinimap minimap;
     private MinimapRenderer minimapRenderer;
 
@@ -65,12 +75,12 @@ public class GTWMinimap {
     }
 
     private void initClient() {
-        minimap = new TexturedMinimap(2593, 2281, -512, -2080, 2080, 200,  1f);
+        minimap = new TexturedMinimap(mapTextureWidth, mapTextureHeight, mapStartX, mapStartY, mapEndX, mapEndY, startZoom);
         minimapRenderer = new MinimapRenderer();
         clientMarkerManager = new ClientMarkerManager();
 
         zoomInBinding = new KeyBinding("Zoom In", Keyboard.KEY_Z, "Minimap");
-        zoomOutBinding = new KeyBinding("Zoom out", Keyboard.KEY_X, "Minimao");
+        zoomOutBinding = new KeyBinding("Zoom out", Keyboard.KEY_X, "Minimap");
 
         ClientRegistry.registerKeyBinding(zoomInBinding);
         ClientRegistry.registerKeyBinding(zoomOutBinding);

@@ -23,7 +23,6 @@ import java.util.List;
 
 public class MinimapRenderer {
 
-
     public void draw() {
         GlStateManager.pushMatrix();
 

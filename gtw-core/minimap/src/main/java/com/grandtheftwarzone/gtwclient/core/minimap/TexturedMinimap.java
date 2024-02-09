@@ -11,17 +11,17 @@ public class TexturedMinimap {
     private final int width;
     private final int height;
 
-    private final int centerX;
-    private final int centerZ;
+    private final long centerX;
+    private final long centerZ;
 
-    private final int startX;
-    private final int startZ;
-    private final int endX;
-    private final int endZ;
+    private final long startX;
+    private final long startZ;
+    private final long endX;
+    private final long endZ;
 
     @Setter private float zoom;
 
-    public TexturedMinimap(int width, int height, int startX, int startZ, int endX, int endZ, float zoom) {
+    public TexturedMinimap(int width, int height, long startX, long startZ, long endX, long endZ, float zoom) {
         this.width = width;
         this.height = height;
         this.startX = startX;
