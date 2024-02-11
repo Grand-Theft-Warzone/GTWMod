@@ -24,6 +24,7 @@ public class GtwScreensManager implements ScreensManager, AtumModService {
         GtwAPI.getInstance().getGtwMod().provideModService(this);
         this.minimap = minimap;
     }
+
     @Override
     public void handleFmlEvent(@NotNull FMLEvent fmlEvent) {
         if (fmlEvent instanceof FMLInitializationEvent) {
@@ -35,9 +36,10 @@ public class GtwScreensManager implements ScreensManager, AtumModService {
     public void onRemove() {
 
     }
+
     @Override
     public @NotNull GuiScreen getMainMenuGuiScreen() {
-        if(customMainMenu != null){
+        if (customMainMenu != null) {
             customMainMenu.getRenderer().closeRenderer();
         }
 
@@ -52,10 +54,10 @@ public class GtwScreensManager implements ScreensManager, AtumModService {
             super(GtwAPI.getInstance().getGtwMod(),
                     Objects.requireNonNull(GtwAPI.getInstance().getGtwMod().getDisplayManager()
                             .getElementRegistry().getDrawableCanvas(
-                            Objects.requireNonNull(GtwAPI.getInstance().getGtwMod().
-                                            getConfigManager().getConfig("settings"))
-                                    .getString("main_menu")
-                    )));
+                                    Objects.requireNonNull(GtwAPI.getInstance().getGtwMod().
+                                                    getConfigManager().getConfig("settings"))
+                                            .getString("main_menu")
+                            )));
         }
     }
 }

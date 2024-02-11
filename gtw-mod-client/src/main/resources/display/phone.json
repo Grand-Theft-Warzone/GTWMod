@@ -42,6 +42,24 @@
   "apps": {
     "settings":{
       "elements": {
+    "button_discord": {
+      "settings": {
+        "brightness-onClick": "20;20;20",
+        "image": "gtwmod:textures/main_menu/discord_button.png",
+        "brightness": "1;1;1",
+        "brightness-onHover": "0.85;0.85;0.85",
+        "actions-onRelease": {
+          "1": "send_display_event@2"
+        }
+      },
+      "fixRatio": true,
+      "template": "button",
+      "layer": "FOREGROUND",
+      "posX": 100,
+      "posY": 353,
+      "width": 122,
+      "height": 118
+    },
         "text_animate": {
           "settings": {
             "fontSize": 40,
