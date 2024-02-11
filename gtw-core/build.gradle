@@ -16,9 +16,4 @@ repositories {
 }
 
 dependencies {
-    api project(':gtw-core:network')
-    api project(':gtw-core:display')
-    api project(':gtw-core:misc')
-    api project(':gtw-core:phone')
-    api project(':gtw-core:minimap')
 }

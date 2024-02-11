@@ -10,6 +10,6 @@ repositories {
 }
 
 dependencies {
-    compileOnly project(':gtw-core:display')
+    compileOnly project(':gtw-core:client:display')
 
 }

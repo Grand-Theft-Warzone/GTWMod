@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+group = mod_group
+version = mod_version
+
+repositories {
+}
+
+dependencies {
+    compileOnly project(':gtw-core:client:misc')
+    api 'com.esotericsoftware.yamlbeans:yamlbeans:1.13'
+}
+
+minecraft {
+    accessTransformer = file('src/main/resources/META-INF/gtwemoji_at.cfg')
+}

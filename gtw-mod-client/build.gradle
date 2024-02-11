@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+    id "com.github.johnrengelman.shadow" version "7.1.0"
+}
+
+group = mod_group
+archivesBaseName = mod_name
+
+repositories {
+
+}
+
+dependencies {
+    implementation(project(":gtw-api"))
+    implementation(project(":gtw-core:client"))
+    implementation(project(":gtw-core:network"))
+    implementation 'io.github.classgraph:classgraph:4.8.104'
+
+}
+
+shadowJar {
+    dependencies {
+        exclude(dependency ->
+                !dependency.moduleGroup.startsWith(mod_group)&&
+                        !dependency.moduleGroup.startsWith("com.esotericsoftware.yamlbeans")
+        )
+        exclude 'META-INF/versions/**'
+    }
+    duplicatesStrategy DuplicatesStrategy.EXCLUDE //prevent duplicates
+    archiveBaseName.set(mod_name+"-client")
+    classifier "" //prevent creation of unshadowed jar
+}
+
+reobf {
+    shadowJar {
+    }
+}
+
+minecraft {
+    accessTransformer = file('src/main/resources/META-INF/gtwemoji_at.cfg')
+}
+
+jar.finalizedBy('reobfJar')
+jar{
+    manifest.attributes.clear()
+    manifest {
+        attributes "FMLAT": "gtwemoji_at.cfg"
+        attributes "ForceLoadAsMod": "true"
+        attributes "FMLCorePluginContainsFMLMod": "true"
+        attributes "FMLCorePlugin": "com.grandtheftwarzone.gtwmod.client.fml.FMLCore"
+        attributes "TweakOrder": "0"
+    }
+}
+

@@ -1,0 +1,159 @@
+{
+  "template": "canvas",
+  "config_version": 2.0,
+  "layer": "MIDDLE",
+  "elements": {
+    "image_main": {
+      "settings": {
+        "image": "gtwmod:textures/gui/business/cakes/image_main.png",
+        "color": "#ffffff"
+      },
+      "template": "image",
+      "layer": "BACKGROUND",
+      "posX": 550.0,
+      "posY": 50.0,
+      "width": 800.0,
+      "height": 900.0
+    },
+    "text_owner": {
+      "settings": {
+        "fontSize": 20.0,
+        "text": "%data_factory_owner%",
+        "font": "minecraft.otf"
+      },
+      "fixRatio": true,
+      "template": "text",
+      "layer": "MIDDLE",
+      "posX": 980.0,
+      "posY": 258.0,
+      "width": 200.0,
+      "height": 19.0
+    },
+    "text_level": {
+      "settings": {
+        "fontSize": 20.0,
+        "text": "%data_factory_level%",
+        "font": "minecraft.otf"
+      },
+      "fixRatio": true,
+      "template": "text",
+      "layer": "MIDDLE",
+      "posX": 980.0,
+      "posY": 355.0,
+      "width": 200.0,
+      "height": 19.0
+    },
+    "text_production_speed": {
+      "settings": {
+        "fontSize": 20.0,
+        "text": "%data_factory_prod_speed%",
+        "font": "minecraft.otf"
+      },
+      "fixRatio": true,
+      "template": "text",
+      "layer": "MIDDLE",
+      "posX": 800.0,
+      "posY": 610.0,
+      "width": 200.0,
+      "height": 19.0
+    },
+    "text_production_efficiency": {
+      "settings": {
+        "fontSize": 20.0,
+        "text": "%data_factory_prod_efficiency%",
+        "font": "minecraft.otf"
+      },
+      "fixRatio": true,
+      "template": "text",
+      "layer": "MIDDLE",
+      "posX": 800.0,
+      "posY": 700.0,
+      "width": 300.0,
+      "height": 19.0
+    },
+    "text_storage_speed": {
+      "settings": {
+        "fontSize": 20.0,
+        "text": "%data_factory_storage_speed%",
+        "font": "minecraft.otf"
+      },
+      "fixRatio": true,
+      "template": "text",
+      "layer": "MIDDLE",
+      "posX": 1170.0,
+      "posY": 610.0,
+      "width": 300.0,
+      "height": 19.0
+    },
+    "text_storage_efficiency": {
+      "settings": {
+        "fontSize": 20.0,
+        "text": "%data_factory_storage_efficiency%",
+        "font": "minecraft.otf"
+      },
+      "fixRatio": true,
+      "template": "text",
+      "layer": "MIDDLE",
+      "posX": 1230.0,
+      "posY": 700.0,
+      "width": 300.0,
+      "height": 19.0
+    },
+    "button_collect": {
+      "settings": {
+        "brightness-onClick": "20.0;20.0;20.0",
+        "image": "gtwmod:textures/gui/business/button_collect.png",
+        "brightness": "1.0;1.0;1.0",
+        "brightness-onHover": "0.85;0.85;0.85",
+        "actions-onRelease": {
+          "1": "open_settings"
+        }
+      },
+      "fixRatio": true,
+      "template": "button",
+      "layer": "FOREGROUND",
+      "posX": 689.0,
+      "posY": 800.0,
+      "width": 168.0,
+      "height": 100.0
+    },
+    "button_upgrade": {
+      "settings": {
+        "brightness-onClick": "20.0;20.0;20.0",
+        "image": "gtwmod:textures/gui/business/button_upgrade.png",
+        "brightness": "1.0;1.0;1.0",
+        "brightness-onHover": "0.85;0.85;0.85",
+        "actions-onRelease": {
+          "1": "open_settings"
+        }
+      },
+      "fixRatio": true,
+      "template": "button",
+      "layer": "FOREGROUND",
+      "posX": 850.0,
+      "posY": 800.0,
+      "width": 208.0,
+      "height": 100.0
+    },
+    "button_claim": {
+      "settings": {
+        "brightness-onClick": "20.0;20.0;20.0",
+        "image": "gtwmod:textures/gui/business/button_claim.png",
+        "brightness": "1.0;1.0;1.0",
+        "brightness-onHover": "0.85;0.85;0.85",
+        "actions-onRelease": {
+          "1": "open_settings"
+        }
+      },
+      "fixRatio": true,
+      "template": "button",
+      "layer": "FOREGROUND",
+      "posX": 1050.0,
+      "posY": 800.0,
+      "width": 168.0,
+      "height": 100.0
+    }
+  },
+  "width": 1920.0,
+  "height": 1080.0
+}

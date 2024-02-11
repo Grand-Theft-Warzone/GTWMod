@@ -11,16 +11,8 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
-plugins{
-    id 'java'
-    id 'java-library'
-    id "com.github.johnrengelman.shadow" version "7.1.0"
-}
 group mod_group
 version mod_version
-archivesBaseName = mod_name
-
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 apply plugin: 'net.minecraftforge.gradle'
 
@@ -31,6 +23,13 @@ allprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'net.minecraftforge.gradle'
 
+    group mod_group
+    version mod_version
+
+    //encoding
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
     sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
     repositories {
         mavenCentral()
@@ -43,9 +42,8 @@ allprojects {
         //global libs
         compileOnly project(":").fileTree(dir: 'libs', include: ['*.jar'])
         //local libs
-        compileOnly fileTree(dir: 'libs', include: ['*.jar'])
-
-        implementation 'io.github.classgraph:classgraph:4.8.104'
+//        api fileTree(dir: 'libs_impl', include: ['.jar'])
+        compileOnly 'io.github.classgraph:classgraph:4.8.104'
 
         //annotations
         compileOnly 'org.projectlombok:lombok:1.18.24'
@@ -53,47 +51,53 @@ allprojects {
         annotationProcessor 'org.projectlombok:lombok:1.18.24'
         annotationProcessor 'org.jetbrains:annotations:23.0.0'
     }
-}
-minecraft {
-    mappings channel: 'snapshot', version: '20171003-1.12'
-}
-dependencies {
-    implementation(project(":gtw-api"))
-    implementation(project(":gtw-core"))
-    implementation(project(":gtw-mod"))
-    implementation 'io.github.classgraph:classgraph:4.8.104'
-
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
-}
-
-shadowJar {
-    dependencies {
-        exclude(dependency ->
-                !dependency.moduleGroup.startsWith(mod_group)&&
-                        !dependency.moduleGroup.startsWith("io.github.classgraph")
-        )
-    }
-    duplicatesStrategy DuplicatesStrategy.EXCLUDE //prevent duplicates
-    archiveBaseName.set(mod_name)
-    classifier "" //prevent creation of unshadowed jar
-
-    //remove unsupported meta-inf staff from newer java versions
-    exclude 'META-INF/versions/**'
-}
-
-reobf {
-    shadowJar {
-    }
-}
-
-jar.finalizedBy('reobfJar')
-jar{
-    manifest.attributes.clear()
-    manifest {
-        attributes "ForceLoadAsMod": "true"
-        attributes "FMLCorePluginContainsFMLMod": "true"
-        attributes "FMLCorePlugin": "com.grandtheftwarzone.gtwclient.mod.fml.FMLCore"
-        attributes "TweakOrder": "0"
+    //replace placeholders from gradle.properties
+    processResources {
+        filesMatching('**/*.yml') {
+            project.properties.each { propertyKey, propertyValue ->
+                if (propertyValue instanceof String) {
+                    filter {
+                        it.replace("\${${propertyKey}}", propertyValue)
+                    }
+                }
+            }
+        }
+        filesMatching('**/*.json') {
+            project.properties.each { propertyKey, propertyValue ->
+                if (propertyValue instanceof String) {
+                    filter {
+                        it.replace("\${${propertyKey}}", propertyValue)
+                    }
+                }
+            }
+        }
+        filesMatching('**/*.info') {
+            project.properties.each { propertyKey, propertyValue ->
+                if (propertyValue instanceof String) {
+                    filter {
+                        it.replace("\${${propertyKey}}", propertyValue)
+                    }
+                }
+            }
+        }
     }
 }
+task copyOutputJars(type: Copy) {
+    doFirst {
+        // Delete existing JARs in the destination folder
+        delete "$buildDir/OUTPUT"
+    }
+    // Ensure this task runs after the submodule's jar is built
+    dependsOn ':gtw-mod-client:build'
+    dependsOn ':gtw-mod-server:build'
 
+    // Define the source and destination of the copy
+    from "$projectDir/gtw-mod-client/build/libs", "$projectDir/gtw-mod-server/build/libs"
+    into "$buildDir/OUTPUT"
+
+    // Optionally, you can specify a pattern to copy only specific JARs
+    include "${mod_name}-client-${mod_version}.jar"
+    include "${mod_name}-server-${mod_version}.jar"
+}
+
+tasks.build.dependsOn(copyOutputJars)

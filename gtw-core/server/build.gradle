@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+group = mod_group
+version = mod_version
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api project(':gtw-core:server:killFeed')
+    api project(':gtw-core:server:minimap')
+}

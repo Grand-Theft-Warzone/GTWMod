@@ -1,0 +1,100 @@
+{
+  "template": "canvas_phone",
+  "config_version": 4.0,
+  "allow_sending_packets": true,
+  "layer": "MIDDLE",
+  "posX": 705,
+  "posY": 100,
+  "width": 480.0,
+  "height": 880.0,
+  "iconPadding": 7,
+  "iconsPerRow": 4,
+  "animationDuration": {
+    "OPENING": 25,
+    "CLOSING": 15,
+    "VERTICAL_TO_HORIZONTAL": 25,
+    "HORIZONTAL_TO_VERTICAL": 25
+
+  },
+  "background": {
+    "settings": {
+      "image": "gtwmod:textures/gui/phone/phone_background.png",
+      "color": "#ffffff"
+    },
+    "template": "image",
+    "layer": "FOREGROUND"
+
+  },
+  "phoneDisplay": {
+    "settings": {
+      "image": "gtwmod:textures/gui/phone/phone_display.png",
+      "color": "#ffffff"
+    },
+    "template": "image",
+    "layer": "FOREGROUND",
+    "posX": 40.0,
+    "posY": 125.0,
+    "width": -75.0,
+    "height": -258.0
+
+  },
+
+  "apps": {
+    "settings":{
+      "elements": {
+        "text_animate": {
+          "settings": {
+            "fontSize": 40,
+            "text": "&fTest mode:",
+            "font": "minecraft.otf"
+          },
+          "template": "text",
+          "layer": "MIDDLE",
+          "posX": 10,
+          "posY": 26,
+          "width": 200,
+          "height": 1
+        },
+        "choose_test": {
+          "settings": {
+            "displayType": "PHONE_LIKE",
+            "display-data-attached": "test",
+            "circleColor": "#4C4C4C",
+            "rectColorTrue": "#78D033",
+            "rectColorFalse": "#E93D3D",
+            "circleRadiusMultiplier": 0.8,
+            "circlePolygons": 40,
+            "maxAnimationTicks": 7
+          },
+          "template": "choose_bool",
+          "layer": "FOREGROUND",
+          "posX": 210,
+          "posY": 20,
+          "width": 150,
+          "height": 20
+        }
+      }
+
+    }
+
+  },
+
+  "resolution_optimization": {
+    "RES_1024x728": {
+      "iconPadding": 7,
+      "iconsPerRow": 4,
+      "width": 580,
+      "posX": 655,
+      "phoneDisplay": {
+        "posX": 40.0,
+        "posY": 125.0,
+        "width": -75.0,
+        "height": -258.0
+      }
+    },
+    "RES_1280x720": {
+      "iconPadding": 7,
+      "iconsPerRow": 4
+    }
+  }
+}

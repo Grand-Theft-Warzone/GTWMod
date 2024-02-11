@@ -1,0 +1,19 @@
+{
+  "levelup": {
+    "sounds": [
+      {
+        "name": "gtwmod:levelup",
+        "stream": false
+      }
+    ]
+  },
+  "main_menu_theme": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "gtwmod:main_menu_theme",
+        "stream": true
+      }
+    ]
+  }
+}

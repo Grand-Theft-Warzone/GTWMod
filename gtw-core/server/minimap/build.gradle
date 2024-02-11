@@ -1,0 +1,13 @@
+plugins {
+    id 'java'
+}
+
+group = mod_group
+version = mod_version
+
+repositories {
+}
+
+dependencies {
+    compileOnly project(':gtw-core:client:misc')
+}

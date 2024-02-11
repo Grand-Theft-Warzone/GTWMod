@@ -15,9 +15,9 @@ dependencies {
 
 tasks.register('applyPropertiesForClass') {
     doLast {
-        def versionClassFile = new File("$projectDir/src/main/java/com/grandtheftwarzone/gtwclient/api", "GtwProperties.java")
+        def versionClassFile = new File("$projectDir/src/main/java/com/grandtheftwarzone/gtwmod/api", "GtwProperties.java")
         versionClassFile.text = """
-            package com.grandtheftwarzone.gtwclient.api;
+            package com.grandtheftwarzone.gtwmod.api;
 
             public class GtwProperties {
                  public static final String VERSION = "${mod_version}";
