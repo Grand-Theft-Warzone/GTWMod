@@ -2,6 +2,7 @@ package com.grandtheftwarzone.gtwmod.server;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
+import com.grandtheftwarzone.gtwmod.api.gui.minimap.MinimapManager;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneManager;
 
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
@@ -40,6 +41,11 @@ public class GtwAPIServer implements GtwAPI {
 
     @Override
     public @NotNull PhoneManager getPhoneManager() {
+        throw new RuntimeException("Client side only!");
+    }
+
+    @Override
+    public @NotNull MinimapManager getGtwMinimapManager() {
         throw new RuntimeException("Client side only!");
     }
 

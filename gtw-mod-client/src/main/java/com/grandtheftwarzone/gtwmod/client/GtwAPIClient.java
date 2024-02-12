@@ -7,6 +7,7 @@ import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import com.grandtheftwarzone.gtwmod.api.screen.ScreensManager;
 import com.grandtheftwarzone.gtwmod.api.sound.SoundsManager;
+import com.grandtheftwarzone.gtwmod.core.display.minimap.GtwMinimapManager;
 import me.phoenixra.atumodcore.api.AtumMod;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,4 +46,11 @@ public class GtwAPIClient implements GtwAPI {
     public @NotNull AtumMod getGtwMod() {
         return GTWModClient.instance;
     }
+
+    @Override
+    public @NotNull GtwMinimapManager getGtwMinimapManager() {
+        return GTWModClient.instance.getMinimap();
+    }
+
+
 }

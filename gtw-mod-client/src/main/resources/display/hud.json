@@ -3,7 +3,9 @@
   "config_version": 5,
   "layer": "MIDDLE",
   "default_data": {
-    "notification": ""
+    "notification": "",
+    "zoom_minimap": "-500",
+    "active_minimap": "1"
   },
   "triggers": {
     "notifySound": {
@@ -18,6 +20,24 @@
     }
   },
   "elements": {
+
+    "minimap": {
+      "settings": {
+        "zoom": "%data_zoom_minimap%",
+        "debug": 1,
+        "zoomRadar": -32,
+        "N1": "56;-962",
+        "N2": "56;-571",
+        "N3": "813;-571",
+        "N4": "813;-962"
+      },
+      "template": "minimap",
+      "layer": "MIDDLE",
+      "posX": 1,
+      "posY": 1,
+      "width": 500,
+      "height": 500
+    },
     "image_heldItem": {
       "settings": {
         "color": "#ffffff",

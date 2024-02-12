@@ -1,6 +1,7 @@
 package com.grandtheftwarzone.gtwmod.api;
 
 import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
+import com.grandtheftwarzone.gtwmod.api.gui.minimap.MinimapManager;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneManager;
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 
@@ -69,6 +70,9 @@ public interface GtwAPI {
      */
     @SideOnly(Side.CLIENT)
     @NotNull PhoneManager getPhoneManager();
+
+    @SideOnly(Side.CLIENT)
+    @NotNull MinimapManager getGtwMinimapManager();
 
     /**
      * Get GTW mod instance
