@@ -78,8 +78,8 @@ public class RadarPlayer implements DynamicMarker {
 
     public MapCord getDynamicMapCord(MapImage map) {
 
-        // Проверка на карту
-        if (map != this.mapImage) {
+        // Check for card
+        if (map.equals(this.mapImage)) {
             //
         }
 

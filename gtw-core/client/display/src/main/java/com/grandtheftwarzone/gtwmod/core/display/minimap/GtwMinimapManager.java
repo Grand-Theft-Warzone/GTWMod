@@ -33,7 +33,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-@EventBusSubscriber
+
 public class GtwMinimapManager implements AtumModService, MinimapManager {
 
 
@@ -60,7 +60,7 @@ public class GtwMinimapManager implements AtumModService, MinimapManager {
 
     private AtumColor defaultColorFrame = AtumColor.GRAY;
 
-    private ColorFilter staticFilter = new ColorFilter(AtumColor.RED, 0);
+    private ColorFilter colorFilter = new ColorFilter(AtumColor.RED, 0);
 
 
     private ResourceLocation minimapImage = new ResourceLocation("gtwmod", "textures/gui/minimap/test_map.png");
@@ -149,12 +149,12 @@ public class GtwMinimapManager implements AtumModService, MinimapManager {
     }
 
     public ColorFilter getColorFilter() {
-        return staticFilter;
+        return colorFilter;
     }
 
     @Override
     public void setColorFilter(ColorFilter filter) {
-        this.staticFilter = filter;
+        this.colorFilter = filter;
     }
 
 
@@ -162,8 +162,6 @@ public class GtwMinimapManager implements AtumModService, MinimapManager {
     public void handleFmlEvent(@NotNull FMLEvent fmlEvent) {
         if(fmlEvent instanceof FMLPreInitializationEvent){
             onPreInit((FMLPreInitializationEvent) fmlEvent);
-        }else if(fmlEvent instanceof FMLInitializationEvent){
-            onInit((FMLInitializationEvent)fmlEvent);
         }
     }
 
@@ -176,11 +174,6 @@ public class GtwMinimapManager implements AtumModService, MinimapManager {
         ClientRegistry.registerKeyBinding(increaseZoom);
         ClientRegistry.registerKeyBinding(decreaseZoom);
         ClientRegistry.registerKeyBinding(showMinimaps);
-    }
-
-    @EventHandler
-    public void onInit(FMLInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override

@@ -196,8 +196,7 @@ public class ElementMinimap extends BaseElement {
     }
 
     public static void drawText(int x, int y, String text, AtumColor color) {
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y, 0);
+
 
         float red = color.getRed() / 255.0f;
         float green = color.getGreen() / 255.0f;
@@ -208,7 +207,6 @@ public class ElementMinimap extends BaseElement {
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
         fontRenderer.drawString(text, 0, 0, color.toInt(), true);
 
-        GlStateManager.popMatrix();
     }
 
 
