@@ -1,4 +1,4 @@
-package com.grandtheftwarzone.gtwmod.core.display.minimap;
+package com.grandtheftwarzone.gtwmod.api.gui.minimap;
 
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.misc.MapCord;

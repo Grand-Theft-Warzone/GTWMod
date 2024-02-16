@@ -7,12 +7,19 @@ import lombok.Setter;
 @Getter
 public class MapCord {
 
-    private double x, y;
+    // z - height axis
+    private double x, y, z;
 
 
     public MapCord(double x, double y) {
         this.x = x;
         this.y = y;
+    }
+
+    public MapCord(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     public MapCord() {

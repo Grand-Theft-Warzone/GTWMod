@@ -1,8 +1,8 @@
 package com.grandtheftwarzone.gtwmod.core.display.minimap;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
+import com.grandtheftwarzone.gtwmod.api.gui.minimap.MapImage;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.TextComponentString;
 import com.grandtheftwarzone.gtwmod.api.misc.ColorFilter;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityCord;
 import com.grandtheftwarzone.gtwmod.api.misc.MapCord;
@@ -27,16 +27,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
 
 @RegisterDisplayElement(templateId = "minimap")
 public class ElementMinimap extends BaseElement {
@@ -74,7 +64,7 @@ public class ElementMinimap extends BaseElement {
 
         player.update(Minecraft.getMinecraft().player);
 
-        MapCord cord = radarPlayer.getDynamicMapCord(minimap);
+        MapCord cord = radarPlayer.getDynamicMapCord();
 
         RenderUtils.bindTexture(minimapImage);
         drawPartialImage(getX(), getY(), getWidth(), getHeight(), (int) cord.getX() - (zoom / 2), (int) cord.getY() - (zoom / 2), zoom, zoom);
