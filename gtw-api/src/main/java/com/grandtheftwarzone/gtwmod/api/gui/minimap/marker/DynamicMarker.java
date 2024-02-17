@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface DynamicMarker {
     
-    List<MapLocation> getMapLocations();
+    List<MapLocation> getMapInterpolations();
     ResourceLocation getIcon();
 
     EntityLocation getWorldLocation();
 
-    MapLocation getDynamicMapLocation();
+    MapLocation getCurrentMapLocation();
 }

@@ -31,7 +31,7 @@ import org.lwjgl.opengl.GL12;
 @RegisterDisplayElement(templateId = "minimap")
 public class ElementMinimap extends BaseElement {
 
-    private int zoomRadar, zoom =  250, debug;
+    private int zoomRadar, zoom = 250, debug;
     private double coef, step;
     private MapLocation N1, N2, N3, N4;
     private ResourceLocation minimapImage, radarImage;
@@ -60,23 +60,23 @@ public class ElementMinimap extends BaseElement {
             return;
         }
 
-        if (!GtwAPI.getInstance().getGtwMinimapManager().getIsActive()) {return;}
+        if (!GtwAPI.getInstance().getGtwMinimapManager().isActive()) {return;}
 
         player.update(Minecraft.getMinecraft().player);
 
-        MapLocation cord = radarPlayer.getDynamicMapLocation();
+        MapLocation cord = radarPlayer.getCurrentMapLocation();
 
         RenderUtils.bindTexture(minimapImage);
         drawPartialImage(getX(), getY(), getWidth(), getHeight(), (int) cord.getX() - (zoom / 2), (int) cord.getY() - (zoom / 2), zoom, zoom);
 
-        // Доп. фильтр
+        // Extra filter
         radarPlayer.updateColorFilter();
         ColorFilter filter = GtwAPI.getInstance().getGtwMinimapManager().getColorFilter();
         System.out.println("Color " + filter.getOpacity());
         RenderUtils.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), filter.getColor().toInt(), filter.getOpacity());
 
 
-        // Нет связи
+        // No connection
         boolean inMap = radarPlayer.inMap();
         if (!inMap) {
             drawText(getX() + (getWidth() / 4), (int) (getY() + getHeight() / 2.5), "NO SIGNAL", AtumColor.WHITE);
@@ -162,7 +162,7 @@ public class ElementMinimap extends BaseElement {
         double uvHeight = einsTeilerHeight * (double)texturePartHeight;
         double uvY = einsTeilerHeight * (double)textureY;
 
-        // Устанавливаем режим зажатия для текстуры
+        // Set the clamping mode for the texture
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
 
@@ -208,7 +208,7 @@ public class ElementMinimap extends BaseElement {
         this.minimapImage = GtwAPI.getInstance().getGtwMinimapManager().getResourceLocation("minimapImage");
         this.radarImage = GtwAPI.getInstance().getGtwMinimapManager().getResourceLocation("radarImage");
 
-        minimap = new MapImage(minimapImage, N1, N2, N3, N4);
+        minimap = new MapImage(minimapImage, N4, N3, N2, N1);
         player = new EntityLocation(Minecraft.getMinecraft().player);
         radarPlayer = new RadarPlayer(player, minimap, radarImage, coef, step);
 
@@ -243,7 +243,7 @@ public class ElementMinimap extends BaseElement {
     @Override
     protected BaseElement onClone(BaseElement baseElement) {
         if (minimap != null || player != null || radarPlayer != null) {
-            minimap = new MapImage(minimapImage, N1, N2, N3, N4);
+            minimap = new MapImage(minimapImage, N4, N3, N3, N1);
             player = new EntityLocation(Minecraft.getMinecraft().player);
             radarPlayer = new RadarPlayer(player, minimap, coef, step);
         }

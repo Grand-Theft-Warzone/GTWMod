@@ -12,10 +12,10 @@ public interface MinimapManager {
     /**
      * Get whether the minimap should be displayed.
      */
-    boolean getIsActive();
+    boolean isActive();
 
     /**
-     * Get the color worth displaying.
+     * Get the color that should be displayed.
      * @return default frame color
      */
     AtumColor getColorFrame();
@@ -29,7 +29,7 @@ public interface MinimapManager {
     /**
      * Set frame color for time
      * @param color - frame color
-     * @param time - how many ticks to keep
+     * @param time - the time period the color will be active
      */
     void setColorFrame(AtumColor color, int time);
 

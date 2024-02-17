@@ -16,7 +16,7 @@ import java.io.InputStream;
 @Getter
 public class MapImage {
 
-    private final MapLocation topLeft, downLeft, downRight, topRight;
+    private final MapLocation topRight, downRight, downLeft, topLeft;
 
     private final ResourceLocation image;
 
@@ -29,12 +29,12 @@ public class MapImage {
     private int widthInBlocks;
     private int heightInBlocks;
 
-    public MapImage(ResourceLocation inputImage, MapLocation topLeft, MapLocation downLeft, MapLocation downRight, MapLocation topRight) {
+    public MapImage(ResourceLocation inputImage, MapLocation topRight, MapLocation downRight, MapLocation downLeft, MapLocation topLeft) {
         this.image = inputImage;
-        this.topLeft = topLeft;
-        this.downLeft = downLeft;
-        this.downRight = downRight;
         this.topRight = topRight;
+        this.downRight = downRight;
+        this.downLeft = downLeft;
+        this.topLeft = topLeft;
 
         try {
             InputStream imageStream = Minecraft.getMinecraft().getResourceManager().getResource(inputImage).getInputStream();
@@ -94,7 +94,6 @@ public class MapImage {
             prozentBorderOnY = 1 - prozentBorderOnY;
         }
 
-        System.out.println("Близость: " + Math.max(prozentBorderOnX, prozentBorderOnY));
         return Math.max(prozentBorderOnX, prozentBorderOnY);
     }
 

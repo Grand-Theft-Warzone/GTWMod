@@ -3,7 +3,6 @@ package com.grandtheftwarzone.gtwmod.core.display.minimap;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.gui.minimap.MinimapManager;
 import com.grandtheftwarzone.gtwmod.api.misc.ColorFilter;
-import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import lombok.Getter;
 import lombok.Setter;
 import me.phoenixra.atumodcore.api.AtumMod;
@@ -18,18 +17,14 @@ import net.minecraftforge.fml.common.event.FMLEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.jetbrains.annotations.NotNull;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,9 +42,9 @@ public class GtwMinimapManager implements AtumModService, MinimapManager {
 
     private DisplayRenderer renderer;
 
-    private boolean isSaveZoom = true;
+    private boolean saveZoom = true;
 
-    private boolean isActive;
+    private boolean active;
 
     @Getter @Setter
     private boolean canActivated = true;
@@ -79,7 +74,7 @@ public class GtwMinimapManager implements AtumModService, MinimapManager {
     public void onKeyInput(KeyInputEvent event) {
         if (showMinimaps.isPressed()) {
 
-            setActive(!isActive);
+            setActive(!active);
         }
 
     }
@@ -87,22 +82,22 @@ public class GtwMinimapManager implements AtumModService, MinimapManager {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
 
-        if (!isActive) return;
+        if (!active) return;
 
         if (increaseZoom.isKeyDown()) {
             element.performAction("zoom_minimap", "add");
-            isSaveZoom = false;
+            saveZoom = false;
             return;
         } else if (decreaseZoom.isKeyDown()) {
 
             element.performAction("zoom_minimap", "remove");
-            isSaveZoom = false;
+            saveZoom = false;
             return;
         }
 
-        if (!isSaveZoom) {
+        if (!saveZoom) {
             element.performAction("zoom_minimap", "update_default");
-            isSaveZoom = true;
+            saveZoom = true;
             colorsFrame.clear();
         }
     }
@@ -110,7 +105,7 @@ public class GtwMinimapManager implements AtumModService, MinimapManager {
     public void setActive(boolean active) {
 
         if (canActivated) {
-            isActive = active;
+            this.active = active;
             Config config = (Config) renderer.getBaseCanvas().getSettingsConfig();
             String strActive;
             if (active) {strActive = "1";} else {strActive = "0";}
@@ -132,8 +127,8 @@ public class GtwMinimapManager implements AtumModService, MinimapManager {
     public void updateMinimapManager(DisplayRenderer renderer) {
         this.renderer = renderer;
         this.element = renderer.getBaseCanvas().getElement("minimap");
-        this.isActive = renderer.getDisplayData().getDataOrDefault("active_minimap", "1").equals("1");
-        setActive(this.isActive);
+        this.active = renderer.getDisplayData().getDataOrDefault("active_minimap", "1").equals("1");
+        setActive(this.active);
 
     }
 
@@ -177,8 +172,8 @@ public class GtwMinimapManager implements AtumModService, MinimapManager {
     }
 
     @Override
-    public boolean getIsActive() {
-        return isActive;
+    public boolean isActive() {
+        return active;
     }
 
     @Override
