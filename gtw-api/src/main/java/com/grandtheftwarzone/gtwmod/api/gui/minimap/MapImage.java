@@ -1,7 +1,7 @@
 package com.grandtheftwarzone.gtwmod.api.gui.minimap;
 
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
-import com.grandtheftwarzone.gtwmod.api.misc.MapCord;
+import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
@@ -16,7 +16,7 @@ import java.io.InputStream;
 @Getter
 public class MapImage {
 
-    private final MapCord topLeft, downLeft, downRight, topRight;
+    private final MapLocation topLeft, downLeft, downRight, topRight;
 
     private final ResourceLocation image;
 
@@ -29,7 +29,7 @@ public class MapImage {
     private int widthInBlocks;
     private int heightInBlocks;
 
-    public MapImage(ResourceLocation inputImage, MapCord topLeft, MapCord downLeft, MapCord downRight, MapCord topRight) {
+    public MapImage(ResourceLocation inputImage, MapLocation topLeft, MapLocation downLeft, MapLocation downRight, MapLocation topRight) {
         this.image = inputImage;
         this.topLeft = topLeft;
         this.downLeft = downLeft;
@@ -52,7 +52,7 @@ public class MapImage {
         this.heightInBlocks = (int) Math.abs(downRight.getY() - topRight.getY());
     }
 
-    public MapImage(ResourceLocation inputImage, int imageWidth, int imageHeight, MapCord topLeft, MapCord downLeft, MapCord downRight, MapCord topRight) {
+    public MapImage(ResourceLocation inputImage, int imageWidth, int imageHeight, MapLocation topLeft, MapLocation downLeft, MapLocation downRight, MapLocation topRight) {
         this.image = inputImage;
         this.topLeft = topLeft;
         this.downLeft = downLeft;
@@ -70,12 +70,12 @@ public class MapImage {
 
     }
 
-    public MapCord calculateCoord(double targetX, double targetY) {
+    public MapLocation calculateCoord(double targetX, double targetY) {
         double targetRelativeX = targetX - topLeft.getX();
         double targetRelativeZ = targetY - topLeft.getY();
         int mapX = (int) (targetRelativeX * this.pixelsPerBlockX);
         int mapZ = (int) (targetRelativeZ * this.pixelsPerBlockZ);
-        return new MapCord(mapX, mapZ);
+        return new MapLocation(mapX, mapZ);
 
     }
 

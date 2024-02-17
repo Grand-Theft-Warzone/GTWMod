@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class EntityCord {
+public class EntityLocation {
 
     @Getter @Setter
     private double x, y, z;
@@ -12,7 +12,7 @@ public class EntityCord {
     @Getter @Setter
     private float yaw, pitch;
 
-    public EntityCord(double x, double y, double z, float yaw, float pitch) {
+    public EntityLocation(double x, double y, double z, float yaw, float pitch) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -20,7 +20,7 @@ public class EntityCord {
         this.pitch = pitch;
     }
 
-    public EntityCord(double x, double y, double z) {
+    public EntityLocation(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -28,7 +28,7 @@ public class EntityCord {
         this.pitch = 0;
     }
 
-    public EntityCord(EntityPlayer player) {
+    public EntityLocation(EntityPlayer player) {
         if (player != null) {
             this.x = player.posX;
             this.y = player.posY;
@@ -44,7 +44,7 @@ public class EntityCord {
         }
     }
 
-    public EntityCord update(EntityPlayer player) {
+    public EntityLocation update(EntityPlayer player) {
         this.x = player.posX;
         this.y = player.posY;
         this.z = player.posZ;

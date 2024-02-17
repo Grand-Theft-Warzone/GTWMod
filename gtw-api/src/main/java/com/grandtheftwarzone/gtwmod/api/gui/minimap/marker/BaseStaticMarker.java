@@ -1,22 +1,22 @@
 package com.grandtheftwarzone.gtwmod.api.gui.minimap.marker;
 
 import com.grandtheftwarzone.gtwmod.api.gui.minimap.MapImage;
-import com.grandtheftwarzone.gtwmod.api.misc.EntityCord;
-import com.grandtheftwarzone.gtwmod.api.misc.MapCord;
+import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
+import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import net.minecraft.util.ResourceLocation;
 
 public class BaseStaticMarker implements StaticMarker {
 
-    private EntityCord cordMarker;
+    private EntityLocation worldLocationMarker;
 
     private MapImage mapImage;
 
-    private MapCord mapCord;
+    private MapLocation mapLocation;
 
     private ResourceLocation icon;
 
-    public BaseStaticMarker(EntityCord cordMarker, MapImage mapImage, ResourceLocation icon) {
-        this.cordMarker = cordMarker;
+    public BaseStaticMarker(EntityLocation worldLocationMarker, MapImage mapImage, ResourceLocation icon) {
+        this.worldLocationMarker = worldLocationMarker;
         this.mapImage = mapImage;
         this.icon = icon;
     }
@@ -27,12 +27,12 @@ public class BaseStaticMarker implements StaticMarker {
     }
 
     @Override
-    public MapCord getMapCord() {
-        return this.mapImage.calculateCoord(cordMarker.getX(), cordMarker.getY());
+    public MapLocation getMapLocation() {
+        return this.mapImage.calculateCoord(worldLocationMarker.getX(), worldLocationMarker.getY());
     }
 
     @Override
-    public EntityCord getRealCord() {
-        return this.cordMarker;
+    public EntityLocation getWorldLocation() {
+        return this.worldLocationMarker;
     }
 }

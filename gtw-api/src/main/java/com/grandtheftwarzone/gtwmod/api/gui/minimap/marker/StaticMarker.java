@@ -1,14 +1,14 @@
 package com.grandtheftwarzone.gtwmod.api.gui.minimap.marker;
 
-import com.grandtheftwarzone.gtwmod.api.misc.EntityCord;
-import com.grandtheftwarzone.gtwmod.api.misc.MapCord;
+import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
+import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import net.minecraft.util.ResourceLocation;
 
 public interface StaticMarker {
 
     ResourceLocation getIcon();
 
-    MapCord getMapCord();
+    MapLocation getMapLocation();
 
-    EntityCord getRealCord();
+    EntityLocation getWorldLocation();
 }

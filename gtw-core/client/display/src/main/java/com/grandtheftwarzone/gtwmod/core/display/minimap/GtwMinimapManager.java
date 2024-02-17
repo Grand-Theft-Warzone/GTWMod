@@ -3,7 +3,7 @@ package com.grandtheftwarzone.gtwmod.core.display.minimap;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.gui.minimap.MinimapManager;
 import com.grandtheftwarzone.gtwmod.api.misc.ColorFilter;
-import com.grandtheftwarzone.gtwmod.api.misc.MapCord;
+import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import lombok.Getter;
 import lombok.Setter;
 import me.phoenixra.atumodcore.api.AtumMod;
