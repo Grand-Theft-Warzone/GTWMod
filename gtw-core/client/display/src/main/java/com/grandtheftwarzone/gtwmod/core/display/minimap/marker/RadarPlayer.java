@@ -1,21 +1,14 @@
 package com.grandtheftwarzone.gtwmod.core.display.minimap.marker;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
-import com.grandtheftwarzone.gtwmod.api.gui.minimap.DynamicMarker;
-import com.grandtheftwarzone.gtwmod.api.gui.minimap.DynamicMarkerImpl;
+import com.grandtheftwarzone.gtwmod.api.gui.minimap.marker.BaseDynamicMarker;
+import com.grandtheftwarzone.gtwmod.api.gui.minimap.MapImage;
 import com.grandtheftwarzone.gtwmod.api.misc.ColorFilter;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityCord;
-import com.grandtheftwarzone.gtwmod.api.misc.MapCord;
-import com.grandtheftwarzone.gtwmod.api.gui.minimap.MapImage;
-import lombok.Getter;
-import lombok.NonNull;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class RadarPlayer extends DynamicMarkerImpl {
+public class RadarPlayer extends BaseDynamicMarker {
 
     public RadarPlayer(EntityCord playerCord, MapImage mapImage, ResourceLocation icon, double coef, double step) {
         super(playerCord, mapImage, icon, coef, step);

@@ -1,5 +1,6 @@
-package com.grandtheftwarzone.gtwmod.api.gui.minimap;
+package com.grandtheftwarzone.gtwmod.api.gui.minimap.marker;
 
+import com.grandtheftwarzone.gtwmod.api.gui.minimap.MapImage;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityCord;
 import com.grandtheftwarzone.gtwmod.api.misc.MapCord;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public abstract class DynamicMarkerImpl implements DynamicMarker {
+public abstract class BaseDynamicMarker implements DynamicMarker {
 
     private EntityCord cordMarker;
 
@@ -23,7 +24,7 @@ public abstract class DynamicMarkerImpl implements DynamicMarker {
 
     private double step;
 
-    public DynamicMarkerImpl(EntityCord cordMarker, MapImage mapImage, ResourceLocation icon, double coeficent, double step) {
+    public BaseDynamicMarker(EntityCord cordMarker, MapImage mapImage, ResourceLocation icon, double coeficent, double step) {
         this.cordMarker = cordMarker;
         this.mapImage = mapImage;
         this.icon = icon;

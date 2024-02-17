@@ -1,12 +1,11 @@
-package com.grandtheftwarzone.gtwmod.api.gui.minimap;
+package com.grandtheftwarzone.gtwmod.api.gui.minimap.marker;
 
+import com.grandtheftwarzone.gtwmod.api.gui.minimap.MapImage;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityCord;
 import com.grandtheftwarzone.gtwmod.api.misc.MapCord;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.List;
-
-public class StaticMarkerImpl implements StaticMarker {
+public class BaseStaticMarker implements StaticMarker {
 
     private EntityCord cordMarker;
 
@@ -16,7 +15,7 @@ public class StaticMarkerImpl implements StaticMarker {
 
     private ResourceLocation icon;
 
-    public StaticMarkerImpl(EntityCord cordMarker, MapImage mapImage, ResourceLocation icon) {
+    public BaseStaticMarker(EntityCord cordMarker, MapImage mapImage, ResourceLocation icon) {
         this.cordMarker = cordMarker;
         this.mapImage = mapImage;
         this.icon = icon;
