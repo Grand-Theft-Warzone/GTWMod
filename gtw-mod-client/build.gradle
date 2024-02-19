@@ -14,7 +14,6 @@ dependencies {
     implementation(project(":gtw-api"))
     implementation(project(":gtw-core:client"))
     implementation(project(":gtw-core:network"))
-    implementation 'io.github.classgraph:classgraph:4.8.104'
 
 }
 

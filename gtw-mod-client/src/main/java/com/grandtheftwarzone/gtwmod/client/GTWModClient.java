@@ -20,9 +20,10 @@ import com.grandtheftwarzone.gtwmod.core.phone.core.GtwPhoneManager;
 import lombok.Getter;
 import lombok.Setter;
 import me.phoenixra.atumodcore.api.AtumMod;
-import me.phoenixra.atumodcore.api.config.Config;
-import me.phoenixra.atumodcore.api.config.ConfigType;
-import me.phoenixra.atumodcore.api.config.category.ConfigCategory;
+import me.phoenixra.atumconfig.api.config.Config;
+
+import me.phoenixra.atumconfig.api.config.ConfigType;
+import me.phoenixra.atumconfig.api.config.category.ConfigCategory;
 import me.phoenixra.atumodcore.api.display.DisplayElement;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -79,7 +80,7 @@ public class GTWModClient extends AtumMod {
         System.out.println("Initializing GTWMod[client]...");
         instance = this;
         GtwAPI.Instance.set(new GtwAPIClient());
-        settings = getApi().createLoadableConfig(this,
+        settings = getConfigManager().createLoadableConfig(
                 "settings",
                 "",
                 ConfigType.JSON,
@@ -133,9 +134,9 @@ public class GTWModClient extends AtumMod {
             }
             @Override
             protected void acceptConfig(@NotNull String id, @NotNull Config config) {
-                getAtumMod().getLogger().info("Loading display element with id " + id);
+                getLogger().info("Loading display element with id " + id);
                 if(getDisplayManager().getElementRegistry().getElementTemplate(id) != null) {
-                    getAtumMod().getLogger().warn("Display element with id " + id +
+                    getLogger().warn("Display element with id " + id +
                             " already added or is a default element!");
                     return;
                 }

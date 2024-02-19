@@ -6,7 +6,8 @@ import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneState;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.canvas.CanvasPhone;
 import lombok.Getter;
 import me.phoenixra.atumodcore.api.AtumMod;
-import me.phoenixra.atumodcore.api.config.Config;
+import me.phoenixra.atumconfig.api.config.Config;
+
 import me.phoenixra.atumodcore.api.display.DisplayCanvas;
 import me.phoenixra.atumodcore.api.display.annotations.RegisterDisplayElement;
 import me.phoenixra.atumodcore.api.display.annotations.RegisterOptimizedVariable;

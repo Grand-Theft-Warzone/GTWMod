@@ -2,12 +2,12 @@ package com.grandtheftwarzone.gtwmod.core.killFeed;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
-import me.phoenixra.atumodcore.api.AtumAPI;
-import me.phoenixra.atumodcore.api.config.Config;
-import me.phoenixra.atumodcore.api.config.ConfigType;
+import me.phoenixra.atumconfig.api.config.Config;
+
+import me.phoenixra.atumconfig.api.config.ConfigType;
 import me.phoenixra.atumodcore.api.service.AtumModService;
-import me.phoenixra.atumodcore.api.tuples.PairRecord;
-import me.phoenixra.atumodcore.api.utils.StringUtils;
+import me.phoenixra.atumconfig.api.tuples.PairRecord;
+import me.phoenixra.atumconfig.api.utils.StringUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -17,7 +17,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -54,7 +53,13 @@ public class GTWKillFeed implements AtumModService {
     }
 
     public void initConfig() {
-        config = AtumAPI.getInstance().createLoadableConfig(GtwAPI.getInstance().getGtwMod(), "config", "killFeed", ConfigType.YAML, true);
+        config = GtwAPI.getInstance().getGtwMod().getConfigManager()
+                .createLoadableConfig(
+                        "config",
+                        "killFeed",
+                        ConfigType.YAML,
+                        true
+                );
 
         debug = config.getBool("debug");
         if (debug) GtwLog.info("[DEBUG killFeed] Start init config");
@@ -171,8 +176,8 @@ public class GTWKillFeed implements AtumModService {
                     variablesData.add(new PairRecord<>("$mod_name", modName));
                     variablesData.add(new PairRecord<>("$item", itemName));
                     variablesData.add(new PairRecord<>("$full_item", weaponId));
-                    killText = StringUtils.format(StringUtils.replaceFast(killText, variables));
-                    killText = StringUtils.format(StringUtils.replaceFast(killText, variablesData));
+                    killText = StringUtils.formatMinecraftColors(StringUtils.replaceFast(killText, variables));
+                    killText = StringUtils.formatMinecraftColors(StringUtils.replaceFast(killText, variablesData));
                     TextComponentString message = new TextComponentString(killText);
                     PlayerList playerList = Objects.requireNonNull(player.getServer()).getPlayerList();
                     playerList.sendMessage(message);

@@ -1,7 +1,8 @@
 package com.grandtheftwarzone.gtwmod.api.gui.phone;
 
 import com.grandtheftwarzone.gtwmod.api.gui.phone.canvas.CanvasPhone;
-import me.phoenixra.atumodcore.api.config.Config;
+import me.phoenixra.atumconfig.api.config.Config;
+
 import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
 import org.jetbrains.annotations.NotNull;
 

@@ -3,7 +3,7 @@ package com.grandtheftwarzone.gtwmod.core.network.impl.gui;
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.gui.GuiSession;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
-import me.phoenixra.atumodcore.api.utils.StringUtils;
+import me.phoenixra.atumconfig.api.utils.StringUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -31,14 +31,14 @@ public class PacketHandlerFactoryGUI implements IMessageHandler<PacketFactoryGUI
             session = new GuiSession();
         }
 
-        session.setData("factoryOwner", StringUtils.format(message.factoryOwner));
-        session.setData("level",StringUtils.format(message.level));
-        session.setData("productionInfo",StringUtils.format(message.productionInfo));
-        session.setData("storageInfo",StringUtils.format(message.storageInfo));
-        session.setData("productionEfficiency",StringUtils.format(message.productionEfficiency));
-        session.setData("storageEfficiency",StringUtils.format(message.storageEfficiency));
-        session.setData("productionUpgradePrice",StringUtils.format(message.productionUpgradePrice));
-        session.setData("storageUpgradePrice",StringUtils.format(message.storageUpgradePrice));
+        session.setData("factoryOwner", StringUtils.formatMinecraftColors(message.factoryOwner));
+        session.setData("level",StringUtils.formatMinecraftColors(message.level));
+        session.setData("productionInfo",StringUtils.formatMinecraftColors(message.productionInfo));
+        session.setData("storageInfo",StringUtils.formatMinecraftColors(message.storageInfo));
+        session.setData("productionEfficiency",StringUtils.formatMinecraftColors(message.productionEfficiency));
+        session.setData("storageEfficiency",StringUtils.formatMinecraftColors(message.storageEfficiency));
+        session.setData("productionUpgradePrice",StringUtils.formatMinecraftColors(message.productionUpgradePrice));
+        session.setData("storageUpgradePrice",StringUtils.formatMinecraftColors(message.storageUpgradePrice));
 
         String s = session.getData("upgradeDelay");
         if(s!=null) {

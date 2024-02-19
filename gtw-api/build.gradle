@@ -2,8 +2,6 @@ plugins {
     id 'java'
 }
 
-group = mod_group
-version = mod_version
 
 repositories {
 
@@ -20,7 +18,7 @@ tasks.register('applyPropertiesForClass') {
             package com.grandtheftwarzone.gtwmod.api;
 
             public class GtwProperties {
-                 public static final String VERSION = "${mod_version}";
+                 public static final String VERSION = "${rootProject.version}";
                  public static final String MOD_NAME = "${mod_name}";
                  public static final String MOD_ID = "${mod_id}";
             }
