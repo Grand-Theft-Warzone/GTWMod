@@ -44,7 +44,6 @@ public class ClientProxy implements AtumModService {
                 new FolderResourcePack(
                         new File("gtwmod_resources")
                 );
-        ResourceLocation
 
 
     }
