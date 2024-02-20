@@ -2,14 +2,13 @@ plugins {
     id 'java'
 }
 
-group = mod_group
-version = mod_version
 
 repositories {
 }
 
 dependencies {
     compileOnly project(':gtw-core:client:misc')
+    //@TODO get rid of this
     api 'com.esotericsoftware.yamlbeans:yamlbeans:1.13'
 }
 

@@ -1,3 +1,7 @@
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardOpenOption
+
 buildscript {
     repositories {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
@@ -10,11 +14,69 @@ buildscript {
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
+    //-------VERSIONING-------
+    def versionPropsFile = file('version.properties')
+    def Properties versionProps = new Properties()
+
+    versionProps.load(new FileInputStream(versionPropsFile))
+
+    def version_active      = versionProps['version.active'].toBoolean()
+    def isSnapshot          = versionProps['version.snapshot'].toBoolean()
+    def version_stage= versionProps['version.stage'].toString()
+    def version_major       = versionProps['version.major'].toInteger()
+    def version_minor       = versionProps['version.minor'].toInteger()
+    def version_patch       = versionProps['version.patch'].toInteger()
+    def version_build       = versionProps['version.build'].toInteger()
+
+
+    if (isSnapshot) {
+        if(version_active){
+            version_build += 1
+        }
+        version = "${version_major}.${version_minor}.${version_patch}${version_stage}-snapshot#${version_build}"
+        System.out.println("VERSIONING-SNAPSHOT")
+    } else {
+        version = "${version_major}.${version_minor}.${version_patch}${version_stage}"
+        System.out.println("VERSIONING-RELEASE")
+
+    }
+
+    project.version = version
+    //-------VERSIONING END-------
 }
 group mod_group
-version mod_version
 
 apply plugin: 'net.minecraftforge.gradle'
+
+
+//------VERSION UPDATE IN FILE------
+build{
+    def versionPropsFile = file('version.properties')
+    def Properties versionProps = new Properties()
+
+    versionProps.load(new FileInputStream(versionPropsFile))
+
+    def version_active = versionProps['version.active'].toBoolean()
+    def isSnapshot     = versionProps['version.snapshot'].toBoolean()
+    def version_build  = isSnapshot?
+            project.version.toString().split("#")[1] : 0
+    if(version_active){
+        def propsFilePath = file('version.properties').absolutePath
+        def lines = Files.readAllLines(Paths.get(propsFilePath))
+        def updatedLines = []
+        lines.each { line ->
+            if (line.startsWith("version.build=")) {
+                line = "version.build=$version_build"
+            } else if (line.startsWith("version.snapshot=")) {
+                line = "version.snapshot=true"
+            }
+            updatedLines.add(line)
+        }
+        Files.write(Paths.get(propsFilePath), updatedLines, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING)
+        System.out.println("UPDATING BUILD VERSION")
+    }
+}
+//------VERSION UPDATE FINISH------
 
 allprojects {
     apply plugin: 'java'
@@ -24,7 +86,7 @@ allprojects {
     apply plugin: 'net.minecraftforge.gradle'
 
     group mod_group
-    version mod_version
+    version rootProject.version
 
     //encoding
     tasks.withType(JavaCompile) {
@@ -43,7 +105,6 @@ allprojects {
         compileOnly project(":").fileTree(dir: 'libs', include: ['*.jar'])
         //local libs
 //        api fileTree(dir: 'libs_impl', include: ['.jar'])
-        compileOnly 'io.github.classgraph:classgraph:4.8.104'
 
         //annotations
         compileOnly 'org.projectlombok:lombok:1.18.24'
@@ -96,8 +157,8 @@ task copyOutputJars(type: Copy) {
     into "$buildDir/OUTPUT"
 
     // Optionally, you can specify a pattern to copy only specific JARs
-    include "${mod_name}-client-${mod_version}.jar"
-    include "${mod_name}-server-${mod_version}.jar"
+    include "${mod_name}-client-${rootProject.version}.jar"
+    include "${mod_name}-server-${rootProject.version}.jar"
 }
 
 tasks.build.dependsOn(copyOutputJars)

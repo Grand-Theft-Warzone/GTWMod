@@ -2,8 +2,6 @@ plugins {
     id 'java'
 }
 
-group = mod_group
-version = mod_version
 
 allprojects {
     dependencies {

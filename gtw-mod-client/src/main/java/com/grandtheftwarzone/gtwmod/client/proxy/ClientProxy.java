@@ -5,14 +5,15 @@ import com.grandtheftwarzone.gtwmod.client.GTWModClient;
 import com.grandtheftwarzone.gtwmod.core.display.hud.GtwHudRenderer;
 import com.grandtheftwarzone.gtwmod.core.network.GtwNetworkAPI;
 import lombok.Getter;
-import me.phoenixra.atumodcore.api.placeholders.types.SimplePlaceholder;
+import me.phoenixra.atumconfig.api.placeholders.types.SimplePlaceholder;
 import me.phoenixra.atumodcore.api.service.AtumModService;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.resources.FolderResourcePack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -38,6 +39,12 @@ public class ClientProxy implements AtumModService {
     public ClientProxy(){
         MinecraftForge.EVENT_BUS.register(this);
         GTWModClient.instance.setNetworkAPI(new GtwNetworkAPI());
+
+        FolderResourcePack resourcePack =
+                new FolderResourcePack(
+                        new File("gtwmod_resources")
+                );
+
 
     }
 

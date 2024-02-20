@@ -3,9 +3,6 @@ plugins {
 }
 
 
-group = mod_group
-version = mod_version
-
 repositories {
 }
 

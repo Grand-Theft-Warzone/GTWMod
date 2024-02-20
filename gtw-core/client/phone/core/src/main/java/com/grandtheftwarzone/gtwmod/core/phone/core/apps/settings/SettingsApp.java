@@ -6,7 +6,8 @@ import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneShape;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.annotations.RegisterPhoneApp;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.canvas.CanvasPhone;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.canvas.CanvasPhoneApp;
-import me.phoenixra.atumodcore.api.config.Config;
+import me.phoenixra.atumconfig.api.config.Config;
+
 
 import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
 import me.phoenixra.atumodcore.api.misc.AtumColor;

@@ -16,14 +16,12 @@ dependencies {
     implementation(project(":gtw-core:network"))
     //dont ask))
     implementation(project(":gtw-core:client:misc"))
-    implementation 'io.github.classgraph:classgraph:4.8.104'
 }
 
 shadowJar {
     dependencies {
         exclude(dependency ->
-                !dependency.moduleGroup.startsWith(mod_group)&&
-                        !dependency.moduleGroup.startsWith("io.github.classgraph")
+                !dependency.moduleGroup.startsWith(mod_group)
         )
     }
     duplicatesStrategy DuplicatesStrategy.EXCLUDE //prevent duplicates
