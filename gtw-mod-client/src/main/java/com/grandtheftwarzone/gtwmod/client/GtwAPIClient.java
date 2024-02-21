@@ -18,7 +18,7 @@ public class GtwAPIClient implements GtwAPI {
     }
 
     @Override
-    public @NotNull NetworkAPI getNetworkManager() {
+    public @NotNull NetworkAPI getNetworkAPI() {
         return GTWModClient.instance.getNetworkAPI();
     }
 

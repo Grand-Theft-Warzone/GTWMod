@@ -205,7 +205,7 @@ public abstract class BaseGUI extends GuiScreen {
 
 
     protected void sendGuiActionPacket(UUID playerUUID, int guiId, GuiAction action){
-        GtwAPI.getInstance().getNetworkManager().sendPacketGuiAction(playerUUID,guiId,action);
+        GtwAPI.getInstance().getNetworkAPI().sendPacketGuiAction(playerUUID,guiId,action);
     }
     public GuiSession getGuiSession() {
         return guiSession;
