@@ -29,7 +29,7 @@ public interface GtwAPI {
      *
      * @return The network manager
      */
-    @NotNull NetworkAPI getNetworkManager();
+    @NotNull NetworkAPI getNetworkAPI();
 
 
 
