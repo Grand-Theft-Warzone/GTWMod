@@ -16,6 +16,7 @@ import com.grandtheftwarzone.gtwmod.core.display.GtwScreensManager;
 import com.grandtheftwarzone.gtwmod.core.display.loadingscreen.MainSplashRenderer;
 import com.grandtheftwarzone.gtwmod.core.display.loadingscreen.listener.ModLoadingListener;
 import com.grandtheftwarzone.gtwmod.core.misc.GtwSoundsManager;
+import com.grandtheftwarzone.gtwmod.core.network.GtwNetworkAPI;
 import com.grandtheftwarzone.gtwmod.core.phone.core.GtwPhoneManager;
 import lombok.Getter;
 import lombok.Setter;
@@ -87,6 +88,7 @@ public class GTWModClient extends AtumMod {
                 false
         );
         //services
+        networkAPI = new GtwNetworkAPI(this);
         soundsManager = new GtwSoundsManager();
         screensManager = new GtwScreensManager();
         phoneManager = new GtwPhoneManager(this);

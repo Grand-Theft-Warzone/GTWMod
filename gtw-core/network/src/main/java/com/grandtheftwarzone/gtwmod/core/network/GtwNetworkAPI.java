@@ -14,27 +14,36 @@ import com.grandtheftwarzone.gtwmod.core.network.impl.gui.PacketGUIAction;
 import com.grandtheftwarzone.gtwmod.core.network.impl.gui.PacketHandlerFactoryGUI;
 import com.grandtheftwarzone.gtwmod.core.network.impl.gui.PacketHandlerGUIAction;
 import lombok.Getter;
+import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.network.NetworkManager;
+import me.phoenixra.atumodcore.api.service.AtumModService;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLEvent;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class GtwNetworkAPI implements NetworkAPI {
+public class GtwNetworkAPI implements NetworkAPI, AtumModService {
     @Getter
     private NetworkManager atumNetwork = GtwAPI.getInstance().getGtwMod().getNetworkManager();
 
-    public GtwNetworkAPI() {
+    public GtwNetworkAPI(AtumMod atumMod) {
+        atumMod.provideModService(this);
+    }
+    @Override
+    public void handleFmlEvent(@NotNull FMLEvent fmlEvent) {
+        if(fmlEvent instanceof FMLInitializationEvent){
+            atumNetwork.registerMessage(PacketHandlerPlayerData.class, PacketPlayerData.class, Side.CLIENT);
+            atumNetwork.registerMessage(PacketHandlerNotification.class, PacketNotification.class, Side.CLIENT);
 
-        atumNetwork.registerMessage(PacketHandlerPlayerData.class, PacketPlayerData.class, Side.CLIENT);
-        atumNetwork.registerMessage(PacketHandlerNotification.class, PacketNotification.class, Side.CLIENT);
-
-        //GUI
-        atumNetwork.registerMessage(PacketHandlerFactoryGUI.class, PacketFactoryGUI.class, Side.CLIENT);
-        atumNetwork.registerMessage(PacketHandlerGUIAction.class, PacketGUIAction.class, Side.SERVER);
+            //GUI
+            atumNetwork.registerMessage(PacketHandlerFactoryGUI.class, PacketFactoryGUI.class, Side.CLIENT);
+            atumNetwork.registerMessage(PacketHandlerGUIAction.class, PacketGUIAction.class, Side.SERVER);
+        }
     }
 
     public void sendPlayerData(@NotNull PlayerData pd, @NotNull UUID playerUUID){
@@ -91,4 +100,14 @@ public class GtwNetworkAPI implements NetworkAPI {
         PacketHandlerGUIAction.addPacketConsumer(consumer);
     }
 
+
+    @Override
+    public void onRemove() {
+
+    }
+
+    @Override
+    public @NotNull String getId() {
+        return "networkManager";
+    }
 }
