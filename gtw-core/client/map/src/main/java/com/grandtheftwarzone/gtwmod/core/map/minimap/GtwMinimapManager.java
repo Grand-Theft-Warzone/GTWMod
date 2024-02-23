@@ -1,35 +1,34 @@
-package com.grandtheftwarzone.gtwmod.core.display.minimap;
+package com.grandtheftwarzone.gtwmod.core.map.minimap;
 
+import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
-import com.grandtheftwarzone.gtwmod.api.gui.minimap.MinimapManager;
+import com.grandtheftwarzone.gtwmod.api.map.MapImage;
+import com.grandtheftwarzone.gtwmod.api.map.MinimapManager;
 import com.grandtheftwarzone.gtwmod.api.misc.ColorFilter;
 import lombok.Getter;
 import lombok.Setter;
-import me.phoenixra.atumodcore.api.AtumMod;
-import me.phoenixra.atumodcore.api.config.Config;
-import me.phoenixra.atumodcore.api.config.LoadableConfig;
+import me.phoenixra.atumconfig.api.config.Config;
+import me.phoenixra.atumconfig.api.config.LoadableConfig;
 import me.phoenixra.atumodcore.api.display.DisplayElement;
 import me.phoenixra.atumodcore.api.display.DisplayRenderer;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
-import me.phoenixra.atumodcore.api.service.AtumModService;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.event.FMLEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.jetbrains.annotations.NotNull;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
-public class GtwMinimapManager implements AtumModService, MinimapManager {
+
+public class GtwMinimapManager implements MinimapManager {
 
 
     private static KeyBinding increaseZoom;
@@ -44,10 +43,13 @@ public class GtwMinimapManager implements AtumModService, MinimapManager {
 
     private boolean saveZoom = true;
 
-    private boolean active;
+    private boolean active = false;
 
     @Getter @Setter
     private boolean canActivated = true;
+
+    @Getter
+    private boolean allowedToDisplay = false;
 
     private DisplayElement element;
 
@@ -55,18 +57,50 @@ public class GtwMinimapManager implements AtumModService, MinimapManager {
 
     private AtumColor defaultColorFrame = AtumColor.GRAY;
 
+    @Getter
     private ColorFilter colorFilter = new ColorFilter(AtumColor.RED, 0);
 
+    private MapImage minimapData;
+    private ResourceLocation minimapImage;
+    private ResourceLocation radarImage;
 
-    private ResourceLocation minimapImage = new ResourceLocation("gtwmod", "textures/gui/minimap/test_map.png");
-    private ResourceLocation radarImage = new ResourceLocation("gtwmod", "textures/gui/minimap/radar.png");
 
 
+    public GtwMinimapManager(){
 
-    public GtwMinimapManager(AtumMod atumMod){
-        atumMod.provideModService(this);
-        this.minimapImage = new ResourceLocation("gtwmod", "textures/gui/minimap/test_map.png");
-        this.radarImage = new ResourceLocation("gtwmod", "textures/gui/minimap/radar.png");
+        EVENT_BUS.register(this);
+
+    }
+
+    public void setAllowedToDisplay(boolean draw) {
+        DisplayRenderer render = GtwAPI.getInstance().getGtwMod().getDisplayManager().getHUDCanvas()
+                .getDisplayRenderer();
+        if(render==null) return;
+        render.getDisplayData().setElementEnabled("minimap",true);
+        this.allowedToDisplay = draw;
+    }
+
+    public GtwMinimapManager(MapImage minimapData, ResourceLocation radarImage){
+        this.minimapData = minimapData;
+        this.minimapImage = minimapData.getImage();
+        this.radarImage = radarImage;
+
+        EVENT_BUS.register(this);
+    }
+
+    public void updateData(MapImage minimapData, ResourceLocation radarImage, boolean draw) {
+        this.minimapData = minimapData;
+        this.minimapImage = minimapData.getImage();
+        this.radarImage = radarImage;
+
+        setAllowedToDisplay(draw);
+    }
+
+    public void updateData(MapImage minimapData, ResourceLocation radarImage) {
+        this.minimapData = minimapData;
+        this.minimapImage = minimapData.getImage();
+        this.radarImage = radarImage;
+
     }
 
 
@@ -82,7 +116,7 @@ public class GtwMinimapManager implements AtumModService, MinimapManager {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
 
-        if (!active) return;
+        if (!active || !allowedToDisplay) return;
 
         if (increaseZoom.isKeyDown()) {
             element.performAction("zoom_minimap", "add");
@@ -143,24 +177,17 @@ public class GtwMinimapManager implements AtumModService, MinimapManager {
         return null;
     }
 
-    public ColorFilter getColorFilter() {
-        return colorFilter;
-    }
-
     @Override
     public void setColorFilter(ColorFilter filter) {
         this.colorFilter = filter;
     }
 
-
     @Override
-    public void handleFmlEvent(@NotNull FMLEvent fmlEvent) {
-        if(fmlEvent instanceof FMLPreInitializationEvent){
-            onPreInit((FMLPreInitializationEvent) fmlEvent);
-        }
+    public MapImage getMinimapImage() {
+        return this.minimapData;
     }
 
-    @EventHandler
+
     public void onPreInit(FMLPreInitializationEvent event) {
         showMinimaps = new KeyBinding("key.minimap.show.desc", Keyboard.KEY_M, "key.categories.mod");
         increaseZoom = new KeyBinding("key.minimap.increase.desc", Keyboard.KEY_PRIOR, "key.categories.mod");
@@ -189,6 +216,7 @@ public class GtwMinimapManager implements AtumModService, MinimapManager {
     public void setDefaultColorFrame(AtumColor color) {
         this.defaultColorFrame = color;
     }
+
     @Override
     public void setColorFrame(AtumColor color, int time) {
         List<AtumColor> addColor = new ArrayList<>();
@@ -196,16 +224,6 @@ public class GtwMinimapManager implements AtumModService, MinimapManager {
             addColor.add(color);
         }
         this.colorsFrame.addAll(addColor);
-    }
-
-    @Override
-    public void onRemove() {
-
-    }
-
-    @Override
-    public @NotNull String getId() {
-        return "minimap";
     }
 
 }

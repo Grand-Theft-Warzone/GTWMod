@@ -1,6 +1,5 @@
 package com.grandtheftwarzone.gtwmod.client;
 
-import com.grandtheftwarzone.gtwmod.core.display.minimap.GtwMinimapManager;
 import com.grandtheftwarzone.gtwmod.core.emoji.GTWEmoji;
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
@@ -16,6 +15,7 @@ import com.grandtheftwarzone.gtwmod.core.display.GtwFactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.core.display.GtwScreensManager;
 import com.grandtheftwarzone.gtwmod.core.display.loadingscreen.MainSplashRenderer;
 import com.grandtheftwarzone.gtwmod.core.display.loadingscreen.listener.ModLoadingListener;
+import com.grandtheftwarzone.gtwmod.core.map.GtwMapManager;
 import com.grandtheftwarzone.gtwmod.core.misc.GtwSoundsManager;
 import com.grandtheftwarzone.gtwmod.core.phone.core.GtwPhoneManager;
 import lombok.Getter;
@@ -73,7 +73,7 @@ public class GTWModClient extends AtumMod {
     @Getter
     private GTWEmoji emoji;
     @Getter
-    private GtwMinimapManager minimap;
+    private GtwMapManager map;
 
     public GTWModClient(){
         if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
@@ -94,7 +94,8 @@ public class GTWModClient extends AtumMod {
         screensManager = new GtwScreensManager();
         phoneManager = new GtwPhoneManager(this);
         emoji = new GTWEmoji();
-        minimap = new GtwMinimapManager(this);
+
+        map = new GtwMapManager(this);
 
         //other
         playerData = new PlayerData();

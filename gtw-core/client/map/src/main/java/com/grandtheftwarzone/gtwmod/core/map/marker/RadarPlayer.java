@@ -1,8 +1,9 @@
-package com.grandtheftwarzone.gtwmod.core.display.minimap.marker;
+package com.grandtheftwarzone.gtwmod.core.map.marker;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
-import com.grandtheftwarzone.gtwmod.api.gui.minimap.marker.BaseDynamicMarker;
-import com.grandtheftwarzone.gtwmod.api.gui.minimap.MapImage;
+
+import com.grandtheftwarzone.gtwmod.api.map.MapImage;
+import com.grandtheftwarzone.gtwmod.api.map.marker.BaseDynamicMarker;
 import com.grandtheftwarzone.gtwmod.api.misc.ColorFilter;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
@@ -26,7 +27,7 @@ public class RadarPlayer extends BaseDynamicMarker {
             opacity = (proximity - 0.9F) * 0.9F * 10;
         }
 
-        GtwAPI.getInstance().getGtwMinimapManager().setColorFilter(new ColorFilter(AtumColor.BLACK, opacity));
+        GtwAPI.getInstance().getMapManager().getMinimapManager().setColorFilter(new ColorFilter(AtumColor.BLACK, opacity));
     }
 
     public boolean inMap() {

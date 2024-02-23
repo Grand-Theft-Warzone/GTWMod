@@ -1,4 +1,4 @@
-package com.grandtheftwarzone.gtwmod.api.gui.minimap;
+package com.grandtheftwarzone.gtwmod.api.map;
 
 import com.grandtheftwarzone.gtwmod.api.misc.ColorFilter;
 import me.phoenixra.atumodcore.api.display.DisplayRenderer;
@@ -39,6 +39,8 @@ public interface MinimapManager {
     ColorFilter getColorFilter();
 
     void setColorFilter(ColorFilter filter);
+
+    MapImage getMinimapImage();
 
 
 }

@@ -1,4 +1,4 @@
-package com.grandtheftwarzone.gtwmod.api.gui.minimap.marker;
+package com.grandtheftwarzone.gtwmod.api.map.marker;
 
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;

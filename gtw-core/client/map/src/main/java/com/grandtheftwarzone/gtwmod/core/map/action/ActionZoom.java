@@ -1,23 +1,19 @@
-package com.grandtheftwarzone.gtwmod.core.display.minimap;
+package com.grandtheftwarzone.gtwmod.core.map.action;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import lombok.Getter;
 import lombok.Setter;
-import me.phoenixra.atumodcore.api.config.Config;
-import me.phoenixra.atumodcore.api.config.LoadableConfig;
+import me.phoenixra.atumconfig.api.config.Config;
+import me.phoenixra.atumconfig.api.config.LoadableConfig;
 import me.phoenixra.atumodcore.api.display.DisplayRenderer;
 import me.phoenixra.atumodcore.api.display.actions.ActionArgs;
 import me.phoenixra.atumodcore.api.display.actions.ActionData;
 import me.phoenixra.atumodcore.api.display.actions.DisplayAction;
 import me.phoenixra.atumodcore.api.display.annotations.RegisterDisplayAction;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
-import net.minecraft.util.SoundEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @RegisterDisplayAction(templateId = "zoom_minimap")
 public class ActionZoom implements DisplayAction {
@@ -91,7 +87,7 @@ public class ActionZoom implements DisplayAction {
         int removeZoom = (int)(zoom - coef);
 
         if (((addZoom >= interval[1] || addZoom <= interval[0]) && args[0].equalsIgnoreCase("add")) || ((removeZoom >= interval[1] || removeZoom <= interval[0]) && args[0].equalsIgnoreCase("remove"))) {
-            GtwAPI.getInstance().getGtwMinimapManager().setColorFrame(AtumColor.RED, 9);
+            GtwAPI.getInstance().getMapManager().getMinimapManager().setColorFrame(AtumColor.RED, 9);
 
             DisplayAction action = GtwAPI.getInstance().getGtwMod().getDisplayManager().getActionRegistry().getActionById("play_sound");
             if(action==null) {

@@ -1,25 +1,25 @@
-package com.grandtheftwarzone.gtwmod.core.display.minimap;
+package com.grandtheftwarzone.gtwmod.core.map.minimap;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
-import com.grandtheftwarzone.gtwmod.api.gui.minimap.MapImage;
-import net.minecraft.client.gui.FontRenderer;
+import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.misc.ColorFilter;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
-import com.grandtheftwarzone.gtwmod.core.display.minimap.marker.RadarPlayer;
+import com.grandtheftwarzone.gtwmod.core.map.marker.RadarPlayer;
 import lombok.SneakyThrows;
+import me.phoenixra.atumconfig.api.config.Config;
+import me.phoenixra.atumconfig.api.placeholders.context.PlaceholderContext;
+import me.phoenixra.atumconfig.api.utils.StringUtils;
 import me.phoenixra.atumodcore.api.AtumMod;
-import me.phoenixra.atumodcore.api.config.Config;
 import me.phoenixra.atumodcore.api.display.DisplayCanvas;
 import me.phoenixra.atumodcore.api.display.DisplayRenderer;
 import me.phoenixra.atumodcore.api.display.annotations.RegisterDisplayElement;
 import me.phoenixra.atumodcore.api.display.impl.BaseElement;
 import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
-import me.phoenixra.atumodcore.api.placeholders.context.PlaceholderContext;
 import me.phoenixra.atumodcore.api.utils.RenderUtils;
-import me.phoenixra.atumodcore.api.utils.StringUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
@@ -28,12 +28,11 @@ import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-@RegisterDisplayElement(templateId = "minimap")
+@RegisterDisplayElement(templateId = "assets.gtwmod.textures.gui.minimap")
 public class ElementMinimap extends BaseElement {
 
     private int zoomRadar, zoom = 250, debug;
     private double coef, step;
-    private MapLocation N1, N2, N3, N4;
     private ResourceLocation minimapImage, radarImage;
     private MapImage minimap;
     private EntityLocation player;
@@ -60,7 +59,7 @@ public class ElementMinimap extends BaseElement {
             return;
         }
 
-        if (!GtwAPI.getInstance().getGtwMinimapManager().isActive()) {return;}
+        if (!GtwAPI.getInstance().getMapManager().getMinimapManager().isActive()) {return;}
 
         player.update(Minecraft.getMinecraft().player);
 
@@ -71,8 +70,7 @@ public class ElementMinimap extends BaseElement {
 
         // Extra filter
         radarPlayer.updateColorFilter();
-        ColorFilter filter = GtwAPI.getInstance().getGtwMinimapManager().getColorFilter();
-        System.out.println("Color " + filter.getOpacity());
+        ColorFilter filter = GtwAPI.getInstance().getMapManager().getMinimapManager().getColorFilter();
         RenderUtils.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), filter.getColor().toInt(), filter.getOpacity());
 
 
@@ -82,7 +80,7 @@ public class ElementMinimap extends BaseElement {
             drawText(getX() + (getWidth() / 4), (int) (getY() + getHeight() / 2.5), "NO SIGNAL", AtumColor.WHITE);
         }
 
-        colorFrame = GtwAPI.getInstance().getGtwMinimapManager().getColorFrame();
+        colorFrame = GtwAPI.getInstance().getMapManager().getMinimapManager().getColorFrame();
 
         RenderUtils.drawOutline(getX(), getY(), getWidth(), getHeight(), 2, colorFrame);
 
@@ -187,7 +185,6 @@ public class ElementMinimap extends BaseElement {
 
     public static void drawText(int x, int y, String text, AtumColor color) {
 
-
         float red = color.getRed() / 255.0f;
         float green = color.getGreen() / 255.0f;
         float blue = color.getBlue() / 255.0f;
@@ -205,15 +202,18 @@ public class ElementMinimap extends BaseElement {
     @SneakyThrows
     private void init() {
 
-        this.minimapImage = GtwAPI.getInstance().getGtwMinimapManager().getResourceLocation("minimapImage");
-        this.radarImage = GtwAPI.getInstance().getGtwMinimapManager().getResourceLocation("radarImage");
+        minimap = GtwAPI.getInstance().getMapManager().getMinimapManager().getMinimapImage();
 
-        minimap = new MapImage(minimapImage, N4, N3, N2, N1);
+//        this.minimapImage = GtwAPI.getInstance().getMapManager().getMinimapManager().getResourceLocation("minimapImage");
+        minimapImage = minimap.getImage();
+
+        this.radarImage = GtwAPI.getInstance().getMapManager().getMinimapManager().getResourceLocation("radarImage");
+
         player = new EntityLocation(Minecraft.getMinecraft().player);
         radarPlayer = new RadarPlayer(player, minimap, radarImage, coef, step);
 
         DisplayRenderer renderer = getElementOwner().getDisplayRenderer();
-        GtwAPI.getInstance().getGtwMinimapManager().updateMinimapManager(renderer);
+        GtwAPI.getInstance().getMapManager().getMinimapManager().updateMinimapManager(renderer);
 
         init = true;
     }
@@ -226,27 +226,12 @@ public class ElementMinimap extends BaseElement {
         coef = Math.abs(config.getInt("coef"));
         step = Math.abs(config.getInt("step"));
         zoomRadar = (config.getInt("zoomRadar") / 2);
-
-        String[] CN1 = config.getString("N1").split(";");
-        String[] CN2 = config.getString("N2").split(";");
-        String[] CN3 = config.getString("N3").split(";");
-        String[] CN4 = config.getString("N4").split(";");
-
-        N1 = new MapLocation(Integer.parseInt(CN1[0]), Integer.parseInt(CN1[1]));
-        N2 = new MapLocation(Integer.parseInt(CN2[0]), Integer.parseInt(CN2[1]));
-        N3 = new MapLocation(Integer.parseInt(CN3[0]), Integer.parseInt(CN3[1]));
-        N4 = new MapLocation(Integer.parseInt(CN4[0]), Integer.parseInt(CN4[1]));
         init = false;
     }
 
 
     @Override
     protected BaseElement onClone(BaseElement baseElement) {
-        if (minimap != null || player != null || radarPlayer != null) {
-            minimap = new MapImage(minimapImage, N4, N3, N3, N1);
-            player = new EntityLocation(Minecraft.getMinecraft().player);
-            radarPlayer = new RadarPlayer(player, minimap, coef, step);
-        }
         return baseElement;
     }
 
