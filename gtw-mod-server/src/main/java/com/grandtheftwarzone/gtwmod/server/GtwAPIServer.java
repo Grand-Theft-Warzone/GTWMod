@@ -2,9 +2,9 @@ package com.grandtheftwarzone.gtwmod.server;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
-import com.grandtheftwarzone.gtwmod.api.gui.minimap.MinimapManager;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneManager;
 
+import com.grandtheftwarzone.gtwmod.api.map.MapManager;
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import com.grandtheftwarzone.gtwmod.api.screen.ScreensManager;
@@ -45,9 +45,10 @@ public class GtwAPIServer implements GtwAPI {
     }
 
     @Override
-    public @NotNull MinimapManager getGtwMinimapManager() {
-        throw new RuntimeException("Client side only!");
+    public @NotNull MapManager getMapManager() {
+        return null;
     }
+
 
     @Override
     public @NotNull AtumMod getGtwMod() {

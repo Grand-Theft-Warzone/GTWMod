@@ -4,6 +4,7 @@ package com.grandtheftwarzone.gtwmod.core.map;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.MapManager;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
+import com.grandtheftwarzone.gtwmod.core.map.globalmap.GtwGlobalmapManager;
 import com.grandtheftwarzone.gtwmod.core.map.minimap.GtwMinimapManager;
 import lombok.Getter;
 import me.phoenixra.atumodcore.api.AtumMod;
@@ -23,13 +24,14 @@ public class GtwMapManager implements AtumModService, MapManager {
     private GtwMinimapManager minimapManager;
 
     @Getter
-    private GtwMinimapManager globalmapManager;
+    private GtwGlobalmapManager globalmapManager;
 
 
 
     public GtwMapManager(AtumMod atumMod) {
         atumMod.provideModService(this);
         this.minimapManager = new GtwMinimapManager();
+        this.globalmapManager = new GtwGlobalmapManager();
     }
 
 
