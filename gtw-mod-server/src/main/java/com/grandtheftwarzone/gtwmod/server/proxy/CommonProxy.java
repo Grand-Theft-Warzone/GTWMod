@@ -24,7 +24,6 @@ public class CommonProxy implements AtumModService {
     public CommonProxy(){
         MinecraftForge.EVENT_BUS.register(this);
 
-        GTWModServer.instance.setNetworkAPI(new GtwNetworkAPI());
     }
 
     @Override

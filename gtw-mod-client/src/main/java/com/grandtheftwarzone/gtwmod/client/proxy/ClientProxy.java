@@ -38,7 +38,6 @@ public class ClientProxy implements AtumModService {
 
     public ClientProxy(){
         MinecraftForge.EVENT_BUS.register(this);
-        GTWModClient.instance.setNetworkAPI(new GtwNetworkAPI());
 
         FolderResourcePack resourcePack =
                 new FolderResourcePack(

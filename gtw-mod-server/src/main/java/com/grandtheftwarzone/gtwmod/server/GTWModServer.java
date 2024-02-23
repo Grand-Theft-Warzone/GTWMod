@@ -6,6 +6,7 @@ import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.GtwProperties;
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 import com.grandtheftwarzone.gtwmod.core.misc.GtwSoundsManager;
+import com.grandtheftwarzone.gtwmod.core.network.GtwNetworkAPI;
 import com.grandtheftwarzone.gtwmod.server.proxy.CommonProxy;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,6 +46,9 @@ public class GTWModServer extends AtumMod {
         GtwLog.info("Initializing GTWMod[server]...");
         instance = this;
         GtwAPI.Instance.set(new GtwAPIServer());
+
+        //services
+        networkAPI = new GtwNetworkAPI(this);
         soundsManager = new GtwSoundsManager();
         killFeed = new GTWKillFeed();
 
