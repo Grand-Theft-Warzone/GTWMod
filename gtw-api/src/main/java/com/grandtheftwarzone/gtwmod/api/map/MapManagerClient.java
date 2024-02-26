@@ -1,6 +1,6 @@
 package com.grandtheftwarzone.gtwmod.api.map;
 
-public interface MapManager {
+public interface MapManagerClient {
     MinimapManager getMinimapManager();
     GlobalmapManager getGlobalmapManager();
 }

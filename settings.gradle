@@ -27,4 +27,6 @@ include 'gtw-core:server:killFeed'
 findProject(':gtw-core:server:killFeed')?.name = 'killFeed'
 include 'gtw-core:client:map'
 findProject(':gtw-core:client:map')?.name = 'map'
+include 'gtw-core:server:map'
+findProject(':gtw-core:server:map')?.name = 'map'
 

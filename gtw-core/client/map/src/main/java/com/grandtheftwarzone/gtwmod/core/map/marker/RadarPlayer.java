@@ -27,7 +27,7 @@ public class RadarPlayer extends BaseDynamicMarker {
             opacity = (proximity - 0.9F) * 0.9F * 10;
         }
 
-        GtwAPI.getInstance().getMapManager().getMinimapManager().setColorFilter(new ColorFilter(AtumColor.BLACK, opacity));
+        GtwAPI.getInstance().getMapManagerClient().getMinimapManager().setColorFilter(new ColorFilter(AtumColor.BLACK, opacity));
     }
 
     public boolean inMap() {

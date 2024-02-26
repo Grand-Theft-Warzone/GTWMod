@@ -49,7 +49,7 @@ public class ActionZoom implements DisplayAction {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            GtwLog.debug("Saving the minimap zoom value (" + zoom + ")");
+            GtwLog.getLogger().debug("Saving the minimap zoom value (" + zoom + ")");
             return;
         }
 
@@ -63,7 +63,7 @@ public class ActionZoom implements DisplayAction {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                GtwLog.debug("[SET] Saving the minimap zoom value (" + zoom + ")");
+                GtwLog.getLogger().debug("[SET] Saving the minimap zoom value (" + zoom + ")");
                 return;
             } else if (args.length == 2) {
                 Config config = (Config) renderer.getBaseCanvas().getSettingsConfig();
@@ -73,7 +73,7 @@ public class ActionZoom implements DisplayAction {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                GtwLog.debug("[SET] Saving the minimap zoom value (" + zoom + ")");
+                GtwLog.getLogger().debug("[SET] Saving the minimap zoom value (" + zoom + ")");
                 return;
             }
         }
@@ -87,7 +87,7 @@ public class ActionZoom implements DisplayAction {
         int removeZoom = (int)(zoom - coef);
 
         if (((addZoom >= interval[1] || addZoom <= interval[0]) && args[0].equalsIgnoreCase("add")) || ((removeZoom >= interval[1] || removeZoom <= interval[0]) && args[0].equalsIgnoreCase("remove"))) {
-            GtwAPI.getInstance().getMapManager().getMinimapManager().setColorFrame(AtumColor.RED, 9);
+            GtwAPI.getInstance().getMapManagerClient().getMinimapManager().setColorFrame(AtumColor.RED, 9);
 
             DisplayAction action = GtwAPI.getInstance().getGtwMod().getDisplayManager().getActionRegistry().getActionById("play_sound");
             if(action==null) {

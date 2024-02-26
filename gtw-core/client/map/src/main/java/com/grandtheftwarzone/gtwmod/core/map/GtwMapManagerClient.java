@@ -2,7 +2,7 @@ package com.grandtheftwarzone.gtwmod.core.map;
 
 
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
-import com.grandtheftwarzone.gtwmod.api.map.MapManager;
+import com.grandtheftwarzone.gtwmod.api.map.MapManagerClient;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.GtwGlobalmapManager;
 import com.grandtheftwarzone.gtwmod.core.map.minimap.GtwMinimapManager;
@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.jetbrains.annotations.NotNull;
 
 
-public class GtwMapManager implements AtumModService, MapManager {
+public class GtwMapManagerClient implements AtumModService, MapManagerClient {
 
 
     @Getter
@@ -28,7 +28,7 @@ public class GtwMapManager implements AtumModService, MapManager {
 
 
 
-    public GtwMapManager(AtumMod atumMod) {
+    public GtwMapManagerClient(AtumMod atumMod) {
         atumMod.provideModService(this);
         this.minimapManager = new GtwMinimapManager();
         this.globalmapManager = new GtwGlobalmapManager();
@@ -62,6 +62,7 @@ public class GtwMapManager implements AtumModService, MapManager {
         System.out.println("Уры! Словлен эвент захода на сервер.");
 
         // Отправляем запросы на данные и т.П.
+        displayMiniMap();
     }
 
     @Override

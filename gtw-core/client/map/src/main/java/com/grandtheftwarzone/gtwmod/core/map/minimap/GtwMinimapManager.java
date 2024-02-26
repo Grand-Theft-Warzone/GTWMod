@@ -106,6 +106,7 @@ public class GtwMinimapManager implements MinimapManager {
 
     @SubscribeEvent
     public void onKeyInput(KeyInputEvent event) {
+        if (!allowedToDisplay) return;
         if (showMinimaps.isPressed()) {
 
             setActive(!active);
@@ -150,9 +151,9 @@ public class GtwMinimapManager implements MinimapManager {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            GtwLog.debug("Minimap visibility changed: " + active);
+            GtwLog.getLogger().debug("Minimap visibility changed: " + active);
         } else {
-            GtwLog.debug("Changing minimap activity is prohibited.");
+            GtwLog.getLogger().debug("Changing minimap activity is prohibited.");
             renderer.getDisplayData().setTemporaryData("notification", "&eChanging minimap activity is prohibited.", 40, false);
         }
 

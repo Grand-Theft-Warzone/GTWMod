@@ -1,0 +1,33 @@
+debug: true
+
+# Обозначает, можно ли отображать миникарту/глобальную карту.
+enable_map: true
+
+# Значения миникарт по умолчанию.
+default_minimap: "main_map"
+default_globalmap: "main_map"
+
+
+database:
+  type: "SQLite"
+  name: "storage"
+  location: "config/GTWMod/map/"
+
+maps:
+  main_map:                                              # название default зарезервированно.
+    image_id: "general_map"
+    attached_to: "all"  # "global" or "mini" or "all"
+    allow_local_marker: true
+    permission:                     # or
+      - "gtwmod.map.main_map"
+    coordinates:
+      top_right: "0;0;0"
+      down_right: "0;0;0"
+      down_left: "0;0;0"
+      top_left: "0;0;0"
+    color_background: "#000000"  # либо 0, если вы хотите отключить изменение цвета фона. В таком случае пиксели грани изображений будут растягиваться до предела.
+    color_borderReach: "#000000" # либо 0, если вы хотите отключить затемнение.
+    min_zoom: 180
+    max_zoom: 1000
+
+

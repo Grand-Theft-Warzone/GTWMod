@@ -7,7 +7,6 @@ import me.phoenixra.atumodcore.api.misc.AtumColor;
 @Getter
 public class ColorFilter {
 
-    @Setter
     private final AtumColor color;
     private final float opacity;
 

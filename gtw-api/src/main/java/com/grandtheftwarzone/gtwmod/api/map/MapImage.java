@@ -40,7 +40,7 @@ public class MapImage {
             this.imageWidth = image.getWidth();
             this.imageHeight = image.getHeight();
         } catch (IOException e) {
-            GtwLog.error(String.valueOf(e));
+            GtwLog.getLogger().error(String.valueOf(e));
         }
 
         this.pixelsPerBlockX = imageWidth / Math.abs(downRight.getX() - downLeft.getX());

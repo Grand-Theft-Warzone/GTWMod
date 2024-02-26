@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-@RegisterDisplayElement(templateId = "assets.gtwmod.textures.gui.minimap")
+@RegisterDisplayElement(templateId = "minimap")
 public class ElementMinimap extends BaseElement {
 
     private int zoomRadar, zoom = 250, debug;
@@ -59,7 +59,7 @@ public class ElementMinimap extends BaseElement {
             return;
         }
 
-        if (!GtwAPI.getInstance().getMapManager().getMinimapManager().isActive()) {return;}
+        if (!GtwAPI.getInstance().getMapManagerClient().getMinimapManager().isActive()) {return;}
 
         player.update(Minecraft.getMinecraft().player);
 
@@ -70,7 +70,7 @@ public class ElementMinimap extends BaseElement {
 
         // Extra filter
         radarPlayer.updateColorFilter();
-        ColorFilter filter = GtwAPI.getInstance().getMapManager().getMinimapManager().getColorFilter();
+        ColorFilter filter = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getColorFilter();
         RenderUtils.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), filter.getColor().toInt(), filter.getOpacity());
 
 
@@ -80,7 +80,7 @@ public class ElementMinimap extends BaseElement {
             drawText(getX() + (getWidth() / 4), (int) (getY() + getHeight() / 2.5), "NO SIGNAL", AtumColor.WHITE);
         }
 
-        colorFrame = GtwAPI.getInstance().getMapManager().getMinimapManager().getColorFrame();
+        colorFrame = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getColorFrame();
 
         RenderUtils.drawOutline(getX(), getY(), getWidth(), getHeight(), 2, colorFrame);
 
@@ -202,18 +202,18 @@ public class ElementMinimap extends BaseElement {
     @SneakyThrows
     private void init() {
 
-        minimap = GtwAPI.getInstance().getMapManager().getMinimapManager().getMinimapImage();
+        minimap = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getMinimapImage();
 
-//        this.minimapImage = GtwAPI.getInstance().getMapManager().getMinimapManager().getResourceLocation("minimapImage");
+//        this.minimapImage = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getResourceLocation("minimapImage");
         minimapImage = minimap.getImage();
 
-        this.radarImage = GtwAPI.getInstance().getMapManager().getMinimapManager().getResourceLocation("radarImage");
+        this.radarImage = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getResourceLocation("radarImage");
 
         player = new EntityLocation(Minecraft.getMinecraft().player);
         radarPlayer = new RadarPlayer(player, minimap, radarImage, coef, step);
 
         DisplayRenderer renderer = getElementOwner().getDisplayRenderer();
-        GtwAPI.getInstance().getMapManager().getMinimapManager().updateMinimapManager(renderer);
+        GtwAPI.getInstance().getMapManagerClient().getMinimapManager().updateMinimapManager(renderer);
 
         init = true;
     }

@@ -126,8 +126,8 @@ public class GuiIconExporter extends GuiScreen {
         }
     }
 
-    public String serializeNbtTag(NBTTagCompound tag) {
-        return tag.toString();
+    public String serializeNbtTag(NBTTagCompound attachedTo) {
+        return attachedTo.toString();
     }
 
     public Queue<IExportTask> createExportTasks() {

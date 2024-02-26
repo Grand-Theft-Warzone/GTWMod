@@ -15,7 +15,7 @@ import com.grandtheftwarzone.gtwmod.core.display.GtwFactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.core.display.GtwScreensManager;
 import com.grandtheftwarzone.gtwmod.core.display.loadingscreen.MainSplashRenderer;
 import com.grandtheftwarzone.gtwmod.core.display.loadingscreen.listener.ModLoadingListener;
-import com.grandtheftwarzone.gtwmod.core.map.GtwMapManager;
+import com.grandtheftwarzone.gtwmod.core.map.GtwMapManagerClient;
 import com.grandtheftwarzone.gtwmod.core.misc.GtwSoundsManager;
 import com.grandtheftwarzone.gtwmod.core.network.GtwNetworkAPI;
 import com.grandtheftwarzone.gtwmod.core.phone.core.GtwPhoneManager;
@@ -74,14 +74,18 @@ public class GTWModClient extends AtumMod {
     @Getter
     private GTWEmoji emoji;
     @Getter
-    private GtwMapManager map;
+    private GtwMapManagerClient map;
 
     public GTWModClient(){
         if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
             throw new RuntimeException("This mod is client only!");
         }
+
+        GtwLog.setLogger(getLogger());
+
         System.out.println(GtwAPI.getGtwAsciiArt());
         System.out.println("Initializing GTWMod[client]...");
+
         instance = this;
         GtwAPI.Instance.set(new GtwAPIClient());
         settings = getConfigManager().createLoadableConfig(
@@ -90,6 +94,7 @@ public class GTWModClient extends AtumMod {
                 ConfigType.JSON,
                 false
         );
+
         //services
         networkAPI = new GtwNetworkAPI(this);
         soundsManager = new GtwSoundsManager();
@@ -97,7 +102,7 @@ public class GTWModClient extends AtumMod {
         phoneManager = new GtwPhoneManager(this);
         emoji = new GTWEmoji();
 
-        map = new GtwMapManager(this);
+        map = new GtwMapManagerClient(this);
 
         //other
         playerData = new PlayerData();
@@ -117,7 +122,7 @@ public class GTWModClient extends AtumMod {
 
     @SubscribeEvent
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        GtwLog.info("Login to server/world registered");
+        GtwLog.getLogger().info("Login to server/world registered");
         emoji.generateEmojiList();
     }
 
