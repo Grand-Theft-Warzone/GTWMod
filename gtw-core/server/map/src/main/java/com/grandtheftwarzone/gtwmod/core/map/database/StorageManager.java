@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 public class StorageManager {
 
     private Database core;
-    private Config config;
+    private final Config config;
 
     public StorageManager(Config config) {
         this.config = config;
@@ -35,7 +35,7 @@ public class StorageManager {
         String location = cfg.getString("location");
         core = new SQLiteDatabase(GtwAPI.getInstance().getGtwMod(), name, location);
 
-        if (core.checkConnection()) {
+        if (core.checkConnection()) { //@TODO         optimize with String.format
             GtwLog.getLogger().info(StringUtils.formatMinecraftColors("&aDatabase successfully established connection :) &7(Type: SQLite)"));
 
             if (!core.existsTable("player") || !core.existsTable("playerData") || core.existsTable("StaticMarker")) {
@@ -75,18 +75,20 @@ public class StorageManager {
 
 
     public @NotNull PlayerData getPlayerData(UUID uuid) {
-        String query = "SELECT * FROM `player` WHERE UUID = '" +uuid+"';";
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT * FROM `player` WHERE UUID = '").append(uuid).append("';");
 
         boolean found = false;
-        ResultSet result = core.select(query);
+        ResultSet result = core.select(query.toString());
 
-        try {
+        try { //@TODO         optimize with String.format
             if (!result.next()) {
-                query = "insert into\n" +
-                        "  `player` (`UUID`, `global_id`, `minimap_id`, `show_map`)\n" +
-                        "values\n" +
-                        "  ('" +uuid+ "', 'default', 'default', '1');";
-                core.execute(query);
+                query = new StringBuilder();
+                query.append("insert into").append(
+                        "  `player` (`UUID`, `global_id`, `minimap_id`, `show_map`)").append(
+                        "values").append(
+                        "  ('").append(uuid).append("', 'default', 'default', '1');");
+                core.execute(query.toString());
                 return new PlayerData(uuid, "default", "default", true);
             }
 
@@ -104,9 +106,9 @@ public class StorageManager {
     }
 
     public @Nullable PlayerHudData getPlayerHudData(UUID uuid) {
-        String query = "SELECT * FROM `playerHud` WHERE UUID = '" +uuid+"';";
+        StringBuilder query = new StringBuilder("SELECT * FROM `playerHud` WHERE UUID = '").append(uuid).append("';");
 
-        ResultSet result = core.select(query);
+        ResultSet result = core.select(query.toString());
         if (result==null) {
             return null;
         }
@@ -129,9 +131,9 @@ public class StorageManager {
     }
 
     public @Nullable StaticMarker getStaticMarker(int id) {
-        String query = "SELECT * FROM `StaticMarker` WHERE id = '" +id+"';";
+        StringBuilder query = new StringBuilder("SELECT * FROM `StaticMarker` WHERE id = '").append(id).append("';");
 
-        ResultSet result = core.select(query);
+        ResultSet result = core.select(query.toString());
         if (result==null) {
             return null;
         }
@@ -141,7 +143,7 @@ public class StorageManager {
                 return null;
             }
 
-            Integer tab_id = result.getInt("id");
+            int tab_id = result.getInt("id");
             String table_zoom = result.getString("name");
             String table_lore = result.getString("lore");
             String table_mapId = result.getString("lore");
@@ -160,9 +162,9 @@ public class StorageManager {
 
     public @Nullable StaticMarker getStaticMarker(MapLocation location) {
         String cord = location.toString();
-        String query = "SELECT * FROM `StaticMarker` WHERE cord = '" +cord+"';";
+        StringBuilder query = new StringBuilder("SELECT * FROM `StaticMarker` WHERE cord = '").append(cord).append("';");
 
-        ResultSet result = core.select(query);
+        ResultSet result = core.select(query.toString());
         if (result==null) {
             return null;
         }
@@ -172,7 +174,7 @@ public class StorageManager {
                 return null;
             }
 
-            Integer tab_id = result.getInt("id");
+            int tab_id = result.getInt("id");
             String table_zoom = result.getString("name");
             String table_lore = result.getString("lore");
             String table_mapId = result.getString("lore");
@@ -189,9 +191,33 @@ public class StorageManager {
         return null;
     }
 
+    public 
+    void addStaticMarker(StaticMarker marker) {
+        //@TODO         optimize with String.format
+        StringBuilder query = new StringBuilder("insert into").append(
+                "  `StaticMarker` (").append(
+                "    `cord`,").append(
+                "    `icon_id`,").append(
+                "    `id`,").append(
+                "    `lore`,").append(
+                "    `map_id`,").append(
+                "    `name`,").append(
+                "    `permission`").append(
+                "  )\n").append(
+                "values\n").append(
+                "  (").append("    '").append(marker.getCord().toString()).append("',\n").append("    '").append(marker.getIconId()).append("',\n").append("    '").append(marker.getId()).append("',\n").append("    '").append(marker.getLore()).append("',\n").append("    '").append(marker.getMapId()).append("',\n").append("    '").append(marker.getName()).append("',\n").append("    '").append(marker.getPermissionOfString()).append("'\n").append("  );");
+
+        core.executeUpdate(query.toString(), true);
+    }
+
+    public void removeStaticMarker(int id) {
+        StringBuilder query = new StringBuilder("DELETE FROM StaticMarker WHERE id = '").append(id).append("';");
+        core.executeUpdate(query.toString(), true);
+    }
+
     public void editPlayerData(UUID uuid, @NotNull PlayerData newPlayerData) {
 
-
+        //@TODO         optimize with String.format
         StringBuilder query = new StringBuilder("UPDATE `playerData` SET show_map '").append(newPlayerData.getGlobalId()).append("' ");
         if (newPlayerData.getMinimapId() != null) {
             query.append(", minimap_id '").append(newPlayerData.getMinimapId()).append("' ");
@@ -204,6 +230,5 @@ public class StorageManager {
         core.executeUpdate(query.toString(), true);
 
     }
-
 
 }

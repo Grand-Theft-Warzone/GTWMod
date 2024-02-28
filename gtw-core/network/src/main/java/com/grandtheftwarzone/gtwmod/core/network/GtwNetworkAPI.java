@@ -13,7 +13,11 @@ import com.grandtheftwarzone.gtwmod.core.network.impl.gui.PacketFactoryGUI;
 import com.grandtheftwarzone.gtwmod.core.network.impl.gui.PacketGUIAction;
 import com.grandtheftwarzone.gtwmod.core.network.impl.gui.PacketHandlerFactoryGUI;
 import com.grandtheftwarzone.gtwmod.core.network.impl.gui.PacketHandlerGUIAction;
+import com.grandtheftwarzone.gtwmod.core.network.impl.minimap.PacketClientHandlerRequestMap;
+import com.grandtheftwarzone.gtwmod.core.network.impl.minimap.PacketRequestMap;
+import com.grandtheftwarzone.gtwmod.core.network.impl.minimap.PacketServerHandlerRequestMap;
 import lombok.Getter;
+import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.network.NetworkManager;
 import me.phoenixra.atumodcore.api.service.AtumModService;
@@ -43,6 +47,10 @@ public class GtwNetworkAPI implements NetworkAPI, AtumModService {
             //GUI
             atumNetwork.registerMessage(PacketHandlerFactoryGUI.class, PacketFactoryGUI.class, Side.CLIENT);
             atumNetwork.registerMessage(PacketHandlerGUIAction.class, PacketGUIAction.class, Side.SERVER);
+
+            // MAP
+            atumNetwork.registerMessage(PacketClientHandlerRequestMap.class, PacketRequestMap.class, Side.CLIENT);
+            atumNetwork.registerMessage(PacketServerHandlerRequestMap.class, PacketRequestMap.class, Side.SERVER);
         }
     }
 
@@ -98,6 +106,11 @@ public class GtwNetworkAPI implements NetworkAPI, AtumModService {
 
     public void addGuiActionPacketConsumer(@NotNull Consumer<String> consumer){
         PacketHandlerGUIAction.addPacketConsumer(consumer);
+    }
+
+    @Override
+    public void sendSRequest(Config config) {
+        atumNetwork.sendToServer(new PacketRequestMap(config));
     }
 
 

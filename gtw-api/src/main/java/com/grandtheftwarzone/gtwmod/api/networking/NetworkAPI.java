@@ -3,6 +3,7 @@ package com.grandtheftwarzone.gtwmod.api.networking;
 import com.grandtheftwarzone.gtwmod.api.gui.GuiAction;
 import com.grandtheftwarzone.gtwmod.api.player.NotificationRequest;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
+import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumodcore.api.network.NetworkManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -77,4 +78,7 @@ public interface NetworkAPI {
     @SideOnly(Side.SERVER)
     void addGuiActionPacketConsumer(Consumer<String> consumer);
 
+
+
+    void sendSRequest(Config config);
 }

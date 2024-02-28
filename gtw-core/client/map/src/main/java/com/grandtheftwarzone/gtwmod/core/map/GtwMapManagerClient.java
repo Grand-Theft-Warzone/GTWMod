@@ -1,12 +1,15 @@
 package com.grandtheftwarzone.gtwmod.core.map;
 
 
+import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.MapManagerClient;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.GtwGlobalmapManager;
 import com.grandtheftwarzone.gtwmod.core.map.minimap.GtwMinimapManager;
 import lombok.Getter;
+import me.phoenixra.atumconfig.api.config.Config;
+import me.phoenixra.atumconfig.api.config.ConfigType;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.service.AtumModService;
 import net.minecraft.util.ResourceLocation;
@@ -15,6 +18,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
 
 
 public class GtwMapManagerClient implements AtumModService, MapManagerClient {
@@ -63,6 +68,14 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
 
         // Отправляем запросы на данные и т.П.
         displayMiniMap();
+
+        // -------------------
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("event", "getYAIZA");
+        Config config = GtwAPI.getInstance().getGtwMod().getConfigManager().createConfig(hashMap, ConfigType.JSON);
+
+        GtwAPI.getInstance().getNetworkAPI().sendSRequest(config);
+
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.grandtheftwarzone.gtwmod.server.proxy.CommonProxy;
 import lombok.Getter;
 import lombok.Setter;
 import me.phoenixra.atumodcore.api.AtumMod;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -40,6 +41,9 @@ public class GTWModServer extends AtumMod {
 
     @Getter
     private GtwServerMapManager map;
+
+    @Getter
+    private MinecraftServer server;
 
 
     public GTWModServer(){
@@ -96,6 +100,7 @@ public class GTWModServer extends AtumMod {
 
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
+        this.server = event.getServer();
         notifyModServices(event);
     }
 

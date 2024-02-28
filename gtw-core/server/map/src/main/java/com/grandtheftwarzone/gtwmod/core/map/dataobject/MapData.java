@@ -16,7 +16,7 @@ public class MapData {
     private String imageId;
     private String attachedTo;
     private boolean allowLocalMarker;
-    private List<String> permission;
+    private List<String> permissions;
 
     private MapLocation topRight;
     private MapLocation downRiht;
@@ -41,7 +41,7 @@ public class MapData {
         this.imageId = imageId;
         this.attachedTo = attachedTo;
         this.allowLocalMarker = allowLocalMarker;
-        this.permission = permission;
+        this.permissions = permission;
 
         this.topRight = topRight;
         this.downRiht = downRiht;

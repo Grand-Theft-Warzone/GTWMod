@@ -17,4 +17,12 @@ public class StaticMarker {
     private MapLocation cord;
     private String iconId;
     private String[] permission;
+
+    public String getPermissionOfString() {
+        StringBuilder permissions = new StringBuilder();
+        for (String perm : this.permission) {
+            permissions.append(perm).append(";");
+        }
+        return permissions.toString();
+    }
 }
