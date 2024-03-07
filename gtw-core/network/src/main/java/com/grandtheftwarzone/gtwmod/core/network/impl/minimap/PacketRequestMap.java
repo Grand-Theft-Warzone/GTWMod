@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 public class PacketRequestMap implements IMessage {
 
 
-    Config config;
+    protected Config config;
 
     @Override
     public void toBytes(ByteBuf buf) {
@@ -33,10 +33,10 @@ public class PacketRequestMap implements IMessage {
         int size = buf.readInt();
         byte[] bytes = new byte[size];
         buf.readBytes(bytes);
-        this.config = (Config) GtwAPI.getInstance().getGtwMod().getConfigManager()
+        this.config = GtwAPI.getInstance().getGtwMod().getConfigManager()
                 .createConfigFromString(
                         new String(bytes, StandardCharsets.UTF_8),
-                        ConfigType.JSON
+                        ConfigType.YAML
                 );
 
     }

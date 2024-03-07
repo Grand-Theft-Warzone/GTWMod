@@ -5,6 +5,7 @@ import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.map.MapManagerServer;
 import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumers;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
+import com.grandtheftwarzone.gtwmod.api.player.NotificationRequest;
 import com.grandtheftwarzone.gtwmod.core.map.database.StorageManager;
 import com.grandtheftwarzone.gtwmod.core.map.dataobject.RestrictionsData;
 import com.grandtheftwarzone.gtwmod.core.map.dataobject.MapData;
@@ -16,8 +17,12 @@ import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
 import me.phoenixra.atumodcore.api.service.AtumModService;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.event.ClientChatEvent;
+import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.server.permission.PermissionAPI;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,7 +60,6 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
     public GtwServerMapManager(AtumMod atumMod) {
         atumMod.provideModService(this);
         this.mapConsumers = new MapConsumers();
-        this.processConsumer = new ProcessConsumer();
     }
 
     public void initConfig() {
@@ -135,6 +139,22 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
         if(fmlEvent instanceof FMLInitializationEvent) {
             initConfig();
             this.db = new StorageManager(config);
+            this.processConsumer = new ProcessConsumer();
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerChat(ServerChatEvent event) {
+        if (event.getMessage().equalsIgnoreCase("qq")) {
+            System.out.println("ВВВ");
+//            HashMap<String, String> hashMap = new HashMap<>();
+//            hashMap.put("event", "getYAIZA");
+//            Config configs = GtwAPI.getInstance().getGtwMod().getConfigManager().createConfig(hashMap, ConfigType.);
+
+//            GtwAPI.getInstance().getNetworkAPI().sendSRequest(this.config, event.getPlayer());
+
+            GtwAPI.getInstance().getNetworkAPI().sendTest("Балабол", event.getPlayer());
+            GtwAPI.getInstance().getNetworkAPI().sendNotification(new NotificationRequest("hi", 123), UUID.fromString("120abf41-c686-3a55-8362-5f06e763dbbf"));
         }
     }
 

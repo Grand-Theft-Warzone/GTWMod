@@ -2,6 +2,7 @@ package com.grandtheftwarzone.gtwmod.core.map;
 
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
+import com.grandtheftwarzone.gtwmod.api.gui.GuiAction;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.MapManagerClient;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
@@ -20,6 +21,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 
 public class GtwMapManagerClient implements AtumModService, MapManagerClient {
@@ -74,7 +76,10 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
         hashMap.put("event", "getYAIZA");
         Config config = GtwAPI.getInstance().getGtwMod().getConfigManager().createConfig(hashMap, ConfigType.JSON);
 
-        GtwAPI.getInstance().getNetworkAPI().sendSRequest(config);
+//        GtwAPI.getInstance().getNetworkAPI().sendSRequest(config);
+        GtwAPI.getInstance().getNetworkAPI().sendTestServer("Феникс устаал");
+        GtwAPI.getInstance().getNetworkAPI().sendPacketGuiAction(UUID.randomUUID(), 123, GuiAction.FACTORY_CLAIM);
+        System.out.println("<kf<kf<kf");
 
     }
 

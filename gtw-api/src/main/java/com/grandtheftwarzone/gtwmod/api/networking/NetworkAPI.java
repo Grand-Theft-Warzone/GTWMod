@@ -5,6 +5,7 @@ import com.grandtheftwarzone.gtwmod.api.player.NotificationRequest;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumodcore.api.network.NetworkManager;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -80,5 +81,9 @@ public interface NetworkAPI {
 
 
 
-    void sendSRequest(Config config);
+    void sendSRequest(Config config, EntityPlayerMP player);
+
+    void sendTest(String config, EntityPlayerMP player);
+
+    void sendTestServer(String config);
 }

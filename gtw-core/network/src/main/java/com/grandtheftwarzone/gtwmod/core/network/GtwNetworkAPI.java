@@ -13,9 +13,7 @@ import com.grandtheftwarzone.gtwmod.core.network.impl.gui.PacketFactoryGUI;
 import com.grandtheftwarzone.gtwmod.core.network.impl.gui.PacketGUIAction;
 import com.grandtheftwarzone.gtwmod.core.network.impl.gui.PacketHandlerFactoryGUI;
 import com.grandtheftwarzone.gtwmod.core.network.impl.gui.PacketHandlerGUIAction;
-import com.grandtheftwarzone.gtwmod.core.network.impl.minimap.PacketClientHandlerRequestMap;
-import com.grandtheftwarzone.gtwmod.core.network.impl.minimap.PacketRequestMap;
-import com.grandtheftwarzone.gtwmod.core.network.impl.minimap.PacketServerHandlerRequestMap;
+import com.grandtheftwarzone.gtwmod.core.network.impl.minimap.*;
 import lombok.Getter;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumodcore.api.AtumMod;
@@ -41,6 +39,7 @@ public class GtwNetworkAPI implements NetworkAPI, AtumModService {
     @Override
     public void handleFmlEvent(@NotNull FMLEvent fmlEvent) {
         if(fmlEvent instanceof FMLInitializationEvent){
+            System.out.println("PRIVET MIR");
             atumNetwork.registerMessage(PacketHandlerPlayerData.class, PacketPlayerData.class, Side.CLIENT);
             atumNetwork.registerMessage(PacketHandlerNotification.class, PacketNotification.class, Side.CLIENT);
 
@@ -49,10 +48,34 @@ public class GtwNetworkAPI implements NetworkAPI, AtumModService {
             atumNetwork.registerMessage(PacketHandlerGUIAction.class, PacketGUIAction.class, Side.SERVER);
 
             // MAP
-            atumNetwork.registerMessage(PacketClientHandlerRequestMap.class, PacketRequestMap.class, Side.CLIENT);
-            atumNetwork.registerMessage(PacketServerHandlerRequestMap.class, PacketRequestMap.class, Side.SERVER);
+             atumNetwork.registerMessage(PacketClientHandlerRequestMap.class, PacketRequestMap.class, Side.CLIENT);
+             atumNetwork.registerMessage(PacketServerHandlerRequestMap.class, PacketRequestMap.class, Side.SERVER);
+
+
+//             atumNetwork.registerMessage(PacketTestHandlerClinet.class, PacketTest.class, Side.CLIENT);
+             atumNetwork.registerMessage(PacketTestHandlerServer.class, PacketTest.class, Side.SERVER);
+            System.out.println("POKA MIR");
+
         }
     }
+
+
+
+    public void sendTest(String str, EntityPlayerMP player) {
+        System.out.println("Отправка клиенту...");
+        atumNetwork.sendTo(new PacketTest(
+                str
+        ), player);
+    }
+
+    public void sendTestServer(String str) {
+        System.out.println("Отправка cерверу...");
+        atumNetwork.sendToServer(new PacketTest(
+                str
+        ));
+    }
+
+
 
     public void sendPlayerData(@NotNull PlayerData pd, @NotNull UUID playerUUID){
         EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance()
@@ -109,8 +132,8 @@ public class GtwNetworkAPI implements NetworkAPI, AtumModService {
     }
 
     @Override
-    public void sendSRequest(Config config) {
-        atumNetwork.sendToServer(new PacketRequestMap(config));
+    public void sendSRequest(Config config, EntityPlayerMP player) {
+        atumNetwork.sendTo(new PacketRequestMap(config), player);
     }
 
 
