@@ -1,4 +1,4 @@
-package com.grandtheftwarzone.gtwmod.core.network.impl.minimap;
+package com.grandtheftwarzone.gtwmod.core.network.impl;
 
 import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;

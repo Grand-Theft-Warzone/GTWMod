@@ -16,6 +16,7 @@ public class MapLocation {
     public MapLocation(double x, double y) {
         this.x = x;
         this.y = y;
+        this.z = 0;
     }
 
     public MapLocation(double x, double y, double z) {

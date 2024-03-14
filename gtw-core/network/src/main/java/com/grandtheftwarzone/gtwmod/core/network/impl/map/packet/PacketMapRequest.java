@@ -1,4 +1,4 @@
-package com.grandtheftwarzone.gtwmod.core.network.impl.minimap;
+package com.grandtheftwarzone.gtwmod.core.network.impl.map.packet;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import io.netty.buffer.ByteBuf;
@@ -14,14 +14,15 @@ import java.nio.charset.StandardCharsets;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor
-public class PacketRequestMap implements IMessage {
+public class PacketMapRequest implements IMessage {
 
 
     protected Config config;
 
     @Override
     public void toBytes(ByteBuf buf) {
-        String text = this.config.toString();
+        String text = this.config.toPlaintext();
+        System.out.println("toBytes: " + text);
         byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
         buf.writeInt(bytes.length);
         buf.writeBytes(bytes);
@@ -30,15 +31,12 @@ public class PacketRequestMap implements IMessage {
     @Override
     public void fromBytes(ByteBuf buf) {
 
-        int size = buf.readInt();
-        byte[] bytes = new byte[size];
+        int textSize = buf.readInt();
+        byte[] bytes = new byte[textSize];
         buf.readBytes(bytes);
-        this.config = GtwAPI.getInstance().getGtwMod().getConfigManager()
-                .createConfigFromString(
-                        new String(bytes, StandardCharsets.UTF_8),
-                        ConfigType.YAML
-                );
-
+        String text = new String(bytes, StandardCharsets.UTF_8);
+        System.out.println("fromBytes: " + text);
+        this.config = GtwAPI.getInstance().getGtwMod().getConfigManager().createConfigFromString(text, ConfigType.JSON);
     }
 
 }

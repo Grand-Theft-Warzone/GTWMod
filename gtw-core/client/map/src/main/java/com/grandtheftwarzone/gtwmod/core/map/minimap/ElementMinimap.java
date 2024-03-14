@@ -38,7 +38,6 @@ public class ElementMinimap extends BaseElement {
     private EntityLocation player;
     private RadarPlayer radarPlayer;
     private AtumColor colorFrame;
-    private boolean init = false;
 
 
     public ElementMinimap(@NotNull AtumMod atumMod, @Nullable DisplayCanvas elementOwner) {
@@ -54,6 +53,7 @@ public class ElementMinimap extends BaseElement {
                 PlaceholderContext.of(getElementOwner().getDisplayRenderer())
         )));
 
+        boolean init = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().isInitElementDraw();
         if (!init) {
             init();
             return;
@@ -202,9 +202,18 @@ public class ElementMinimap extends BaseElement {
     @SneakyThrows
     private void init() {
 
+        // @TODO remove
+        if (!GtwAPI.getInstance().getMapManagerClient().getMinimapManager().isAllowedToDisplay()) {
+            return;
+        }
+
         minimap = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getMinimapImage();
 
 //        this.minimapImage = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getResourceLocation("minimapImage");
+        if (minimap == null) {
+            return;
+        }
+
         minimapImage = minimap.getImage();
 
         this.radarImage = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getResourceLocation("radarImage");
@@ -215,7 +224,7 @@ public class ElementMinimap extends BaseElement {
         DisplayRenderer renderer = getElementOwner().getDisplayRenderer();
         GtwAPI.getInstance().getMapManagerClient().getMinimapManager().updateMinimapManager(renderer);
 
-        init = true;
+         GtwAPI.getInstance().getMapManagerClient().getMinimapManager().setInitElementDraw(true);
     }
 
 
@@ -226,7 +235,7 @@ public class ElementMinimap extends BaseElement {
         coef = Math.abs(config.getInt("coef"));
         step = Math.abs(config.getInt("step"));
         zoomRadar = (config.getInt("zoomRadar") / 2);
-        init = false;
+        GtwAPI.getInstance().getMapManagerClient().getMinimapManager().setInitElementDraw(false);
     }
 
 

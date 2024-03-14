@@ -9,7 +9,10 @@ import lombok.Getter;
 import lombok.Setter;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.config.LoadableConfig;
+import me.phoenixra.atumconfig.api.placeholders.context.PlaceholderContext;
+import me.phoenixra.atumconfig.api.utils.StringUtils;
 import me.phoenixra.atumodcore.api.display.DisplayElement;
+import me.phoenixra.atumodcore.api.display.DisplayManager;
 import me.phoenixra.atumodcore.api.display.DisplayRenderer;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
 import net.minecraft.client.settings.KeyBinding;
@@ -43,6 +46,9 @@ public class GtwMinimapManager implements MinimapManager {
 
     private boolean saveZoom = true;
 
+    @Getter
+    private int minZoom = 100, maxZoom = 1000;
+
     private boolean active = false;
 
     @Getter @Setter
@@ -61,29 +67,25 @@ public class GtwMinimapManager implements MinimapManager {
     private ColorFilter colorFilter = new ColorFilter(AtumColor.RED, 0);
 
     private MapImage minimapData;
+
+    @Getter @Setter
+    private boolean initElementDraw = false;
     private ResourceLocation minimapImage;
     private ResourceLocation radarImage;
 
 
 
     public GtwMinimapManager(){
-
         EVENT_BUS.register(this);
-
     }
 
-    public void setAllowedToDisplay(boolean draw) {
-        DisplayRenderer render = GtwAPI.getInstance().getGtwMod().getDisplayManager().getHUDCanvas()
-                .getDisplayRenderer();
-        if(render==null) return;
-        render.getDisplayData().setElementEnabled("minimap",true);
-        this.allowedToDisplay = draw;
-    }
+
 
     public GtwMinimapManager(MapImage minimapData, ResourceLocation radarImage){
         this.minimapData = minimapData;
         this.minimapImage = minimapData.getImage();
         this.radarImage = radarImage;
+
 
         EVENT_BUS.register(this);
     }
@@ -93,7 +95,8 @@ public class GtwMinimapManager implements MinimapManager {
         this.minimapImage = minimapData.getImage();
         this.radarImage = radarImage;
 
-        setAllowedToDisplay(draw);
+        this.initElementDraw = false;
+        setAllowedToDisplay(draw, true);
     }
 
     public void updateData(MapImage minimapData, ResourceLocation radarImage) {
@@ -101,6 +104,8 @@ public class GtwMinimapManager implements MinimapManager {
         this.minimapImage = minimapData.getImage();
         this.radarImage = radarImage;
 
+        this.initElementDraw = false;
+        setAllowedToDisplay(this.allowedToDisplay, true);
     }
 
 
@@ -216,6 +221,49 @@ public class GtwMinimapManager implements MinimapManager {
     @Override
     public void setDefaultColorFrame(AtumColor color) {
         this.defaultColorFrame = color;
+    }
+
+
+    public void updateZoomLimits(int min, int max) {
+
+        DisplayRenderer renderer = GtwAPI.getInstance().getGtwMod().getDisplayManager().getHUDCanvas().getDisplayRenderer();
+        if (renderer == null) {
+            System.out.println("НЕ ДАЛА(((");
+        }
+        DisplayElement element = renderer != null ? renderer.getBaseCanvas().getElement("minimap") : null;
+        if (element == null) {
+            System.out.println("NULLLLLLLLLLLL");
+        }
+
+        System.out.println(min + " " + max);
+//        DisplayManager
+        int zoom = Integer.parseInt(renderer.getDisplayData().getDataOrDefault("zoom_minimap", "250"));
+        if (zoom < min) {
+            element.performAction("zoom_minimap", "update_zoom;" + min);
+        }
+        if (zoom > max) {
+            element.performAction("zoom_minimap", "update_zoom;" + max);
+        }
+        minZoom = min;
+        maxZoom = max;
+    }
+
+
+    /**
+     * Изменяет переменную allowedToDisplay и статус отображения.
+     * @param draw значение переменной.
+     * @param quietChange изменять ли значение переменной после изменения значения?
+     */
+    public void setAllowedToDisplay(Boolean draw, Boolean quietChange) {
+        System.out.println(draw);
+        if (draw == null) {System.out.println("Draw is null");}
+        DisplayRenderer render = GtwAPI.getInstance().getGtwMod().getDisplayManager().getHUDCanvas()
+                .getDisplayRenderer();
+        if(render==null) return;
+        if (quietChange) {
+            render.getDisplayData().setElementEnabled("minimap", draw);
+        }
+        this.allowedToDisplay = draw;
     }
 
     @Override

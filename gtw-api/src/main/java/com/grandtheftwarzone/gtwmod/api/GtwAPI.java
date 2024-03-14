@@ -35,7 +35,6 @@ public interface GtwAPI {
     @NotNull NetworkAPI getNetworkAPI();
 
 
-
     /**
      * Get the sounds manager
      *

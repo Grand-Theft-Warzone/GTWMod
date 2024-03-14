@@ -3,13 +3,12 @@ package com.grandtheftwarzone.gtwmod.core.map;
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.map.MapManagerServer;
-import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumers;
+import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumersServer;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
-import com.grandtheftwarzone.gtwmod.api.player.NotificationRequest;
 import com.grandtheftwarzone.gtwmod.core.map.database.StorageManager;
-import com.grandtheftwarzone.gtwmod.core.map.dataobject.RestrictionsData;
-import com.grandtheftwarzone.gtwmod.core.map.dataobject.MapData;
-import com.grandtheftwarzone.gtwmod.core.map.dataobject.PlayerData;
+import com.grandtheftwarzone.gtwmod.api.map.data.RestrictionsData;
+import com.grandtheftwarzone.gtwmod.api.map.data.server.MapData;
+import com.grandtheftwarzone.gtwmod.api.map.data.server.PlayerMapData;
 import lombok.Getter;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.config.ConfigType;
@@ -17,12 +16,8 @@ import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
 import me.phoenixra.atumodcore.api.service.AtumModService;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.client.event.ClientChatEvent;
-import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.server.permission.PermissionAPI;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,9 +36,9 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
     private Config config;
 
     @Getter
-    private String defaultGlobalmap;
+    private String defaultGlobalmapId;
     @Getter
-    private String defaultMinimap;
+    private String defaultMinimapId;
     @Getter
     private boolean enableMap;
     @Getter
@@ -52,14 +47,14 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
     private StorageManager db;
 
     @Getter
-    private MapConsumers mapConsumers;
+    private MapConsumersServer mapConsumers;
 
     @Getter
     private ProcessConsumer processConsumer;
 
     public GtwServerMapManager(AtumMod atumMod) {
         atumMod.provideModService(this);
-        this.mapConsumers = new MapConsumers();
+        this.mapConsumers = new MapConsumersServer();
     }
 
     public void initConfig() {
@@ -72,23 +67,23 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
                 );
         debug = config.getBool("debug");
         if (debug) GtwLog.getLogger().info("[DEBUG Map] Start init map");
-        defaultGlobalmap = config.getString("default_globalmap");
-        defaultMinimap = config.getString("default_minimap");
-        enableMap = config.getBool("enableMap");
+        defaultGlobalmapId = config.getString("default_globalmap");
+        defaultMinimapId = config.getString("default_minimap");
+        enableMap = config.getBool("enable_map");
 
         Config mapSection = config.getSubsection("maps");
         for (String mapId : mapSection.getKeys(false)) {
             Config cfg = mapSection.getSubsection(mapId);
             String imageId = cfg.getString("image_id");
-            String attachedTo = cfg.getString("attachedTo");
+            String attachedTo = cfg.getString("attached_to");
             boolean allowLocalMarker = cfg.getBool("allow_local_marker");
 
             List<String> perm = (List<String>) cfg.get("permission");
 
             MapLocation topRight = new MapLocation(cfg.getSubsection("coordinates").getString("top_right"));
             MapLocation downRight = new MapLocation(cfg.getSubsection("coordinates").getString("down_right"));
-            MapLocation downLeft = new MapLocation(cfg.getSubsection("coordinates").getString("down_right"));
-            MapLocation topLeft = new MapLocation(cfg.getSubsection("coordinates").getString("top_right"));
+            MapLocation downLeft = new MapLocation(cfg.getSubsection("coordinates").getString("down_left"));
+            MapLocation topLeft = new MapLocation(cfg.getSubsection("coordinates").getString("top_left"));
 
             String colorBackgroundStr = cfg.getString("color_background");
             String colorBorderReachStr = cfg.getString("colorBorderReach");
@@ -143,32 +138,25 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
         }
     }
 
-    @SubscribeEvent
-    public void onPlayerChat(ServerChatEvent event) {
-        if (event.getMessage().equalsIgnoreCase("qq")) {
-            System.out.println("ВВВ");
-//            HashMap<String, String> hashMap = new HashMap<>();
-//            hashMap.put("event", "getYAIZA");
-//            Config configs = GtwAPI.getInstance().getGtwMod().getConfigManager().createConfig(hashMap, ConfigType.);
-
-//            GtwAPI.getInstance().getNetworkAPI().sendSRequest(this.config, event.getPlayer());
-
-            GtwAPI.getInstance().getNetworkAPI().sendTest("Балабол", event.getPlayer());
-            GtwAPI.getInstance().getNetworkAPI().sendNotification(new NotificationRequest("hi", 123), UUID.fromString("120abf41-c686-3a55-8362-5f06e763dbbf"));
-        }
-    }
+//    @SubscribeEvent
+//    public void onPlayerChat(ServerChatEvent event) {
+//        if (event.getMessage().equalsIgnoreCase("qq")) {
+//            GtwAPI.getInstance().getNetworkAPI().sendNotification(new NotificationRequest("hi", 123), UUID.fromString("120abf41-c686-3a55-8362-5f06e763dbbf"));
+//        }
+//    }
 
     // -------------------
 
     private boolean checkAllowDisplay(UUID uuid) {
         return db.getPlayerData(uuid).isAllowMapDisplay() && enableMap;
     }
-    private boolean checkAllowDisplay(PlayerData playerData) {
+    private boolean checkAllowDisplay(PlayerMapData playerData) {
         return playerData.isAllowMapDisplay() && enableMap;
     }
 
     private boolean checkPermissions(UUID uuid, MapData mapData, String attachedTo) {
-        if (!attachedTo.equals(mapData.getAttachedTo())) {
+        if ( !(mapData.getAttachedTo().equals("all") || attachedTo.equals(mapData.getAttachedTo()))) {
+            System.out.println(attachedTo + " " + mapData.getAttachedTo());
             return false;
         }
         EntityPlayer player = GtwAPI.getInstance().getServer().getEntityWorld().getPlayerEntityByUUID(uuid);
@@ -179,44 +167,43 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
 
         for (String perm : mapData.getPermissions()) {
             if (!PermissionAPI.hasPermission(player, perm)) {
+                System.out.println("право " + perm + " " + PermissionAPI.hasPermission(player, perm));
+                System.out.println("Право " + perm + " не обнаружено.");
                 return false;
             }
         }
         return true;
     }
 
-    private @Nullable MapData getMapData(UUID uuid, String attachedTo, String mapId) {
+    @Nullable
+    public MapData getMapData(UUID uuid, String attachedTo, @Nullable String mapId) {
         MapData mapData = getMaps().getOrDefault(mapId, null);
 
         if (mapData == null) {
+            System.out.println("BBBBBBBBBBBBBBBBBBBBBBBB");
             return null;
         }
 
         if (!checkAllowDisplay(uuid)) {
+            System.out.println("AAAAAAAAAAAAAAAAAAAa");
             return null;
         }
         if (!checkPermissions(uuid, mapData, attachedTo)) {
+            GtwLog.getLogger().info("! At the user " + GtwAPI.getInstance().getServer().getPlayerList().getPlayerByUUID(uuid).getName() + "no rights to the card " + mapId);
             return null;
         }
 
         return mapData;
     }
 
-    private @NotNull PlayerData getPlayerData(UUID uuid) {
-        PlayerData playerData = db.getPlayerData(uuid);
-        if (playerData.getMinimapId().equals("default")) {
-            playerData.setMinimapId(defaultMinimap);
-        }
-        if (playerData.getGlobalId().equals("default")) {
-            playerData.setGlobalId(defaultGlobalmap);
-        }
-        return playerData;
+    public PlayerMapData getPlayerData(UUID uuid) {
+        return db.getPlayerData(uuid);
     }
 
-    private RestrictionsData getRestrictionsData(UUID uuid) {
-        PlayerData playerData = getPlayerData(uuid);
+    public RestrictionsData getRestrictionsData(UUID uuid) {
+        PlayerMapData playerData = getPlayerData(uuid);
         MapData minimapData = maps.get(playerData.getMinimapId());
-        return new RestrictionsData(uuid, checkAllowDisplay(playerData), minimapData.getMinZoom(), minimapData.getDefaultMaxZoom());
+        return new RestrictionsData(uuid, checkAllowDisplay(playerData), minimapData.isAllowLocalMarker(), minimapData.getMinZoom(), minimapData.getDefaultMaxZoom());
     }
 
     // -------------------

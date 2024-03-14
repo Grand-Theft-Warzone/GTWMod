@@ -25,7 +25,6 @@ public class GtwAPIServer implements GtwAPI {
         return GTWModServer.instance.getNetworkAPI();
     }
 
-
     @Override
     public @NotNull SoundsManager getSoundsManager() {
         throw new RuntimeException("Client side only!");

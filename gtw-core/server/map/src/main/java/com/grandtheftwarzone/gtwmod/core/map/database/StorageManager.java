@@ -3,8 +3,7 @@ package com.grandtheftwarzone.gtwmod.core.map.database;
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
-import com.grandtheftwarzone.gtwmod.core.map.GtwServerMapManager;
-import com.grandtheftwarzone.gtwmod.core.map.dataobject.PlayerData;
+import com.grandtheftwarzone.gtwmod.api.map.data.server.PlayerMapData;
 import com.grandtheftwarzone.gtwmod.core.map.dataobject.PlayerHudData;
 import com.grandtheftwarzone.gtwmod.core.map.dataobject.StaticMarker;
 import me.phoenixra.atumconfig.api.config.Config;
@@ -17,7 +16,6 @@ import javax.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 public class StorageManager {
 
@@ -74,7 +72,7 @@ public class StorageManager {
     }
 
 
-    public @NotNull PlayerData getPlayerData(UUID uuid) {
+    public @NotNull PlayerMapData getPlayerData(UUID uuid) {
         StringBuilder query = new StringBuilder();
         query.append("SELECT * FROM `player` WHERE UUID = '").append(uuid).append("';");
 
@@ -89,7 +87,7 @@ public class StorageManager {
                         "values").append(
                         "  ('").append(uuid).append("', 'default', 'default', '1');");
                 core.execute(query.toString());
-                return new PlayerData(uuid, "default", "default", true);
+                return new PlayerMapData(uuid, "default", "default", true);
             }
 
             UUID tab_uuid = UUID.fromString(result.getString("UUID"));
@@ -97,7 +95,7 @@ public class StorageManager {
             String table_globalId = result.getString("global_id");
             boolean table_showMap = result.getBoolean("show_map");
 
-            return new PlayerData(tab_uuid, table_minimapId, table_globalId, table_showMap);
+            return new PlayerMapData(tab_uuid, table_minimapId, table_globalId, table_showMap);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -215,15 +213,15 @@ public class StorageManager {
         core.executeUpdate(query.toString(), true);
     }
 
-    public void editPlayerData(UUID uuid, @NotNull PlayerData newPlayerData) {
+    public void editPlayerData(UUID uuid, @NotNull PlayerMapData newPlayerData) {
 
         //@TODO         optimize with String.format
-        StringBuilder query = new StringBuilder("UPDATE `playerData` SET show_map '").append(newPlayerData.getGlobalId()).append("' ");
+        StringBuilder query = new StringBuilder("UPDATE `playerData` SET show_map '").append(newPlayerData.getGlobalmapId()).append("' ");
         if (newPlayerData.getMinimapId() != null) {
             query.append(", minimap_id '").append(newPlayerData.getMinimapId()).append("' ");
         }
-        if (newPlayerData.getGlobalId() != null) {
-            query.append(", globalmap_id '").append(newPlayerData.getGlobalId()).append("' ");
+        if (newPlayerData.getGlobalmapId() != null) {
+            query.append(", globalmap_id '").append(newPlayerData.getGlobalmapId()).append("' ");
         }
         query.append("WHERE `playerData`.`uuid` = '").append(uuid).append("'; ");
 

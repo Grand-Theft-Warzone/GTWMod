@@ -2,10 +2,14 @@ package com.grandtheftwarzone.gtwmod.core.map;
 
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
+import com.grandtheftwarzone.gtwmod.api.event.ClientConnectEvent;
 import com.grandtheftwarzone.gtwmod.api.gui.GuiAction;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.MapManagerClient;
+import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumersClient;
+import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumersServer;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
+import com.grandtheftwarzone.gtwmod.api.player.NotificationRequest;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.GtwGlobalmapManager;
 import com.grandtheftwarzone.gtwmod.core.map.minimap.GtwMinimapManager;
 import lombok.Getter;
@@ -13,10 +17,16 @@ import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.config.ConfigType;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.service.AtumModService;
+import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ClientChatEvent;
+import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLEvent;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,12 +43,18 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
     @Getter
     private GtwGlobalmapManager globalmapManager;
 
+    @Getter
+    private MapConsumersClient mapConsumers;
+
+    @Getter
+    private ProcessConsumer processConsumer;
 
 
     public GtwMapManagerClient(AtumMod atumMod) {
         atumMod.provideModService(this);
         this.minimapManager = new GtwMinimapManager();
         this.globalmapManager = new GtwGlobalmapManager();
+        this.mapConsumers = new MapConsumersClient();
     }
 
 
@@ -47,6 +63,7 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
     public void handleFmlEvent(@NotNull FMLEvent fmlEvent) {
         if(fmlEvent instanceof FMLPreInitializationEvent){
             minimapManager.onPreInit((FMLPreInitializationEvent) fmlEvent);
+            this.processConsumer = new ProcessConsumer();
         }
     }
 
@@ -65,23 +82,33 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
     }
 
     @SubscribeEvent
-    public void onPlayerJoin(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-        System.out.println("Уры! Словлен эвент захода на сервер.");
+    public void onConnectServer(ClientConnectEvent event) {
+        System.out.println("Получил статус Connect...");
 
         // Отправляем запросы на данные и т.П.
-        displayMiniMap();
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("event", "getStartData");
+        Config config = GtwAPI.getInstance().getGtwMod().getConfigManager().createConfig(hashMap, ConfigType.JSON);
+        GtwAPI.getInstance().getNetworkAPI().sendSRequest(config);
 
         // -------------------
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("event", "getYAIZA");
-        Config config = GtwAPI.getInstance().getGtwMod().getConfigManager().createConfig(hashMap, ConfigType.JSON);
 
-//        GtwAPI.getInstance().getNetworkAPI().sendSRequest(config);
-        GtwAPI.getInstance().getNetworkAPI().sendTestServer("Феникс устаал");
-        GtwAPI.getInstance().getNetworkAPI().sendPacketGuiAction(UUID.randomUUID(), 123, GuiAction.FACTORY_CLAIM);
-        System.out.println("<kf<kf<kf");
+//        displayMiniMap();
+
 
     }
+
+    @SubscribeEvent
+    public void onPlayerChat(ClientChatEvent event) {
+        if (event.getMessage().equalsIgnoreCase("bb")) {
+
+        System.out.println("БАЛАБОЛ ВЫПОЛНИЛСЯ ЧАТЭВЕНТ");
+            GtwAPI.getInstance().getNetworkAPI().sendTestServer("Балабол");
+//            GtwAPI.getInstance().getNetworkAPI().sendNotification(new NotificationRequest("hi", 123), UUID.fromString("120abf41-c686-3a55-8362-5f06e763dbbf"));
+        }
+    }
+
 
     @Override
     public void onRemove() {
@@ -92,4 +119,5 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
     public @NotNull String getId() {
         return "map";
     }
+
 }

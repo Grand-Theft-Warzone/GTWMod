@@ -1,6 +1,7 @@
-package com.grandtheftwarzone.gtwmod.core.map.dataobject;
+package com.grandtheftwarzone.gtwmod.api.map.data.server;
 
 
+import com.grandtheftwarzone.gtwmod.api.map.data.MapImageData;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import lombok.Getter;
 import lombok.Setter;
@@ -67,6 +68,21 @@ public class MapData {
 
     public MapData(String id, String imageId, String attachedTo, boolean allowLocalMarker, List<String> permission, MapLocation topRight, MapLocation downRiht, MapLocation downLeft, MapLocation topLeft, boolean background, AtumColor colorBackground, boolean boardReach, int minZoom, int maxZoom) {
         this(id, imageId, attachedTo, allowLocalMarker, permission, topRight, downRiht, downLeft, topLeft, background, colorBackground, boardReach, null, minZoom, maxZoom);
+    }
+
+    public MapImageData toMapImageData() {
+        AtumColor colorBackgroundP,  colorBoardReachP;
+        if (!background) {
+            colorBackgroundP = null;
+        } else {
+            colorBackgroundP = colorBackground;
+        }
+        if (!boardReach) {
+            colorBoardReachP = null;
+        } else {
+            colorBoardReachP = colorBarderReach;
+        }
+        return new MapImageData(imageId, topRight, downRiht, downLeft, topLeft, colorBackgroundP, colorBoardReachP);
     }
 
 

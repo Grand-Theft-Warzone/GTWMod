@@ -42,5 +42,22 @@ public interface MinimapManager {
 
     MapImage getMinimapImage();
 
+    // @TODO: remove
+    boolean isAllowedToDisplay();
+
+    void updateData(MapImage minimapData, ResourceLocation radarImage, boolean draw);
+
+    void updateData(MapImage minimapData, ResourceLocation radarImage);
+
+    int getMinZoom();
+    int getMaxZoom();
+
+    void updateZoomLimits(int min, int max);
+
+    void setAllowedToDisplay(Boolean draw, Boolean quietChange);
+
+    boolean isInitElementDraw();
+    void setInitElementDraw(boolean draw);
+
 
 }

@@ -1,6 +1,7 @@
 package com.grandtheftwarzone.gtwmod.api.networking;
 
 import com.grandtheftwarzone.gtwmod.api.gui.GuiAction;
+import com.grandtheftwarzone.gtwmod.api.map.data.CStartData;
 import com.grandtheftwarzone.gtwmod.api.player.NotificationRequest;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import me.phoenixra.atumconfig.api.config.Config;
@@ -81,9 +82,13 @@ public interface NetworkAPI {
 
 
 
-    void sendSRequest(Config config, EntityPlayerMP player);
+    void sendSRequest(Config config);
 
     void sendTest(String config, EntityPlayerMP player);
 
     void sendTestServer(String config);
+
+    void sendConnect(EntityPlayerMP player);
+
+    void sendMapStartData(CStartData cStartData, EntityPlayerMP player);
 }

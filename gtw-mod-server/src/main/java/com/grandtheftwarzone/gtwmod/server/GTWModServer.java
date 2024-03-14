@@ -12,12 +12,15 @@ import com.grandtheftwarzone.gtwmod.server.proxy.CommonProxy;
 import lombok.Getter;
 import lombok.Setter;
 import me.phoenixra.atumodcore.api.AtumMod;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 
@@ -76,6 +79,13 @@ public class GTWModServer extends AtumMod {
 
         notifyModServices(event);
     }
+
+    @SubscribeEvent
+    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        System.out.println("Заметил вход игрока");
+        GtwAPI.getInstance().getNetworkAPI().sendConnect((EntityPlayerMP) event.player);
+    }
+
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {

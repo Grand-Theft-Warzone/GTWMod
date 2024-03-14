@@ -19,6 +19,7 @@ import java.io.IOException;
 public class ActionZoom implements DisplayAction {
 
     private double coef = 2;
+    private int setZoom;
     private int zoom;
 
     private String defaultZoom = "250";
@@ -26,7 +27,8 @@ public class ActionZoom implements DisplayAction {
     private final String id = "zoom_minimap";
 
     @Getter @Setter
-    private int[] interval = {200, 1000};
+    private int[] interval = {GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getMinZoom(),
+            GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getMaxZoom()};
 
     @Override
     public void perform(ActionData actionData) {
@@ -43,7 +45,8 @@ public class ActionZoom implements DisplayAction {
 
         if (args[0].equalsIgnoreCase("update_default")) {
             Config config = (Config) renderer.getBaseCanvas().getSettingsConfig();
-            renderer.getBaseCanvas().getSettingsConfig().getSubsection("default_data").set(id, String.valueOf(zoom));try {
+            renderer.getBaseCanvas().getSettingsConfig().getSubsection("default_data").set(id, String.valueOf(zoom));
+            try {
                 assert config != null;
                 ((LoadableConfig)config).save();
             } catch (IOException e) {
@@ -67,7 +70,8 @@ public class ActionZoom implements DisplayAction {
                 return;
             } else if (args.length == 2) {
                 Config config = (Config) renderer.getBaseCanvas().getSettingsConfig();
-                renderer.getBaseCanvas().getSettingsConfig().getSubsection("default_data").set(id, String.valueOf(args[1]));try {
+                renderer.getBaseCanvas().getSettingsConfig().getSubsection("default_data").set(id, String.valueOf(args[1]));
+                try {
                     assert config != null;
                     ((LoadableConfig)config).save();
                 } catch (IOException e) {
@@ -109,8 +113,17 @@ public class ActionZoom implements DisplayAction {
 
         if (args[0].equalsIgnoreCase("add")) {
             renderer.getDisplayData().setData(id, String.valueOf(addZoom));
-        } else if (args[0].equalsIgnoreCase("remove")) {
+            return;
+        }
+        if (args[0].equalsIgnoreCase("remove")) {
             renderer.getDisplayData().setData(id, String.valueOf(removeZoom));
+            return;
+        }
+
+        if (args[0].equalsIgnoreCase("update_zoom")) {
+            setZoom = Integer.parseInt(args[1]);
+            renderer.getDisplayData().setData(id, String.valueOf(setZoom));
+            return;
         }
 
     }

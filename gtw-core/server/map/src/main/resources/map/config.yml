@@ -21,10 +21,10 @@ maps:
     permission:                     # or
       - "gtwmod.map.main_map"
     coordinates:
-      top_right: "0;0;0"
-      down_right: "0;0;0"
-      down_left: "0;0;0"
-      top_left: "0;0;0"
+      top_right: "1887;-1952;0"
+      down_right: "1887;159;0"
+      down_left: "-464;159;0"
+      top_left: "-464;-1952;0"
     color_background: "#000000"  # либо 0, если вы хотите отключить изменение цвета фона. В таком случае пиксели грани изображений будут растягиваться до предела.
     color_borderReach: "#000000" # либо 0, если вы хотите отключить затемнение.
     min_zoom: 180
