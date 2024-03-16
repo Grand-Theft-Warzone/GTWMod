@@ -2,7 +2,6 @@ package com.grandtheftwarzone.gtwmod.core.map.minimap;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
-import com.grandtheftwarzone.gtwmod.api.misc.ColorFilter;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import com.grandtheftwarzone.gtwmod.core.map.marker.RadarPlayer;
@@ -65,27 +64,23 @@ public class ElementMinimap extends BaseElement {
 
         MapLocation cord = radarPlayer.getCurrentMapLocation();
 
+
         RenderUtils.bindTexture(minimapImage);
         drawPartialImage(getX(), getY(), getWidth(), getHeight(), (int) cord.getX() - (zoom / 2), (int) cord.getY() - (zoom / 2), zoom, zoom);
 
         // Extra filter
-        radarPlayer.updateColorFilter();
-        ColorFilter filter = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getColorFilter();
-        RenderUtils.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), filter.getColor().toInt(), filter.getOpacity());
-
-
-        // No connection
-        boolean inMap = radarPlayer.inMap();
-        if (!inMap) {
-            drawText(getX() + (getWidth() / 4), (int) (getY() + getHeight() / 2.5), "NO SIGNAL", AtumColor.WHITE);
+        if (GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getColorBorderReach() != null) {
+            radarPlayer.updateColorFilter();
+            RenderUtils.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getColorBorderReach().toInt(), GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getOpacityFilter());
         }
+
 
         colorFrame = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getColorFrame();
 
         RenderUtils.drawOutline(getX(), getY(), getWidth(), getHeight(), 2, colorFrame);
 
 
-        if (inMap) {
+        if (radarPlayer.inMap()) {
             GlStateManager.pushMatrix();
             RenderUtils.bindTexture(radarPlayer.getIcon());
             GlStateManager.translate(getX() + ((float) getWidth() / 2), getY() + ((float) getHeight() / 2), 0);
@@ -100,54 +95,13 @@ public class ElementMinimap extends BaseElement {
             );
 
             GlStateManager.popMatrix();
+        } else {
+            // No connection
+            drawText((int) (getX() + (getWidth() / 4)), (int) (getY() + getHeight() / 2.5), "NO SIGNAL", AtumColor.WHITE);
         }
 
 
     }
-
-//    public ResourceLocation modifyMinimap() {
-//        ResourceLocation originalLocation = new ResourceLocation("gtwmod", "textures/gui/minimap/test_map.png");
-//        ResourceLocation modifiedLocation = new ResourceLocation("gtwmod", "textures/gui/minimap/modified_map.png");
-//
-//        try {
-//            InputStream stream = Minecraft.getMinecraft().getResourceManager().getResource(originalLocation).getInputStream();
-//            BufferedImage image = ImageIO.read(stream);
-//
-//            int width = image.getWidth();
-//            int height = image.getHeight();
-//
-//            for (int y = 0; y < height; y++) {
-//                image.setRGB(0, y, 0xFF000000); // Левый край
-//                image.setRGB(width - 1, y, 0xFF000000); // Правый край
-//            }
-//            for (int x = 0; x < width; x++) {
-//                image.setRGB(x, 0, 0xFF000000); // Верхний край
-//                image.setRGB(x, height - 1, 0xFF000000); // Нижний край
-//            }
-//
-//            String modFolderLocation = "mods/gtwmod/textures/gui/minimap/";
-//            File modFolder = new File(modFolderLocation);
-//            if (!modFolder.exists()) {
-//                modFolder.mkdirs();
-//            }
-//
-//            File modifiedFile = new File(modFolder, "modified_map.png");
-//            if (!modifiedFile.exists()) {
-//                System.out.println("DELITE");
-//            }
-//
-//            modifiedFile.createNewFile();
-//
-//            FileOutputStream outputStream = new FileOutputStream(modifiedFile);
-//            ImageIO.write(image, "PNG", outputStream);
-//            outputStream.close();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return modifiedLocation;
-//    }
 
 
     public static void drawPartialImage(int posX, int posY, int width, int height, int textureX, int textureY, int texturePartWidth, int texturePartHeight) {
@@ -192,7 +146,7 @@ public class ElementMinimap extends BaseElement {
         GlStateManager.color(red, green, blue, alpha);
 
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-        fontRenderer.drawString(text, 0, 0, color.toInt(), true);
+        fontRenderer.drawString(text, x, y, color.toInt(), true);
 
     }
 

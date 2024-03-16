@@ -5,6 +5,7 @@ import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.GtwProperties;
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
+import com.grandtheftwarzone.gtwmod.core.map.GtwCommandManager;
 import com.grandtheftwarzone.gtwmod.core.map.GtwServerMapManager;
 import com.grandtheftwarzone.gtwmod.core.misc.GtwSoundsManager;
 import com.grandtheftwarzone.gtwmod.core.network.GtwNetworkAPI;
@@ -111,6 +112,7 @@ public class GTWModServer extends AtumMod {
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
         this.server = event.getServer();
+        event.registerServerCommand(new GtwCommandManager());
         notifyModServices(event);
     }
 

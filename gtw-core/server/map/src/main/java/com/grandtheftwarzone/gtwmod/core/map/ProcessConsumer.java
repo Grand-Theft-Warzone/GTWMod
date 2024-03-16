@@ -32,7 +32,7 @@ public class ProcessConsumer {
         );
     }
 
-    private void getStartData(UUID uuid) {
+    public static void getStartData(UUID uuid) {
 
         MapImageData minimap = null, globalmap = null;
 

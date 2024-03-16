@@ -3,35 +3,26 @@ package com.grandtheftwarzone.gtwmod.core.map;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.event.ClientConnectEvent;
-import com.grandtheftwarzone.gtwmod.api.gui.GuiAction;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.MapManagerClient;
 import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumersClient;
-import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumersServer;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
-import com.grandtheftwarzone.gtwmod.api.player.NotificationRequest;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.GtwGlobalmapManager;
 import com.grandtheftwarzone.gtwmod.core.map.minimap.GtwMinimapManager;
 import lombok.Getter;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.config.ConfigType;
 import me.phoenixra.atumodcore.api.AtumMod;
+import me.phoenixra.atumodcore.api.misc.AtumColor;
 import me.phoenixra.atumodcore.api.service.AtumModService;
-import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ClientChatEvent;
-import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 
 public class GtwMapManagerClient implements AtumModService, MapManagerClient {
@@ -68,18 +59,18 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
     }
 
 
-    public void displayMiniMap() {
-
-
-        MapLocation N1 = new MapLocation(-464, -1952);
-        MapLocation N2 = new MapLocation(-464, 159);
-        MapLocation N3 = new MapLocation(1887, 159);
-        MapLocation N4 = new MapLocation(1887, -1952);
-
-        MapImage mapImage = new MapImage(new ResourceLocation("gtwmod", "textures/gui/minimap/test_map.png"), N4, N3, N2, N1);
-        this.minimapManager.updateData(mapImage, new ResourceLocation("gtwmod", "textures/gui/minimap/radar.png"), true);
-
-    }
+//    public void displayMiniMap() {
+//
+//
+//        MapLocation N1 = new MapLocation(-464, -1952);
+//        MapLocation N2 = new MapLocation(-464, 159);
+//        MapLocation N3 = new MapLocation(1887, 159);
+//        MapLocation N4 = new MapLocation(1887, -1952);
+//
+//        MapImage mapImage = new MapImage(new ResourceLocation("gtwmod", "textures/gui/minimap/test_map_8k.png"), N4, N3, N2, N1);
+//        this.minimapManager.updateData(mapImage, new ResourceLocation("gtwmod", "textures/gui/minimap/radar.png"), true);
+//
+//    }
 
     @SubscribeEvent
     public void onConnectServer(ClientConnectEvent event) {
@@ -104,8 +95,11 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
         if (event.getMessage().equalsIgnoreCase("bb")) {
 
         System.out.println("БАЛАБОЛ ВЫПОЛНИЛСЯ ЧАТЭВЕНТ");
-            GtwAPI.getInstance().getNetworkAPI().sendTestServer("Балабол");
+//            GtwAPI.getInstance().getNetworkAPI().sendTestServer("Балабол");
 //            GtwAPI.getInstance().getNetworkAPI().sendNotification(new NotificationRequest("hi", 123), UUID.fromString("120abf41-c686-3a55-8362-5f06e763dbbf"));
+
+//            MapImageUtils.getMapImage("test", null, null);
+
         }
     }
 

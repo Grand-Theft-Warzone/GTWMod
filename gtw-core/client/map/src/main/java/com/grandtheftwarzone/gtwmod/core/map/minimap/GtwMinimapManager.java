@@ -4,15 +4,14 @@ import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.MinimapManager;
-import com.grandtheftwarzone.gtwmod.api.misc.ColorFilter;
+import com.grandtheftwarzone.gtwmod.api.map.data.MapImageData;
+import com.grandtheftwarzone.gtwmod.api.map.data.client.UpdateMinimapData;
+import com.grandtheftwarzone.gtwmod.api.map.MapImageUtils;
 import lombok.Getter;
 import lombok.Setter;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.config.LoadableConfig;
-import me.phoenixra.atumconfig.api.placeholders.context.PlaceholderContext;
-import me.phoenixra.atumconfig.api.utils.StringUtils;
 import me.phoenixra.atumodcore.api.display.DisplayElement;
-import me.phoenixra.atumodcore.api.display.DisplayManager;
 import me.phoenixra.atumodcore.api.display.DisplayRenderer;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
 import net.minecraft.client.settings.KeyBinding;
@@ -57,19 +56,25 @@ public class GtwMinimapManager implements MinimapManager {
     @Getter
     private boolean allowedToDisplay = false;
 
+    @Getter @Setter
+    private UpdateMinimapData updatingData = null;
+
     private DisplayElement element;
 
     private List<AtumColor> colorsFrame = new ArrayList<>();
 
     private AtumColor defaultColorFrame = AtumColor.GRAY;
 
-    @Getter
-    private ColorFilter colorFilter = new ColorFilter(AtumColor.RED, 0);
+    @Getter @Setter
+    private float opacityFilter = 0;
 
     private MapImage minimapData;
 
+
     @Getter @Setter
     private boolean initElementDraw = false;
+    @Getter @Setter
+    private AtumColor colorBorderReach = null;
     private ResourceLocation minimapImage;
     private ResourceLocation radarImage;
 
@@ -81,29 +86,26 @@ public class GtwMinimapManager implements MinimapManager {
 
 
 
-    public GtwMinimapManager(MapImage minimapData, ResourceLocation radarImage){
-        this.minimapData = minimapData;
-        this.minimapImage = minimapData.getImage();
-        this.radarImage = radarImage;
+    public void updateData(MapImageData minimapData, String radarImageId, boolean draw) {
 
+        ResourceLocation mapTexture = MapImageUtils.getMapImage(minimapData.getImageId(), minimapData.getColorBackground());
+//        ResourceLocation mapTexture = new ResourceLocation("gtwmod", "textures/gui/minimap/test_map.png");
+        this.minimapData = new MapImage(mapTexture, minimapData.getImageId(), minimapData.getTopRight(), minimapData.getDownRight(), minimapData.getDownLeft(), minimapData.getTopLeft());
+        this.minimapImage = mapTexture;
+        this.radarImage = MapImageUtils.getImage(radarImageId);
 
-        EVENT_BUS.register(this);
-    }
-
-    public void updateData(MapImage minimapData, ResourceLocation radarImage, boolean draw) {
-        this.minimapData = minimapData;
-        this.minimapImage = minimapData.getImage();
-        this.radarImage = radarImage;
-
+        this.colorBorderReach = minimapData.getColorBorderReach();
+        System.out.println("DDDD: " + this.colorBorderReach);
         this.initElementDraw = false;
         setAllowedToDisplay(draw, true);
     }
 
-    public void updateData(MapImage minimapData, ResourceLocation radarImage) {
-        this.minimapData = minimapData;
-        this.minimapImage = minimapData.getImage();
-        this.radarImage = radarImage;
+    public void updateData(MapImageData minimapData, String radarImageId) {
+        ResourceLocation mapTexture = MapImageUtils.getMapImage(minimapData.getImageId(), minimapData.getColorBackground());
+        this.minimapData = new MapImage(mapTexture, minimapData.getImageId(), minimapData.getTopRight(), minimapData.getDownRight(), minimapData.getDownLeft(), minimapData.getTopLeft());
+        this.radarImage = MapImageUtils.getImage(radarImageId);
 
+        this.colorBorderReach = minimapData.getColorBorderReach();
         this.initElementDraw = false;
         setAllowedToDisplay(this.allowedToDisplay, true);
     }
@@ -139,6 +141,19 @@ public class GtwMinimapManager implements MinimapManager {
             element.performAction("zoom_minimap", "update_default");
             saveZoom = true;
             colorsFrame.clear();
+        }
+    }
+
+    @SubscribeEvent
+    public void onClientUpdate(TickEvent.ClientTickEvent event) {
+        if (updatingData != null) {
+            if (updatingData.getAllowDisplay() != null) {
+                updateData(updatingData.getMapImageData(), updatingData.getRadarImageId(), updatingData.getAllowDisplay());
+            } else {
+                updateData(updatingData.getMapImageData(), updatingData.getRadarImageId());
+            }
+
+            this.updatingData = null;
         }
     }
 
@@ -183,10 +198,6 @@ public class GtwMinimapManager implements MinimapManager {
         return null;
     }
 
-    @Override
-    public void setColorFilter(ColorFilter filter) {
-        this.colorFilter = filter;
-    }
 
     @Override
     public MapImage getMinimapImage() {
@@ -238,6 +249,7 @@ public class GtwMinimapManager implements MinimapManager {
         System.out.println(min + " " + max);
 //        DisplayManager
         int zoom = Integer.parseInt(renderer.getDisplayData().getDataOrDefault("zoom_minimap", "250"));
+        System.out.println("Сейчас zoom: " + zoom);
         if (zoom < min) {
             element.performAction("zoom_minimap", "update_zoom;" + min);
         }

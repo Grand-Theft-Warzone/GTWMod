@@ -8,8 +8,11 @@ import net.minecraft.util.ResourceLocation;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
+import static com.grandtheftwarzone.gtwmod.api.map.MapImageUtils.getFileInputStream;
 
 @Getter
 public class MapImage {
@@ -42,6 +45,52 @@ public class MapImage {
         } catch (IOException e) {
             GtwLog.getLogger().error(String.valueOf(e));
         }
+
+        this.pixelsPerBlockX = imageWidth / Math.abs(downRight.getX() - downLeft.getX());
+        this.pixelsPerBlockZ = imageHeight / Math.abs(topLeft.getY() - downLeft.getY());
+
+        this.widthInBlocks = (int) Math.abs(downRight.getX() - downLeft.getX());
+        this.heightInBlocks = (int) Math.abs(downRight.getY() - topRight.getY());
+    }
+
+    public MapImage(ResourceLocation inputImage, String imageId, MapLocation topRight, MapLocation downRight, MapLocation downLeft, MapLocation topLeft) {
+        this.image = inputImage;
+        this.topRight = topRight;
+        this.downRight = downRight;
+        this.downLeft = downLeft;
+        this.topLeft = topLeft;
+
+
+        System.out.println("" +
+                " Top Right: " + topRight +
+                " Down Right: " + downRight +
+                " Down Left" + downLeft +
+                " Top Left" + topLeft
+        );
+
+        try {
+            if (inputImage.getResourcePath().startsWith("dynamic")) {
+                System.out.println("Запускаю первый алгоритм");
+                File file = new File(MapImageUtils.getGameDir(), "/maps/" + imageId + ".png");
+                InputStream stream = getFileInputStream(file);
+                BufferedImage imageFirst = ImageIO.read(stream);
+
+                this.imageWidth = imageFirst.getWidth();
+                this.imageHeight = imageFirst.getHeight();
+
+            } else {
+                System.out.println("Запускаю другой алгоритм");
+                InputStream imageStream = Minecraft.getMinecraft().getResourceManager().getResource(inputImage).getInputStream();
+
+                BufferedImage image = ImageIO.read(imageStream);
+                this.imageWidth = image.getWidth();
+                this.imageHeight = image.getHeight();
+            }
+        } catch (IOException e) {
+            GtwLog.getLogger().error(String.valueOf(e));
+        }
+
+        System.out.println("W: " + this.imageWidth + " H: " + this.imageHeight);
 
         this.pixelsPerBlockX = imageWidth / Math.abs(downRight.getX() - downLeft.getX());
         this.pixelsPerBlockZ = imageHeight / Math.abs(topLeft.getY() - downLeft.getY());

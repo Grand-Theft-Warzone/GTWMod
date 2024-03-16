@@ -3,7 +3,13 @@ package com.grandtheftwarzone.gtwmod.core.map;
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.data.MapImageData;
+import com.grandtheftwarzone.gtwmod.api.map.data.client.UpdateMinimapData;
+import me.phoenixra.atumodcore.api.display.misc.resources.BufferTextureResource;
 import net.minecraft.util.ResourceLocation;
+
+import java.io.File;
+import java.io.IOException;
+
 
 public class ProcessConsumer {
 
@@ -19,8 +25,8 @@ public class ProcessConsumer {
                     // @TODO У нас ещё есть ограничение - разрешены ли локальные маркеры. Реализовать позже.
 
                     // working with maps.
-                    ResourceLocation temporaryImage = new ResourceLocation("gtwmod", "textures/gui/minimap/test_map.png");
-                    ResourceLocation radarImage = new ResourceLocation("gtwmod", "textures/gui/minimap/radar.png");
+//                    ResourceLocation temporaryImage = new ResourceLocation("gtwmod", "textures/gui/minimap/test_map_8k.png");
+//                    ResourceLocation radarImage = new ResourceLocation("gtwmod", "textures/gui/minimap/radar.png");
 
                     if (it.getMinimapData() == null) {
                         System.out.println("minimap null");
@@ -33,10 +39,9 @@ public class ProcessConsumer {
                     }
 
                     if (it.getMinimapData() != null) {
-                        MapImageData minimapData = it.getMinimapData();
-                        MapImage minimapImage = new MapImage(temporaryImage, minimapData.getTopRight(), minimapData.getDownRight(), minimapData.getDownLeft(), minimapData.getTopLeft());
                         System.out.println("Is Allow Map Display: " + it.getRestrictionsData().isAllowMapDisplay());
-                        GtwAPI.getInstance().getMapManagerClient().getMinimapManager().updateData(minimapImage, radarImage, it.getRestrictionsData().isAllowMapDisplay());
+                        GtwAPI.getInstance().getMapManagerClient().getMinimapManager().setUpdatingData(new UpdateMinimapData(it.getMinimapData(), "radar", it.getRestrictionsData().isAllowMapDisplay()));
+//                        GtwAPI.getInstance().getMapManagerClient().getMinimapManager().updateData(it.getMinimapData(), "radar", it.getRestrictionsData().isAllowMapDisplay());
                     }
 
                     if (it.getGlobalmapData() != null) {

@@ -67,9 +67,9 @@
     "minimap": {
       "template": "minimap",
       "settings": {
-        "coef": 1000.0,
-        "zoom": "%data_zoom_minimap%",
+        "coef": 1.0,
         "zoomRadar": 22.0,
+        "zoom": "%data_zoom_minimap%",
         "step": 1.0
       },
       "active": false,

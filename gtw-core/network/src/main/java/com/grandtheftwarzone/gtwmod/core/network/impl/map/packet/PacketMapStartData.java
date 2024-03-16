@@ -19,16 +19,15 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PacketMapStartData implements IMessage {
 
+    private MapImageData minimapData;
+    private MapImageData globalmapData;
+    private RestrictionsData restrictionsData;
 
     public PacketMapStartData() {
         this.minimapData = new MapImageData();
         this.globalmapData = new MapImageData();
 
     }
-
-    private MapImageData minimapData;
-    private MapImageData globalmapData;
-    private RestrictionsData restrictionsData;
 
     public PacketMapStartData(CStartData cStartData) {
         this.minimapData = cStartData.getMinimapData();
@@ -96,7 +95,7 @@ public class PacketMapStartData implements IMessage {
                 if (mapData.getColorBorderReach() == null) {
                     colorBorderReach = "null";
                 } else {
-                    colorBorderReach = mapData.getColorBorderReach().toString();
+                    colorBorderReach = mapData.getColorBorderReach().toHex(true);
                 }
                 bytes = colorBorderReach.getBytes(StandardCharsets.UTF_8);
                 buf.writeInt(bytes.length);
@@ -197,8 +196,8 @@ public class PacketMapStartData implements IMessage {
                                 "\nДанные карты " + mapData.getClass().getCanonicalName() +
                                 "\nimageId: " + mapData.getImageId() +
                                 "\ncord: " + mapData.getTopRight() + "  " + mapData.getDownRight() + "  " + mapData.getDownLeft() + "  " + mapData.getTopLeft() +
-                                "\ncolor фон: " + mapData.getColorBackground().toString() +
-                                "\ncolor барьер: " + mapData.getColorBorderReach().toString() + "\n------------"
+                                "\ncolor фон: " + (mapData.getColorBackground() != null ? mapData.getColorBackground().toString() : "нету") +
+                                "\ncolor барьер: " + (mapData.getColorBorderReach() != null ? mapData.getColorBorderReach().toString() : "нету") + "\n------------"
                 );
 
             }

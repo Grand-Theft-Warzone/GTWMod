@@ -13,6 +13,8 @@ import me.phoenixra.atumodcore.api.AtumMod;
 import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+
 public class GtwAPIClient implements GtwAPI {
     @Override
     public @NotNull PlayerData getPlayerData() {
@@ -62,6 +64,11 @@ public class GtwAPIClient implements GtwAPI {
     @Override
     public @NotNull AtumMod getGtwMod() {
         return GTWModClient.instance;
+    }
+
+    @Override
+    public @NotNull File getMinecraftDir() {
+        return GTWModClient.instance.getMinecraftDir();
     }
 
 

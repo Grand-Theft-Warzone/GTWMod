@@ -8,4 +8,5 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 
 @NoArgsConstructor
 public class ClientConnectEvent extends Event {
+
 }

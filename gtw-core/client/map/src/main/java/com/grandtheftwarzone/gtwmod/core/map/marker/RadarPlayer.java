@@ -4,7 +4,6 @@ import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.marker.BaseDynamicMarker;
-import com.grandtheftwarzone.gtwmod.api.misc.ColorFilter;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
 import net.minecraft.util.ResourceLocation;
@@ -26,8 +25,7 @@ public class RadarPlayer extends BaseDynamicMarker {
         if (proximity > 0.9) {
             opacity = (proximity - 0.9F) * 0.9F * 10;
         }
-
-        GtwAPI.getInstance().getMapManagerClient().getMinimapManager().setColorFilter(new ColorFilter(AtumColor.BLACK, opacity));
+        GtwAPI.getInstance().getMapManagerClient().getMinimapManager().setOpacityFilter(opacity);
     }
 
     public boolean inMap() {

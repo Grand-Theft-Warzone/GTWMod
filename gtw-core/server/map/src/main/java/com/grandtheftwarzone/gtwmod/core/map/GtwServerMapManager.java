@@ -86,7 +86,7 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
             MapLocation topLeft = new MapLocation(cfg.getSubsection("coordinates").getString("top_left"));
 
             String colorBackgroundStr = cfg.getString("color_background");
-            String colorBorderReachStr = cfg.getString("colorBorderReach");
+            String colorBorderReachStr = cfg.getString("color_borderReach");
             boolean isColorBackground = true, isColorBorderReach = true;
             AtumColor colorBackground = AtumColor.BLACK, colorBorderReach = AtumColor.BLACK;
             if (colorBackgroundStr.equals("0")) {
@@ -101,8 +101,8 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
                 colorBorderReach = AtumColor.fromHex(colorBorderReachStr);
             }
 
-            int minZoom = cfg.getIntOrDefault("min_zoom", 180);
-            int maxZoom = cfg.getIntOrDefault("max_zoom", 1000);
+            Integer minZoom = cfg.getIntOrNull("min_zoom");
+            Integer maxZoom = cfg.getIntOrNull("max_zoom");
 
             MapData data = new MapData(mapId, imageId, attachedTo, allowLocalMarker, perm, topRight, downRight, downLeft, topLeft, isColorBackground, colorBackground, isColorBorderReach, colorBorderReach, minZoom, maxZoom);
             maps.put(mapId, data);
@@ -203,7 +203,7 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
     public RestrictionsData getRestrictionsData(UUID uuid) {
         PlayerMapData playerData = getPlayerData(uuid);
         MapData minimapData = maps.get(playerData.getMinimapId());
-        return new RestrictionsData(uuid, checkAllowDisplay(playerData), minimapData.isAllowLocalMarker(), minimapData.getMinZoom(), minimapData.getDefaultMaxZoom());
+        return new RestrictionsData(uuid, checkAllowDisplay(playerData), minimapData.isAllowLocalMarker(), minimapData.getMinZoomOrDefault(), minimapData.getMaxZoomOrDefault());
     }
 
     // -------------------

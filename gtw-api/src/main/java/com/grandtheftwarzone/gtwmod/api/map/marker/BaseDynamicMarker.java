@@ -7,6 +7,7 @@ import lombok.Getter;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -80,6 +81,9 @@ public abstract class BaseDynamicMarker implements DynamicMarker {
 
     // ОТРЕДАЧИТЬ НАЗВАНИЕ!!!! МОЖЕТ ТЫ СТЕК УЖЕ НАЧНЁШЬ ИСПОЛЬЗОВАТЬ?  А?
     private MapLocation getRemoveFirstLocation() {
+
+//        System.out.println(Arrays.toString(mapInterpolations.toArray()));
+
         if (mapInterpolations.size() > 1) {
             return mapInterpolations.remove(0);
         } else if (mapInterpolations.size() == 1) {

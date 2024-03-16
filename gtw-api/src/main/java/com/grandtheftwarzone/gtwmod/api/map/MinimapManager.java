@@ -1,6 +1,6 @@
 package com.grandtheftwarzone.gtwmod.api.map;
 
-import com.grandtheftwarzone.gtwmod.api.misc.ColorFilter;
+import com.grandtheftwarzone.gtwmod.api.map.data.client.UpdateMinimapData;
 import me.phoenixra.atumodcore.api.display.DisplayRenderer;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
 import net.minecraft.util.ResourceLocation;
@@ -36,18 +36,13 @@ public interface MinimapManager {
 
     ResourceLocation getResourceLocation(String imageName) throws NoSuchFieldException, IllegalAccessException;
 
-    ColorFilter getColorFilter();
-
-    void setColorFilter(ColorFilter filter);
+    float getOpacityFilter();
+    void setOpacityFilter(float var);
 
     MapImage getMinimapImage();
 
     // @TODO: remove
     boolean isAllowedToDisplay();
-
-    void updateData(MapImage minimapData, ResourceLocation radarImage, boolean draw);
-
-    void updateData(MapImage minimapData, ResourceLocation radarImage);
 
     int getMinZoom();
     int getMaxZoom();
@@ -59,5 +54,8 @@ public interface MinimapManager {
     boolean isInitElementDraw();
     void setInitElementDraw(boolean draw);
 
-
+    UpdateMinimapData getUpdatingData();
+    void setUpdatingData(UpdateMinimapData updatingData);
+    AtumColor getColorBorderReach();
+    void setColorBorderReach(AtumColor color);
 }

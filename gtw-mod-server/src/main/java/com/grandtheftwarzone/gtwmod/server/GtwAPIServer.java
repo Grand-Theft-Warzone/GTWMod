@@ -14,6 +14,8 @@ import me.phoenixra.atumodcore.api.AtumMod;
 import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+
 public class GtwAPIServer implements GtwAPI {
     @Override
     public @NotNull PlayerData getPlayerData() {
@@ -58,6 +60,11 @@ public class GtwAPIServer implements GtwAPI {
     @Override
     public @NotNull MapManagerServer getMapManagerServer() {
         return GTWModServer.instance.getMap();
+    }
+
+    @Override
+    public @NotNull File getMinecraftDir() {
+        throw new RuntimeException("Client side only!");
     }
 
 

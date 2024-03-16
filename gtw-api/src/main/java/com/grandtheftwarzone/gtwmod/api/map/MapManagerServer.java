@@ -11,6 +11,8 @@ import java.util.UUID;
 public interface MapManagerServer {
 
     MapConsumersServer getMapConsumers();
+
+    void initConfig();
     String getDefaultMinimapId();
     String getDefaultGlobalmapId();
 

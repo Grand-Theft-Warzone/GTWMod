@@ -15,6 +15,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+
 public interface GtwAPI {
 
     /**
@@ -80,6 +82,9 @@ public interface GtwAPI {
 
     @SideOnly(Side.SERVER)
     @NotNull MapManagerServer getMapManagerServer();
+
+    @SideOnly(Side.CLIENT)
+    @NotNull File getMinecraftDir();
 
     /**
      * Get GTW mod instance

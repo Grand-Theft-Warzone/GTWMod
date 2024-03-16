@@ -41,6 +41,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +76,8 @@ public class GTWModClient extends AtumMod {
     private GTWEmoji emoji;
     @Getter
     private GtwMapManagerClient map;
+    @Getter
+    private File minecraftDir;
 
     public GTWModClient(){
         if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
@@ -176,7 +179,7 @@ public class GTWModClient extends AtumMod {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
-
+        this.minecraftDir = event.getModConfigurationDirectory().getParentFile();
         notifyModServices(event);
     }
 
