@@ -26,9 +26,6 @@ public class ActionZoom implements DisplayAction {
 
     private final String id = "zoom_minimap";
 
-    @Getter @Setter
-    private int[] interval = {GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getMinZoom(),
-            GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getMaxZoom()};
 
     @Override
     public void perform(ActionData actionData) {
@@ -90,7 +87,9 @@ public class ActionZoom implements DisplayAction {
         int addZoom = (int)(zoom + coef);
         int removeZoom = (int)(zoom - coef);
 
-        if (((addZoom >= interval[1] || addZoom <= interval[0]) && args[0].equalsIgnoreCase("add")) || ((removeZoom >= interval[1] || removeZoom <= interval[0]) && args[0].equalsIgnoreCase("remove"))) {
+        int maxZoom = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getMaxZoom();
+        int minZoom = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getMinZoom();
+        if (((addZoom >= maxZoom || addZoom <= minZoom) && args[0].equalsIgnoreCase("add")) || ((removeZoom >= maxZoom || removeZoom <= minZoom) && args[0].equalsIgnoreCase("remove"))) {
             GtwAPI.getInstance().getMapManagerClient().getMinimapManager().setColorFrame(AtumColor.RED, 9);
 
             DisplayAction action = GtwAPI.getInstance().getGtwMod().getDisplayManager().getActionRegistry().getActionById("play_sound");

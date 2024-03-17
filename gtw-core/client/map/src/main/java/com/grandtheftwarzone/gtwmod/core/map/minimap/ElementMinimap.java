@@ -81,8 +81,8 @@ public class ElementMinimap extends BaseElement {
 
 
         if (radarPlayer.inMap()) {
-            GlStateManager.pushMatrix();
             RenderUtils.bindTexture(radarPlayer.getIcon());
+            GlStateManager.pushMatrix();
             GlStateManager.translate(getX() + ((float) getWidth() / 2), getY() + ((float) getHeight() / 2), 0);
             GlStateManager.rotate((float) player.getYaw(), 0, 0, 1);
 

@@ -5,13 +5,21 @@ import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import lombok.Getter;
 import me.phoenixra.atumodcore.api.display.misc.resources.BufferTextureResource;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourcePack;
+import net.minecraft.client.resources.ResourcePackRepository;
 import net.minecraft.util.ResourceLocation;
+import org.apache.commons.io.FileUtils;
 
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.rmi.registry.Registry;
+import java.util.List;
 
 public class MapImageUtils {
 
@@ -21,16 +29,43 @@ public class MapImageUtils {
     private static File gameDir = new File("gtwdata/map/");
 
 
-    public static void init(ResourceLocation folder) {
-        System.out.println("Типо скапировали всё содержимое из " + folder.toString());
-    }
+    public static ResourceLocation getImage(String idName) {
 
+        if (!gameDir.exists()) {
+            gameDir.mkdir();
+        }
 
-    public static ResourceLocation getImage(String id) {
-        File file = new File(gameDir, id + ".png");
+        String id = idName + ".png";
+        File file = new File(gameDir, id);
         if (!file.exists()) {
             GtwLog.getLogger().error("[getImage] File " + file.getAbsolutePath() + " Not found.");
-            return nullImage;
+            GtwLog.getLogger().error("[getImage] I'm looking for a mod in resources...");
+
+            IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
+            ResourceLocation resourceLocation = new ResourceLocation("gtwmod", "textures/gui/minimap/" + id);
+
+            try {
+                IResource resource = resourceManager.getResource(resourceLocation);
+                GtwLog.getLogger().debug("[getMapImage] Image "+idName+" detected.");
+                InputStream inputStream = resource.getInputStream();
+                BufferedImage image = ImageIO.read(inputStream);
+
+                if (!file.exists()) {
+                    System.out.println("DELITE");
+                }
+
+                file.createNewFile();
+
+                FileOutputStream outputStream = new FileOutputStream(file);
+                ImageIO.write(image, "PNG", outputStream);
+                outputStream.close();
+
+                GtwLog.getLogger().debug("[getMapImage] Image "+idName+" copied.");
+                return resourceLocation;
+            } catch (IOException e) {
+                // Ресурс не найден
+                return nullImage;
+            }
         }
         try {
             BufferTextureResource bufferTextureResource = new BufferTextureResource(file);
@@ -43,9 +78,43 @@ public class MapImageUtils {
 
     public static @Nullable ResourceLocation getMapImage(String id, @Nullable AtumColor colorBackground) {
         File file = new File(gameDir, "maps/" + id + ".png");
+
+
+        File maps = new File(gameDir, "maps");
+        if (!maps.exists()) {
+            maps.mkdir();
+        }
+
         if (!file.exists()) {
             GtwLog.getLogger().error("[getMapImage] File " + file.getAbsolutePath() + " Not found.");
-            return nullImage;
+            GtwLog.getLogger().debug("[getMapImage] I'm looking for a mod in resources...");
+
+            IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
+            ResourceLocation resourceLocation = new ResourceLocation("gtwmod", "textures/gui/minimap/maps/" + id + ".png");
+
+            try {
+                IResource resource = resourceManager.getResource(resourceLocation);
+                GtwLog.getLogger().debug("[getMapImage] Image "+id+" detected.");
+                InputStream inputStream = resource.getInputStream();
+                BufferedImage image = ImageIO.read(inputStream);
+
+                if (!file.exists()) {
+                    System.out.println("DELITE");
+                }
+
+                file.createNewFile();
+
+                FileOutputStream outputStream = new FileOutputStream(file);
+                ImageIO.write(image, "PNG", outputStream);
+                outputStream.close();
+
+                GtwLog.getLogger().debug("[getMapImage] Image "+id+" copied.");
+
+
+            } catch (IOException e) {
+                // Ресурс не найден
+                return nullImage;
+            }
         }
 
 

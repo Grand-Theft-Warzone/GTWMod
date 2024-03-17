@@ -4,6 +4,7 @@ package com.grandtheftwarzone.gtwmod.core.map;
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.event.ClientConnectEvent;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
+import com.grandtheftwarzone.gtwmod.api.map.MapImageUtils;
 import com.grandtheftwarzone.gtwmod.api.map.MapManagerClient;
 import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumersClient;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 
@@ -55,6 +57,7 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
         if(fmlEvent instanceof FMLPreInitializationEvent){
             minimapManager.onPreInit((FMLPreInitializationEvent) fmlEvent);
             this.processConsumer = new ProcessConsumer();
+
         }
     }
 
@@ -67,8 +70,8 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
 //        MapLocation N3 = new MapLocation(1887, 159);
 //        MapLocation N4 = new MapLocation(1887, -1952);
 //
-//        MapImage mapImage = new MapImage(new ResourceLocation("gtwmod", "textures/gui/minimap/test_map_8k.png"), N4, N3, N2, N1);
-//        this.minimapManager.updateData(mapImage, new ResourceLocation("gtwmod", "textures/gui/minimap/radar.png"), true);
+//        MapImage mapImage = new MapImage(new ResourceLocation("gtwmod", "textures/gui/minimap/general_map.png"), N4, N3, N2, N1);
+//        this.minimapManager.updateData(mapImage, new ResourceLocation("gtwmod", "textures/gui/minimap/general_map.png"), true);
 //
 //    }
 

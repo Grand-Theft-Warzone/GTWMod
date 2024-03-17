@@ -44,10 +44,10 @@ public interface MinimapManager {
     // @TODO: remove
     boolean isAllowedToDisplay();
 
-    int getMinZoom();
-    int getMaxZoom();
+    Integer getMinZoom();
+    Integer getMaxZoom();
 
-    void updateZoomLimits(int min, int max);
+    void updateZoomLimits(Integer min, Integer max);
 
     void setAllowedToDisplay(Boolean draw, Boolean quietChange);
 
