@@ -78,11 +78,11 @@ public class ElementMinimap extends BaseElement {
         colorFrame = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getColorFrame();
 
         RenderUtils.drawOutline(getX(), getY(), getWidth(), getHeight(), 2, colorFrame);
-
-
+//        drawCustomCircle(getX() + getWidth()/2, getY() + getHeight()/2, (float) ((getHeight() /2) + 2.5), 5, colorFrame.toInt());
+//        clipOutsideCircleAndInsideRectangle(getX() + getWidth()/2, getY() + getHeight()/2, (float) ((getHeight() /2) + 2.5), getWidth(), getHeight());
         if (radarPlayer.inMap()) {
-            RenderUtils.bindTexture(radarPlayer.getIcon());
             GlStateManager.pushMatrix();
+            RenderUtils.bindTexture(radarPlayer.getIcon());
             GlStateManager.translate(getX() + ((float) getWidth() / 2), getY() + ((float) getHeight() / 2), 0);
             GlStateManager.rotate((float) player.getYaw(), 0, 0, 1);
 
@@ -93,7 +93,6 @@ public class ElementMinimap extends BaseElement {
                     zoomRadar, zoomRadar,
                     zoomRadar, zoomRadar
             );
-
             GlStateManager.popMatrix();
         } else {
             // No connection
@@ -101,6 +100,53 @@ public class ElementMinimap extends BaseElement {
         }
 
 
+    }
+
+    public static void clipOutsideCircleAndInsideRectangle(int centerX, int centerY, float radius, int width, int height) {
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+
+        int x = (int) (centerX - radius);
+        int y = (int) (centerY - radius);
+        int x2 = (int) (centerX + radius);
+        int y2 = (int) (centerY + radius);
+
+        int left = Math.max(x, 0);
+        int right = Math.min(x2, width);
+        int top = Math.max(y, 0);
+        int bottom = Math.min(y2, height);
+
+        GL11.glScissor(left, top, right - left, bottom - top);
+    }
+
+    public static void drawCustomCircle(int centerX, int centerY, float radius, int thickness, int color) {
+        GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
+
+        GL11.glColor4f(
+                ((color >> 16) & 0xFF) / 255.0f,
+                ((color >> 8) & 0xFF) / 255.0f,
+                (color & 0xFF) / 255.0f,
+                ((color >> 24) & 0xFF) / 255.0f
+        );
+
+        GL11.glLineWidth(thickness);
+        GL11.glBegin(GL11.GL_LINE_LOOP);
+        for (int i = 0; i < 360; i++) {
+            float radian = (float) Math.toRadians(i);
+            float x = centerX + radius * (float) Math.cos(radian);
+            float y = centerY + radius * (float) Math.sin(radian);
+            GL11.glVertex2f(x, y);
+        }
+        GL11.glEnd();
+
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glPopMatrix();
     }
 
 
