@@ -33,6 +33,7 @@ public interface MinimapManager {
      */
     void setColorFrame(AtumColor color, int time);
 
+    AtumColor getDefaultColorFrame();
 
     ResourceLocation getResourceLocation(String imageName) throws NoSuchFieldException, IllegalAccessException;
 

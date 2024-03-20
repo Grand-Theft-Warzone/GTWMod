@@ -63,6 +63,7 @@ public class GtwMinimapManager implements MinimapManager {
 
     private List<AtumColor> colorsFrame = new ArrayList<>();
 
+    @Getter
     private AtumColor defaultColorFrame = AtumColor.GRAY;
 
     @Getter @Setter
