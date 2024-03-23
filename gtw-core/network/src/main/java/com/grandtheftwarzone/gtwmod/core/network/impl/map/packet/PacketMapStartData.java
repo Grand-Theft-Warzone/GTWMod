@@ -54,6 +54,7 @@ public class PacketMapStartData implements IMessage {
                 System.out.println("=================\nДанные карты " + mapData.getClass().getSimpleName() +
                         "\nimageId: " + mapData.getImageId() +
                         "\ncord: " + mapData.getTopRight() + "  " + mapData.getDownRight() + "  " + mapData.getDownLeft() + "  " + mapData.getTopLeft() +
+                        "\nOffset: " + mapData.getOffsetX() + " " + mapData.getOffsetY() +
                         "\ncolor фон: " + (mapData.getColorBackground() != null ? mapData.getColorBackground().toString() : "Нету") +
                         "\ncolor барьер: " + (mapData.getColorBorderReach() != null ? mapData.getColorBorderReach().toString() : "Нету") +
                         "\n================="
@@ -78,6 +79,9 @@ public class PacketMapStartData implements IMessage {
                 bytes = mapData.getTopLeft().toString().getBytes(StandardCharsets.UTF_8);
                 buf.writeInt(bytes.length);
                 buf.writeBytes(bytes);
+
+                buf.writeInt(mapData.getOffsetX());
+                buf.writeInt(mapData.getOffsetY());
 
                 // Цвет фона
                 String colorBackground;
@@ -166,6 +170,9 @@ public class PacketMapStartData implements IMessage {
                 buf.readBytes(bytes);
                 MapLocation topLeft = new MapLocation(new String(bytes, StandardCharsets.UTF_8));
 
+                int offsetX = buf.readInt();
+                int offsetY = buf.readInt();
+
                 // Цвет фона
                 bytes = new byte[buf.readInt()];
                 buf.readBytes(bytes);
@@ -189,13 +196,14 @@ public class PacketMapStartData implements IMessage {
                 }
 
 
-                mapData = new MapImageData(imageId, topRight, downRight, downLeft, topLeft, colorBackground, colorBorderReach);
+                mapData = new MapImageData(imageId, topRight, downRight, downLeft, topLeft, offsetX, offsetY, colorBackground, colorBorderReach);
 
                 System.out.println(
                         "\n------------ " +
                                 "\nДанные карты " + mapData.getClass().getCanonicalName() +
                                 "\nimageId: " + mapData.getImageId() +
                                 "\ncord: " + mapData.getTopRight() + "  " + mapData.getDownRight() + "  " + mapData.getDownLeft() + "  " + mapData.getTopLeft() +
+                                "\noffset: " + mapData.getOffsetX() + "  " + mapData.getOffsetY() +
                                 "\ncolor фон: " + (mapData.getColorBackground() != null ? mapData.getColorBackground().toString() : "нету") +
                                 "\ncolor барьер: " + (mapData.getColorBorderReach() != null ? mapData.getColorBorderReach().toString() : "нету") + "\n------------"
                 );

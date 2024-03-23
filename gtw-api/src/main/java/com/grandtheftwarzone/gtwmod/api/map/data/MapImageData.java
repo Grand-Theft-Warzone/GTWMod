@@ -18,6 +18,8 @@ public class MapImageData {
     private MapLocation downRight;
     private MapLocation downLeft;
     private MapLocation topLeft;
+    private int offsetX;
+    private int offsetY;
     @Nullable private AtumColor colorBackground;
     @Nullable private AtumColor colorBorderReach;
 

@@ -87,29 +87,21 @@ public class GtwMinimapManager implements MinimapManager {
 
 
 
-    public void updateData(MapImageData minimapData, String radarImageId, boolean draw) {
+    public void updateData(MapImageData minimapData, String radarImageId, Boolean draw) {
 
         ResourceLocation mapTexture = MapImageUtils.getMapImage(minimapData.getImageId(), minimapData.getColorBackground());
-//        ResourceLocation mapTexture = new ResourceLocation("gtwmod", "textures/gui/minimap/test_map.png");
-        this.minimapData = new MapImage(mapTexture, minimapData.getImageId(), minimapData.getTopRight(), minimapData.getDownRight(), minimapData.getDownLeft(), minimapData.getTopLeft());
+        this.minimapData = new MapImage(mapTexture, minimapData.getImageId(), minimapData.getTopRight(), minimapData.getDownRight(), minimapData.getDownLeft(), minimapData.getTopLeft(), minimapData.getOffsetX(), minimapData.getOffsetY());
         this.minimapImage = mapTexture;
         this.radarImage = MapImageUtils.getImage(radarImageId);
 
         this.colorBorderReach = minimapData.getColorBorderReach();
-        System.out.println("DDDD: " + this.colorBorderReach);
         this.initElementDraw = false;
+        if (draw == null) {
+            draw = this.allowedToDisplay;
+        }
         setAllowedToDisplay(draw, true);
     }
 
-    public void updateData(MapImageData minimapData, String radarImageId) {
-        ResourceLocation mapTexture = MapImageUtils.getMapImage(minimapData.getImageId(), minimapData.getColorBackground());
-        this.minimapData = new MapImage(mapTexture, minimapData.getImageId(), minimapData.getTopRight(), minimapData.getDownRight(), minimapData.getDownLeft(), minimapData.getTopLeft());
-        this.radarImage = MapImageUtils.getImage(radarImageId);
-
-        this.colorBorderReach = minimapData.getColorBorderReach();
-        this.initElementDraw = false;
-        setAllowedToDisplay(this.allowedToDisplay, true);
-    }
 
 
     @SubscribeEvent
@@ -151,7 +143,7 @@ public class GtwMinimapManager implements MinimapManager {
             if (updatingData.getAllowDisplay() != null) {
                 updateData(updatingData.getMapImageData(), updatingData.getRadarImageId(), updatingData.getAllowDisplay());
             } else {
-                updateData(updatingData.getMapImageData(), updatingData.getRadarImageId());
+                updateData(updatingData.getMapImageData(), updatingData.getRadarImageId(), null);
             }
 
             this.updatingData = null;

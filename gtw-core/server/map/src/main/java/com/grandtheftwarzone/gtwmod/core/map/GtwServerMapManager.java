@@ -85,6 +85,9 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
             MapLocation downLeft = new MapLocation(cfg.getSubsection("coordinates").getString("down_left"));
             MapLocation topLeft = new MapLocation(cfg.getSubsection("coordinates").getString("top_left"));
 
+            int offsetX = cfg.getIntOrDefault("offsetX", 0);
+            int offsetY = cfg.getIntOrDefault("offsetY", 0);
+
             String colorBackgroundStr = cfg.getString("color_background");
             String colorBorderReachStr = cfg.getString("color_borderReach");
             boolean isColorBackground = true, isColorBorderReach = true;
@@ -104,7 +107,7 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
             Integer minZoom = cfg.getIntOrNull("min_zoom");
             Integer maxZoom = cfg.getIntOrNull("max_zoom");
 
-            MapData data = new MapData(mapId, imageId, attachedTo, allowLocalMarker, perm, topRight, downRight, downLeft, topLeft, isColorBackground, colorBackground, isColorBorderReach, colorBorderReach, minZoom, maxZoom);
+            MapData data = new MapData(mapId, imageId, attachedTo, allowLocalMarker, perm, topRight, downRight, downLeft, topLeft, offsetX, offsetY, isColorBackground, colorBackground, isColorBorderReach, colorBorderReach, minZoom, maxZoom);
             maps.put(mapId, data);
             if (debug) {
                 GtwLog.getLogger().info("\n============ " + mapId + " =============\n" +
@@ -118,6 +121,7 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
                         "\n+-+ Down Right: " + downRight.getX() + "  " + downRight.getY() + "  " + downRight.getZ() +
                         "\n+-+ Down Left: " + downLeft.getX() + "  " + downLeft.getY() + "  " + downLeft.getZ() +
                         "\n+-+ Top Left: " + topLeft.getX() + "  " + topLeft.getY() + "  " + topLeft.getZ() +
+                        "\nOffset: " + offsetX + " " + offsetY +
                         "\nColor Background: " + colorBackground.toHex(false) +
                         "\nColor BorderReach: " + colorBorderReach.toHex(false) +
                         "\nMin Zoom: " + minZoom +

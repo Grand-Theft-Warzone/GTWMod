@@ -21,13 +21,15 @@ maps:
     permission:                     # or
       - "gtwmod.map.main_map"
     coordinates:
-      top_right: "1855;-2080;0"
-      down_right: "1855;255;0"
-      down_left: "-576;255;0"
-      top_left: "-576;-2080;0"
+      top_right: "4863;-8960;0"
+      down_right: "4863;2303;0"
+      down_left: "-6528;2303;0"
+      top_left: "-6528;-8960;0"
+    offsetX: 151
+    offsetY: 48
     color_background: "#FF0000"  # or 0 if you want to disable background color changing. In this case, the pixels on the edge of the images will be stretched to the limit.
     color_borderReach: "#FF0000" # or 0 if you want to disable dimming.
-    min_zoom: 180
-    max_zoom: 1000
+    min_zoom: 250
+    max_zoom: 1100
 
 

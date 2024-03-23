@@ -34,11 +34,14 @@ public class MapData {
     @Nullable private Integer minZoom;
     @Nullable private Integer maxZoom;
 
+    int offsetX;
+    int offsetY;
+
     public int defaultMinZoom = 180;
     public int defaultMaxZoom = 1000;
 
 
-    public MapData(String id, String imageId, String attachedTo, boolean allowLocalMarker, List<String> permission, MapLocation topRight, MapLocation downRiht, MapLocation downLeft, MapLocation topLeft, boolean background, AtumColor colorBackground, boolean boardReach, AtumColor colorBarderReach, int minZoom, int maxZoom) {
+    public MapData(String id, String imageId, String attachedTo, boolean allowLocalMarker, List<String> permission, MapLocation topRight, MapLocation downRiht, MapLocation downLeft, MapLocation topLeft, int offsetX, int offsetY, boolean background, AtumColor colorBackground, boolean boardReach, AtumColor colorBarderReach, int minZoom, int maxZoom) {
         this.id = id;
         this.imageId = imageId;
         this.attachedTo = attachedTo;
@@ -50,6 +53,9 @@ public class MapData {
         this.downLeft = downLeft;
         this.topLeft = topLeft;
 
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+
         this.background = background;
         this.colorBackground = colorBackground;
         this.boardReach = boardReach;
@@ -59,16 +65,16 @@ public class MapData {
         this.maxZoom = maxZoom;
     }
 
-    public MapData(String id, String imageId, String attachedTo, boolean allowLocalMarker, List<String> permission, MapLocation topRight, MapLocation downRiht, MapLocation downLeft, MapLocation topLeft, boolean background, boolean boardReach, AtumColor colorBarderReach, Integer minZoom, Integer maxZoom) {
-        this(id, imageId, attachedTo, allowLocalMarker, permission, topRight, downRiht, downLeft, topLeft, background, null, boardReach, colorBarderReach, minZoom, maxZoom);
+    public MapData(String id, String imageId, String attachedTo, boolean allowLocalMarker, List<String> permission, MapLocation topRight, MapLocation downRiht, MapLocation downLeft, MapLocation topLeft, int offsetX, int offsetY, boolean background, boolean boardReach, AtumColor colorBarderReach, Integer minZoom, Integer maxZoom) {
+        this(id, imageId, attachedTo, allowLocalMarker, permission, topRight, downRiht, downLeft, topLeft, offsetX, offsetY, background, null, boardReach, colorBarderReach, minZoom, maxZoom);
     }
 
-    public MapData(String id, String imageId, String attachedTo, boolean allowLocalMarker, List<String> permission, MapLocation topRight, MapLocation downRiht, MapLocation downLeft, MapLocation topLeft, boolean background, boolean boardReach, Integer minZoom, Integer maxZoom) {
-        this(id, imageId, attachedTo, allowLocalMarker, permission, topRight, downRiht, downLeft, topLeft, background, null, boardReach, null, minZoom, maxZoom);
+    public MapData(String id, String imageId, String attachedTo, boolean allowLocalMarker, List<String> permission, MapLocation topRight, MapLocation downRiht, MapLocation downLeft, MapLocation topLeft, int offsetX, int offsetY, boolean background, boolean boardReach, Integer minZoom, Integer maxZoom) {
+        this(id, imageId, attachedTo, allowLocalMarker, permission, topRight, downRiht, downLeft, topLeft, offsetX, offsetY, background, null, boardReach, null, minZoom, maxZoom);
     }
 
-    public MapData(String id, String imageId, String attachedTo, boolean allowLocalMarker, List<String> permission, MapLocation topRight, MapLocation downRiht, MapLocation downLeft, MapLocation topLeft, boolean background, AtumColor colorBackground, boolean boardReach, Integer minZoom, Integer maxZoom) {
-        this(id, imageId, attachedTo, allowLocalMarker, permission, topRight, downRiht, downLeft, topLeft, background, colorBackground, boardReach, null, minZoom, maxZoom);
+    public MapData(String id, String imageId, String attachedTo, boolean allowLocalMarker, List<String> permission, MapLocation topRight, MapLocation downRiht, MapLocation downLeft, MapLocation topLeft, int offsetX, int offsetY, boolean background, AtumColor colorBackground, boolean boardReach, Integer minZoom, Integer maxZoom) {
+        this(id, imageId, attachedTo, allowLocalMarker, permission, topRight, downRiht, downLeft, topLeft, offsetX, offsetY, background, colorBackground, boardReach, null, minZoom, maxZoom);
     }
 
     public MapImageData toMapImageData() {
@@ -83,7 +89,7 @@ public class MapData {
         } else {
             colorBoardReachP = colorBarderReach;
         }
-        return new MapImageData(imageId, topRight, downRiht, downLeft, topLeft, colorBackgroundP, colorBoardReachP);
+        return new MapImageData(imageId, topRight, downRiht, downLeft, topLeft, offsetX, offsetY, colorBackgroundP, colorBoardReachP);
     }
 
     public int getMinZoomOrDefault() {

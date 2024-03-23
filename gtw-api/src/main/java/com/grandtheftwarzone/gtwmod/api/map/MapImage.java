@@ -30,30 +30,8 @@ public class MapImage {
     private int widthInBlocks;
     private int heightInBlocks;
 
-    public MapImage(ResourceLocation inputImage, MapLocation topRight, MapLocation downRight, MapLocation downLeft, MapLocation topLeft) {
-        this.image = inputImage;
-        this.topRight = topRight;
-        this.downRight = downRight;
-        this.downLeft = downLeft;
-        this.topLeft = topLeft;
 
-        try {
-            InputStream imageStream = Minecraft.getMinecraft().getResourceManager().getResource(inputImage).getInputStream();
-            BufferedImage image = ImageIO.read(imageStream);
-            this.imageWidth = image.getWidth();
-            this.imageHeight = image.getHeight();
-        } catch (IOException e) {
-            GtwLog.getLogger().error(String.valueOf(e));
-        }
-
-        this.pixelsPerBlockX = imageWidth / Math.abs(downRight.getX() - downLeft.getX());
-        this.pixelsPerBlockZ = imageHeight / Math.abs(topLeft.getY() - downLeft.getY());
-
-        this.widthInBlocks = (int) Math.abs(downRight.getX() - downLeft.getX());
-        this.heightInBlocks = (int) Math.abs(downRight.getY() - topRight.getY());
-    }
-
-    public MapImage(ResourceLocation inputImage, String imageId, MapLocation topRight, MapLocation downRight, MapLocation downLeft, MapLocation topLeft) {
+    public MapImage(ResourceLocation inputImage, String imageId, MapLocation topRight, MapLocation downRight, MapLocation downLeft, MapLocation topLeft, int offsetX, int offsetY) {
         this.image = inputImage;
         this.topRight = topRight;
         this.downRight = downRight;
@@ -75,16 +53,16 @@ public class MapImage {
                 InputStream stream = getFileInputStream(file);
                 BufferedImage imageFirst = ImageIO.read(stream);
 
-                this.imageWidth = imageFirst.getWidth();
-                this.imageHeight = imageFirst.getHeight();
+                this.imageWidth = imageFirst.getWidth() + offsetX;
+                this.imageHeight = imageFirst.getHeight() + offsetY;
 
             } else {
                 System.out.println("Запускаю другой алгоритм");
                 InputStream imageStream = Minecraft.getMinecraft().getResourceManager().getResource(inputImage).getInputStream();
 
                 BufferedImage image = ImageIO.read(imageStream);
-                this.imageWidth = image.getWidth();
-                this.imageHeight = image.getHeight();
+                this.imageWidth = image.getWidth() + offsetX;
+                this.imageHeight = image.getHeight() + offsetY;
             }
         } catch (IOException e) {
             GtwLog.getLogger().error(String.valueOf(e));
@@ -97,24 +75,6 @@ public class MapImage {
 
         this.widthInBlocks = (int) Math.abs(downRight.getX() - downLeft.getX());
         this.heightInBlocks = (int) Math.abs(downRight.getY() - topRight.getY());
-    }
-
-    public MapImage(ResourceLocation inputImage, int imageWidth, int imageHeight, MapLocation topLeft, MapLocation downLeft, MapLocation downRight, MapLocation topRight) {
-        this.image = inputImage;
-        this.topLeft = topLeft;
-        this.downLeft = downLeft;
-        this.downRight = downRight;
-        this.topRight = topRight;
-
-        this.imageWidth = imageWidth;
-        this.imageHeight = imageHeight;
-
-        this.pixelsPerBlockX = imageWidth / (downRight.getX() - downLeft.getX());
-        this.pixelsPerBlockZ = imageHeight / (topLeft.getY() - downLeft.getY());
-
-        this.widthInBlocks = (int) Math.abs(downRight.getX() - downLeft.getX());
-        this.heightInBlocks = (int) Math.abs(downRight.getY() - topRight.getY());
-
     }
 
     public MapLocation calculateCoord(double targetX, double targetY) {
