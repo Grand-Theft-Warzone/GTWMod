@@ -23,6 +23,7 @@ import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +72,7 @@ public class GtwMinimapManager implements MinimapManager {
 
     private MapImage minimapData;
 
+    private MapImageUtils mapImageUtils;
 
     @Getter @Setter
     private boolean initElementDraw = false;
@@ -82,6 +84,7 @@ public class GtwMinimapManager implements MinimapManager {
 
 
     public GtwMinimapManager(){
+        mapImageUtils = new MapImageUtils(new File("gtwdata/map/"));
         EVENT_BUS.register(this);
     }
 
@@ -89,10 +92,10 @@ public class GtwMinimapManager implements MinimapManager {
 
     public void updateData(MapImageData minimapData, String radarImageId, Boolean draw) {
 
-        ResourceLocation mapTexture = MapImageUtils.getMapImage(minimapData.getImageId(), minimapData.getColorBackground());
+        ResourceLocation mapTexture = mapImageUtils.getMapImage(minimapData.getImageId(), minimapData.getColorBackground());
         this.minimapData = new MapImage(mapTexture, minimapData.getImageId(), minimapData.getTopRight(), minimapData.getDownRight(), minimapData.getDownLeft(), minimapData.getTopLeft(), minimapData.getOffsetX(), minimapData.getOffsetY());
         this.minimapImage = mapTexture;
-        this.radarImage = MapImageUtils.getImage(radarImageId);
+        this.radarImage = mapImageUtils.getImage(radarImageId);
 
         this.colorBorderReach = minimapData.getColorBorderReach();
         this.initElementDraw = false;

@@ -1,82 +1,41 @@
 package com.grandtheftwarzone.gtwmod.api.map;
 
-import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
+import com.grandtheftwarzone.gtwmod.api.misc.FileImageUtils;
 import lombok.Getter;
 import me.phoenixra.atumodcore.api.display.misc.resources.BufferTextureResource;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.IResourcePack;
-import net.minecraft.client.resources.ResourcePackRepository;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.io.FileUtils;
 
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.rmi.registry.Registry;
-import java.util.List;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
-public class MapImageUtils {
+public class MapImageUtils extends FileImageUtils {
 
-    private static ResourceLocation nullImage = new ResourceLocation("gtwmod", "textures/gui/minimap/nullable.png");
 
     @Getter
-    private static File gameDir = new File("gtwdata/map/");
+    private File gameDir;
 
 
-    public static ResourceLocation getImage(String idName) {
-
-        if (!gameDir.exists()) {
-            gameDir.mkdir();
-        }
-
-        String id = idName + ".png";
-        File file = new File(gameDir, id);
-        if (!file.exists()) {
-            GtwLog.getLogger().error("[getImage] File " + file.getAbsolutePath() + " Not found.");
-            GtwLog.getLogger().error("[getImage] I'm looking for a mod in resources...");
-
-            IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
-            ResourceLocation resourceLocation = new ResourceLocation("gtwmod", "textures/gui/minimap/" + id);
-
-            try {
-                IResource resource = resourceManager.getResource(resourceLocation);
-                GtwLog.getLogger().debug("[getMapImage] Image "+idName+" detected.");
-                InputStream inputStream = resource.getInputStream();
-                BufferedImage image = ImageIO.read(inputStream);
-
-                if (!file.exists()) {
-                    System.out.println("DELITE");
-                }
-
-                file.createNewFile();
-
-                FileOutputStream outputStream = new FileOutputStream(file);
-                ImageIO.write(image, "PNG", outputStream);
-                outputStream.close();
-
-                GtwLog.getLogger().debug("[getMapImage] Image "+idName+" copied.");
-                return resourceLocation;
-            } catch (IOException e) {
-                // Ресурс не найден
-                return nullImage;
-            }
-        }
-        try {
-            BufferTextureResource bufferTextureResource = new BufferTextureResource(file);
-            bufferTextureResource.loadTexture();
-            return bufferTextureResource.getResourceLocation();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public MapImageUtils(File gameDir) {
+        super(gameDir);
+        this.gameDir = gameDir;
     }
 
-    public static @Nullable ResourceLocation getMapImage(String id, @Nullable AtumColor colorBackground) {
+    @Override
+    public ResourceLocation getImage(String idName) {
+        return super.getImage(idName, "textures/gui/minimap/");
+    }
+
+    public @Nullable ResourceLocation getMapImage(String id, @Nullable AtumColor colorBackground) {
         File file = new File(gameDir, "maps/" + id + ".png");
 
 
@@ -120,7 +79,7 @@ public class MapImageUtils {
 
 
         if (colorBackground == null) {
-            return getImage("maps/" + id);
+            return super.getImage("maps/" + id, "textures/gui/minimap/");
         }
         try {
             InputStream stream = getFileInputStream(file);
@@ -174,13 +133,5 @@ public class MapImageUtils {
         return nullImage;
     }
 
-    public static InputStream getFileInputStream(File file) {
-        try {
-            return new FileInputStream(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
 }
