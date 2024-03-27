@@ -8,6 +8,7 @@ import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -50,6 +51,23 @@ public class FileImageUtils {
             throw new RuntimeException(e);
         }
     }
+
+    public static @Nullable ResourceLocation getRLImagefromFile(File file) {
+
+        if (!file.exists()) {
+            GtwLog.getLogger().error("[getRLImagefromFile] File " + file.getAbsolutePath() + " Not found.");
+            return null;
+        }
+        try {
+            BufferTextureResource bufferTextureResource = new BufferTextureResource(file);
+            bufferTextureResource.loadTexture();
+            return bufferTextureResource.getResourceLocation();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 
     public ResourceLocation getImage(String idName, String localSearchDir) {
 

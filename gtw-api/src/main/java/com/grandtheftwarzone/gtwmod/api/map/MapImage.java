@@ -49,7 +49,7 @@ public class MapImage {
         try {
             if (inputImage.getResourcePath().startsWith("dynamic")) {
                 System.out.println("Запускаю первый алгоритм");
-                File file = new File("/maps/" + imageId + ".png");
+                File file = new File("gtwdata/map/maps/" + imageId + ".png");
                 InputStream stream = getFileInputStream(file);
                 BufferedImage imageFirst = ImageIO.read(stream);
 

@@ -2,6 +2,7 @@ package com.grandtheftwarzone.gtwmod.api.map;
 
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.misc.FileImageUtils;
+import com.grandtheftwarzone.gtwmod.api.misc.FileLoader;
 import lombok.Getter;
 import me.phoenixra.atumodcore.api.display.misc.resources.BufferTextureResource;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
@@ -28,6 +29,9 @@ public class MapImageUtils extends FileImageUtils {
     public MapImageUtils(File gameDir) {
         super(gameDir);
         this.gameDir = gameDir;
+
+        new FileLoader(gameDir);
+
     }
 
     @Override
