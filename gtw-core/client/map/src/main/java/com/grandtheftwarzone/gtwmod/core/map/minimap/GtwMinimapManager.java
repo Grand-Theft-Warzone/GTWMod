@@ -17,6 +17,7 @@ import me.phoenixra.atumodcore.api.misc.AtumColor;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
@@ -84,7 +85,6 @@ public class GtwMinimapManager implements MinimapManager {
 
 
     public GtwMinimapManager(){
-        mapImageUtils = new MapImageUtils(new File("gtwdata/map/"));
         EVENT_BUS.register(this);
     }
 
@@ -209,6 +209,11 @@ public class GtwMinimapManager implements MinimapManager {
         ClientRegistry.registerKeyBinding(increaseZoom);
         ClientRegistry.registerKeyBinding(decreaseZoom);
         ClientRegistry.registerKeyBinding(showMinimaps);
+
+    }
+
+    public void onInit(FMLInitializationEvent event) {
+        mapImageUtils = new MapImageUtils(new File("gtwdata/map/"));
     }
 
     @Override

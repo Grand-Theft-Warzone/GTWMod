@@ -8,6 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -26,6 +27,8 @@ public class FileLoader {
 
         // Рекурсивно обрабатываем все файлы и подпапки
         updateDirImage(folderPath);
+
+
     }
 
     public void updateDirImage(File directory) {
@@ -34,7 +37,7 @@ public class FileLoader {
             for (File file : files) {
                 if (file.isFile()) {
                     System.out.println("Обнаружил " + file.toString());
-                    if (file.toString().endsWith(".png") || file.toString().endsWith(".jpeg")) {
+                    if (!(file.toString().endsWith(".png") || file.toString().endsWith(".jpeg"))) {
                         GtwLog.getLogger().warn("File " + file + " is not .png || .jpeg");
                         continue;
                     }
@@ -45,20 +48,22 @@ public class FileLoader {
                             continue;
                         }
                         FileDetails fileDetails = new FileDetails(calculateFileHash(file), resourceLocationFile);
+                        System.out.println("BLABLABLA " + fileDetails.toString());
                         fileMap.put(file, fileDetails);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 } else if (file.isDirectory()) {
                     // Рекурсивно обрабатываем подпапку
-                    updateDir(file);
+                    updateDirImage(file);
                 }
             }
         }
+
     }
 
     public void updateFileImage(File file) {
-        if (file.toString().endsWith(".png") || file.toString().endsWith(".jpeg")) {
+        if (!(file.toString().endsWith(".png") || file.toString().endsWith(".jpeg"))) {
             GtwLog.getLogger().warn("File " + file + " is not .png || .jpeg");
             return;
         }
@@ -82,6 +87,40 @@ public class FileLoader {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public @Nullable ResourceLocation getResourceLocationOrNull(File file) throws IOException {
+        if (file.isDirectory() || !file.exists()) {
+            GtwLog.getLogger().error("[getResourceLocationOrNull] File "+file+" not found! (Or is a folder)");
+            fileMap.remove(file);
+            return null;
+        }
+
+        FileDetails fileDetails = fileMap.get(file);
+        if (fileDetails == null) {
+            GtwLog.getLogger().warn("[getResourceLocationOrNull] FileDetails " + " файла " + file + "= null");
+            fileMap.remove(file);
+            return null;
+        }
+
+        if (!calculateFileHash(file).equals(fileDetails.getFileHash())) {
+            GtwLog.getLogger().warn("[getResourceLocationOrNull] The file " + file + " has been modified!");
+            fileMap.remove(file);
+            return null;
+        }
+
+        if (fileDetails.getResourceLocation() == null) {
+            GtwLog.getLogger().error("FileDetails " + fileDetails + " RL is null");
+            fileMap.remove(file);
+            return null;
+        }
+
+        return fileDetails.getResourceLocation();
+
+    }
+
+    public void removeFile(File file) {
+        fileMap.remove(file);
     }
 
     public static String calculateFileHash(File file) throws IOException {

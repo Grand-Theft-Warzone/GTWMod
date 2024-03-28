@@ -19,6 +19,7 @@ import me.phoenixra.atumodcore.api.service.AtumModService;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.fml.common.event.FMLEvent;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
@@ -54,10 +55,12 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
 
     @Override
     public void handleFmlEvent(@NotNull FMLEvent fmlEvent) {
+
         if(fmlEvent instanceof FMLPreInitializationEvent){
             minimapManager.onPreInit((FMLPreInitializationEvent) fmlEvent);
             this.processConsumer = new ProcessConsumer();
-
+        }else if(fmlEvent instanceof FMLInitializationEvent){
+            minimapManager.onInit((FMLInitializationEvent)fmlEvent);
         }
     }
 

@@ -27,11 +27,8 @@ public class MapImageUtils extends FileImageUtils {
 
 
     public MapImageUtils(File gameDir) {
-        super(gameDir);
+        super(gameDir, true);
         this.gameDir = gameDir;
-
-        new FileLoader(gameDir);
-
     }
 
     @Override
@@ -40,6 +37,9 @@ public class MapImageUtils extends FileImageUtils {
     }
 
     public @Nullable ResourceLocation getMapImage(String id, @Nullable AtumColor colorBackground) {
+
+        System.out.println("F1");
+
         File file = new File(gameDir, "maps/" + id + ".png");
 
 
@@ -61,10 +61,6 @@ public class MapImageUtils extends FileImageUtils {
                 InputStream inputStream = resource.getInputStream();
                 BufferedImage image = ImageIO.read(inputStream);
 
-                if (!file.exists()) {
-                    System.out.println("DELITE");
-                }
-
                 file.createNewFile();
 
                 FileOutputStream outputStream = new FileOutputStream(file);
@@ -79,13 +75,16 @@ public class MapImageUtils extends FileImageUtils {
                 return nullImage;
             }
         }
+        System.out.println("F2");
 
 
 
         if (colorBackground == null) {
             return super.getImage("maps/" + id, "textures/gui/minimap/");
         }
+
         try {
+            System.out.println("F3");
             InputStream stream = getFileInputStream(file);
             BufferedImage imageFirst = ImageIO.read(stream);
 
@@ -105,6 +104,7 @@ public class MapImageUtils extends FileImageUtils {
 //                imageFirst = background;
 //            }
 
+            System.out.println("F for for");
             if (colorBackground != null) {
                 for (int y = 0; y < height; y++) {
                     imageFirst.setRGB(0, y, colorBackground.toInt()); // Левый край
@@ -115,21 +115,37 @@ public class MapImageUtils extends FileImageUtils {
                     imageFirst.setRGB(x, height - 1, colorBackground.toInt()); // Нижний край
                 }
             }
-
+            System.out.println("F for for end");
             File modifiedFile = new File(gameDir, "/maps/" + id +"_modif.png");
+
             if (!modifiedFile.exists()) {
                 System.out.println("DELITE");
             }
 
             modifiedFile.createNewFile();
+            System.out.println("F create end");
 
             FileOutputStream outputStream = new FileOutputStream(modifiedFile);
             ImageIO.write(imageFirst, "PNG", outputStream);
             outputStream.close();
+            System.out.println("F4");
 
-            BufferTextureResource bufImage = new BufferTextureResource(modifiedFile);
-            bufImage.loadTexture();
-            return bufImage.getResourceLocation();
+            if (super.getFileLoader() != null) {
+
+                ResourceLocation resourceLocationImage = super.getFileLoader().getResourceLocationOrNull(modifiedFile);
+                if (resourceLocationImage == null) {
+                    resourceLocationImage = FileImageUtils.getRLImagefromFile(modifiedFile);
+                    super.getFileLoader().updateFileImage(modifiedFile);
+                }
+                System.out.println("F5");
+                return resourceLocationImage;
+
+            } else {
+                System.out.println("F6");
+                return FileImageUtils.getRLImagefromFile(modifiedFile);
+            }
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }

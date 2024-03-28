@@ -97,6 +97,7 @@ public class GTWModServer extends AtumMod {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         notifyModServices(event);
+
     }
 
     @Mod.EventHandler
