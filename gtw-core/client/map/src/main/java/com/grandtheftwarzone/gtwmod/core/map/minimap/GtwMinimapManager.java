@@ -18,6 +18,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
@@ -213,7 +214,13 @@ public class GtwMinimapManager implements MinimapManager {
     }
 
     public void onInit(FMLInitializationEvent event) {
+//        mapImageUtils = new MapImageUtils(new File("gtwdata/map/"));
+    }
+
+    public void onPostInit(FMLPostInitializationEvent event) {
+        System.out.println("PostInit start");
         mapImageUtils = new MapImageUtils(new File("gtwdata/map/"));
+        System.out.println("PostInit stop");
     }
 
     @Override

@@ -14,10 +14,9 @@ import net.minecraft.util.ResourceLocation;
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class MapImageUtils extends FileImageUtils {
 
@@ -85,8 +84,7 @@ public class MapImageUtils extends FileImageUtils {
 
         try {
             System.out.println("F3");
-            InputStream stream = getFileInputStream(file);
-            BufferedImage imageFirst = ImageIO.read(stream);
+            BufferedImage imageFirst = getFileBufferedImage(file);
 
             int width = imageFirst.getWidth();
             int height = imageFirst.getHeight();
@@ -119,22 +117,26 @@ public class MapImageUtils extends FileImageUtils {
             File modifiedFile = new File(gameDir, "/maps/" + id +"_modif.png");
 
             if (!modifiedFile.exists()) {
-                System.out.println("DELITE");
+
             }
 
-            modifiedFile.createNewFile();
-            System.out.println("F create end");
-
-            FileOutputStream outputStream = new FileOutputStream(modifiedFile);
-            ImageIO.write(imageFirst, "PNG", outputStream);
-            outputStream.close();
-            System.out.println("F4");
+            // @TODO Тут вместо false добавить проверку на идентичность.
+            if (modifiedFile.exists() && false) {
+                System.out.println("Хэш идентичный. Пропускаем изменеие файла.");
+            } else {
+                modifiedFile.createNewFile();
+                System.out.println("F create end");
+                FileOutputStream outputStream = new FileOutputStream(modifiedFile);
+                ImageIO.write(imageFirst, "PNG", outputStream);
+                outputStream.close();
+                System.out.println("F4");
+            }
 
             if (super.getFileLoader() != null) {
 
                 ResourceLocation resourceLocationImage = super.getFileLoader().getResourceLocationOrNull(modifiedFile);
                 if (resourceLocationImage == null) {
-                    resourceLocationImage = FileImageUtils.getRLImagefromFile(modifiedFile);
+                    resourceLocationImage = getRLImagefromFile(modifiedFile);
                     super.getFileLoader().updateFileImage(modifiedFile);
                 }
                 System.out.println("F5");
@@ -142,7 +144,7 @@ public class MapImageUtils extends FileImageUtils {
 
             } else {
                 System.out.println("F6");
-                return FileImageUtils.getRLImagefromFile(modifiedFile);
+                return getRLImagefromFile(modifiedFile);
             }
 
 
@@ -152,6 +154,7 @@ public class MapImageUtils extends FileImageUtils {
 
         return nullImage;
     }
+
 
 
 }

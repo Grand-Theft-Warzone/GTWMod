@@ -12,6 +12,8 @@ import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 public class FileImageUtils {
@@ -151,6 +153,38 @@ public class FileImageUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static BufferedImage getFileBufferedImage(File file) {
+        try {
+            InputStream stream = getFileInputStream(file);
+            assert stream != null;
+            return ImageIO.read(stream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String getMD5Hash(BufferedImage image) throws NoSuchAlgorithmException, IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", outputStream);
+
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        byte[] hashBytes = md.digest(outputStream.toByteArray());
+
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hashBytes) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+
+        return hexString.toString();
     }
 
 }
