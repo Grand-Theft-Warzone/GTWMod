@@ -389,15 +389,7 @@ public class CanvasPhoneImpl extends CanvasPhone {
     }
 
 
-    @Override
-    public boolean isSetupState() {
-        return false;
-    }
 
-    @Override
-    public void setSetupState(boolean b) {
-
-    }
 
     @Override
     public void setDisplayRenderer(@NotNull DisplayRenderer displayRenderer) {
