@@ -40,26 +40,26 @@ public class GTWEmoji implements AtumModService {
 
 
     public GTWEmoji() {
-        GtwLog.info("Main method Emoji is called.");
+        GtwLog.getLogger().info("Main method Emoji is called.");
         GtwAPI.getInstance().getGtwMod().provideModService(
                 this
         );
     }
 
     public static List<Emoji> readCategory(String cat) throws YamlException {
-        GtwLog.info("Reading category: " + cat);
+        GtwLog.getLogger().info("Reading category: " + cat);
 
         String yamlContent = readStringFromURL(GITHUB_URL + cat);
-        GtwLog.debug("Received YAML content:\n" + yamlContent);
+        GtwLog.getLogger().debug("Received YAML content:\n" + yamlContent);
 
         YamlReader categoryReader = new YamlReader(new StringReader(yamlContent));
 
         try {
             Emoji[] emojis = categoryReader.read(Emoji[].class);
-            GtwLog.info("Successfully read emojis from category: " + cat);
+            GtwLog.getLogger().info("Successfully read emojis from category: " + cat);
             return Lists.newArrayList(emojis);
         } catch (YamlException e) {
-            GtwLog.error("Error reading YAML content for category " + cat + ": " + e.getMessage());
+            GtwLog.getLogger().error("Error reading YAML content for category " + cat + ": " + e.getMessage());
             throw e;
         }
     }
@@ -72,7 +72,7 @@ public class GTWEmoji implements AtumModService {
             }
         } catch (IOException e) {
             // Log the exceptionz
-            GtwLog.error("Error reading from URL: " + e);
+            GtwLog.getLogger().error("Error reading from URL: " + e);
         }
         return "";
     }
@@ -80,15 +80,15 @@ public class GTWEmoji implements AtumModService {
 
     public void generateEmojiList() {
         if (error) {
-            GtwLog.error("Emoji List is not generated. See the error above.");
+            GtwLog.getLogger().error("Emoji List is not generated. See the error above.");
             return;
         }
         if (emoji_full) {
-            GtwLog.error("The Emoji List is already fully formed. Skip regeneration.");
+            GtwLog.getLogger().error("The Emoji List is already fully formed. Skip regeneration.");
             return;
         }
         try {
-            GtwLog.info("Generate Emoji List start.");
+            GtwLog.getLogger().info("Generate Emoji List start.");
 
             EMOJI_LIST.clear();
             YamlReader reader = new YamlReader(new StringReader(readStringFromURL(GITHUB_URL + "Categories.yml")));
@@ -99,17 +99,17 @@ public class GTWEmoji implements AtumModService {
             }
             emoji_full = true;
         } catch (YamlException e) {
-            GtwLog.info("YAML Exception: " + e);
-            GtwLog.info("Error!");
+            GtwLog.getLogger().info("YAML Exception: " + e);
+            GtwLog.getLogger().info("Error!");
             error = true;
         } catch (NullPointerException e) {
-            GtwLog.error("-> NullPointerException: " + e.getMessage());
-            GtwLog.error("-> Error loading Emoji List. Please check your internet connection.");
-            GtwLog.error("Details about the error: ");
+            GtwLog.getLogger().error("-> NullPointerException: " + e.getMessage());
+            GtwLog.getLogger().error("-> Error loading Emoji List. Please check your internet connection.");
+            GtwLog.getLogger().error("Details about the error: ");
             e.printStackTrace();
             //error = true;
         } catch (Exception e) {
-            GtwLog.error("An unknown error has occurred: " + e.getMessage());
+            GtwLog.getLogger().error("An unknown error has occurred: " + e.getMessage());
             error = true;
             e.printStackTrace();
         }
@@ -127,7 +127,7 @@ public class GTWEmoji implements AtumModService {
     }
     public void onPreInit(FMLPreInitializationEvent event) {
         minecraftDir = event.getModConfigurationDirectory().getParentFile();
-        GtwLog.info("Pre-Initialization Event is called. (Emoji)");
+        GtwLog.getLogger().info("Pre-Initialization Event is called. (Emoji)");
     }
 
     public void onInit(FMLInitializationEvent event) {
@@ -135,7 +135,7 @@ public class GTWEmoji implements AtumModService {
         ConfigManager.sync(GtwProperties.MOD_ID, Config.Type.INSTANCE);
 
         // Log information about the method being called
-        GtwLog.info("Initialization Event is called. (Emoji)");
+        GtwLog.getLogger().info("Initialization Event is called. (Emoji)");
 
         if (!error) {
             Minecraft.getMinecraft().fontRenderer = new EmojiFontRenderer(Minecraft.getMinecraft());

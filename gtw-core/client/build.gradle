@@ -11,6 +11,7 @@ dependencies {
     api project(':gtw-core:client:display')
     api project(':gtw-core:client:phone')
     api project(':gtw-core:client:misc')
+    api project(':gtw-core:client:map')
     api project(':gtw-core:client:emoji')
 
 }

@@ -15,6 +15,7 @@ import com.grandtheftwarzone.gtwmod.core.display.GtwFactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.core.display.GtwScreensManager;
 import com.grandtheftwarzone.gtwmod.core.display.loadingscreen.MainSplashRenderer;
 import com.grandtheftwarzone.gtwmod.core.display.loadingscreen.listener.ModLoadingListener;
+import com.grandtheftwarzone.gtwmod.core.map.GtwMapManagerClient;
 import com.grandtheftwarzone.gtwmod.core.misc.GtwSoundsManager;
 import com.grandtheftwarzone.gtwmod.core.network.GtwNetworkAPI;
 import com.grandtheftwarzone.gtwmod.core.phone.core.GtwPhoneManager;
@@ -40,6 +41,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,13 +74,21 @@ public class GTWModClient extends AtumMod {
     private PlayerData playerData;
     @Getter
     private GTWEmoji emoji;
+    @Getter
+    private GtwMapManagerClient map;
+    @Getter
+    private File minecraftDir;
 
     public GTWModClient(){
         if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
             throw new RuntimeException("This mod is client only!");
         }
+
+        GtwLog.setLogger(getLogger());
+
         System.out.println(GtwAPI.getGtwAsciiArt());
         System.out.println("Initializing GTWMod[client]...");
+
         instance = this;
         GtwAPI.Instance.set(new GtwAPIClient());
         settings = getConfigManager().createLoadableConfig(
@@ -87,6 +97,7 @@ public class GTWModClient extends AtumMod {
                 ConfigType.JSON,
                 false
         );
+
         //services
         networkAPI = new GtwNetworkAPI(this);
         soundsManager = new GtwSoundsManager();
@@ -94,11 +105,14 @@ public class GTWModClient extends AtumMod {
         phoneManager = new GtwPhoneManager(this);
         emoji = new GTWEmoji();
 
+        map = new GtwMapManagerClient(this);
+
         //other
         playerData = new PlayerData();
         factoryGuiHandler = new GtwFactoryGuiHandler();
 
         registerConfigCategory();
+
     }
 
 
@@ -111,7 +125,7 @@ public class GTWModClient extends AtumMod {
 
     @SubscribeEvent
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        GtwLog.info("Login to server/world registered");
+        GtwLog.getLogger().info("Login to server/world registered");
         emoji.generateEmojiList();
     }
 
@@ -165,7 +179,7 @@ public class GTWModClient extends AtumMod {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
-
+        this.minecraftDir = event.getModConfigurationDirectory().getParentFile();
         notifyModServices(event);
     }
 

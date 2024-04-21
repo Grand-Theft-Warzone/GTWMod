@@ -55,11 +55,11 @@ public class ImageExportUtil {
         }
     }
 
-    public static void exportNbtFile(File dir, String key, NBTTagCompound tag) throws IOException {
+    public static void exportNbtFile(File dir, String key, NBTTagCompound attachedTo) throws IOException {
         // Write the file
         File file = new File(dir, key + ".txt").getCanonicalFile();
         try {
-            FileUtils.writeStringToFile(file, tag.toString(), Charsets.UTF_8);
+            FileUtils.writeStringToFile(file, attachedTo.toString(), Charsets.UTF_8);
         } catch (NullPointerException e) {
             e.printStackTrace();
             throw new IOException("Error while writing the TXT image " + file);

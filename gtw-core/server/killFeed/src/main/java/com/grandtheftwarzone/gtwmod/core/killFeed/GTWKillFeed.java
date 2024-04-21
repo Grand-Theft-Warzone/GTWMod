@@ -5,6 +5,7 @@ import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import me.phoenixra.atumconfig.api.config.Config;
 
 import me.phoenixra.atumconfig.api.config.ConfigType;
+import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.service.AtumModService;
 import me.phoenixra.atumconfig.api.tuples.PairRecord;
 import me.phoenixra.atumconfig.api.utils.StringUtils;
@@ -37,11 +38,9 @@ public class GTWKillFeed implements AtumModService {
     public static Boolean debug;
 
 
-    public GTWKillFeed() {
-        GtwLog.info("The killFeed module is starting...");
-
-        MinecraftForge.EVENT_BUS.register(this);
-        GtwAPI.getInstance().getGtwMod().provideModService(this);
+    public GTWKillFeed(AtumMod atumMod) {
+        atumMod.provideModService(this);
+        GtwLog.getLogger().info("The killFeed module is starting...");
 
     }
 
@@ -62,42 +61,42 @@ public class GTWKillFeed implements AtumModService {
                 );
 
         debug = config.getBool("debug");
-        if (debug) GtwLog.info("[DEBUG killFeed] Start init config");
+        if (debug) GtwLog.getLogger().info("[DEBUG killFeed] Start init config");
 
 
         variables = new ArrayList<>();
-        if (debug) GtwLog.info("======================\n[DEBUG killFeed] Variables list:");
+        if (debug) GtwLog.getLogger().info("======================\n[DEBUG killFeed] Variables list:");
         Config variableSection = config.getSubsection("variable");
         for(String key : variableSection.getKeys(false)){
             variables.add(new PairRecord<>("$" + key, variableSection.getString(key)));
-            if (debug) GtwLog.info("* " + key + " -|- " + variableSection.getString(key));
+            if (debug) GtwLog.getLogger().info("* " + key + " -|- " + variableSection.getString(key));
         }
-        if (debug) GtwLog.info("======================");
+        if (debug) GtwLog.getLogger().info("======================");
 
 
         regexp = new HashMap<>();
-        if (debug) GtwLog.info("[DEBUG killFeed] Regexp list:");
+        if (debug) GtwLog.getLogger().info("[DEBUG killFeed] Regexp list:");
         Config regexpSection = config.getSubsection("regexp");
         for(String key : regexpSection.getKeys(false)){
             regexp.put(key, regexpSection.getString(key));
-            if (debug) GtwLog.info("* " + key + " -|- " + regexpSection.getString(key));
+            if (debug) GtwLog.getLogger().info("* " + key + " -|- " + regexpSection.getString(key));
         }
-        if (debug) GtwLog.info("======================");
+        if (debug) GtwLog.getLogger().info("======================");
 
-        if (debug) GtwLog.info("======================\n[DEBUG killFeed] Mods/Item list:");
+        if (debug) GtwLog.getLogger().info("======================\n[DEBUG killFeed] Mods/Item list:");
         mods = new HashMap<>();
         Config modsSection = config.getSubsection("mods");
         for (String modName : modsSection.getKeys(false)) {
             Map<String, String> blablacar = new HashMap<>();
             Config cfg = modsSection.getSubsection(modName);
-            if (debug) GtwLog.info("* " + modName + ":");
+            if (debug) GtwLog.getLogger().info("* " + modName + ":");
             for (String key : cfg.getKeys(false)) {
                 blablacar.put(key, cfg.getString(key));
-                if (debug) GtwLog.info("  - " + key + " -|- " + cfg.getString(key));
+                if (debug) GtwLog.getLogger().info("  - " + key + " -|- " + cfg.getString(key));
             }
             mods.put(modName, blablacar);
         }
-        if (debug) GtwLog.info("======================");
+        if (debug) GtwLog.getLogger().info("======================");
 
     }
 
@@ -107,7 +106,7 @@ public class GTWKillFeed implements AtumModService {
     public void onLivingDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntity();
-            if (debug) GtwLog.info("[killFeed] Caught the LivingDeathEvent event");
+            if (debug) GtwLog.getLogger().info("[killFeed] Caught the LivingDeathEvent event");
             if (player.getAttackingEntity() != null && !(player.getAttackingEntity() instanceof FakePlayer)) {
                 EntityLivingBase attacker = player.getAttackingEntity();
 
@@ -166,7 +165,7 @@ public class GTWKillFeed implements AtumModService {
                             "\n\nStatus: " + !killText.isEmpty() +
                             "\nkillText: " + killText +
                             "\n=======================";
-                    GtwLog.info(debugData);
+                    GtwLog.getLogger().info(debugData);
                 }
 
                 if (!killText.isEmpty()) {

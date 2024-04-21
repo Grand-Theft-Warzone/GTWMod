@@ -1,29 +1,16 @@
 package com.grandtheftwarzone.gtwmod.api;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraftforge.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
 
 
 public class GtwLog {
-    private static final String MOD_ID = GtwProperties.MOD_ID;
 
-    public static void log(Level logLevel, String message) {
-        FMLLog.log(MOD_ID, logLevel, message);
-    }
+    @Setter
+    @Getter
+    private static Logger logger;
 
-    public static void debug(String message) {
-        FMLLog.log(MOD_ID, Level.DEBUG, message);
-    }
-
-    public static void info(String message) {
-        FMLLog.log(MOD_ID, Level.INFO, message);
-    }
-
-    public static void all(String message) {
-        FMLLog.log(MOD_ID, Level.ALL, message);
-    }
-
-    public static void error(String message) {
-        FMLLog.log(MOD_ID, Level.ERROR, message);
-    }
 }

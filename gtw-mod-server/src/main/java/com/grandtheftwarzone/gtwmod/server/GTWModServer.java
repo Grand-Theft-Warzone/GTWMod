@@ -5,18 +5,23 @@ import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.GtwProperties;
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
+import com.grandtheftwarzone.gtwmod.core.map.GtwCommandManager;
+import com.grandtheftwarzone.gtwmod.core.map.GtwServerMapManager;
 import com.grandtheftwarzone.gtwmod.core.misc.GtwSoundsManager;
 import com.grandtheftwarzone.gtwmod.core.network.GtwNetworkAPI;
 import com.grandtheftwarzone.gtwmod.server.proxy.CommonProxy;
 import lombok.Getter;
 import lombok.Setter;
 import me.phoenixra.atumodcore.api.AtumMod;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,20 +43,30 @@ public class GTWModServer extends AtumMod {
     @Getter
     private GTWKillFeed killFeed;
 
+    @Getter
+    private GtwServerMapManager map;
+
+    @Getter
+    private MinecraftServer server;
+
 
     public GTWModServer(){
         if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
             throw new RuntimeException("This mod is server side only!");
         }
-        GtwLog.info(GtwAPI.getGtwAsciiArt());
-        GtwLog.info("Initializing GTWMod[server]...");
+
+        GtwLog.setLogger(getLogger());
+
+        GtwLog.getLogger().info(GtwAPI.getGtwAsciiArt());
+        GtwLog.getLogger().info("Initializing GTWMod[server]...");
         instance = this;
         GtwAPI.Instance.set(new GtwAPIServer());
 
         //services
         networkAPI = new GtwNetworkAPI(this);
         soundsManager = new GtwSoundsManager();
-        killFeed = new GTWKillFeed();
+        killFeed = new GTWKillFeed(this);
+        map = new GtwServerMapManager(this);
 
     }
 
@@ -66,6 +81,13 @@ public class GTWModServer extends AtumMod {
         notifyModServices(event);
     }
 
+    @SubscribeEvent
+    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        System.out.println("Заметил вход игрока");
+        GtwAPI.getInstance().getNetworkAPI().sendConnect((EntityPlayerMP) event.player);
+    }
+
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
@@ -75,6 +97,7 @@ public class GTWModServer extends AtumMod {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         notifyModServices(event);
+
     }
 
     @Mod.EventHandler
@@ -89,6 +112,8 @@ public class GTWModServer extends AtumMod {
 
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
+        this.server = event.getServer();
+        event.registerServerCommand(new GtwCommandManager());
         notifyModServices(event);
     }
 
@@ -114,6 +139,6 @@ public class GTWModServer extends AtumMod {
 
     @Override
     public boolean isDebugEnabled() {
-        return false;
+        return true;
     }
 }

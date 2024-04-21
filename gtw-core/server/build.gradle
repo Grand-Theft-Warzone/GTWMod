@@ -8,5 +8,6 @@ repositories {
 
 dependencies {
     api project(':gtw-core:server:killFeed')
+    api project(':gtw-core:server:map')
 
 }

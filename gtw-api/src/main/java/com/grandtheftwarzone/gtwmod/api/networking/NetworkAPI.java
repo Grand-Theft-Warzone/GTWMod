@@ -1,9 +1,12 @@
 package com.grandtheftwarzone.gtwmod.api.networking;
 
 import com.grandtheftwarzone.gtwmod.api.gui.GuiAction;
+import com.grandtheftwarzone.gtwmod.api.map.data.CStartData;
 import com.grandtheftwarzone.gtwmod.api.player.NotificationRequest;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
+import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumodcore.api.network.NetworkManager;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -77,4 +80,15 @@ public interface NetworkAPI {
     @SideOnly(Side.SERVER)
     void addGuiActionPacketConsumer(Consumer<String> consumer);
 
+
+
+    void sendSRequest(Config config);
+
+    void sendTest(String config, EntityPlayerMP player);
+
+    void sendTestServer(String config);
+
+    void sendConnect(EntityPlayerMP player);
+
+    void sendMapStartData(CStartData cStartData, EntityPlayerMP player);
 }

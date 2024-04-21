@@ -17,6 +17,7 @@ public class PacketHandlerGUIAction implements IMessageHandler<PacketGUIAction, 
         List<Consumer<String>> list = new ArrayList<>(packetConsumers);
         packetConsumers.clear();
         list.forEach((it)->it.accept(message.getPlayerUUID()+";"+message.getGuiID()+";"+message.getAction()));
+        System.out.println("Privet");
         return null;
     }
 

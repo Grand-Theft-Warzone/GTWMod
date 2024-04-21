@@ -2,15 +2,20 @@ package com.grandtheftwarzone.gtwmod.api;
 
 import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneManager;
+import com.grandtheftwarzone.gtwmod.api.map.MapManagerClient;
+import com.grandtheftwarzone.gtwmod.api.map.MapManagerServer;
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import com.grandtheftwarzone.gtwmod.api.screen.ScreensManager;
 import com.grandtheftwarzone.gtwmod.api.sound.SoundsManager;
 import me.phoenixra.atumodcore.api.AtumMod;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
 
 public interface GtwAPI {
 
@@ -30,7 +35,6 @@ public interface GtwAPI {
      * @return The network manager
      */
     @NotNull NetworkAPI getNetworkAPI();
-
 
 
     /**
@@ -69,6 +73,18 @@ public interface GtwAPI {
      */
     @SideOnly(Side.CLIENT)
     @NotNull PhoneManager getPhoneManager();
+
+    @SideOnly(Side.SERVER)
+    @NotNull MinecraftServer getServer();
+
+    @SideOnly(Side.CLIENT)
+    @NotNull MapManagerClient getMapManagerClient();
+
+    @SideOnly(Side.SERVER)
+    @NotNull MapManagerServer getMapManagerServer();
+
+    @SideOnly(Side.CLIENT)
+    @NotNull File getMinecraftDir();
 
     /**
      * Get GTW mod instance
