@@ -35,8 +35,7 @@ public class NotificationsApp implements PhoneApp {
     }
 
     @Override
-    public void drawIcon(@NotNull CanvasPhone parent,
-                         @NotNull DisplayResolution resolution,
+    public void drawIcon(@NotNull DisplayResolution resolution,
                          int x, int y, int size,
                          boolean isHovered) {
         RenderUtils.bindTexture(icon);

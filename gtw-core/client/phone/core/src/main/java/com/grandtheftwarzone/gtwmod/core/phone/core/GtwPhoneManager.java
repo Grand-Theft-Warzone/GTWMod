@@ -5,6 +5,7 @@ import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneApp;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneManager;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.annotations.RegisterPhoneApp;
 
+import com.grandtheftwarzone.gtwmod.api.gui.phone.canvas.CanvasPhone;
 import lombok.Getter;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.service.AtumModService;
@@ -13,6 +14,7 @@ import me.phoenixra.libs.io.github.classgraph.ClassInfo;
 import me.phoenixra.libs.io.github.classgraph.ClassInfoList;
 import me.phoenixra.libs.io.github.classgraph.ScanResult;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -56,7 +58,6 @@ public class GtwPhoneManager implements PhoneManager, AtumModService {
     }
 
     private void registerApps(){
-        // EXAMPLE OF A CHANGE
         GtwAPI.getInstance().getGtwMod().getLogger().info("Registering phone apps");
         try (ScanResult scanResult = new ClassGraph()
                 .enableAllInfo()
@@ -98,6 +99,18 @@ public class GtwPhoneManager implements PhoneManager, AtumModService {
 
     }
 
+    @Override
+    public void tryOpenApp(String appId){
+        if(!(Minecraft.getMinecraft().currentScreen
+                instanceof GtwPhoneScreen)){
+            return;
+        }
+        PhoneApp app= getApp(appId);
+        if(app==null) return;
+        GtwPhoneScreen phoneScreen = (GtwPhoneScreen) Minecraft.getMinecraft().currentScreen;
+        CanvasPhone canvasPhone= (CanvasPhone) phoneScreen.getRenderer().getBaseCanvas();
+        canvasPhone.openApp(app);
+    }
     @Override
     public void removeApp(@NotNull PhoneApp app) {
         apps.remove(app.getId());

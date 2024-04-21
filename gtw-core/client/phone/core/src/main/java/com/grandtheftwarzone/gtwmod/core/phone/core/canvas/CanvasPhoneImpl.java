@@ -1,34 +1,33 @@
 package com.grandtheftwarzone.gtwmod.core.phone.core.canvas;
 
-import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneApp;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneShape;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneState;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.canvas.CanvasPhone;
 import lombok.Getter;
+import lombok.Setter;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumconfig.api.config.Config;
 
 import me.phoenixra.atumodcore.api.display.DisplayCanvas;
+import me.phoenixra.atumodcore.api.display.DisplayRenderer;
 import me.phoenixra.atumodcore.api.display.annotations.RegisterDisplayElement;
 import me.phoenixra.atumodcore.api.display.annotations.RegisterOptimizedVariable;
+import me.phoenixra.atumodcore.api.display.impl.BaseCanvas;
 import me.phoenixra.atumodcore.api.display.impl.BaseElement;
 import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
-import me.phoenixra.atumodcore.api.display.misc.variables.OptimizedVariableInt;
 import me.phoenixra.atumodcore.api.utils.MathUtils;
 import me.phoenixra.atumodcore.api.utils.RenderUtils;
 import me.phoenixra.atumodcore.core.display.elements.ElementImage;
+import me.phoenixra.atumodcore.core.display.elements.canvas.DefaultCanvas;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
-import java.util.List;
 
 import static org.lwjgl.opengl.GL11.GL_SCISSOR_TEST;
 
@@ -36,30 +35,22 @@ import static org.lwjgl.opengl.GL11.GL_SCISSOR_TEST;
 public class CanvasPhoneImpl extends CanvasPhone {
 
 
-    private List<IconPosition> appIconPositions;
+    protected ElementImage phoneModel;
+    //divide mainmenu display and display disabled by classes
+    protected ElementImage phoneDisplayDefault;
+
+    protected CanvasPhoneLocked phoneDisplayLocked;
+    protected CanvasPhoneMainMenu phoneDisplayMainPage;
 
 
-    protected ElementImage background;
-    protected ElementImage phoneDisplay;
-    @RegisterOptimizedVariable
 
-    private OptimizedVariableInt iconPadding;
-    @RegisterOptimizedVariable
-    private OptimizedVariableInt iconsPerRow;
-
-
-    private float horizontalShapeScale = 1.5f;
 
 
     private PhoneShapeDrawer phoneShapeDrawer;
 
-    private boolean init;
 
     public CanvasPhoneImpl(AtumMod atumMod, DisplayCanvas owner) {
         super(atumMod,owner);
-        iconPadding = new OptimizedVariableInt("iconPadding",10);
-        iconsPerRow = new OptimizedVariableInt("iconsPerRow",3);
-
     }
 
     @Override
@@ -67,46 +58,38 @@ public class CanvasPhoneImpl extends CanvasPhone {
                           int mouseX, int mouseY) {
         super.onDraw(resolution, scaleFactor, mouseX, mouseY);
 
-        phoneShapeDrawer.draw(resolution, scaleFactor, mouseX, mouseY);
-        switch (state) {
-            case OPENED_DISPLAY:
-                if (!init) {
-                    appIconPositions = IconPosition.calculateIconLayout(
-                            phoneDisplay.getX(),
-                            phoneDisplay.getY(),
-                            phoneDisplay.getWidth(),
-                            phoneDisplay.getHeight(),
-                            getApps().size(),
-                            iconsPerRow.getValue(resolution),
-                            iconPadding.getValue(resolution)
-                    );
-                    init = true;
-                }
+        phoneShapeDrawer.prepareDrawing(resolution, scaleFactor, mouseX, mouseY);
 
-                for (int i = 0; i < getApps().size(); i++) {
-                    getApps().get(i).drawIcon(this, resolution,
-                            appIconPositions.get(i).x,
-                            appIconPositions.get(i).y,
-                            appIconPositions.get(i).size,
-                            isAppHovered(
-                                    appIconPositions.get(i).x,
-                                    appIconPositions.get(i).y,
-                                    appIconPositions.get(i).size,
-                                    mouseX,
-                                    mouseY
-                            )
+        phoneShapeDrawer.phoneDisplayDrawer.run();
+        switch (getState()) {
+            case OPENED_DISPLAY:
+                if(isLocked()) {
+                    phoneDisplayLocked.draw(
+                            resolution,
+                            scaleFactor,
+                            mouseX,
+                            mouseY
+                    );
+                }else {
+                    phoneDisplayMainPage.draw(
+                            resolution,
+                            scaleFactor,
+                            mouseX,
+                            mouseY
                     );
                 }
                 break;
             case OPENED_APP:
-                int displayX = phoneDisplay.getX();
-                int displayY = phoneDisplay.getY();
-                int displayWidth = phoneDisplay.getWidth();
-                int displayHeight = phoneDisplay.getHeight();
+                int displayX = getDisplayX();
+                int displayY = getDisplayY();
+                int displayWidth = getDisplayWidth();
+                int displayHeight = getDisplayHeight();
 
                 //calculated phone display location depending on a shape
-                if (shape == PhoneShape.VERTICAL) {
-                    drawApp(resolution,
+                if (shape == PhoneShape.VERTICAL
+                        || shape == PhoneShape.FULL_SCREEN) {
+                    drawApp(
+                            resolution,
                             scaleFactor,
                             displayX,
                             displayY,
@@ -116,42 +99,49 @@ public class CanvasPhoneImpl extends CanvasPhone {
                     );
 
                 } else if (shape == PhoneShape.HORIZONTAL) {
-                    int centerX = phoneDisplay.getX() + (phoneDisplay.getWidth() / 2);
-                    int centerY = phoneDisplay.getY() + (phoneDisplay.getHeight() / 2);
+                    int centerX = phoneDisplayDefault.getX() + (phoneDisplayDefault.getWidth() / 2);
+                    int centerY = phoneDisplayDefault.getY() + (phoneDisplayDefault.getHeight() / 2);
 
-                    displayX = centerX - (centerY - phoneDisplay.getY());
-                    displayY = centerY - (phoneDisplay.getX() +
-                            phoneDisplay.getWidth() - centerX);
-                    displayWidth = phoneDisplay.getHeight();
-                    displayHeight = phoneDisplay.getWidth();
+                    displayX = centerX - (centerY - phoneDisplayDefault.getY());
+                    displayY = centerY - (phoneDisplayDefault.getX() +
+                            phoneDisplayDefault.getWidth() - centerX);
+                    displayWidth = phoneDisplayDefault.getHeight();
+                    displayHeight = phoneDisplayDefault.getWidth();
                     int widthScaled = (int) (displayWidth * horizontalShapeScale);
                     int heightScaled = (int) (displayHeight * horizontalShapeScale);
-                    drawApp(resolution,
+                    drawApp(
+                            resolution,
                             scaleFactor,
                             displayX - (widthScaled - displayWidth) / 2,
                             displayY - (heightScaled - displayHeight) / 2,
                             widthScaled,
                             heightScaled,
-                            mouseX, mouseY);
+                            mouseX, mouseY
+                    );
 
-                } else {
-                    //separately drawnfor better perfomance, cause
-                    //such shape is used mostly by apps that require
-                    //performance
-                    openedApp.draw(this, resolution,
-                            scaleFactor,
-                            Display.getWidth(),
-                            Display.getHeight(),
-                            mouseX, mouseY);
                 }
                 break;
         }
+        phoneShapeDrawer.phoneModelDrawer.run();
+
     }
-    private void drawApp(DisplayResolution resolution,
-                         float scaleFactor,
-                         int displayX, int displayY,
-                         int displayWidth, int displayHeight,
-                         int mouseX, int mouseY){
+    protected void drawApp(DisplayResolution resolution,
+                           float scaleFactor,
+                           int displayX, int displayY,
+                           int displayWidth, int displayHeight,
+                           int mouseX, int mouseY){
+        if(shape == PhoneShape.FULL_SCREEN){
+            //separately drawn for better perfomance, cause
+            //such shape is used mostly by apps that require
+            //performance
+            openedApp.draw(this, resolution,
+                    scaleFactor,
+                    Display.getWidth(),
+                    Display.getHeight(),
+                    mouseX, mouseY
+            );
+            return;
+        }
         GL11.glEnable(GL_SCISSOR_TEST);
         GL11.glScissor((int) (displayX*scaleFactor),
                 (int) (Display.getHeight() - (displayY + displayHeight)*scaleFactor), //invert y, bcz scissor works in a bottom-left corner
@@ -192,61 +182,112 @@ public class CanvasPhoneImpl extends CanvasPhone {
                 animationDuration
         );
 
-        iconPadding.setDefaultValue(
-                config.getIntOrDefault("iconPadding", 10)
-        );
-        iconsPerRow.setDefaultValue(
-                config.getIntOrDefault("iconsPerRow", 3)
-        );
 
-        horizontalShapeScale = (float) config.getDoubleOrDefault("horizontalShapeScale", 1.5f);
-
-        if (config.hasPath("background")) {
-            Config config1 = config.getSubsection("background");
-            background = new ElementImage(
+        if (config.hasPath("phoneModel")) {
+            Config config1 = config.getSubsection("phoneModel");
+            phoneModel = new ElementImage(
                     getAtumMod(),
                     this
             );
 
-            background.updateVariables(config1, "background");
-            background.setOriginX(getOriginX());
-            background.setOriginY(getOriginY());
-            background.setOriginWidth(getOriginWidth());
-            background.setOriginHeight(getOriginHeight());
+            phoneModel.updateVariables(config1, "phoneModel");
+            phoneModel.setOriginX(getOriginX());
+            phoneModel.setOriginY(getOriginY());
+            phoneModel.setOriginWidth(getOriginWidth());
+            phoneModel.setOriginHeight(getOriginHeight());
         }
         if (config.hasPath("phoneDisplay")) {
             Config config1 = config.getSubsection("phoneDisplay");
-            phoneDisplay = new ElementImage(
+            phoneDisplayDefault = new ElementImage(
                     getAtumMod(),
                     this
             );
-            phoneDisplay.updateVariables(config1, "phoneDisplay");
+            phoneDisplayDefault.updateVariables(config1, "phoneDisplay");
 
 
-            phoneDisplay.getOriginX().setDefaultValue(
-                    getOriginX().getDefaultValue() + phoneDisplay.getOriginX().getDefaultValue()
+            phoneDisplayDefault.getOriginX().setDefaultValue(
+                    getOriginX().getDefaultValue() + phoneDisplayDefault.getOriginX().getDefaultValue()
             );
-            phoneDisplay.getOriginY().setDefaultValue(
-                    getOriginY().getDefaultValue() + phoneDisplay.getOriginY().getDefaultValue()
+            phoneDisplayDefault.getOriginY().setDefaultValue(
+                    getOriginY().getDefaultValue() + phoneDisplayDefault.getOriginY().getDefaultValue()
             );
-            phoneDisplay.getOriginWidth().setDefaultValue(
-                    getOriginWidth().getDefaultValue() + phoneDisplay.getOriginWidth().getDefaultValue()
+            phoneDisplayDefault.getOriginWidth().setDefaultValue(
+                    getOriginWidth().getDefaultValue() + phoneDisplayDefault.getOriginWidth().getDefaultValue()
             );
-            phoneDisplay.getOriginHeight().setDefaultValue(
-                    getOriginHeight().getDefaultValue() + phoneDisplay.getOriginHeight().getDefaultValue()
+            phoneDisplayDefault.getOriginHeight().setDefaultValue(
+                    getOriginHeight().getDefaultValue() + phoneDisplayDefault.getOriginHeight().getDefaultValue()
+            );
+
+
+            phoneDisplayLocked = new CanvasPhoneLocked(
+                    getAtumMod(),
+                    this
+            );
+            phoneDisplayLocked.updateVariables(
+                    config1.getSubsection("locked"),
+                    "phoneDisplayLocked"
+            );
+            phoneDisplayLocked.getOriginX().setDefaultValue(
+                    phoneDisplayDefault.getOriginX().getDefaultValue()
+            );
+            phoneDisplayLocked.getOriginY().setDefaultValue(
+                    phoneDisplayDefault.getOriginY().getDefaultValue()
+            );
+            phoneDisplayLocked.getOriginWidth().setDefaultValue(
+                    phoneDisplayDefault.getOriginWidth().getDefaultValue()
+            );
+            phoneDisplayLocked.getOriginHeight().setDefaultValue(
+                    phoneDisplayDefault.getOriginHeight().getDefaultValue()
+            );
+            phoneDisplayLocked.updateElements(
+                    config1.getSubsection("locked.elements")
+            );
+
+
+            phoneDisplayMainPage = new CanvasPhoneMainMenu(
+                    getAtumMod(),
+                    this
+            );
+            phoneDisplayMainPage.updateVariables(
+                    config1.getSubsection("mainPage"),
+                    "phoneDisplayMainPage"
+            );
+            phoneDisplayMainPage.getOriginX().setDefaultValue(
+                    phoneDisplayDefault.getOriginX().getDefaultValue()
+            );
+            phoneDisplayMainPage.getOriginY().setDefaultValue(
+                    phoneDisplayDefault.getOriginY().getDefaultValue()
+            );
+            phoneDisplayMainPage.getOriginWidth().setDefaultValue(
+                    phoneDisplayDefault.getOriginWidth().getDefaultValue()
+            );
+            phoneDisplayMainPage.getOriginHeight().setDefaultValue(
+                    phoneDisplayDefault.getOriginHeight().getDefaultValue()
+            );
+            phoneDisplayMainPage.updateElements(
+                    config1.getSubsection("mainPage.elements")
             );
 
         }
     }
 
     @Override
-    protected int getPhoneDisplayX() {
-        return phoneDisplay.getX();
+    public int getDisplayX() {
+        return phoneDisplayDefault.getX();
     }
 
     @Override
-    protected int getPhoneDisplayY() {
-        return phoneDisplay.getY();
+    public int getDisplayY() {
+        return phoneDisplayDefault.getY();
+    }
+
+    @Override
+    public int getDisplayWidth() {
+        return phoneDisplayDefault.getWidth();
+    }
+    @Override
+    public int getDisplayHeight() {
+        return phoneDisplayDefault.getHeight();
     }
 
     @Override
@@ -254,17 +295,51 @@ public class CanvasPhoneImpl extends CanvasPhone {
         super.applyResolutionOptimizer(resolution, config);
         if(config.hasPath("phoneDisplay")) {
 
-            phoneDisplay.getOriginX().addOptimizedValue(resolution,
-                    getOriginX().getValue(resolution) + config.getInt("phoneDisplay.posX")
+            phoneDisplayDefault.getOriginX().addOptimizedValue(resolution,
+                    getOriginX().getValue(resolution)
+                            + config.getInt("phoneDisplay.posX")
             );
-            phoneDisplay.getOriginY().addOptimizedValue(resolution,
-                    getOriginY().getValue(resolution) + config.getInt("phoneDisplay.posY")
+            phoneDisplayDefault.getOriginY().addOptimizedValue(resolution,
+                    getOriginY().getValue(resolution)
+                            + config.getInt("phoneDisplay.posY")
             );
-            phoneDisplay.getOriginWidth().addOptimizedValue(resolution,
-                    getOriginWidth().getValue(resolution) + config.getInt("phoneDisplay.width")
+            phoneDisplayDefault.getOriginWidth().addOptimizedValue(resolution,
+
+                            getOriginWidth().getValue(resolution)
+                                    + config.getInt("phoneDisplay.width")
+
             );
-            phoneDisplay.getOriginHeight().addOptimizedValue(resolution,
-                    getOriginHeight().getValue(resolution) + config.getInt("phoneDisplay.height")
+            phoneDisplayDefault.getOriginHeight().addOptimizedValue(resolution,
+                    getOriginHeight().getValue(resolution)
+                            + config.getInt("phoneDisplay.height")
+
+            );
+
+            phoneDisplayLocked.getOriginX().addOptimizedValue(resolution,
+                    phoneDisplayDefault.getOriginX().getValue(resolution)
+            );
+            phoneDisplayLocked.getOriginY().addOptimizedValue(resolution,
+                    phoneDisplayDefault.getOriginY().getValue(resolution)
+            );
+            phoneDisplayLocked.getOriginWidth().addOptimizedValue(resolution,
+                    phoneDisplayDefault.getOriginWidth().getValue(resolution)
+            );
+            phoneDisplayLocked.getOriginHeight().addOptimizedValue(resolution,
+                    phoneDisplayDefault.getOriginHeight().getValue(resolution)
+            );
+
+
+            phoneDisplayMainPage.getOriginX().addOptimizedValue(resolution,
+                    phoneDisplayDefault.getOriginX().getValue(resolution)
+            );
+            phoneDisplayMainPage.getOriginY().addOptimizedValue(resolution,
+                    phoneDisplayDefault.getOriginY().getValue(resolution)
+            );
+            phoneDisplayMainPage.getOriginWidth().addOptimizedValue(resolution,
+                    phoneDisplayDefault.getOriginWidth().getValue(resolution)
+            );
+            phoneDisplayMainPage.getOriginHeight().addOptimizedValue(resolution,
+                    phoneDisplayDefault.getOriginHeight().getValue(resolution)
             );
 
         }
@@ -273,8 +348,8 @@ public class CanvasPhoneImpl extends CanvasPhone {
     private void updateState() {
         switch (state) {
             case OPENING:
-                background.setAdditionY(0);
-                phoneDisplay.setAdditionY(0);
+                phoneModel.setAdditionY(0);
+                phoneDisplayDefault.setAdditionY(0);
                 state = PhoneState.OPENED_DISPLAY;
                 break;
             case CLOSING:
@@ -314,30 +389,6 @@ public class CanvasPhoneImpl extends CanvasPhone {
     }
 
 
-    @SubscribeEvent
-    public void onMouseClicked(GuiScreenEvent.MouseInputEvent.Pre e) {
-        int pressed = Mouse.getEventButton();
-        PhoneState phoneState = getState();
-        if (phoneState != PhoneState.OPENED_DISPLAY) {
-            return;
-        }
-        if (Mouse.getEventButtonState() && pressed == 0) {
-            for (int i = 0; i < getApps().size(); i++) {
-                PhoneApp app = getApps().get(i);
-                if (isAppHovered(
-                        appIconPositions.get(i).x,
-                        appIconPositions.get(i).y,
-                        appIconPositions.get(i).size,
-                        getLastMouseX(),
-                        getLastMouseY()
-                )) {
-                    openApp(app);
-                    return;
-                }
-            }
-        }
-    }
-
     @Override
     public boolean isSetupState() {
         return false;
@@ -348,29 +399,38 @@ public class CanvasPhoneImpl extends CanvasPhone {
 
     }
 
-    private boolean isAppHovered(int x, int y, int size,
-                                 int mouseX, int mouseY) {
-        return mouseX >= x &&
-                mouseX <= x + size
-                && mouseY >= y
-                && mouseY <= y + size;
+    @Override
+    public void setDisplayRenderer(@NotNull DisplayRenderer displayRenderer) {
+        super.setDisplayRenderer(displayRenderer);
+        if(phoneDisplayLocked!=null){
+            phoneDisplayLocked.setDisplayRenderer(displayRenderer);
+        }
+        if(phoneDisplayMainPage!=null){
+            phoneDisplayMainPage.setDisplayRenderer(displayRenderer);
+        }
     }
-
 
     @Override
     protected BaseElement onClone(BaseElement baseCanvas) {
 
         CanvasPhoneImpl canvasPhone = (CanvasPhoneImpl) super.onClone(baseCanvas);
-        canvasPhone.init = false;
         canvasPhone.phoneShapeDrawer = new PhoneShapeDrawer(
                 canvasPhone,
                 phoneShapeDrawer == null ? new HashMap<>() : phoneShapeDrawer.animationDuration
         );
-        if (background != null) {
-            canvasPhone.background = (ElementImage) background.clone();
+        if (phoneModel != null) {
+            canvasPhone.phoneModel = (ElementImage) phoneModel.clone();
         }
-        if (phoneDisplay != null) {
-            canvasPhone.phoneDisplay = (ElementImage) phoneDisplay.clone();
+        if (phoneDisplayDefault != null) {
+            canvasPhone.phoneDisplayDefault = (ElementImage) phoneDisplayDefault.clone();
+        }
+        if (phoneDisplayLocked != null) {
+            canvasPhone.phoneDisplayLocked = (CanvasPhoneLocked) phoneDisplayLocked.clone();
+            canvasPhone.phoneDisplayLocked.phone = canvasPhone;
+        }
+        if (phoneDisplayMainPage != null) {
+            canvasPhone.phoneDisplayMainPage = (CanvasPhoneMainMenu) phoneDisplayMainPage.clone();
+            canvasPhone.phoneDisplayMainPage.phone = canvasPhone;
         }
         canvasPhone.openedApp = null;
         return canvasPhone;
@@ -383,22 +443,43 @@ public class CanvasPhoneImpl extends CanvasPhone {
         }
     }
 
+
+    @Override
+    public void onRemove() {
+        super.onRemove();
+        if(phoneModel!=null) {
+            phoneModel.onRemove();
+        }
+        if(phoneDisplayLocked!=null) {
+            phoneDisplayLocked.onRemove();
+        }
+        if(phoneDisplayMainPage!=null) {
+            phoneDisplayMainPage.onRemove();
+        }
+    }
+
     private static class PhoneShapeDrawer {
         private CanvasPhoneImpl phone;
         @Getter
         private HashMap<PhoneState, Integer> animationDuration;
         private int animationTimer = 0;
 
+        private Runnable phoneModelDrawer;
+
+        private Runnable phoneDisplayDrawer;
+
         private PhoneShapeDrawer(CanvasPhoneImpl phone, HashMap<PhoneState, Integer> animationDuration) {
             this.phone = phone;
             this.animationDuration = animationDuration;
         }
 
-        public void draw(DisplayResolution resolution, float scaleFactor,
-                         int mouseX, int mouseY) {
+        //stage 0 -> phone model
+        //stage 1 -> phone display
+        public void prepareDrawing(DisplayResolution resolution, float scaleFactor,
+                                   int mouseX, int mouseY) {
             PhoneState phoneState = phone.getState();
-            ElementImage background = phone.background;
-            ElementImage phoneDisplay = phone.phoneDisplay;
+            ElementImage phoneModel = phone.phoneModel;
+            ElementImage phoneDisplay = phone.phoneDisplayDefault;
 
             //-------WITHOUT ANIMATION-------
             if (phoneState == PhoneState.OPENED_APP
@@ -406,15 +487,19 @@ public class CanvasPhoneImpl extends CanvasPhone {
 
 
                 if (phone.shape == PhoneShape.VERTICAL) {
-                    background.draw(resolution, scaleFactor, mouseX, mouseY);
-                    phoneDisplay.draw(resolution, scaleFactor, mouseX, mouseY);
+                    phoneDisplayDrawer = ()-> {
+                        phoneDisplay.draw(resolution, scaleFactor, mouseX, mouseY);
+                    };
+                    phoneModelDrawer = ()-> {
+                        phoneModel.draw(resolution, scaleFactor, mouseX, mouseY);
+                    };
                     return;
                 } else if (phone.shape == PhoneShape.HORIZONTAL) {
                     int rotationAngle = -90;
                     int centerX = phoneDisplay.getX() + (phoneDisplay.getWidth() / 2);
                     int centerY = phoneDisplay.getY() + (phoneDisplay.getHeight() / 2);
 
-                    drawRotated(background,
+                    preparedrawRotated(phoneModel,
                             phoneDisplay,
                             resolution,
                             scaleFactor,
@@ -422,18 +507,13 @@ public class CanvasPhoneImpl extends CanvasPhone {
                             centerX, centerY,
                             0,
                             rotationAngle,
-                            phone.horizontalShapeScale,
+                            horizontalShapeScale,
                             0
                     );
                 } else {
-                    RenderUtils.fill(
-                            0,
-                            0,
-                            Display.getWidth(),
-                            Display.getHeight(),
-                            0x000000,
-                            1.0f
-                    );
+                    phoneModelDrawer = ()-> {
+
+                    };
                 }
 
                 return;
@@ -459,23 +539,31 @@ public class CanvasPhoneImpl extends CanvasPhone {
                     animate = (int) (MathUtils.fastCos(
                             Math.PI * 0.5 *
                                     ((double) animationTimer / animationDuration)
-                    ) * (1920 - background.getOriginY().getValue(resolution))
+                    ) * (1920 - phoneModel.getOriginY().getValue(resolution))
                     );
-                    background.setAdditionY(animate);
+                    phoneModel.setAdditionY(animate);
                     phoneDisplay.setAdditionY(animate);
-                    background.draw(resolution, scaleFactor, mouseX, mouseY);
-                    phoneDisplay.draw(resolution, scaleFactor, mouseX, mouseY);
+                    phoneDisplayDrawer = () -> {
+                        phoneDisplay.draw(resolution, scaleFactor, mouseX, mouseY);
+                    };
+                    phoneModelDrawer = () -> {
+                        phoneModel.draw(resolution, scaleFactor, mouseX, mouseY);
+                    };
                     break;
                 case CLOSING:
                     animate = (int) (MathUtils.fastSin(
                             Math.PI * 0.5 *
                                     ((double) animationTimer / animationDuration)
-                    ) * (1920 - background.getOriginY().getValue(resolution))
+                    ) * (1920 - phoneModel.getOriginY().getValue(resolution))
                     );
-                    background.setAdditionY(animate);
+                    phoneModel.setAdditionY(animate);
                     phoneDisplay.setAdditionY(animate);
-                    background.draw(resolution, scaleFactor, mouseX, mouseY);
-                    phoneDisplay.draw(resolution, scaleFactor, mouseX, mouseY);
+                    phoneDisplayDrawer = ()->{
+                        phoneDisplay.draw(resolution, scaleFactor, mouseX, mouseY);
+                    };
+                    phoneModelDrawer = () ->{
+                        phoneModel.draw(resolution, scaleFactor, mouseX, mouseY);
+                    };
                     break;
                 case VERTICAL_TO_HORIZONTAL:
                     scaleShape = phone.horizontalShapeScale;
@@ -489,7 +577,7 @@ public class CanvasPhoneImpl extends CanvasPhone {
                     rotationAnimation = (int) (b * rotationAngle);
                     scaleAnimation = (float) (b * (scaleShape - 1));
                     // Apply transformations
-                    drawRotated(background,
+                    preparedrawRotated(phoneModel,
                             phoneDisplay,
                             resolution,
                             scaleFactor,
@@ -513,7 +601,7 @@ public class CanvasPhoneImpl extends CanvasPhone {
                     rotationAnimation = (int) (b * rotationAngle);
                     scaleAnimation = (float) (b * (scaleShape + 1));
                     // Apply transformations
-                    drawRotated(background,
+                    preparedrawRotated(phoneModel,
                             phoneDisplay,
                             resolution,
                             scaleFactor,
@@ -538,7 +626,7 @@ public class CanvasPhoneImpl extends CanvasPhone {
                     rotationAnimation = (int) (b * rotationAngle);
                     scaleAnimation = (float) (b * (scaleShape - 1));
                     // Apply transformations
-                    drawRotated(background,
+                    preparedrawRotated(phoneModel,
                             phoneDisplay,
                             resolution,
                             scaleFactor,
@@ -562,7 +650,7 @@ public class CanvasPhoneImpl extends CanvasPhone {
                     rotationAnimation = (int) (b * rotationAngle);
                     scaleAnimation = (float) (b * (scaleShape + 1));
                     // Apply transformations
-                    drawRotated(background,
+                    preparedrawRotated(phoneModel,
                             phoneDisplay,
                             resolution,
                             scaleFactor,
@@ -584,7 +672,7 @@ public class CanvasPhoneImpl extends CanvasPhone {
                     );
                     scaleAnimation = (float) (b * (scaleShape - 1));
                     // Apply transformations
-                    drawRotated(background,
+                    preparedrawRotated(phoneModel,
                             phoneDisplay,
                             resolution,
                             scaleFactor,
@@ -606,7 +694,7 @@ public class CanvasPhoneImpl extends CanvasPhone {
                     );
                     scaleAnimation = (float) (b * (scaleShape + 1));
                     // Apply transformations
-                    drawRotated(background,
+                    preparedrawRotated(phoneModel,
                             phoneDisplay,
                             resolution,
                             scaleFactor,
@@ -628,27 +716,38 @@ public class CanvasPhoneImpl extends CanvasPhone {
             }
         }
 
-        private void drawRotated(ElementImage background,
-                                 ElementImage phoneDisplay,
-                                 DisplayResolution resolution,
-                                 float scaleFactor,
-                                 int mouseX, int mouseY,
-                                 int centerX, int centerY,
-                                 float rotationAngleDefault,
-                                 float rotationAngle,
-                                 float scaleDefault,
-                                 float scaleNew) {
-            GL11.glPushMatrix();
-            GL11.glTranslatef(centerX, centerY, 0); // Translate to the center
-            GL11.glRotatef(rotationAngleDefault + rotationAngle, 0, 0, 1); // Rotate around the center
-            GL11.glScalef(scaleDefault + scaleNew, scaleDefault + scaleNew, 1); // Scale to the new size
-            GL11.glTranslatef(-centerX, -centerY, 0); // Translate back
+        private void preparedrawRotated(ElementImage phoneModel,
+                                        ElementImage phoneDisplay,
+                                        DisplayResolution resolution,
+                                        float scaleFactor,
+                                        int mouseX, int mouseY,
+                                        int centerX, int centerY,
+                                        float rotationAngleDefault,
+                                        float rotationAngle,
+                                        float scaleDefault,
+                                        float scaleNew) {// Translate back
 
-            background.draw(resolution, scaleFactor, mouseX, mouseY);
-            phoneDisplay.draw(resolution, scaleFactor, mouseX, mouseY);
 
-            // Restore the matrix state
-            GL11.glPopMatrix();
+            phoneDisplayDrawer = () ->{
+                GL11.glPushMatrix();
+                GL11.glTranslatef(centerX, centerY, 0); // Translate to the center
+                GL11.glRotatef(rotationAngleDefault + rotationAngle, 0, 0, 1); // Rotate around the center
+                GL11.glScalef(scaleDefault + scaleNew, scaleDefault + scaleNew, 1); // Scale to the new size
+                GL11.glTranslatef(-centerX, -centerY, 0);
+                phoneDisplay.draw(resolution, scaleFactor, mouseX, mouseY);
+                GL11.glPopMatrix();
+            };
+            phoneModelDrawer = () -> {
+                GL11.glPushMatrix();
+                GL11.glTranslatef(centerX, centerY, 0); // Translate to the center
+                GL11.glRotatef(rotationAngleDefault + rotationAngle, 0, 0, 1); // Rotate around the center
+                GL11.glScalef(scaleDefault + scaleNew, scaleDefault + scaleNew, 1); // Scale to the new size
+                GL11.glTranslatef(-centerX, -centerY, 0);
+                phoneModel.draw(resolution, scaleFactor, mouseX, mouseY);
+                GL11.glPopMatrix();
+            };
+
+
         }
     }
 
