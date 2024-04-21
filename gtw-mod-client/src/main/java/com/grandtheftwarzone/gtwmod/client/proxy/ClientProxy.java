@@ -1,7 +1,6 @@
 package com.grandtheftwarzone.gtwmod.client.proxy;
 
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
-import com.grandtheftwarzone.gtwmod.api.utils.GtwUtils;
 import com.grandtheftwarzone.gtwmod.client.GTWModClient;
 import com.grandtheftwarzone.gtwmod.core.display.hud.GtwHudRenderer;
 import com.grandtheftwarzone.gtwmod.core.network.GtwNetworkAPI;
@@ -159,10 +158,6 @@ public class ClientProxy implements AtumModService {
         ).register();
         new SimplePlaceholder(GTWModClient.instance,"player_experience_max",
                 ()-> String.valueOf(playerData.getExperienceCap())
-        ).register();
-
-        new SimplePlaceholder(GTWModClient.instance,"current_time",
-                GtwUtils::getCurrentTime
         ).register();
 
         //@TODO move that to the PlayerHUD for better organization

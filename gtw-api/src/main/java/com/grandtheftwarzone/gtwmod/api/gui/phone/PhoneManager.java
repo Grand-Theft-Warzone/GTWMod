@@ -21,7 +21,6 @@ public interface PhoneManager {
      */
     void removeApp(@NotNull PhoneApp app);
 
-    void tryOpenApp(String appId);
     /**
      * Get an app by its id
      * @param id the app id

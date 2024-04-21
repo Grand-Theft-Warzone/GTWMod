@@ -32,14 +32,6 @@ public class SettingsApp implements PhoneApp {
                      float scaleFactor,
                      int displayWidth, int displayHeight,
                      int mouseX, int mouseY) {
-        RenderUtils.fill(
-                0,
-                0,
-                displayWidth,
-                displayHeight,
-                AtumColor.ORANGE.toInt(),
-                1.0f
-        );
         canvas.draw(
                 resolution,
                 scaleFactor,
@@ -50,7 +42,8 @@ public class SettingsApp implements PhoneApp {
     }
 
     @Override
-    public void drawIcon(@NotNull DisplayResolution resolution,
+    public void drawIcon(@NotNull CanvasPhone parent,
+                         @NotNull DisplayResolution resolution,
                          int x, int y, int size,
                          boolean isHovered) {
         RenderUtils.bindTexture(icon);

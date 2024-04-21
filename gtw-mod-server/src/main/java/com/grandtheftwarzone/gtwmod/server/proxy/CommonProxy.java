@@ -6,12 +6,10 @@ import com.grandtheftwarzone.gtwmod.core.network.GtwNetworkAPI;
 import com.grandtheftwarzone.gtwmod.server.GTWModServer;
 import me.phoenixra.atumodcore.api.events.network.PlayerDisplayEvent;
 import me.phoenixra.atumodcore.api.service.AtumModService;
-import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.fml.common.event.FMLEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.server.permission.PermissionAPI;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

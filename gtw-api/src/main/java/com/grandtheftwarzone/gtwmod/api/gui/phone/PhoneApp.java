@@ -33,8 +33,10 @@ public interface PhoneApp {
      * @param x the x position
      * @param y the y position
      * @param size the icon size
+     * @param parent the phone gui
      */
-    void drawIcon(@NotNull DisplayResolution resolution,
+    void drawIcon(@NotNull CanvasPhone parent,
+                  @NotNull DisplayResolution resolution,
                   int x, int y, int size,
                   boolean isHovered);
 

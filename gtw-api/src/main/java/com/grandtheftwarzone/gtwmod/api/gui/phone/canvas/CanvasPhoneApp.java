@@ -32,9 +32,15 @@ public class CanvasPhoneApp extends BaseCanvas {
         return super.getY() + canvasPhone.getGlobalY();
     }
 
+    @Override
+    public boolean isSetupState() {
+        return false;
+    }
 
+    @Override
+    public void setSetupState(boolean b) {
 
-
+    }
     @Override
     protected BaseElement onClone(BaseElement baseElement) {
         return baseElement;
