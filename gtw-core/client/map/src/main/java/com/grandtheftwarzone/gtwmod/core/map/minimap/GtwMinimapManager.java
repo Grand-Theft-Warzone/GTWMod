@@ -7,6 +7,7 @@ import com.grandtheftwarzone.gtwmod.api.map.MinimapManager;
 import com.grandtheftwarzone.gtwmod.api.map.data.MapImageData;
 import com.grandtheftwarzone.gtwmod.api.map.data.client.UpdateMinimapData;
 import com.grandtheftwarzone.gtwmod.api.map.MapImageUtils;
+import com.grandtheftwarzone.gtwmod.core.map.globalmap.GtwGlobalmapScreen;
 import lombok.Getter;
 import lombok.Setter;
 import me.phoenixra.atumconfig.api.config.Config;
@@ -14,6 +15,7 @@ import me.phoenixra.atumconfig.api.config.LoadableConfig;
 import me.phoenixra.atumodcore.api.display.DisplayElement;
 import me.phoenixra.atumodcore.api.display.DisplayRenderer;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -56,9 +58,6 @@ public class GtwMinimapManager implements MinimapManager {
     @Getter @Setter
     private boolean canActivated = true;
 
-    @Getter
-    private boolean allowedToDisplay = false;
-
     @Getter @Setter
     private UpdateMinimapData updatingData = null;
 
@@ -73,8 +72,6 @@ public class GtwMinimapManager implements MinimapManager {
     private float opacityFilter = 0;
 
     private MapImage minimapData;
-
-    private MapImageUtils mapImageUtils;
 
     @Getter @Setter
     private boolean initElementDraw = false;
@@ -93,24 +90,24 @@ public class GtwMinimapManager implements MinimapManager {
 
     public void updateData(MapImageData minimapData, String radarImageId, Boolean draw) {
 
-        ResourceLocation mapTexture = mapImageUtils.getMapImage(minimapData.getImageId(), minimapData.getColorBackground());
+        ResourceLocation mapTexture = GtwAPI.getInstance().getMapManagerClient().getMapImageUtils().getMapImage(minimapData.getImageId(), minimapData.getColorBackground());
         this.minimapData = new MapImage(mapTexture, minimapData.getImageId(), minimapData.getTopRight(), minimapData.getDownRight(), minimapData.getDownLeft(), minimapData.getTopLeft(), minimapData.getOffsetX(), minimapData.getOffsetY());
         this.minimapImage = mapTexture;
-        this.radarImage = mapImageUtils.getImage(radarImageId);
+        this.radarImage = GtwAPI.getInstance().getMapManagerClient().getMapImageUtils().getImage(radarImageId);
 
         this.colorBorderReach = minimapData.getColorBorderReach();
         this.initElementDraw = false;
         if (draw == null) {
-            draw = this.allowedToDisplay;
+            draw = GtwAPI.getInstance().getMapManagerClient().isAllowedToDisplay();
         }
-        setAllowedToDisplay(draw, true);
+        GtwAPI.getInstance().getMapManagerClient().setAllowedToDisplay(draw, true);
     }
 
 
 
     @SubscribeEvent
     public void onKeyInput(KeyInputEvent event) {
-        if (!allowedToDisplay) return;
+        if (!GtwAPI.getInstance().getMapManagerClient().isAllowedToDisplay()) return;
         if (showMinimaps.isPressed()) {
 
             setActive(!active);
@@ -121,7 +118,7 @@ public class GtwMinimapManager implements MinimapManager {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
 
-        if (!active || !allowedToDisplay) return;
+        if (!active || !GtwAPI.getInstance().getMapManagerClient().isAllowedToDisplay()) return;
 
         if (increaseZoom.isKeyDown()) {
             element.performAction("zoom_minimap", "add");
@@ -169,6 +166,18 @@ public class GtwMinimapManager implements MinimapManager {
                 throw new RuntimeException(e);
             }
             GtwLog.getLogger().debug("Minimap visibility changed: " + active);
+
+//            // @TODO Переделать!!!
+//            if (active) {
+//                Minecraft.getMinecraft().displayGuiScreen(
+//                        new GtwGlobalmapScreen(GtwAPI.getInstance().getGtwMod(), "globalmap")
+//                );
+//            } else {
+//                Minecraft.getMinecraft().displayGuiScreen(
+//                        null
+//                );
+//            }
+
         } else {
             GtwLog.getLogger().debug("Changing minimap activity is prohibited.");
             renderer.getDisplayData().setTemporaryData("notification", "&eChanging minimap activity is prohibited.", 40, false);
@@ -203,7 +212,7 @@ public class GtwMinimapManager implements MinimapManager {
 
 
     public void onPreInit(FMLPreInitializationEvent event) {
-        showMinimaps = new KeyBinding("key.minimap.show.desc", Keyboard.KEY_M, "key.categories.mod");
+        showMinimaps = new KeyBinding("key.minimap.show.desc", Keyboard.KEY_U, "key.categories.mod");
         increaseZoom = new KeyBinding("key.minimap.increase.desc", Keyboard.KEY_PRIOR, "key.categories.mod");
         decreaseZoom = new KeyBinding("key.minimap.decrease.desc", Keyboard.KEY_NEXT, "key.categories.mod");
 
@@ -211,16 +220,6 @@ public class GtwMinimapManager implements MinimapManager {
         ClientRegistry.registerKeyBinding(decreaseZoom);
         ClientRegistry.registerKeyBinding(showMinimaps);
 
-    }
-
-    public void onInit(FMLInitializationEvent event) {
-//        mapImageUtils = new MapImageUtils(new File("gtwdata/map/"));
-    }
-
-    public void onPostInit(FMLPostInitializationEvent event) {
-        System.out.println("PostInit start");
-        mapImageUtils = new MapImageUtils(new File("gtwdata/map/"));
-        System.out.println("PostInit stop");
     }
 
     @Override
@@ -276,22 +275,22 @@ public class GtwMinimapManager implements MinimapManager {
     }
 
 
-    /**
-     * Изменяет переменную allowedToDisplay и статус отображения.
-     * @param draw значение переменной.
-     * @param quietChange изменять ли значение переменной после изменения значения?
-     */
-    public void setAllowedToDisplay(Boolean draw, Boolean quietChange) {
-        System.out.println(draw);
-        if (draw == null) {System.out.println("Draw is null");}
-        DisplayRenderer render = GtwAPI.getInstance().getGtwMod().getDisplayManager().getHUDCanvas()
-                .getDisplayRenderer();
-        if(render==null) return;
-        if (quietChange) {
-            render.getDisplayData().setElementEnabled("minimap", draw);
-        }
-        this.allowedToDisplay = draw;
-    }
+//    /**
+//     * Изменяет переменную allowedToDisplay и статус отображения.
+//     * @param draw значение переменной.
+//     * @param quietChange изменять ли значение переменной после изменения значения?
+//     */
+//    public void setAllowedToDisplay(Boolean draw, Boolean quietChange) {
+//        System.out.println(draw);
+//        if (draw == null) {System.out.println("Draw is null");}
+//        DisplayRenderer render = GtwAPI.getInstance().getGtwMod().getDisplayManager().getHUDCanvas()
+//                .getDisplayRenderer();
+//        if(render==null) return;
+//        if (quietChange) {
+//            render.getDisplayData().setElementEnabled("minimap", draw);
+//        }
+//        this.allowedToDisplay = draw;
+//    }
 
     @Override
     public void setColorFrame(AtumColor color, int time) {

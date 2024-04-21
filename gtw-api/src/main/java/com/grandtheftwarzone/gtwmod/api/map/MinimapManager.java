@@ -42,15 +42,11 @@ public interface MinimapManager {
 
     MapImage getMinimapImage();
 
-    // @TODO: remove
-    boolean isAllowedToDisplay();
-
     Integer getMinZoom();
     Integer getMaxZoom();
 
     void updateZoomLimits(Integer min, Integer max);
 
-    void setAllowedToDisplay(Boolean draw, Boolean quietChange);
 
     boolean isInitElementDraw();
     void setInitElementDraw(boolean draw);

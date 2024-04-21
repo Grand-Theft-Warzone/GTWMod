@@ -193,7 +193,7 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
             return null;
         }
         if (!checkPermissions(uuid, mapData, attachedTo)) {
-            GtwLog.getLogger().info("! At the user " + GtwAPI.getInstance().getServer().getPlayerList().getPlayerByUUID(uuid).getName() + "no rights to the card " + mapId);
+            System.out.println("! At the user " + GtwAPI.getInstance().getServer().getPlayerList().getPlayerByUUID(uuid).getName() + "no rights to the card " + mapId);
             return null;
         }
 

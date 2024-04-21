@@ -28,6 +28,10 @@ public class FileImageUtils {
     private FileLoader fileLoader = null;
 
     public FileImageUtils(File rootDir, boolean usageFileLoader) {
+
+        if (!rootDir.exists()) {
+            rootDir.mkdir();
+        }
         this.rootDir = rootDir;
         if (usageFileLoader) {
             fileLoader = new FileLoader(rootDir);

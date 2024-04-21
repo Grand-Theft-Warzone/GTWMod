@@ -125,7 +125,7 @@ public class ElementMinimap extends BaseElement {
     private void init() {
 
         // @TODO remove
-        if (!GtwAPI.getInstance().getMapManagerClient().getMinimapManager().isAllowedToDisplay()) {
+        if (!GtwAPI.getInstance().getMapManagerClient().isAllowedToDisplay()) {
             return;
         }
 

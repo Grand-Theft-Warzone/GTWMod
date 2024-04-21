@@ -9,4 +9,12 @@ public interface MapManagerClient {
     MinimapManager getMinimapManager();
     GlobalmapManager getGlobalmapManager();
 
+    MapImageUtils getMapImageUtils();
+
+    // ------------------------------------------
+
+    // @TODO: remove, было для дебага
+    boolean isAllowedToDisplay();
+    void setAllowedToDisplay(Boolean draw, Boolean quietChange);
+
 }

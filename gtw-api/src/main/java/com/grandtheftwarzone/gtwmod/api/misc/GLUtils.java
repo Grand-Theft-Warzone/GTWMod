@@ -7,6 +7,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import static org.lwjgl.opengl.GL11.*;
+
 public class GLUtils {
 
     public static void preDrawConstants() {
@@ -155,36 +157,72 @@ public class GLUtils {
 
 
     public static void drawPartialImage(int posX, int posY, int width, int height, int textureX, int textureY, int texturePartWidth, int texturePartHeight) {
-        double imageWidth = (double) GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
-        double imageHeight = (double) GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
-        double einsTeilerWidth = 1.0 / imageWidth;
-        double uvWidth = einsTeilerWidth * (double)texturePartWidth;
-        double uvX = einsTeilerWidth * (double)textureX;
-        double einsTeilerHeight = 1.0 / imageHeight;
-        double uvHeight = einsTeilerHeight * (double)texturePartHeight;
-        double uvY = einsTeilerHeight * (double)textureY;
+//        double imageWidth = (double) GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
+//        double imageHeight = (double) GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
+//        double einsTeilerWidth = 1.0 / imageWidth;
+//        double uvWidth = einsTeilerWidth * (double)texturePartWidth;
+//        double uvX = einsTeilerWidth * (double)textureX;
+//        double einsTeilerHeight = 1.0 / imageHeight;
+//        double uvHeight = einsTeilerHeight * (double)texturePartHeight;
+//        double uvY = einsTeilerHeight * (double)textureY;
+//
+//        // Установите режим зажима текстуры
+//        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+//        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+//        GL11.glEnable(GL11.GL_TEXTURE_2D);
+//        GL11.glEnable(GL11.GL_BLEND);
+//        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+//
+//        GL11.glTranslatef((float)posX, (float)posY, 0.0F);
+//        GL11.glBegin(GL11.GL_QUADS);
+//        GL11.glTexCoord2d(uvX, uvY);
+//        GL11.glVertex3f(0.0F, 0.0F, 0.0F);
+//        GL11.glTexCoord2d(uvX, uvY + uvHeight);
+//        GL11.glVertex3f(0.0F, (float)height, 0.0F);
+//        GL11.glTexCoord2d(uvX + uvWidth, uvY + uvHeight);
+//        GL11.glVertex3f((float)width, (float)height, 0.0F);
+//        GL11.glTexCoord2d(uvX + uvWidth, uvY);
+//        GL11.glVertex3f((float)width, 0.0F, 0.0F);
+//        GL11.glEnd();
+//        GL11.glTranslatef((float)(-posX), (float)(-posY), 0.0F);
+//
+//        GL11.glDisable(GL11.GL_BLEND);
+//        GL11.glDisable(GL11.GL_TEXTURE_2D);
 
-        // Set the clamping mode for the texture
+        double imageWidth = glGetTexLevelParameteri(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH);
+        double imageHeight = glGetTexLevelParameteri(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT);
+
+        double einsTeilerWidth = 1F / imageWidth;
+        double uvWidth = einsTeilerWidth * texturePartWidth;
+        double uvX = einsTeilerWidth * textureX;
+
+        double einsTeilerHeight = 1F / imageHeight;
+        double uvHeight = einsTeilerHeight * texturePartHeight;
+        double uvY = einsTeilerHeight * textureY;
+
+        GlStateManager.enableBlend();
+
+        // === new
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+//        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        // ====
+        GlStateManager.enableAlpha();
+        glTranslatef(posX, posY, 0);
+        glBegin(GL_QUADS);
 
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glTranslatef((float)posX, (float)posY, 0.0F);
-        GL11.glBegin(GL11.GL_QUADS);
-        GL11.glTexCoord2d(uvX, uvY);
-        GL11.glVertex3f(0.0F, 0.0F, 0.0F);
-        GL11.glTexCoord2d(uvX, uvY + uvHeight);
-        GL11.glVertex3f(0.0F, (float)height, 0.0F);
-        GL11.glTexCoord2d(uvX + uvWidth, uvY + uvHeight);
-        GL11.glVertex3f((float)width, (float)height, 0.0F);
-        GL11.glTexCoord2d(uvX + uvWidth, uvY);
-        GL11.glVertex3f((float)width, 0.0F, 0.0F);
-        GL11.glEnd();
-        GL11.glTranslatef((float)(-posX), (float)(-posY), 0.0F);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        glTexCoord2d(uvX, uvY);
+        glVertex3f(0, 0, 0);
+        glTexCoord2d(uvX, uvY + uvHeight);
+        glVertex3f(0, height, 0);
+        glTexCoord2d(uvX + uvWidth, uvY + uvHeight);
+        glVertex3f(width, height, 0);
+        glTexCoord2d(uvX + uvWidth, uvY);
+        glVertex3f(width, 0, 0);
+        glEnd();
+        glTranslatef(-posX, -posY, 0);
+        GlStateManager.disableBlend();
+
     }
 
     public static void drawText(int x, int y, String text, AtumColor color) {

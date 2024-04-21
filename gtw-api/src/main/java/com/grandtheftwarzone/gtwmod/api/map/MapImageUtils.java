@@ -24,7 +24,6 @@ public class MapImageUtils extends FileImageUtils {
     @Getter
     private File gameDir;
 
-
     public MapImageUtils(File gameDir) {
         super(gameDir, true);
         this.gameDir = gameDir;
@@ -34,6 +33,8 @@ public class MapImageUtils extends FileImageUtils {
     public ResourceLocation getImage(String idName) {
         return super.getImage(idName, "textures/gui/minimap/");
     }
+
+
 
     public @Nullable ResourceLocation getMapImage(String id, @Nullable AtumColor colorBackground) {
 
@@ -155,6 +156,7 @@ public class MapImageUtils extends FileImageUtils {
         return nullImage;
     }
 
-
-
+    public @Nullable ResourceLocation getMapImage(String id) {
+        return getMapImage(id, null);
+    }
 }

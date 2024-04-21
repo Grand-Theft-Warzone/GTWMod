@@ -48,7 +48,7 @@ public class ProcessConsumer {
                         // @TODO Добавить функционал глобальной карты.
                     }
 
-                    GtwAPI.getInstance().getMapManagerClient().getMinimapManager().setAllowedToDisplay(it.getRestrictionsData().isAllowMapDisplay(), true);
+                    GtwAPI.getInstance().getMapManagerClient().setAllowedToDisplay(it.getRestrictionsData().isAllowMapDisplay(), true);
                     GtwAPI.getInstance().getMapManagerClient().getMinimapManager().updateZoomLimits(it.getRestrictionsData().getMinZoom(), it.getRestrictionsData().getMaxZoom());
 
 
