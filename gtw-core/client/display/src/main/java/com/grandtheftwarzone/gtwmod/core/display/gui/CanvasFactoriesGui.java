@@ -19,15 +19,7 @@ public class CanvasFactoriesGui extends BaseCanvas {
         return null;
     }
 
-    @Override
-    public boolean isSetupState() {
-        return false;
-    }
 
-    @Override
-    public void setSetupState(boolean b) {
-
-    }
 
     @Override
     protected void onDraw(DisplayResolution displayResolution, float v, int i, int i1) {

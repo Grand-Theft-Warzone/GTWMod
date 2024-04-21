@@ -8,7 +8,8 @@ import java.util.Objects;
 
 public class GtwPhoneScreen extends BaseScreen {
     public GtwPhoneScreen(@NotNull AtumMod atumMod, @NotNull String id) {
-        super(atumMod, Objects.requireNonNull(atumMod.getDisplayManager()
+        super(atumMod,
+                Objects.requireNonNull(atumMod.getDisplayManager()
                 .getElementRegistry().getDrawableCanvas(id))
         );
 

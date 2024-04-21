@@ -5,6 +5,7 @@ import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneApp;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneShape;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneState;
 import lombok.Getter;
+import lombok.Setter;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumconfig.api.config.Config;
 
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public abstract class CanvasPhone extends BaseCanvas {
+    public static final float horizontalShapeScale = 1.5f;
 
     @Getter
     protected PhoneState state = PhoneState.OPENING;
@@ -30,6 +32,9 @@ public abstract class CanvasPhone extends BaseCanvas {
 
     @Getter
     protected PhoneApp openedApp;
+
+    @Getter @Setter
+    private boolean locked = true;
 
 
 
@@ -75,6 +80,7 @@ public abstract class CanvasPhone extends BaseCanvas {
     }
 
     public void openApp(PhoneApp app){
+        if(state == PhoneState.OPENING || state == PhoneState.CLOSING) return;
         if(openedApp!=null){
             openedApp.onAppClose(this);
         }
@@ -101,17 +107,20 @@ public abstract class CanvasPhone extends BaseCanvas {
 
     }
 
-    protected abstract int getPhoneDisplayX();
-    protected abstract int getPhoneDisplayY();
+    public abstract int getDisplayX();
+    public abstract int getDisplayY();
+
+    public abstract int getDisplayWidth();
+    public abstract int getDisplayHeight();
 
     @Override
     public int getGlobalX() {
-        return super.getGlobalX() + (getPhoneDisplayX() - super.getGlobalX());
+        return super.getGlobalX() + (getDisplayX() - super.getGlobalX());
     }
 
     @Override
     public int getGlobalY() {
-        return super.getGlobalY() + (getPhoneDisplayY() - super.getGlobalY());
+        return super.getGlobalY() + (getDisplayY() - super.getGlobalY());
     }
 
     @Override
