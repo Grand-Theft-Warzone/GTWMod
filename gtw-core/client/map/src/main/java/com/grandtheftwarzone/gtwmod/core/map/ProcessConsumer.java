@@ -4,6 +4,7 @@ import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.data.MapImageData;
 import com.grandtheftwarzone.gtwmod.api.map.data.client.UpdateMinimapData;
+import com.grandtheftwarzone.gtwmod.api.map.data.server.UpdateGlobalmapData;
 import me.phoenixra.atumodcore.api.display.misc.resources.BufferTextureResource;
 import net.minecraft.util.ResourceLocation;
 
@@ -46,6 +47,7 @@ public class ProcessConsumer {
 
                     if (it.getGlobalmapData() != null) {
                         // @TODO Добавить функционал глобальной карты.
+                        GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().setUpdatingData(new UpdateGlobalmapData(it.getGlobalmapData(), it.getRestrictionsData().isAllowMapDisplay()));
                     }
 
                     GtwAPI.getInstance().getMapManagerClient().setAllowedToDisplay(it.getRestrictionsData().isAllowMapDisplay(), true);
