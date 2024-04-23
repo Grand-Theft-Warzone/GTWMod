@@ -57,8 +57,7 @@ public class ElementMinimap extends BaseElement {
                 PlaceholderContext.of(getElementOwner().getDisplayRenderer())
         )));
 
-        boolean init = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().isInitElementDraw();
-        if (!init) {
+        if (!GtwAPI.getInstance().getMapManagerClient().getMinimapManager().isInitElementDraw()) {
             init();
             return;
         }

@@ -73,6 +73,7 @@
         "step": 1.0
       },
       "active": false,
+      "fixRatio": true,
       "layer": "MIDDLE",
       "posX": 10.5,
       "posY": 10.5,

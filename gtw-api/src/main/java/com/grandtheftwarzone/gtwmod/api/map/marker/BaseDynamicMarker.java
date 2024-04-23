@@ -7,7 +7,6 @@ import lombok.Getter;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -32,7 +31,7 @@ public abstract class BaseDynamicMarker implements DynamicMarker {
         this.coefficient = coefficient;
         this.step = step;
         this.mapInterpolations = new ArrayList<>();
-        this.mapInterpolations.add(mapImage.calculateCoord(worldLocationMarker.getX(), worldLocationMarker.getZ()));
+        this.mapInterpolations.add(mapImage.calculateImageCoord(worldLocationMarker.getX(), worldLocationMarker.getZ()));
     }
 
     @Override
@@ -50,7 +49,7 @@ public abstract class BaseDynamicMarker implements DynamicMarker {
         List<MapLocation> addmapInterpolations = new ArrayList<>();
 
         MapLocation startLocation = this.mapInterpolations.get(mapInterpolations.size() - 1);
-        MapLocation endLocation = mapImage.calculateCoord(worldLocationMarker.getX(), worldLocationMarker.getZ());
+        MapLocation endLocation = mapImage.calculateImageCoord(worldLocationMarker.getX(), worldLocationMarker.getZ());
 
         if (Math.abs(endLocation.getX() - startLocation.getX()) > 15 || Math.abs(endLocation.getY() - startLocation.getY()) > 15) {
             this.mapInterpolations.clear();

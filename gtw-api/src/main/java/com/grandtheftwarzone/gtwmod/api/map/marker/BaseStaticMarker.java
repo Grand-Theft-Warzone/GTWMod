@@ -28,7 +28,7 @@ public class BaseStaticMarker implements StaticMarker {
 
     @Override
     public MapLocation getMapLocation() {
-        return this.mapImage.calculateCoord(worldLocationMarker.getX(), worldLocationMarker.getY());
+        return this.mapImage.calculateImageCoord(worldLocationMarker.getX(), worldLocationMarker.getY());
     }
 
     @Override

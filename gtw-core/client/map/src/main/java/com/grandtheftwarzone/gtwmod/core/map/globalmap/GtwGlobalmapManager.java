@@ -36,6 +36,8 @@ public class GtwGlobalmapManager implements GlobalmapManager {
     @Getter @Setter
     private boolean initCanvasDraw = false;
 
+    @Getter
+    private GlobalZoom zoom;
 
     private final Minecraft mc = Minecraft.getMinecraft();
 
@@ -60,6 +62,10 @@ public class GtwGlobalmapManager implements GlobalmapManager {
         }
         GtwAPI.getInstance().getMapManagerClient().setAllowedToDisplay(draw, true);
     }
+
+//    public void setZoom(int zoom) {
+//
+//    }
 
     @SubscribeEvent
     public void onClientUpdate(TickEvent.ClientTickEvent event) {

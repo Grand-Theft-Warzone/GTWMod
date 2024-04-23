@@ -3,6 +3,12 @@
   "config_version": 12,
   "width": 1920,
   "height": 1080,
+  "fixRatio": true,
+  "settings": {
+    "debug_cord": "100;150;0",
+    "zoom": 150
+  },
+
   "elements": {
 
   }

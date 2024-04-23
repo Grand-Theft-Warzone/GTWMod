@@ -2,6 +2,8 @@ package com.grandtheftwarzone.gtwmod.core.map.globalmap;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
+import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
+import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.display.DisplayCanvas;
 import me.phoenixra.atumodcore.api.display.annotations.RegisterDisplayElement;
@@ -21,6 +23,9 @@ public class CanvasGlobalmap extends BaseCanvas {
     private MapImage globalmap;
     private ResourceLocation globalmapTexture;
 
+    private int zoom = 100;
+    private MapLocation imageLocation;
+
     public CanvasGlobalmap(@NotNull AtumMod atumMod, @Nullable DisplayCanvas elementOwner) {
         super(atumMod, elementOwner);
     }
@@ -34,16 +39,15 @@ public class CanvasGlobalmap extends BaseCanvas {
             return;
         }
 
-//        MapImage mapImage = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getMinimapImage();
         RenderUtils.bindTexture(globalmapTexture);
 
 
-        int zoom = 1500;
-        System.out.println(zoom);
-//        RenderUtils.drawCompleteImage(0, 0, getWidth(), getHeight());
-        drawPartialImage(0, 0, getWidth(), getHeight(), 1000, 200, zoom, zoom);
+
+        drawPartialImage(0, 0, getWidth(), getHeight(), (int)imageLocation.getX()  - (zoom / 2), (int)imageLocation.getY()  - (zoom / 2), zoom, zoom);
 
     }
+
+
 
     private void init() {
         // БлаБлаБла
@@ -56,8 +60,18 @@ public class CanvasGlobalmap extends BaseCanvas {
         globalmap = GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage();
         globalmapTexture = globalmap.getImage();
 
-
         GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().setInitCanvasDraw(true);
+
+    }
+
+    @Override
+    public void updateElementVariables(@NotNull Config config) {
+        System.out.println("Вызываю updateElementVariables в CanvasGlobalmap");
+        zoom = config.getInt("zoom");
+        String debugCordStr = config.getString("debug_cord");
+        imageLocation = new MapLocation(debugCordStr);
+
+        GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().setInitCanvasDraw(false);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.grandtheftwarzone.gtwmod.api.map;
 
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
+import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
@@ -77,13 +78,25 @@ public class MapImage {
         this.heightInBlocks = (int) Math.abs(downRight.getY() - topRight.getY());
     }
 
-    public MapLocation calculateCoord(double targetX, double targetY) {
+    /**
+     * Translates the player's coordinates in space to coordinates in a given image.
+     * @param targetX X coordinate in the real world
+     * @param targetY Y coordinate in the real world
+     * @return coordinates on the image
+     */
+    public MapLocation calculateImageCoord(double targetX, double targetY) {
         double targetRelativeX = targetX - topLeft.getX();
         double targetRelativeZ = targetY - topLeft.getY();
         int mapX = (int) (targetRelativeX * this.pixelsPerBlockX);
         int mapZ = (int) (targetRelativeZ * this.pixelsPerBlockZ);
         return new MapLocation(mapX, mapZ);
 
+    }
+
+    public EntityLocation calculateWorldCoord(double targetX, double targetY) {
+        double targetWorldX = topLeft.getX() + (targetX * pixelsPerBlockX);
+        double targetWorldZ = topLeft.getY() + (targetY * pixelsPerBlockZ);
+        return new EntityLocation(targetWorldX, targetWorldZ, 0);
     }
 
     public boolean inRealMap(double targetX, double targetY) {
