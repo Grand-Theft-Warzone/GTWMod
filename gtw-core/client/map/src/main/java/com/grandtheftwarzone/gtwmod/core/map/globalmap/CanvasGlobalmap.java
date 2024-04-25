@@ -2,6 +2,7 @@ package com.grandtheftwarzone.gtwmod.core.map.globalmap;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
+import com.grandtheftwarzone.gtwmod.api.map.MapManagerClient;
 import com.grandtheftwarzone.gtwmod.api.map.misc.GlobalZoom;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import me.phoenixra.atumconfig.api.config.Config;
@@ -38,6 +39,8 @@ public class CanvasGlobalmap extends BaseCanvas {
     private boolean pressIncreaseZoom;
     private boolean pressDecreaseZoom;
 
+    private int lastZoom;
+
     public CanvasGlobalmap(@NotNull AtumMod atumMod, @Nullable DisplayCanvas elementOwner) {
         super(atumMod, elementOwner);
     }
@@ -58,15 +61,15 @@ public class CanvasGlobalmap extends BaseCanvas {
         // Приближение
         if (pressIncreaseZoom) {
             System.out.println("Приближение...");
-            zoom.addZoom(getSettingsConfig().getSubsection("settings").getInt("step_zoom"));
+            zoom.addZoom(getSettingsConfig().getSubsection("settings").getSubsection("zoom").getInt("step"));
         } else if (pressDecreaseZoom) {
             System.out.println("Отдаление...");
-            zoom.removeZoom(getSettingsConfig().getSubsection("settings").getInt("step_zoom"));
+            zoom.removeZoom(getSettingsConfig().getSubsection("settings").getSubsection("zoom").getInt("step"));
         }
 
         RenderUtils.bindTexture(globalmapTexture);
 
-        int lastZoom = zoom.getZoom();
+        lastZoom = zoom.getZoom();
         drawPartialImage(0, 0, getWidth(), getHeight(), (int)imageLocation.getX()  - (lastZoom / 2), (int)imageLocation.getY()  - (lastZoom / 2), lastZoom, lastZoom);
 
     }
@@ -95,9 +98,10 @@ public class CanvasGlobalmap extends BaseCanvas {
         imageLocation = new MapLocation(debugCordStr);
 
         // zoom
-        int configZoom = config.getInt("zoom");
+        int configZoom = config.getSubsection("zoom").getInt("zoom");
 //        GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalZoom().setStraightZoom(configZoom);
         GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalZoom().setStraightZoom(configZoom);
+        GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalZoom().setAnimSpeed(config.getSubsection("zoom").getInt("speed"));
 
         isActive = false;
         GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().setInitCanvasDraw(false);
@@ -110,14 +114,7 @@ public class CanvasGlobalmap extends BaseCanvas {
         isActive = false;
         GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().setInitCanvasDraw(false);
 
-        LoadableConfig config = (LoadableConfig) getSettingsConfig();
-        config.getSubsection("settings").set("zoom", GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalZoom().getLastZoomAndClearList());
-        try {
-            config.save();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        saveZoomInConfig();
     }
 
 
@@ -131,15 +128,17 @@ public class CanvasGlobalmap extends BaseCanvas {
     @SubscribeEvent
     protected void onPress(InputPressEvent event) {
 
+        MapManagerClient mapManagerClient = GtwAPI.getInstance().getMapManagerClient();
+
         if (!isActive()) {
             return;
         }
 
         // Увеличиваю зум.
-        if (event.getKeyboardKey() == GtwAPI.getInstance().getMapManagerClient().getKeyIncreaseZoom().getKeyCode() && !pressDecreaseZoom) {
+        if (event.getKeyboardKey() == mapManagerClient.getKeyIncreaseZoom().getKeyCode() && !pressDecreaseZoom) {
             System.out.println("Включаю pressIncreaseZoom");
             pressIncreaseZoom = true;
-        } else if (event.getKeyboardKey() == GtwAPI.getInstance().getMapManagerClient().getKeyDecreaseZoom().getKeyCode() && !pressIncreaseZoom) {
+        } else if (event.getKeyboardKey() == mapManagerClient.getKeyDecreaseZoom().getKeyCode() && !pressIncreaseZoom) {
             System.out.println("Включаю pressDecreaseZoom");
             pressDecreaseZoom = true;
         }
@@ -151,15 +150,33 @@ public class CanvasGlobalmap extends BaseCanvas {
         if(!isActive()){
             return;
         }
+        MapManagerClient mapManagerClient = GtwAPI.getInstance().getMapManagerClient();
 
         // Увеличиваю зум стоп.
         if (event.getKeyboardKey() == GtwAPI.getInstance().getMapManagerClient().getKeyIncreaseZoom().getKeyCode()) {
             System.out.println("Выключаю pressIncreaseZoom");
             pressIncreaseZoom = false;
+            mapManagerClient.getGlobalmapManager().getGlobalZoom().setStraightZoom(lastZoom);
+            saveZoomInConfig();
         } else if (event.getKeyboardKey() == GtwAPI.getInstance().getMapManagerClient().getKeyDecreaseZoom().getKeyCode()) {
             System.out.println("Выключаю pressDecreaseZoom");
             pressDecreaseZoom = false;
+            mapManagerClient.getGlobalmapManager().getGlobalZoom().setStraightZoom(lastZoom);
+            saveZoomInConfig();
         }
 
     }
+
+
+    public void saveZoomInConfig() {
+        LoadableConfig config = (LoadableConfig) getSettingsConfig();
+        config.getSubsection("settings").getSubsection("zoom").set("zoom", GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalZoom().getLastZoomAndClearList());
+        try {
+            config.save();
+            System.out.println("Zoom успешно сохранено в config");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

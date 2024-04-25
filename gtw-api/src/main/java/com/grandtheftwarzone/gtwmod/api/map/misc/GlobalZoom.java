@@ -3,22 +3,27 @@ package com.grandtheftwarzone.gtwmod.api.map.misc;
 import akka.japi.pf.Match;
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.canvas.CanvasPhone;
-import jdk.nashorn.internal.objects.annotations.Getter;
+
+import lombok.Getter;
+import lombok.Setter;
 import me.phoenixra.atumodcore.api.display.DisplayRenderer;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Getter
 public class GlobalZoom {
     private List<Integer> zoomInterpolations;
 
-    private int step;
+    private int step = 1;
 
-    public GlobalZoom(int defaultZoom, int step) {
+    @Setter
+    private double animSpeed;
 
-        this.step = step;
+    public GlobalZoom(int defaultZoom, double animSpeed) {
+
+        this.animSpeed = animSpeed;
 
         this.zoomInterpolations = new ArrayList<>();
         this.zoomInterpolations.add(defaultZoom);
@@ -32,42 +37,92 @@ public class GlobalZoom {
     }
 
     // Итерполяляцию тут доделат надас
+//    public void setZoom(int newZoom) {
+//
+//        System.out.println("Запускается setZoom, newZoom = " + newZoom + ", lastZoom = " + this.zoomInterpolations.get(this.zoomInterpolations.size() - 1) + ", step = " + step);
+//
+//        List<Integer> addZoomInterpolations = new ArrayList<>();
+//        int lastZoom = this.zoomInterpolations.get(this.zoomInterpolations.size() - 1);
+//        int difference = newZoom - lastZoom;
+//        int znak = difference / Math.abs(difference);
+//
+//        int prozessZoom = lastZoom;
+//        for (int i = 0; i < difference; i++) {
+//            if (znak > 0) {
+//                if (prozessZoom + znak*step < newZoom) {
+//                    prozessZoom += znak*step;
+//                    addZoomInterpolations.add(prozessZoom);
+//                } else if (prozessZoom + znak*step >= newZoom) {
+//                    addZoomInterpolations.add(newZoom);
+//                    break;
+//                }
+//            } else if (znak < 0) {
+//                if (prozessZoom + znak*step > newZoom) {
+//                    prozessZoom += znak*step;
+//                    addZoomInterpolations.add(prozessZoom);
+//                } else if (prozessZoom + znak*step <= newZoom) {
+//                    addZoomInterpolations.add(newZoom);
+//                    break;
+//                }
+//            }
+//
+//        }
+//        this.zoomInterpolations.addAll(addZoomInterpolations);
+//        System.out.println("Cписок zoomInterpolations:" );
+//        for (Integer ia : zoomInterpolations) {
+//            System.out.print(ia + " ");
+//        }
+//    }
+
+//    public void setZoom(int newZoom) {
+//        int lastZoom = getLastZoom();
+//        int difference = newZoom - lastZoom;
+//        int numSteps = Math.abs(difference) / step;
+//
+//        if (numSteps == 0) {
+//            addZoomInterpolation(newZoom);
+//            return;
+//        }
+//
+//        double stepSize = (double) difference / numSteps * animSpeed;
+//
+//        for (int i = 0; i < numSteps; i++) {
+//            int interpolatedZoom = (int) (lastZoom + i * stepSize);
+//            addZoomInterpolation(interpolatedZoom);
+//        }
+//
+//        addZoomInterpolation(newZoom);
+//    }
+
     public void setZoom(int newZoom) {
 
-        System.out.println("Запускается setZoom, newZoom = " + newZoom + ", lastZoom = " + this.zoomInterpolations.get(this.zoomInterpolations.size() - 1) + ", step = " + step);
-
         List<Integer> addZoomInterpolations = new ArrayList<>();
-        int lastZoom = this.zoomInterpolations.get(this.zoomInterpolations.size() - 1);
+        int lastZoom = getLastZoom();
         int difference = newZoom - lastZoom;
-        int znak = difference / Math.abs(difference);
+        int numSteps = Math.abs(difference) / step;
 
-        int prozessZoom = lastZoom;
-        for (int i = 0; i < difference; i++) {
-            if (znak > 0) {
-                if (prozessZoom + znak*step < newZoom) {
-                    prozessZoom += znak*step;
-                    addZoomInterpolations.add(prozessZoom);
-                } else if (prozessZoom + znak*step >= newZoom) {
-                    addZoomInterpolations.add(newZoom);
-                    break;
-                }
-            } else if (znak < 0) {
-                if (prozessZoom + znak*step > newZoom) {
-                    prozessZoom += znak*step;
-                    addZoomInterpolations.add(prozessZoom);
-                } else if (prozessZoom + znak*step <= newZoom) {
-                    addZoomInterpolations.add(newZoom);
-                    break;
-                }
-            }
-
+        if (numSteps == 0) {
+            addZoomInterpolations.add(newZoom);
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             this.zoomInterpolations.addAll(addZoomInterpolations);
-
-            System.out.println("Cписок zoomInterpolations:" );
-            for (Integer ia : zoomInterpolations) {
-                System.out.print(ia + " ");
-            }
+            return;
         }
+
+        double stepSize = (double) difference / numSteps * animSpeed;
+
+        for (int i = 0; i < numSteps; i++) {
+            int interpolatedZoom = (int) (lastZoom + i * stepSize);
+            addZoomInterpolations.add(interpolatedZoom);
+        }
+
+        addZoomInterpolations.add(newZoom);
+        this.zoomInterpolations.addAll(addZoomInterpolations);
+
+    }
+
+
+    private void addZoomInterpolation(int zoom) {
+        zoomInterpolations.add(zoom);
     }
 
     public void setStraightZoom(int newZoom) {

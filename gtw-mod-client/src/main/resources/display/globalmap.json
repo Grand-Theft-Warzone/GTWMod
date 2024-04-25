@@ -1,16 +1,16 @@
 {
   "template": "canvas_globalmap",
-  "config_version": 12,
-  "width": 1920,
-  "height": 1080,
-  "fixRatio": true,
   "settings": {
-    "debug_cord": "100;150;0",
-    "step_zoom": 1,
-    "zoom": 150
+    "debug_cord": "3500;4700;0",
+    "zoom": {
+      "speed": 1,
+      "step": 1,
+      "zoom": 2600
+    }
   },
-
-  "elements": {
-
-  }
+  "fixRatio": true,
+  "config_version": 12.0,
+  "elements": {},
+  "width": 1920.0,
+  "height": 1080.0
 }
