@@ -3,11 +3,9 @@ package com.grandtheftwarzone.gtwmod.core.map;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.event.ClientConnectEvent;
-import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.MapImageUtils;
 import com.grandtheftwarzone.gtwmod.api.map.MapManagerClient;
 import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumersClient;
-import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.GtwGlobalmapManager;
 import com.grandtheftwarzone.gtwmod.core.map.minimap.GtwMinimapManager;
 import lombok.Getter;
@@ -15,24 +13,35 @@ import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.config.ConfigType;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.display.DisplayRenderer;
-import me.phoenixra.atumodcore.api.misc.AtumColor;
 import me.phoenixra.atumodcore.api.service.AtumModService;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.event.ClientChatEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.input.Keyboard;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
 
 public class GtwMapManagerClient implements AtumModService, MapManagerClient {
 
+    @Getter
+    private KeyBinding keyShowGlobalmap;
+
+    @Getter
+    private KeyBinding keyShowMinimap;
+
+    @Getter
+    private KeyBinding keyIncreaseZoom;
+
+    @Getter
+    private KeyBinding keyDecreaseZoom;
 
     @Getter
     private GtwMinimapManager minimapManager;
@@ -68,6 +77,7 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
             minimapManager.onPreInit((FMLPreInitializationEvent) fmlEvent);
             globalmapManager.onPreInit((FMLPreInitializationEvent) fmlEvent);
             this.processConsumer = new ProcessConsumer();
+            this.onPreInit((FMLPreInitializationEvent) fmlEvent);
         }else if (fmlEvent instanceof FMLPostInitializationEvent) {
             onPostInit((FMLPostInitializationEvent) fmlEvent);
         }else if(fmlEvent instanceof FMLInitializationEvent){
@@ -137,6 +147,19 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
             render.getDisplayData().setElementEnabled("minimap", draw);
         }
         this.allowedToDisplay = draw;
+    }
+
+    public void onPreInit(FMLPreInitializationEvent event) {
+        keyShowMinimap = new KeyBinding("key.minimap.show.desc", Keyboard.KEY_U, "key.categories.mod");
+        keyIncreaseZoom = new KeyBinding("key.minimap.increase.desc", Keyboard.KEY_PRIOR, "key.categories.mod");
+        keyDecreaseZoom = new KeyBinding("key.minimap.decrease.desc", Keyboard.KEY_NEXT, "key.categories.mod");
+        keyShowGlobalmap = new KeyBinding("key.globalmap.show.desc", Keyboard.KEY_M, "key.categories.mod");
+
+        ClientRegistry.registerKeyBinding(keyIncreaseZoom);
+        ClientRegistry.registerKeyBinding(keyDecreaseZoom);
+        ClientRegistry.registerKeyBinding(keyShowMinimap);
+        ClientRegistry.registerKeyBinding(keyShowGlobalmap);
+
     }
 
     public void onPostInit(FMLPostInitializationEvent event) {

@@ -6,6 +6,7 @@
   "fixRatio": true,
   "settings": {
     "debug_cord": "100;150;0",
+    "step_zoom": 1,
     "zoom": 150
   },
 

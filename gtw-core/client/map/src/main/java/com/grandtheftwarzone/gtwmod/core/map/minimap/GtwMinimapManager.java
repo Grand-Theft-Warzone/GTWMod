@@ -38,14 +38,6 @@ import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 public class GtwMinimapManager implements MinimapManager {
 
 
-    private static KeyBinding increaseZoom;
-
-
-    private static KeyBinding decreaseZoom;
-
-
-    private static KeyBinding showMinimaps;
-
     private DisplayRenderer renderer;
 
     private boolean saveZoom = true;
@@ -108,7 +100,7 @@ public class GtwMinimapManager implements MinimapManager {
     @SubscribeEvent
     public void onKeyInput(KeyInputEvent event) {
         if (!GtwAPI.getInstance().getMapManagerClient().isAllowedToDisplay()) return;
-        if (showMinimaps.isPressed()) {
+        if (GtwAPI.getInstance().getMapManagerClient().getKeyShowMinimap().isPressed()) {
 
             setActive(!active);
         }
@@ -120,11 +112,11 @@ public class GtwMinimapManager implements MinimapManager {
 
         if (!active || !GtwAPI.getInstance().getMapManagerClient().isAllowedToDisplay()) return;
 
-        if (increaseZoom.isKeyDown()) {
+        if (GtwAPI.getInstance().getMapManagerClient().getKeyIncreaseZoom().isKeyDown()) {
             element.performAction("zoom_minimap", "add");
             saveZoom = false;
             return;
-        } else if (decreaseZoom.isKeyDown()) {
+        } else if (GtwAPI.getInstance().getMapManagerClient().getKeyDecreaseZoom().isKeyDown()) {
 
             element.performAction("zoom_minimap", "remove");
             saveZoom = false;
@@ -150,6 +142,11 @@ public class GtwMinimapManager implements MinimapManager {
             this.updatingData = null;
         }
     }
+
+    public void onPreInit(FMLPreInitializationEvent event) {
+        // ...
+    }
+
 
     public void setActive(boolean active) {
 
@@ -210,17 +207,6 @@ public class GtwMinimapManager implements MinimapManager {
         return this.minimapData;
     }
 
-
-    public void onPreInit(FMLPreInitializationEvent event) {
-        showMinimaps = new KeyBinding("key.minimap.show.desc", Keyboard.KEY_U, "key.categories.mod");
-        increaseZoom = new KeyBinding("key.minimap.increase.desc", Keyboard.KEY_PRIOR, "key.categories.mod");
-        decreaseZoom = new KeyBinding("key.minimap.decrease.desc", Keyboard.KEY_NEXT, "key.categories.mod");
-
-        ClientRegistry.registerKeyBinding(increaseZoom);
-        ClientRegistry.registerKeyBinding(decreaseZoom);
-        ClientRegistry.registerKeyBinding(showMinimaps);
-
-    }
 
     @Override
     public boolean isActive() {
@@ -300,6 +286,7 @@ public class GtwMinimapManager implements MinimapManager {
         }
         this.colorsFrame.addAll(addColor);
     }
+
 
 }
 
