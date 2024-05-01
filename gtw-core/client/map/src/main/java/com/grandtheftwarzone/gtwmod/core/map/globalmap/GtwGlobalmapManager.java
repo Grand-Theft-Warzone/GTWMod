@@ -5,7 +5,9 @@ import com.grandtheftwarzone.gtwmod.api.map.GlobalmapManager;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.data.MapImageData;
 import com.grandtheftwarzone.gtwmod.api.map.data.server.UpdateGlobalmapData;
+import com.grandtheftwarzone.gtwmod.api.map.misc.GlobalCentrCoord;
 import com.grandtheftwarzone.gtwmod.api.map.misc.GlobalZoom;
+import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
@@ -36,13 +38,17 @@ public class GtwGlobalmapManager implements GlobalmapManager {
     @Getter
     private GlobalZoom globalZoom;
 
+    @Getter
+    private GlobalCentrCoord centrCoord;
+
     private final Minecraft mc = Minecraft.getMinecraft();
 
     public GtwGlobalmapManager() {
 
         EVENT_BUS.register(this);
 
-        this.globalZoom = new GlobalZoom(1000);
+        this.globalZoom = new GlobalZoom(1000, 16, 9);
+        this.centrCoord = new GlobalCentrCoord(new MapLocation(3500, 4700), globalZoom);
 
     }
 

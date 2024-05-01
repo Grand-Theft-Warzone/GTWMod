@@ -104,6 +104,8 @@ public class MapImage {
     }
 
 
+
+
     public float proximityToTheBorder(double targetX, double targetY) {
         float prozentBorderOnX = (float) ((targetX - downLeft.getX()) / widthInBlocks);
         float prozentBorderOnY = (float) ((targetY - topLeft.getY()) / heightInBlocks);

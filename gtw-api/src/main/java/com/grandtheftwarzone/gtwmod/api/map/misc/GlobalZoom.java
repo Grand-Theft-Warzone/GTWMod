@@ -1,13 +1,7 @@
 package com.grandtheftwarzone.gtwmod.api.map.misc;
 
-import akka.japi.pf.Match;
-import com.grandtheftwarzone.gtwmod.api.GtwAPI;
-import com.grandtheftwarzone.gtwmod.api.gui.phone.canvas.CanvasPhone;
-
 import lombok.Getter;
 import lombok.Setter;
-import me.phoenixra.atumodcore.api.display.DisplayRenderer;
-import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,90 +10,40 @@ import java.util.List;
 public class GlobalZoom {
     private List<Integer> zoomInterpolations;
 
-    private int step = 1;
-
     @Setter
     private double animSpeed;
 
-    public GlobalZoom(int defaultZoom, double animSpeed) {
+    @Getter
+    private double coefZoomX, coefZoomY;
+
+    public GlobalZoom(int defaultZoom, double animSpeed, double coefZoomX, double coefZoomY) {
 
         this.animSpeed = animSpeed;
+        this.coefZoomX = coefZoomX;
+        this.coefZoomY = coefZoomY;
 
         this.zoomInterpolations = new ArrayList<>();
         this.zoomInterpolations.add(defaultZoom);
     }
     public GlobalZoom(int defaultZoom) {
-        this(defaultZoom, 1);
+        this(defaultZoom, 1, 16, 9);
+    }
+    public GlobalZoom(int defaultZoom, double coefZoomX, double coefZoomY) {
+        this(defaultZoom, 1, coefZoomX, coefZoomY);
     }
 
     public int getLastZoom() {
         return zoomInterpolations.get(zoomInterpolations.size() - 1);
     }
 
-    // Итерполяляцию тут доделат надас
-//    public void setZoom(int newZoom) {
-//
-//        System.out.println("Запускается setZoom, newZoom = " + newZoom + ", lastZoom = " + this.zoomInterpolations.get(this.zoomInterpolations.size() - 1) + ", step = " + step);
-//
-//        List<Integer> addZoomInterpolations = new ArrayList<>();
-//        int lastZoom = this.zoomInterpolations.get(this.zoomInterpolations.size() - 1);
-//        int difference = newZoom - lastZoom;
-//        int znak = difference / Math.abs(difference);
-//
-//        int prozessZoom = lastZoom;
-//        for (int i = 0; i < difference; i++) {
-//            if (znak > 0) {
-//                if (prozessZoom + znak*step < newZoom) {
-//                    prozessZoom += znak*step;
-//                    addZoomInterpolations.add(prozessZoom);
-//                } else if (prozessZoom + znak*step >= newZoom) {
-//                    addZoomInterpolations.add(newZoom);
-//                    break;
-//                }
-//            } else if (znak < 0) {
-//                if (prozessZoom + znak*step > newZoom) {
-//                    prozessZoom += znak*step;
-//                    addZoomInterpolations.add(prozessZoom);
-//                } else if (prozessZoom + znak*step <= newZoom) {
-//                    addZoomInterpolations.add(newZoom);
-//                    break;
-//                }
-//            }
-//
-//        }
-//        this.zoomInterpolations.addAll(addZoomInterpolations);
-//        System.out.println("Cписок zoomInterpolations:" );
-//        for (Integer ia : zoomInterpolations) {
-//            System.out.print(ia + " ");
-//        }
-//    }
 
-//    public void setZoom(int newZoom) {
-//        int lastZoom = getLastZoom();
-//        int difference = newZoom - lastZoom;
-//        int numSteps = Math.abs(difference) / step;
-//
-//        if (numSteps == 0) {
-//            addZoomInterpolation(newZoom);
-//            return;
-//        }
-//
-//        double stepSize = (double) difference / numSteps * animSpeed;
-//
-//        for (int i = 0; i < numSteps; i++) {
-//            int interpolatedZoom = (int) (lastZoom + i * stepSize);
-//            addZoomInterpolation(interpolatedZoom);
-//        }
-//
-//        addZoomInterpolation(newZoom);
-//    }
 
-    public void setZoom(int newZoom) {
+    public void setZoom(int newZoom, double animSpeed) {
 
         List<Integer> addZoomInterpolations = new ArrayList<>();
         int lastZoom = getLastZoom();
         int difference = newZoom - lastZoom;
-        int numSteps = Math.abs(difference) / step;
+        int numSteps = (int) (Math.abs(difference) / animSpeed);
 
         if (numSteps == 0) {
             addZoomInterpolations.add(newZoom);
@@ -108,7 +52,7 @@ public class GlobalZoom {
             return;
         }
 
-        double stepSize = (double) difference / numSteps * animSpeed;
+        double stepSize = (double) difference / numSteps;
 
         for (int i = 0; i < numSteps; i++) {
             int interpolatedZoom = (int) (lastZoom + i * stepSize);
@@ -118,6 +62,25 @@ public class GlobalZoom {
         addZoomInterpolations.add(newZoom);
         this.zoomInterpolations.addAll(addZoomInterpolations);
 
+    }
+
+    public void setZoomWithDuration(int newZoom, double duration) {
+        List<Integer> addZoomInterpolations = new ArrayList<>();
+        int lastZoom = getLastZoom();
+        int difference = newZoom - lastZoom;
+        double totalSteps = duration * 60; // Assuming 60 frames per second for smooth animation
+        double stepSize = difference / totalSteps;
+
+        for (int i = 0; i <= totalSteps; i++) {
+            int interpolatedZoom = (int) (lastZoom + i * stepSize);
+            addZoomInterpolations.add(interpolatedZoom);
+        }
+
+        this.zoomInterpolations.addAll(addZoomInterpolations);
+    }
+
+    public void setZoom(int newZoom) {
+        this.setZoom(newZoom, this.animSpeed);
     }
 
 
@@ -135,9 +98,19 @@ public class GlobalZoom {
         setZoom(zoomInterpolations.get(zoomInterpolations.size() - 1) + addZoom);
     }
 
+    public void addZoom(int addZoom, double animSpeed) {
+        setZoom(zoomInterpolations.get(zoomInterpolations.size() - 1) + addZoom, animSpeed);
+    }
+
+
     public void removeZoom(int removeZoom) {
         setZoom(zoomInterpolations.get(zoomInterpolations.size() - 1) - removeZoom);
     }
+
+    public void removeZoom(int removeZoom, double animSpeed) {
+        setZoom(zoomInterpolations.get(zoomInterpolations.size() - 1) - removeZoom, animSpeed);
+    }
+
 
     public int getLastZoomAndClearList() {
         int lastZoom = zoomInterpolations.get(zoomInterpolations.size() - 1);
@@ -148,7 +121,7 @@ public class GlobalZoom {
         return lastZoom;
     }
 
-    public int getZoom() {
+    public int getZoomInterpolation() {
         if (zoomInterpolations.size() > 1) {
             return zoomInterpolations.remove(0);
         } else if (zoomInterpolations.size() == 1) {
@@ -157,5 +130,9 @@ public class GlobalZoom {
             System.out.println("Всё плохо. Список zoomInterpolations пуст");
             return -3000;
         }
+    }
+
+    public int getFirstZoom() {
+        return zoomInterpolations.get(0);
     }
 }

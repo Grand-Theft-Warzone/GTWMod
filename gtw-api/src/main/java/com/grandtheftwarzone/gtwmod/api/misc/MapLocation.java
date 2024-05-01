@@ -41,4 +41,12 @@ public class MapLocation {
         this.y = 0;
         this.z = 0;
     }
+
+    public MapLocation toAbs() {
+        return new MapLocation(Math.abs(x), Math.abs(y), Math.abs(z));
+    }
+
+    public double sumAbsCord() {
+        return Math.abs(x) + Math.abs(y) + Math.abs(z);
+    }
 }
