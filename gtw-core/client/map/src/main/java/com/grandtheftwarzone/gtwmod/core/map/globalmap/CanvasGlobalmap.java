@@ -130,51 +130,12 @@ public class CanvasGlobalmap extends BaseCanvas {
             double deltaY = (getLastMouseY() - firstMouseLocation.getY()) * proporziaY * springResistance;
 
             MapLocation newCenterLocation = new MapLocation((centrCoord.getLastCentreCoord().getX() - deltaX), (centrCoord.getLastCentreCoord().getY() - deltaY));
-//            centrCoord.setCenterCoordsOpimale(newCenterLocation);
-            centrCoord.setStraightCenter(newCenterLocation);
+            centrCoord.setStraightCenter(newCenterLocation, false);
             firstMouseLocation = new MapLocation(getLastMouseX(), getLastMouseY());
         } else {
             if (blockReturnLCM && !centrCoord.isAccessZone(centrCoord.getFirstCoordInter(), globalmap)) {
-                MapLocation distanceAccess = centrCoord.getDistanceAccess(globalmap);
-                double centerX = (double) globalmap.getImageWidth() / 2;
-                double centerY = (double) globalmap.getImageHeight() / 2;
-
-                double DistanceFromTheCenterX = Math.abs(centrCoord.getFirstCoordInter().getX() - centerX);
-                double DistanceFromTheCenterY = Math.abs(centrCoord.getFirstCoordInter().getY() - centerY);
-
-                double cordX, cordY;
-
-                MapLocation currentLocation = centrCoord.getFirstCoordInter();
-                if (currentLocation.getX() > centerX) {
-                    if (DistanceFromTheCenterX > distanceAccess.getX()) {
-                        cordX = currentLocation.getX() + lastDeltaCoords.getX();
-                    } else {
-                        cordX = currentLocation.getX();
-                    }
-                } else {
-                    if (DistanceFromTheCenterX > distanceAccess.getX()) {
-                        cordX = currentLocation.getX() - lastDeltaCoords.getX();
-                    } else {
-                        cordX = currentLocation.getX();
-                    }
-                }
-
-                if (currentLocation.getY() > centerY) {
-                    if (DistanceFromTheCenterY > distanceAccess.getY()) {
-                        cordY = currentLocation.getY() + lastDeltaCoords.getY();
-                    } else {
-                        cordY = currentLocation.getY();
-                    }
-                } else {
-                    if (DistanceFromTheCenterY > distanceAccess.getY()) {
-                        cordY = currentLocation.getY() - lastDeltaCoords.getY();
-                    } else {
-                        cordY = currentLocation.getY();
-                    }
-                }
-
-                MapLocation newCenterLocation = new MapLocation(cordX, cordY);
-                centrCoord.setCentrCoordDurations(newCenterLocation, 0.4);
+                MapLocation newCenterLocation = centrCoord.getVerifiedCoordinatesLCM(centrCoord.getFirstCoordInter(), globalmap, lastDeltaCoords);
+                centrCoord.setCentrCoordDurations(newCenterLocation, 0.3, false);
                 blockReturnLCM = false;
             }
         }
@@ -209,11 +170,12 @@ public class CanvasGlobalmap extends BaseCanvas {
             double coef_mul = getSettingsConfig().getSubsection("settings").getSubsection("scroll").getDouble("coef_mul_zoom");
             double duration = getSettingsConfig().getSubsection("settings").getSubsection("scroll").getDouble("duration");
 
+            zoom.setStraightZoom(lastZoom);
+            zoom.setZoomWithDuration((int) (lastZoom+(-(step*coef_mul)*directionWheel)), duration);
+
             centrCoord.setStraightCenter(cetnerLocation);
             centrCoord.setCentrCoordDurations(newCenterLocation, duration);
 
-            zoom.setStraightZoom(lastZoom);
-            zoom.setZoomWithDuration((int) (lastZoom+(-(step*coef_mul)*directionWheel)), duration);
             pressWheel = false;
         }
         // ------------------------------------------
