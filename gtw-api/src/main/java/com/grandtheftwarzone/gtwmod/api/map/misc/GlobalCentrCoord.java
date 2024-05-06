@@ -1,6 +1,7 @@
 package com.grandtheftwarzone.gtwmod.api.map.misc;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
+import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class GlobalCentrCoord {
     private double animSpeed;
 
     private GlobalZoom zoom;
+
 
     public GlobalCentrCoord(MapLocation centreCoords, GlobalZoom zoom, double animSpeed) {
 
@@ -81,16 +83,50 @@ public class GlobalCentrCoord {
             double interpolatedY = lastCenter.getY() + i * stepSizeY;
             MapLocation interpolatedLocation = new MapLocation(interpolatedX, interpolatedY);
 
+            System.out.println("DEB " + !isAccessZone(interpolatedLocation, GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage()));
+
             if (checkCorrectCord && !isAccessZone(interpolatedLocation, GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage())) {
-                MapLocation newLocation = getVerifiedCoordinates(interpolatedLocation, GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage());
-                addCentrCoordInterpolations.add(newLocation);
-                continue;
+                interpolatedLocation = getVerifiedCoordinates(interpolatedLocation, GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage());
             }
 
             addCentrCoordInterpolations.add(interpolatedLocation);
         }
 
         this.centrCoordsInterpol.addAll(addCentrCoordInterpolations);
+    }
+
+    public void setCentrCoordDurationsDependencyZoom(MapLocation newCenter, double animSpeed, List<Integer> zoomInterpolation) {
+        List<MapLocation> addCentrCoordInterpolations = new ArrayList<>();
+
+        MapLocation lastCenter = getLastCentreCoord();
+        double deltaX = newCenter.getX() - lastCenter.getX();
+        double deltaY = newCenter.getY() - lastCenter.getY();
+        double totalSteps = animSpeed * 60; // Assuming 60 frames per second for smooth animation
+        double stepSizeX = deltaX / totalSteps;
+        double stepSizeY = deltaY / totalSteps;
+
+        int interpZoom;
+
+        for (int i = 0; i <= totalSteps; i++) {
+            double interpolatedX = lastCenter.getX() + i * stepSizeX;
+            double interpolatedY = lastCenter.getY() + i * stepSizeY;
+            MapLocation interpolatedLocation = new MapLocation(interpolatedX, interpolatedY);
+
+            try {
+                interpZoom = zoomInterpolation.get(i);
+            } catch (Exception e) {
+                GtwLog.getLogger().error(e.getMessage());
+                interpZoom = zoomInterpolation.get(-1);
+            }
+            if (!isAccessZone(interpolatedLocation, GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage(), interpZoom)) {
+                interpolatedLocation = getVerifiedCoordinates(interpolatedLocation, GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage(), interpZoom);
+            }
+
+            addCentrCoordInterpolations.add(interpolatedLocation);
+        }
+
+        this.centrCoordsInterpol.addAll(addCentrCoordInterpolations);
+
     }
 
     public void setCentrCoordDurations(MapLocation newCenter, double animSpeed) {
@@ -164,13 +200,19 @@ public class GlobalCentrCoord {
 
         MapLocation distanceAccess = getDistanceAccess(mapImage);
 
-        return getVerifiedCoordinates(location, distanceAccess, deltaCoords, mapImage.getImageWidth(), mapImage.getImageHeight());
+        return getVerifiedCoordinates(location, distanceAccess, deltaCoords, mapImage.getImageWidthReal(), mapImage.getImageHeightReal());
+    }
+
+    public MapLocation getVerifiedCoordinates(MapLocation location, MapImage mapImage, int zoom) {
+        MapLocation distanceAccess = getDistanceAccess(mapImage, zoom);
+        MapLocation deltaCoords = getDeltaCoords(location, mapImage, zoom);
+        return getVerifiedCoordinates(location, distanceAccess, deltaCoords, mapImage.getImageWidthReal(), mapImage.getImageHeightReal());
     }
 
     public MapLocation getVerifiedCoordinates(MapLocation location, MapImage mapImage) {
         MapLocation distanceAccess = getDistanceAccess(mapImage);
         MapLocation deltaCoords = getDeltaCoords(location, mapImage);
-        return getVerifiedCoordinates(location, distanceAccess, deltaCoords, mapImage.getImageWidth(), mapImage.getImageHeight());
+        return getVerifiedCoordinates(location, distanceAccess, deltaCoords, mapImage.getImageWidthReal(), mapImage.getImageHeightReal());
     }
 
     public MapLocation getVerifiedCoordinatesAndCheckZone(MapLocation location, MapImage mapImage) {
@@ -179,23 +221,27 @@ public class GlobalCentrCoord {
             return location;
         }
         MapLocation distanceAccess = getDistanceAccess(mapImage);
-        return getVerifiedCoordinates(location, distanceAccess, deltaCoords, mapImage.getImageWidth(), mapImage.getImageHeight());
+        return getVerifiedCoordinates(location, distanceAccess, deltaCoords, mapImage.getImageWidthReal(), mapImage.getImageHeightReal());
     }
 
 
 
         public MapLocation getDistanceAccess(int imageWidth, int imageHeight, int zoom) {
-            double distanceAccessX = (imageWidth - zoom*this.zoom.getCoefZoomX()) / 2;
-            double distanceAccessY = (imageHeight - zoom*this.zoom.getCoefZoomY()) / 2;
+            System.out.println("DAX: ("+imageWidth + "-" + zoom*this.zoom.getCoefZoomX() +")" +" / "+ 2);
+            double distanceAccessX = ((imageWidth - zoom*this.zoom.getCoefZoomX()) / 2);
+
+            System.out.println("DAY: ("+imageHeight + "-" + zoom*this.zoom.getCoefZoomY() +")" +" / "+ 2);
+            double distanceAccessY = ((imageHeight - zoom*this.zoom.getCoefZoomY()) / 2);
+
             return new MapLocation(distanceAccessX, distanceAccessY);
     }
 
     public MapLocation getDistanceAccess(MapImage mapImage, int zoom) {
-        return this.getDistanceAccess(mapImage.getImageWidth(), mapImage.getImageHeight(), zoom);
+        return this.getDistanceAccess(mapImage.getImageWidthReal(), mapImage.getImageHeightReal(), zoom);
     }
 
     public MapLocation getDistanceAccess(MapImage mapImage) {
-        return this.getDistanceAccess(mapImage.getImageWidth(), mapImage.getImageHeight(), zoom.getFirstZoom());
+        return this.getDistanceAccess(mapImage.getImageWidthReal(), mapImage.getImageHeightReal(), zoom.getFirstZoom());
     }
 
 
@@ -209,6 +255,7 @@ public class GlobalCentrCoord {
 
         double DistanceFromTheCenterX = Math.abs(location.getX() - centerX);
         double DistanceFromTheCenterY = Math.abs(location.getY() - centerY);
+        System.out.println("DistanceFrom: " + DistanceFromTheCenterX + " : " + DistanceFromTheCenterY);
 
         return new MapLocation(distanceAccess.getX() - DistanceFromTheCenterX, distanceAccess.getY() - DistanceFromTheCenterY);
     }
@@ -222,11 +269,11 @@ public class GlobalCentrCoord {
     }
 
     public MapLocation getDeltaCoords(MapLocation location, MapImage mapImage, MapLocation distanceAccess) {
-        return getDeltaCoords(location, mapImage.getImageWidth(), mapImage.getImageHeight(), distanceAccess);
+        return getDeltaCoords(location, mapImage.getImageWidthReal(), mapImage.getImageHeightReal(), distanceAccess);
     }
 
     public MapLocation getDeltaCoords(MapLocation location, MapImage mapImage, int zoom) {
-        return getDeltaCoords(location, mapImage.getImageWidth(), mapImage.getImageHeight(), zoom);
+        return getDeltaCoords(location, mapImage.getImageWidthReal(), mapImage.getImageHeightReal(), zoom);
     }
 
     public MapLocation getDeltaCoords(MapLocation location, MapImage mapImage) {

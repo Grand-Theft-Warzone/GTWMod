@@ -23,6 +23,7 @@ public class MapImage {
     private final ResourceLocation image;
 
     private int imageWidth, imageHeight;
+    private int imageWidthReal, imageHeightReal;
 
     private final double pixelsPerBlockX;
     private final double pixelsPerBlockZ;
@@ -55,7 +56,9 @@ public class MapImage {
                 BufferedImage imageFirst = ImageIO.read(stream);
 
                 this.imageWidth = imageFirst.getWidth() + offsetX;
+                this.imageWidthReal = imageFirst.getWidth();
                 this.imageHeight = imageFirst.getHeight() + offsetY;
+                this.imageHeightReal = imageFirst.getHeight();
 
             } else {
                 System.out.println("Запускаю другой алгоритм");
@@ -63,7 +66,9 @@ public class MapImage {
 
                 BufferedImage image = ImageIO.read(imageStream);
                 this.imageWidth = image.getWidth() + offsetX;
+                this.imageWidthReal = image.getWidth();
                 this.imageHeight = image.getHeight() + offsetY;
+                this.imageHeightReal = image.getHeight();
             }
         } catch (IOException e) {
             GtwLog.getLogger().error(String.valueOf(e));

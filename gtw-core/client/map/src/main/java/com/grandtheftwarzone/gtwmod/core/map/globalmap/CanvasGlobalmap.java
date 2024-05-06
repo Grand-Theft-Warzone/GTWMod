@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.vecmath.Vector2d;
 import java.io.IOException;
+import java.util.List;
 
 import static com.grandtheftwarzone.gtwmod.api.misc.GLUtils.drawPartialImage;
 
@@ -35,8 +36,6 @@ public class CanvasGlobalmap extends BaseCanvas {
     boolean isActive = false;
     private MapImage globalmap;
     private ResourceLocation globalmapTexture;
-
-//    private MapLocation imageLocation;
 
     private GlobalZoom zoom;
 
@@ -51,7 +50,7 @@ public class CanvasGlobalmap extends BaseCanvas {
     private int directionWheel;
 
     private int lastZoom;
-    private MapLocation lastDeltaCoords;
+    private MapLocation lastDeltaCoords = new MapLocation(0, 0);
     private boolean blockReturnLCM = false;
     private MapLocation firstMouseLocation;
 
@@ -70,7 +69,60 @@ public class CanvasGlobalmap extends BaseCanvas {
             return;
         }
 
+        // Блок отслеживания нажатия на клавиши зума.
+        // ------------------------------------------------
+        if (pressDecreaseZoom) {
+            System.out.println("Отдаление...");
+            int step = getSettingsConfig().getSubsection("settings").getSubsection("zoom").getInt("step");
+            zoom.addZoom(step);
+            centrCoord.setStraightCenter(centrCoord.getVerifiedCoordinates(centrCoord.getFirstCoordInter(), globalmap));
+        } else if (pressIncreaseZoom) {
+            System.out.println("Приближение...");
+            int step = getSettingsConfig().getSubsection("settings").getSubsection("zoom").getInt("step");
+            zoom.removeZoom(step);
+            centrCoord.setStraightCenter(centrCoord.getVerifiedCoordinates(centrCoord.getFirstCoordInter(), globalmap));
+        }
+        // ------------------------------------------------
+
+
+        // Блок перемещение через курсор
+        // ------------------------------------------
+        if (pressWheel) {
+            System.out.println("Вижу нажатие колесика...");
+            int centerScreenX = getWidth() / 2;
+            int centerScreenY = getHeight() / 2;
+
+            int mouseX = getLastMouseX();
+            int mouseY = getLastMouseY();
+
+            double step = getSettingsConfig().getSubsection("settings").getSubsection("scroll").getDouble("step");
+
+            Vector2d vectorCenterCursor = new Vector2d(mouseX-centerScreenX, mouseY-centerScreenY);
+            vectorCenterCursor.scale((double) 1 / step * directionWheel);
+
+            double coef_mul = getSettingsConfig().getSubsection("settings").getSubsection("scroll").getDouble("coef_mul_zoom");
+            double duration = getSettingsConfig().getSubsection("settings").getSubsection("scroll").getDouble("duration");
+
+            zoom.setStraightZoom(lastZoom); // !
+            List<Integer> interpolationZoom = zoom.setZoomWithDurationAndReplace((int) (lastZoom+(-(step*coef_mul)*directionWheel)), duration);
+
+            double deltaX = vectorCenterCursor.getX() * (double) (int) (zoom.getFirstZoom()*zoom.getCoefZoomX()) / getWidth();
+            double deltaY = vectorCenterCursor.getY() * (double) (int) (zoom.getFirstZoom()*zoom.getCoefZoomY()) / getHeight();
+            MapLocation newCenterLocation = new MapLocation((centrCoord.getFirstCoordInter().getX() + deltaX), (centrCoord.getFirstCoordInter().getY() + deltaY));
+
+            centrCoord.setStraightCenter(centrCoord.getFirstCoordInter());
+            centrCoord.setCentrCoordDurationsDependencyZoom(newCenterLocation, duration, interpolationZoom);
+
+            pressWheel = false;
+        }
+        // ------------------------------------------
+
         // Определение переменных 1
+        // ------------------------------------------
+        lastZoom = zoom.getZoomInterpolation();
+        MapLocation cetnerLocation = centrCoord.getCentreCoordInter();
+        // ------------------------------------------
+        // Определение переменных 2
         // ------------------------------------------------
         int zoomX = (int) (lastZoom*zoom.getCoefZoomX());
         int zoomY = (int) (lastZoom*zoom.getCoefZoomY());
@@ -78,21 +130,6 @@ public class CanvasGlobalmap extends BaseCanvas {
         double proporziaX = (double) zoomX / getWidth();
         double proporziaY = (double) zoomY / getHeight();
         // ------------------------------------------------
-
-
-        // Блок отслеживания нажатия на клавиши зума.
-        // ------------------------------------------------
-        if (pressDecreaseZoom) {
-            System.out.println("Отдаление...");
-            int step = getSettingsConfig().getSubsection("settings").getSubsection("zoom").getInt("step");
-            zoom.addZoom(step);
-        } else if (pressIncreaseZoom) {
-            System.out.println("Приближение...");
-            int step = getSettingsConfig().getSubsection("settings").getSubsection("zoom").getInt("step");
-            zoom.removeZoom(step);
-        }
-        // ------------------------------------------------
-
 
         // Блок перемещения через LCM
         // ------------------------------------------------
@@ -133,52 +170,16 @@ public class CanvasGlobalmap extends BaseCanvas {
             centrCoord.setStraightCenter(newCenterLocation, false);
             firstMouseLocation = new MapLocation(getLastMouseX(), getLastMouseY());
         } else {
-            if (blockReturnLCM && !centrCoord.isAccessZone(centrCoord.getFirstCoordInter(), globalmap)) {
+            if (blockReturnLCM && !centrCoord.isAccessZone(lastDeltaCoords)) {
                 MapLocation newCenterLocation = centrCoord.getVerifiedCoordinatesLCM(centrCoord.getFirstCoordInter(), globalmap, lastDeltaCoords);
-                centrCoord.setCentrCoordDurations(newCenterLocation, 0.3, false);
+                System.out.println("Kvakva");
+                centrCoord.setCentrCoordDurations(newCenterLocation, 0.4, false);
                 blockReturnLCM = false;
             }
         }
         // ------------------------------------------------
 
 
-        // Определение переменных 2
-        // ------------------------------------------
-        lastZoom = zoom.getZoomInterpolation();
-        MapLocation cetnerLocation = centrCoord.getCentreCoordInter();
-        // ------------------------------------------
-
-        // Блок перемещение через курсор
-        // ------------------------------------------
-        if (pressWheel) {
-            System.out.println("Вижу нажатие колесика...");
-            int centerScreenX = getWidth() / 2;
-            int centerScreenY = getHeight() / 2;
-
-            int mouseX = getLastMouseX();
-            int mouseY = getLastMouseY();
-
-            double step = getSettingsConfig().getSubsection("settings").getSubsection("scroll").getDouble("step");
-
-            Vector2d vectorCenterCursor = new Vector2d(mouseX-centerScreenX, mouseY-centerScreenY);
-            vectorCenterCursor.scale((double) 1 / step * directionWheel);
-
-            double deltaX = vectorCenterCursor.getX() * proporziaX;
-            double deltaY = vectorCenterCursor.getY() * proporziaY;
-            MapLocation newCenterLocation = new MapLocation((cetnerLocation.getX() + deltaX), (cetnerLocation.getY() + deltaY));
-
-            double coef_mul = getSettingsConfig().getSubsection("settings").getSubsection("scroll").getDouble("coef_mul_zoom");
-            double duration = getSettingsConfig().getSubsection("settings").getSubsection("scroll").getDouble("duration");
-
-            zoom.setStraightZoom(lastZoom);
-            zoom.setZoomWithDuration((int) (lastZoom+(-(step*coef_mul)*directionWheel)), duration);
-
-            centrCoord.setStraightCenter(cetnerLocation);
-            centrCoord.setCentrCoordDurations(newCenterLocation, duration);
-
-            pressWheel = false;
-        }
-        // ------------------------------------------
 
         // Рендер
         // ==========================================
@@ -202,6 +203,8 @@ public class CanvasGlobalmap extends BaseCanvas {
         centrCoord = GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getCentrCoord();
         globalmap = GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage();
         globalmapTexture = globalmap.getImage();
+        GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalZoom().updateDiapazon(globalmap);
+
 
         GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().setInitCanvasDraw(true);
 
@@ -291,8 +294,6 @@ public class CanvasGlobalmap extends BaseCanvas {
     @SubscribeEvent
     protected void onPressLCM(InputPressEvent event) {
 
-        MapManagerClient mapManagerClient = GtwAPI.getInstance().getMapManagerClient();
-
         if (!isActive()) {
             return;
         }
@@ -319,7 +320,7 @@ public class CanvasGlobalmap extends BaseCanvas {
         if (event.getType().equals(InputType.MOUSE_LEFT)) {
             System.out.println("Отпущена левая кнопка мыши");
             pressLCM = false;
-            GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getCentrCoord().setStraightCenter(GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getCentrCoord().getFirstCoordInter());
+//            GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getCentrCoord().setStraightCenter(GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getCentrCoord().getFirstCoordInter());
             if (getSettingsConfig().getSubsection("settings").getBool("save_coord")) {
                 saveCenterCoordInConfig();
             }

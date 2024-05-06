@@ -1,12 +1,22 @@
 {
   "template": "canvas_globalmap",
   "settings": {
-    "debug_cord": "3500;4700;0",
+    "center": {
+      "speed": 10.0
+    },
+    "scroll": {
+      "duration": 0.5,
+      "step": 3.0,
+      "coef_mul_zoom": 15.0
+    },
     "zoom": {
-      "speed": 1,
-      "step": 1,
-      "zoom": 2600
-    }
+      "zoom": 397,
+      "step": 5.0,
+      "speed": 100.0
+    },
+    "correct_scale_zone": "100;500;0",
+    "center_coord": "3356.537704918033;3636.865131779785;0.0",
+    "save_coord": false
   },
   "fixRatio": true,
   "config_version": 12.0,

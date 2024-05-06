@@ -94,12 +94,20 @@ public class GtwGlobalmapManager implements GlobalmapManager {
         if (!GtwAPI.getInstance().getMapManagerClient().isAllowedToDisplay()) return;
         if (GtwAPI.getInstance().getMapManagerClient().getKeyShowGlobalmap().isPressed()) {
 
-            // @TODO Добавить условия, тобишь проверку, разрешено ли отображение. (Ну и др.)
             System.out.println("Отследил нажатие на M");
-            System.out.println("Пытаюсь открыть карту");
-            Minecraft.getMinecraft().displayGuiScreen(
-                    new GtwGlobalmapScreen(GtwAPI.getInstance().getGtwMod(), "globalmap")
-            );
+
+            if (mc.currentScreen instanceof GtwGlobalmapScreen) {
+                System.out.println("Пытаюсь закрыть карту");
+                mc.displayGuiScreen(null);
+            }
+
+            if (mc.currentScreen == null) {
+                System.out.println("Пытаюсь открыть карту");
+                Minecraft.getMinecraft().displayGuiScreen(
+                        new GtwGlobalmapScreen(GtwAPI.getInstance().getGtwMod(), "globalmap")
+                );
+            }
+
         }
 
     }

@@ -1,5 +1,6 @@
 package com.grandtheftwarzone.gtwmod.api.map.misc;
 
+import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,8 @@ public class GlobalZoom {
 
     @Getter
     private double coefZoomX, coefZoomY;
+
+    private int minZoom, maxZoom;
 
     public GlobalZoom(int defaultZoom, double animSpeed, double coefZoomX, double coefZoomY) {
 
@@ -46,8 +49,7 @@ public class GlobalZoom {
         int numSteps = (int) (Math.abs(difference) / animSpeed);
 
         if (numSteps == 0) {
-            addZoomInterpolations.add(newZoom);
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            addZoomInterpolations.add(correctZoomInDiapazon(newZoom));
             this.zoomInterpolations.addAll(addZoomInterpolations);
             return;
         }
@@ -55,7 +57,7 @@ public class GlobalZoom {
         double stepSize = (double) difference / numSteps;
 
         for (int i = 0; i < numSteps; i++) {
-            int interpolatedZoom = (int) (lastZoom + i * stepSize);
+            int interpolatedZoom = correctZoomInDiapazon((int) (lastZoom + i * stepSize));
             addZoomInterpolations.add(interpolatedZoom);
         }
 
@@ -72,25 +74,38 @@ public class GlobalZoom {
         double stepSize = difference / totalSteps;
 
         for (int i = 0; i <= totalSteps; i++) {
-            int interpolatedZoom = (int) (lastZoom + i * stepSize);
+            int interpolatedZoom =  correctZoomInDiapazon((int) (lastZoom + i * stepSize));
             addZoomInterpolations.add(interpolatedZoom);
         }
 
         this.zoomInterpolations.addAll(addZoomInterpolations);
     }
 
+    public List<Integer> setZoomWithDurationAndReplace(int newZoom, double duration) {
+        List<Integer> addZoomInterpolations = new ArrayList<>();
+        int lastZoom = getLastZoom();
+        int difference = newZoom - lastZoom;
+        double totalSteps = duration * 60; // Assuming 60 frames per second for smooth animation
+        double stepSize = difference / totalSteps;
+
+        for (int i = 0; i <= totalSteps; i++) {
+            int interpolatedZoom =  correctZoomInDiapazon((int) (lastZoom + i * stepSize));
+            addZoomInterpolations.add(interpolatedZoom);
+        }
+
+        this.zoomInterpolations = addZoomInterpolations;
+        return addZoomInterpolations;
+    }
+
+
     public void setZoom(int newZoom) {
         this.setZoom(newZoom, this.animSpeed);
     }
 
 
-    private void addZoomInterpolation(int zoom) {
-        zoomInterpolations.add(zoom);
-    }
-
     public void setStraightZoom(int newZoom) {
         ArrayList<Integer> newList = new ArrayList<>();
-        newList.add(newZoom);
+        newList.add(correctZoomInDiapazon(newZoom));
         zoomInterpolations = newList;
     }
 
@@ -111,6 +126,14 @@ public class GlobalZoom {
         setZoom(zoomInterpolations.get(zoomInterpolations.size() - 1) - removeZoom, animSpeed);
     }
 
+    public int correctZoomInDiapazon(int zoom) {
+        if (zoom < minZoom) {
+            return minZoom;
+        } else if (zoom > maxZoom) {
+            return maxZoom;
+        }
+        return zoom;
+    }
 
     public int getLastZoomAndClearList() {
         int lastZoom = zoomInterpolations.get(zoomInterpolations.size() - 1);
@@ -130,6 +153,13 @@ public class GlobalZoom {
             System.out.println("Всё плохо. Список zoomInterpolations пуст");
             return -3000;
         }
+    }
+
+    public void updateDiapazon(MapImage mapImage) {
+        int maxZoomX = (int) ((int) (mapImage.getImageWidthReal() / coefZoomX) - ((int) (mapImage.getImageWidthReal() / coefZoomX) * 0.10));
+        int maxZoomY = (int) ((int) (mapImage.getImageHeightReal() / coefZoomY) - ((int) (mapImage.getImageHeightReal() / coefZoomY) * 0.10));
+        this.maxZoom = Math.min(maxZoomX, maxZoomY);
+        this.minZoom = 10;
     }
 
     public int getFirstZoom() {
