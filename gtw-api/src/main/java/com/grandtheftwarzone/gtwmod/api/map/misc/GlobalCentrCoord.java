@@ -343,9 +343,6 @@ public class GlobalCentrCoord {
         centrCoordsInterpol = newList;
     }
 
-    private void addCentrCoordInterpolation(MapLocation location) {
-        centrCoordsInterpol.add(location);
-    }
 
     public MapLocation getFirstCoordInter() {
         return centrCoordsInterpol.get(0);

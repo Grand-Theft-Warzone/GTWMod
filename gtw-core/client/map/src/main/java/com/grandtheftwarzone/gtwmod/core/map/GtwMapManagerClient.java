@@ -14,8 +14,11 @@ import me.phoenixra.atumconfig.api.config.ConfigType;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.display.DisplayRenderer;
 import me.phoenixra.atumodcore.api.service.AtumModService;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.ClientChatEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -61,13 +64,13 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
     @Getter
     private MapImageUtils mapImageUtils;
 
+
     public GtwMapManagerClient(AtumMod atumMod) {
         atumMod.provideModService(this);
         this.minimapManager = new GtwMinimapManager();
         this.globalmapManager = new GtwGlobalmapManager();
         this.mapConsumers = new MapConsumersClient();
     }
-
 
 
     @Override
@@ -122,13 +125,16 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
     public void onPlayerChat(ClientChatEvent event) {
         if (event.getMessage().equalsIgnoreCase("bb")) {
 
-        System.out.println("БАЛАБОЛ ВЫПОЛНИЛСЯ ЧАТЭВЕНТ");
+            System.out.println("БАЛАБОЛ ВЫПОЛНИЛСЯ ЧАТЭВЕНТ");
 //            GtwAPI.getInstance().getNetworkAPI().sendTestServer("Балабол");
 //            GtwAPI.getInstance().getNetworkAPI().sendNotification(new NotificationRequest("hi", 123), UUID.fromString("120abf41-c686-3a55-8362-5f06e763dbbf"));
 
 //            MapImageUtils.getMapImage("test", null, null);
 
         }
+
+
+
     }
 
 
@@ -160,6 +166,11 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
         ClientRegistry.registerKeyBinding(keyShowMinimap);
         ClientRegistry.registerKeyBinding(keyShowGlobalmap);
 
+    }
+
+    public void onInit(FMLInitializationEvent event) {
+//        MinecraftForge.EVENT_BUS.register(new CommandMapManager());
+        MinecraftForge.EVENT_BUS.register(new CommandMapChat());
     }
 
     public void onPostInit(FMLPostInitializationEvent event) {
