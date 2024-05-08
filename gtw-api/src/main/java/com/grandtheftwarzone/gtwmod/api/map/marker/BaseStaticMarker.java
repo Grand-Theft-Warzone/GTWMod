@@ -1,38 +1,87 @@
 package com.grandtheftwarzone.gtwmod.api.map.marker;
 
+import com.grandtheftwarzone.gtwmod.api.GtwAPI;
+import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 
-public class BaseStaticMarker implements StaticMarker {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-    private EntityLocation worldLocationMarker;
+@Getter
+public class BaseStaticMarker implements MapMarker {
 
-    private MapImage mapImage;
-
-    private MapLocation mapLocation;
+    private String identificator;
 
     private ResourceLocation icon;
 
-    public BaseStaticMarker(EntityLocation worldLocationMarker, MapImage mapImage, ResourceLocation icon) {
-        this.worldLocationMarker = worldLocationMarker;
-        this.mapImage = mapImage;
+    private String name;
+
+    private String lore;
+
+    private List<String> mapImageIds;
+
+    private boolean localMarker;
+
+    @Setter
+    private boolean draw;
+
+    private List<String> actionList;
+
+    private EntityLocation worldLocation;
+
+
+    public BaseStaticMarker(String indentificator, @Nullable String name, @Nullable String lore, ResourceLocation icon, EntityLocation worldLocation, boolean localMarker, List<String> mapImageIds, @Nullable List<String> actionList, boolean draw) {
+        this.identificator = indentificator;
+        this.name = name;
+        this.lore = lore;
         this.icon = icon;
+        this.worldLocation = worldLocation;
+        this.localMarker = localMarker;
+        this.mapImageIds = mapImageIds;
+        this.actionList = actionList;
+        this.draw = draw;
     }
 
-    @Override
-    public ResourceLocation getIcon() {
-        return this.icon;
+    public BaseStaticMarker(String indentificator, @Nullable String name, @Nullable String lore, ResourceLocation icon, EntityLocation worldLocation, boolean localMarker, List<String> mapImageIds, @Nullable List<String> actionList) {
+        this(indentificator, name, lore, icon, worldLocation, localMarker, mapImageIds, actionList, true);
     }
 
-    @Override
+
+    public MapLocation getMapLocation(String targetMap) {
+
+        MapImage mapImage = getMapImage(targetMap);
+
+        if (!this.mapImageIds.contains(mapImage.getImageId())) {
+            GtwLog.getLogger().error("[getMapLocation] Error!");
+            return new MapLocation(-999999999,-999999999,-404);
+        }
+
+        if (!draw) {
+            GtwLog.getLogger().error("[getMapLocation] Error! draw disable.");
+            return new MapLocation(-999999999,-999999999,-405);
+        }
+
+        return mapImage.calculateImageCoord(worldLocation.getX(), worldLocation.getY());
+    }
+
     public MapLocation getMapLocation() {
-        return this.mapImage.calculateImageCoord(worldLocationMarker.getX(), worldLocationMarker.getY());
+        return this.getMapLocation("globalmap");
     }
 
-    @Override
-    public EntityLocation getWorldLocation() {
-        return this.worldLocationMarker;
+    public MapImage getMapImage(String targetMap) {
+        if (Objects.equals(targetMap, "minimap")) {
+            return GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getMinimapImage();
+        } else if (Objects.equals(targetMap, "globalmap")) {
+            return GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage();
+        }
+        return null;
     }
+
 }

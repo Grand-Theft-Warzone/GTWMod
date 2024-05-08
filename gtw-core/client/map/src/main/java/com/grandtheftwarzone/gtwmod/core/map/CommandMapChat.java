@@ -15,7 +15,7 @@ public class CommandMapChat {
     private final List<String> commands = new ArrayList<>();
 
     public CommandMapChat() {
-        MinecraftForge.EVENT_BUS.register(this);
+//        MinecraftForge.EVENT_BUS.register(this);
 
         commands.add("/lmapmanager");
         commands.add("/lmmm");
@@ -23,7 +23,8 @@ public class CommandMapChat {
 
 
     @SubscribeEvent
-    public void onPlayerChat(ClientChatEvent event) {
+    public void onPlayerChast(ClientChatEvent event) {
+        System.out.println("aaaa");
         String message = event.getMessage();
         System.out.println("A");
         boolean zash = false;

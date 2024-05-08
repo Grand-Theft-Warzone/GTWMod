@@ -105,7 +105,7 @@ public class GlobalCentrCoord {
         double stepSizeX = deltaX / totalSteps;
         double stepSizeY = deltaY / totalSteps;
 
-        int interpZoom;
+        int interpZoom, nextInterpZoom;
 
         for (int i = 0; i <= totalSteps; i++) {
             double interpolatedX = lastCenter.getX() + i * stepSizeX;
@@ -116,10 +116,26 @@ public class GlobalCentrCoord {
                 interpZoom = zoomInterpolation.get(i);
             } catch (Exception e) {
                 GtwLog.getLogger().error(e.getMessage());
-                interpZoom = zoomInterpolation.get(-1);
+                interpZoom = zoomInterpolation.get(zoomInterpolation.size() - 1);
             }
+
             if (!isAccessZone(interpolatedLocation, GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage(), interpZoom)) {
+
+                if (i==0) {
+                    if (interpZoom == zoomInterpolation.get(i+1)) {
+                        interpolatedLocation = getFirstCoordInter();
+                    }
+                } else if (i == zoomInterpolation.size()-1) {
+                    if (interpZoom == zoomInterpolation.get(i-1)) {
+                        interpolatedLocation = addCentrCoordInterpolations.get(i-1);
+                    }
+                } else if (interpZoom == zoomInterpolation.get(i+1)) {
+                    interpolatedLocation = addCentrCoordInterpolations.get(i-1);
+                }
+
                 interpolatedLocation = getVerifiedCoordinates(interpolatedLocation, GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage(), interpZoom);
+
+
             }
 
             addCentrCoordInterpolations.add(interpolatedLocation);

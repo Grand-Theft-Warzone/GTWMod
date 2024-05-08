@@ -5,7 +5,6 @@ import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.marker.BaseDynamicMarker;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
-import me.phoenixra.atumodcore.api.misc.AtumColor;
 import net.minecraft.util.ResourceLocation;
 
 public class RadarPlayer extends BaseDynamicMarker {

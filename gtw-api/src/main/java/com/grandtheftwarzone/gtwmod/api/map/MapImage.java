@@ -18,6 +18,8 @@ import static com.grandtheftwarzone.gtwmod.api.map.MapImageUtils.getFileInputStr
 @Getter
 public class MapImage {
 
+    private String imageId;
+
     private final MapLocation topRight, downRight, downLeft, topLeft;
 
     private final ResourceLocation image;
@@ -35,6 +37,7 @@ public class MapImage {
 
     public MapImage(ResourceLocation inputImage, String imageId, MapLocation topRight, MapLocation downRight, MapLocation downLeft, MapLocation topLeft, int offsetX, int offsetY) {
         this.image = inputImage;
+        this.imageId = imageId;
         this.topRight = topRight;
         this.downRight = downRight;
         this.downLeft = downLeft;

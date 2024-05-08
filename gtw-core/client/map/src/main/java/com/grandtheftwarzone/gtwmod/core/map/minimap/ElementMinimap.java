@@ -18,19 +18,13 @@ import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
 import me.phoenixra.atumodcore.api.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
-import static com.grandtheftwarzone.gtwmod.api.misc.GLUtils.*;
+import static com.grandtheftwarzone.gtwmod.api.utils.GLUtils.*;
 
 @RegisterDisplayElement(templateId = "minimap")
 public class ElementMinimap extends BaseElement {
@@ -76,7 +70,7 @@ public class ElementMinimap extends BaseElement {
         float centerY = getY() + (float) getHeight() /2;
         enableCircleStencil(centerX, centerY, (float) (getHeight() /2));
 
-        drawPartialImage(getX(), getY(), getWidth(), getHeight(), (int) cord.getX() - (zoom / 2), (int) cord.getY() - (zoom / 2), zoom, zoom);
+        drawPartialImage(getX(), getY(), getWidth(), getHeight(), cord.getX() - (zoom / 2), cord.getY() - (zoom / 2), zoom, zoom);
 
         // Extra filter
         if (GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getColorBorderReach() != null) {

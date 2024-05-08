@@ -28,7 +28,7 @@ import javax.vecmath.Vector2d;
 import java.io.IOException;
 import java.util.List;
 
-import static com.grandtheftwarzone.gtwmod.api.misc.GLUtils.drawPartialImage;
+import static com.grandtheftwarzone.gtwmod.api.utils.GLUtils.drawPartialImage;
 
 @RegisterDisplayElement(templateId = "canvas_globalmap")
 public class CanvasGlobalmap extends BaseCanvas {
@@ -185,7 +185,6 @@ public class CanvasGlobalmap extends BaseCanvas {
         // ==========================================
         RenderUtils.bindTexture(globalmapTexture);
         drawPartialImage(0, 0, getWidth(), getHeight(), (int)cetnerLocation.getX()  - (zoomX / 2), (int)cetnerLocation.getY()  - (zoomY / 2), zoomX, zoomY);
-        RenderUtils.drawCircle((int)cetnerLocation.getX()  - (zoomX / 2), (int)cetnerLocation.getY()  - (zoomY / 2), 5, 3, AtumColor.BLACK);
         // ==========================================
     }
 

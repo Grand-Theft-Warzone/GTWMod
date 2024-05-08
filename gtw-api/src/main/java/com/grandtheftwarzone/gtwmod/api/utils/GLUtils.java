@@ -1,4 +1,4 @@
-package com.grandtheftwarzone.gtwmod.api.misc;
+package com.grandtheftwarzone.gtwmod.api.utils;
 
 import me.phoenixra.atumodcore.api.misc.AtumColor;
 import net.minecraft.client.Minecraft;
@@ -156,7 +156,7 @@ public class GLUtils {
 
 
 
-    public static void drawPartialImage(int posX, int posY, int width, int height, int textureX, int textureY, int texturePartWidth, int texturePartHeight) {
+    public static void drawPartialImage(int posX, int posY, int width, int height, double textureX, double textureY, int texturePartWidth, int texturePartHeight) {
 //        double imageWidth = (double) GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
 //        double imageHeight = (double) GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
 //        double einsTeilerWidth = 1.0 / imageWidth;
