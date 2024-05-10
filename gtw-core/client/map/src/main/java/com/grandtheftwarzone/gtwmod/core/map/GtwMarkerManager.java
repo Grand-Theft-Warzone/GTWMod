@@ -11,6 +11,7 @@ import me.phoenixra.atumconfig.api.ConfigOwner;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.config.ConfigType;
 import me.phoenixra.atumconfig.api.config.LoadableConfig;
+import me.phoenixra.atumconfig.core.config.AtumConfig;
 import me.phoenixra.atumconfig.core.config.AtumConfigSection;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,9 +34,9 @@ public class GtwMarkerManager implements MarkerManager {
         configMarker = GtwAPI.getInstance().getGtwMod().getConfigManager()
                 .createLoadableConfig(
                         "markers",
-                        "display",
-                        ConfigType.YAML,
-                        true
+                        "сache",
+                        ConfigType.JSON,
+                        false
                 );
         initLocalMarker();
     }
@@ -43,7 +44,11 @@ public class GtwMarkerManager implements MarkerManager {
     public void initLocalMarker() {
         List<MapMarker> newLocalMarkerList = new ArrayList<>();
 
-        Config markers = configMarker.getSubsection("markers");
+        Config markers = configMarker.getSubsectionOrNull("markers");
+        if (markers == null) {
+            localMarkerList.clear();
+            return;
+        }
 
         GtwLog.getLogger().debug("Init Local Marker");
 
@@ -87,20 +92,33 @@ public class GtwMarkerManager implements MarkerManager {
     }
 
     public void updateLocalConfig() {
-        Config newConfig = new AtumConfigSection((ConfigOwner) configMarker, ConfigType.YAML, null);
 
+
+
+        Config newConfig = new AtumConfigSection(configMarker.getConfigOwner(), ConfigType.YAML, null);
+
+
+//        Config newConfig = new AtumConfigSection(configMarker.getConfigOwner(), ConfigType.YAML, null);
+
+//        Config newConfig = new AtumConfigSection(configMarker.getConfigOwner(), ConfigType.JSON, null);
+//        configMarker.set("baobab222.aaaaa", 1111);
+//        configMarker.set("markers", newConfig);
+//        configMarker.set("markers.pritvet.aaaa", "MOU BOI");
+//        configMarker.set("markers.privet.S", true);
+//        configMarker.set("markers.ffff.a", 11111);
+
+//
         for (MapMarker marker : localMarkerList) {
-            Config config = new AtumConfigSection((ConfigOwner) newConfig, ConfigType.YAML, null);
-            config.set("name", marker.getName());
-            config.set("lore", marker.getLore());
-            config.set("iconId", marker.getIconId());
-            config.set("worldLocation", marker.getWorldLocation().toString());
-            config.set("mapImageIds", marker.getMapImageIds());
-            config.set("draw", marker.isDraw());
-            newConfig.set(marker.getIdentificator(), config);
-        }
 
+
+            Config markerConfig = marker.serializeToConfig(configMarker.getConfigOwner(), null);
+
+            String identificator = markerConfig.getKeys(false).get(0);
+            newConfig.set(identificator, markerConfig.getSubsection(identificator));
+
+        }
         configMarker.set("markers", newConfig);
+
         try {
             ((LoadableConfig)configMarker).save();
         } catch (IOException e) {

@@ -2,12 +2,13 @@ package com.grandtheftwarzone.gtwmod.api.map.marker;
 
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
+import me.phoenixra.atumconfig.api.config.serialization.ConfigSerializer;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public interface MapMarker {
+public interface MapMarker extends ConfigSerializer<MapMarker> {
 
     String getIdentificator();
 

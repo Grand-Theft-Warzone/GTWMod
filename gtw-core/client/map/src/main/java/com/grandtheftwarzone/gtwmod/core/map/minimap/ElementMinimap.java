@@ -4,7 +4,7 @@ import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
-import com.grandtheftwarzone.gtwmod.core.map.marker.RadarPlayer;
+import com.grandtheftwarzone.gtwmod.api.map.marker.RadarPlayer;
 import lombok.SneakyThrows;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.placeholders.context.PlaceholderContext;

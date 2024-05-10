@@ -9,8 +9,10 @@ import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumersClient;
 import com.grandtheftwarzone.gtwmod.api.map.marker.BaseStaticMarker;
 import com.grandtheftwarzone.gtwmod.api.map.marker.TemplateMarker;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.GtwGlobalmapManager;
+import com.grandtheftwarzone.gtwmod.api.map.marker.RadarPlayer;
 import com.grandtheftwarzone.gtwmod.core.map.minimap.GtwMinimapManager;
 import lombok.Getter;
+import lombok.Setter;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.config.ConfigType;
 import me.phoenixra.atumodcore.api.AtumMod;
@@ -27,9 +29,12 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
+import scala.actors.threadpool.Arrays;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class GtwMapManagerClient implements AtumModService, MapManagerClient {
@@ -66,6 +71,11 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
 
     @Getter
     private MapImageUtils mapImageUtils;
+
+    //
+
+    @Getter @Setter
+    private RadarPlayer radarPlayer;
 
 
     public GtwMapManagerClient(AtumMod atumMod) {
@@ -183,7 +193,13 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
 
         this.markerManager = new GtwMarkerManager();
 
-        markerManager.addLocalMarker(new BaseStaticMarker(new TemplateMarker("Holla", "2", "radar", "222;111;1;1;1", true, null, null, true)));
+        List<String> aaa = new ArrayList<>();
+        aaa.add("aaa");
+        aaa.add("bbb");
+        markerManager.addLocalMarker(new BaseStaticMarker(new TemplateMarker("Holla", "2", "radar", "222;111;1;1;1", true, aaa, null, true)));
+
+        // Инициализация радара
+//        radarPlayer = new RadarPlayer(player, "L-Radar_player", "Ya", radarImage, coef, step);
     }
 
 

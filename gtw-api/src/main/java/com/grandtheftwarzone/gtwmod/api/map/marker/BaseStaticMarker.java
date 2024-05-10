@@ -7,7 +7,13 @@ import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import lombok.Getter;
 import lombok.Setter;
+import me.phoenixra.atumconfig.api.ConfigOwner;
+import me.phoenixra.atumconfig.api.config.Config;
+import me.phoenixra.atumconfig.api.config.ConfigType;
+import me.phoenixra.atumconfig.api.config.serialization.ConfigSerializer;
+import me.phoenixra.atumconfig.core.config.AtumConfigSection;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -116,4 +122,22 @@ public class BaseStaticMarker implements MapMarker {
         return this.getMapImage("globalmap");
     }
 
+    @Override
+    public @NotNull Config serializeToConfig(@NotNull ConfigOwner configOwner, @Nullable MapMarker mapMarker) {
+        Config config = new AtumConfigSection(configOwner, ConfigType.JSON, null);
+        Config subsec = new AtumConfigSection(configOwner, ConfigType.JSON, null);
+
+        subsec.set("name", this.getName());
+        subsec.set("lore", this.getLore());
+        subsec.set("icon", this.getIconId());
+        subsec.set("worldLocation", this.getWorldLocation().toString());
+        subsec.set("localMarker", this.isLocalMarker());
+        subsec.set("mapImageIds", this.getMapImageIds());
+        subsec.set("actionList", this.getActionList());
+        subsec.set("draw", this.isDraw());
+
+        config.set(this.getIdentificator(), subsec);
+
+        return config;
+    }
 }
