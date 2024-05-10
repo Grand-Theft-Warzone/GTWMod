@@ -60,8 +60,7 @@ public class ElementMinimap extends BaseElement {
 
         player.update(Minecraft.getMinecraft().player);
 
-        MapLocation cord = radarPlayer.getCurrentMapLocation();
-
+        MapLocation cord = radarPlayer.getMapLocation("minimap");
 
         RenderUtils.bindTexture(minimapImage);
 
@@ -134,7 +133,8 @@ public class ElementMinimap extends BaseElement {
         this.radarImage = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getResourceLocation("radarImage");
 
         player = new EntityLocation(Minecraft.getMinecraft().player);
-        radarPlayer = new RadarPlayer(player, minimap, radarImage, coef, step);
+
+        radarPlayer = new RadarPlayer(player, "L-Radar_player", "Ya", radarImage, coef, step);
 
         DisplayRenderer renderer = getElementOwner().getDisplayRenderer();
         GtwAPI.getInstance().getMapManagerClient().getMinimapManager().updateMinimapManager(renderer);

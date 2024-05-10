@@ -20,6 +20,15 @@ public class EntityLocation {
         this.pitch = pitch;
     }
 
+    public EntityLocation(String position) {
+        String[] split = position.split(";");
+        this.x = Double.parseDouble(split[0]);
+        this.y = Double.parseDouble(split[1]);
+        this.z = Double.parseDouble(split[2]);
+        this.yaw = Float.parseFloat(split[3]);
+        this.pitch = Float.parseFloat(split[4]);
+    }
+
     public EntityLocation(double x, double y, double z) {
         this.x = x;
         this.y = y;
@@ -52,6 +61,10 @@ public class EntityLocation {
         this.pitch = player.rotationPitch;
 
         return this;
+    }
+
+    public String toString() {
+        return x + ";" + y + ";" + z + ";" + yaw + ";" + pitch;
     }
 
 }

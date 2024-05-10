@@ -6,9 +6,9 @@ import net.minecraft.client.settings.KeyBinding;
 
 public interface MapManagerClient {
     MapConsumersClient getMapConsumers();
-
     MinimapManager getMinimapManager();
     GlobalmapManager getGlobalmapManager();
+    MarkerManager getMarkerManager();
 
     MapImageUtils getMapImageUtils();
 

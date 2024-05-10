@@ -6,6 +6,8 @@ import com.grandtheftwarzone.gtwmod.api.event.ClientConnectEvent;
 import com.grandtheftwarzone.gtwmod.api.map.MapImageUtils;
 import com.grandtheftwarzone.gtwmod.api.map.MapManagerClient;
 import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumersClient;
+import com.grandtheftwarzone.gtwmod.api.map.marker.BaseStaticMarker;
+import com.grandtheftwarzone.gtwmod.api.map.marker.TemplateMarker;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.GtwGlobalmapManager;
 import com.grandtheftwarzone.gtwmod.core.map.minimap.GtwMinimapManager;
 import lombok.Getter;
@@ -14,9 +16,7 @@ import me.phoenixra.atumconfig.api.config.ConfigType;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.display.DisplayRenderer;
 import me.phoenixra.atumodcore.api.service.AtumModService;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -51,6 +51,9 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
 
     @Getter
     private GtwGlobalmapManager globalmapManager;
+
+    @Getter
+    private GtwMarkerManager markerManager;
 
     @Getter
     private MapConsumersClient mapConsumers;
@@ -177,6 +180,10 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
         System.out.println("[MapManager] PostInit start");
         mapImageUtils = new MapImageUtils(new File("gtwdata/map/"));
         System.out.println("[MapManager] PostInit stop");
+
+        this.markerManager = new GtwMarkerManager();
+
+        markerManager.addLocalMarker(new BaseStaticMarker(new TemplateMarker("Holla", "2", "radar", "222;111;1;1;1", true, null, null, true)));
     }
 
 

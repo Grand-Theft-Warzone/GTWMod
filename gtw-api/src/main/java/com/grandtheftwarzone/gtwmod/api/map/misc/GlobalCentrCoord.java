@@ -243,10 +243,10 @@ public class GlobalCentrCoord {
 
 
         public MapLocation getDistanceAccess(int imageWidth, int imageHeight, int zoom) {
-            System.out.println("DAX: ("+imageWidth + "-" + zoom*this.zoom.getCoefZoomX() +")" +" / "+ 2);
+//            System.out.println("DAX: ("+imageWidth + "-" + zoom*this.zoom.getCoefZoomX() +")" +" / "+ 2);
             double distanceAccessX = ((imageWidth - zoom*this.zoom.getCoefZoomX()) / 2);
 
-            System.out.println("DAY: ("+imageHeight + "-" + zoom*this.zoom.getCoefZoomY() +")" +" / "+ 2);
+//            System.out.println("DAY: ("+imageHeight + "-" + zoom*this.zoom.getCoefZoomY() +")" +" / "+ 2);
             double distanceAccessY = ((imageHeight - zoom*this.zoom.getCoefZoomY()) / 2);
 
             return new MapLocation(distanceAccessX, distanceAccessY);

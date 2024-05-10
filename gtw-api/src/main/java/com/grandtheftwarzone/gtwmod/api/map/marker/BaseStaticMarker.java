@@ -10,38 +10,53 @@ import lombok.Setter;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Getter
 public class BaseStaticMarker implements MapMarker {
 
+    @Getter
     private String identificator;
 
+    @Nullable
+    @Getter
     private ResourceLocation icon;
 
+    @Nullable
+    @Getter
+    private String iconId;
+
+    @Getter
     private String name;
 
+    @Getter
     private String lore;
 
+    @Nullable
+    @Getter
     private List<String> mapImageIds;
 
+    @Getter
     private boolean localMarker;
 
-    @Setter
+    @Getter @Setter
     private boolean draw;
 
+    @Nullable
+    @Getter
     private List<String> actionList;
 
+    @Getter @Setter
     private EntityLocation worldLocation;
 
 
-    public BaseStaticMarker(String indentificator, @Nullable String name, @Nullable String lore, ResourceLocation icon, EntityLocation worldLocation, boolean localMarker, List<String> mapImageIds, @Nullable List<String> actionList, boolean draw) {
+    public BaseStaticMarker(String indentificator, @Nullable String name, @Nullable String lore, ResourceLocation icon, String iconId, EntityLocation worldLocation, boolean localMarker, List<String> mapImageIds, @Nullable List<String> actionList, boolean draw) {
         this.identificator = indentificator;
         this.name = name;
         this.lore = lore;
         this.icon = icon;
+        this.iconId = iconId;
         this.worldLocation = worldLocation;
         this.localMarker = localMarker;
         this.mapImageIds = mapImageIds;
@@ -49,8 +64,21 @@ public class BaseStaticMarker implements MapMarker {
         this.draw = draw;
     }
 
-    public BaseStaticMarker(String indentificator, @Nullable String name, @Nullable String lore, ResourceLocation icon, EntityLocation worldLocation, boolean localMarker, List<String> mapImageIds, @Nullable List<String> actionList) {
-        this(indentificator, name, lore, icon, worldLocation, localMarker, mapImageIds, actionList, true);
+    public BaseStaticMarker(String indentificator, @Nullable String name, @Nullable String lore, ResourceLocation icon, String iconId, EntityLocation worldLocation, boolean localMarker, List<String> mapImageIds, @Nullable List<String> actionList) {
+        this(indentificator, name, lore, icon, iconId, worldLocation, localMarker, mapImageIds, actionList, true);
+    }
+
+    public BaseStaticMarker(TemplateMarker templateMarker) {
+        this.identificator = templateMarker.getIdentificator();
+        this.name = templateMarker.getName();
+        this.lore = templateMarker.getLore();
+        this.icon = GtwAPI.getInstance().getMapManagerClient().getMapImageUtils().getImage("marker/"+templateMarker.getIconId());
+        this.iconId = templateMarker.getIconId();
+        this.worldLocation = new EntityLocation(templateMarker.getWorldLocation());
+        this.localMarker = templateMarker.isLocalMarker();
+        this.mapImageIds = templateMarker.getMapImageIds();
+        this.actionList = templateMarker.getActionList();
+        this.draw = templateMarker.isDraw();
     }
 
 
@@ -58,13 +86,13 @@ public class BaseStaticMarker implements MapMarker {
 
         MapImage mapImage = getMapImage(targetMap);
 
-        if (!this.mapImageIds.contains(mapImage.getImageId())) {
-            GtwLog.getLogger().error("[getMapLocation] Error!");
+        if (!this.mapImageIds.isEmpty() && !this.mapImageIds.contains(mapImage.getImageId())) {
+            GtwLog.getLogger().error("[getMapLocation] Error! Displaying marker " + getIdentificator() + " is not allowed on canvas " + mapImage.getImageId());
             return new MapLocation(-999999999,-999999999,-404);
         }
 
         if (!draw) {
-            GtwLog.getLogger().error("[getMapLocation] Error! draw disable.");
+            GtwLog.getLogger().error("[getMapLocation] Error! Display of token " + getIdentificator() + " is disabled.");
             return new MapLocation(-999999999,-999999999,-405);
         }
 
@@ -82,6 +110,10 @@ public class BaseStaticMarker implements MapMarker {
             return GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage();
         }
         return null;
+    }
+
+    public MapImage getMapImage() {
+        return this.getMapImage("globalmap");
     }
 
 }

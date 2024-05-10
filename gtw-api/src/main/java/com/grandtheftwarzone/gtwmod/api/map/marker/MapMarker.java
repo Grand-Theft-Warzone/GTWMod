@@ -19,6 +19,9 @@ public interface MapMarker {
 
     ResourceLocation getIcon();
 
+    @Nullable
+    String getIconId();
+
     EntityLocation getWorldLocation();
 
     MapLocation getMapLocation();
