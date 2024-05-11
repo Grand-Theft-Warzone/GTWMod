@@ -27,6 +27,8 @@ public interface MapMarker extends ConfigSerializer<MapMarker> {
 
     MapLocation getMapLocation();
 
+    MapLocation getMapLocation(String typeMap);
+
     List<String> getMapImageIds();
 
     boolean isLocalMarker();

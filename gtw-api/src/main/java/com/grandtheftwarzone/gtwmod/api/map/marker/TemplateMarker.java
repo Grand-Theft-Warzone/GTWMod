@@ -30,7 +30,8 @@ public class TemplateMarker {
         this.draw = draw;
     }
 
-    public TemplateMarker(@Nullable String name, @Nullable String lore, String iconId, String worldLocation, boolean localMarker, @Nullable List<String> mapImadeIds, @Nullable List<String> actionList, boolean draw) {
+    public TemplateMarker(@Nullable String name, @Nullable String lore, String iconId, String worldLocation, boolean localMarker, @Nullable List<String> mapImadeIds,
+                          @Nullable List<String> actionList, boolean draw) {
         if (localMarker) {
             this.identificator = "L-" + UUID.randomUUID();
         } else {

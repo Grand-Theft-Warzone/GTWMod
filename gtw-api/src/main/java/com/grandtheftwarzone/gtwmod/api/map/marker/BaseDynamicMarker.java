@@ -40,9 +40,9 @@ public class BaseDynamicMarker extends BaseStaticMarker {
     }
 
     @Override
-    public MapLocation getMapLocation(String targetMap) {
+    public MapLocation getMapLocation(String typeMap) {
 
-        this.mapImage = getMapImage(targetMap);
+        this.mapImage = getMapImage(typeMap);
 
 
         if (!(getMapImageIds() == null) && !getMapImageIds().contains(this.mapImage.getImageId())) {

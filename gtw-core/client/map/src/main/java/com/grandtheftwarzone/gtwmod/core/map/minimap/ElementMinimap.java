@@ -2,6 +2,7 @@ package com.grandtheftwarzone.gtwmod.core.map.minimap;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
+import com.grandtheftwarzone.gtwmod.api.map.marker.MapMarker;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import com.grandtheftwarzone.gtwmod.api.map.marker.RadarPlayer;
@@ -23,6 +24,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 import static com.grandtheftwarzone.gtwmod.api.utils.GLUtils.*;
 
@@ -69,7 +72,9 @@ public class ElementMinimap extends BaseElement {
         float centerY = getY() + (float) getHeight() /2;
         enableCircleStencil(centerX, centerY, (float) (getHeight() /2));
 
-        drawPartialImage(getX(), getY(), getWidth(), getHeight(), cord.getX() - (zoom / 2), cord.getY() - (zoom / 2), zoom, zoom);
+        MapLocation radarCordImage = new MapLocation(cord.getX() - (zoom / 2), cord.getY() - (zoom / 2));
+
+        drawPartialImage(getX(), getY(), getWidth(), getHeight(), radarCordImage.getX(), radarCordImage.getY(), zoom, zoom);
 
         // Extra filter
         if (GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getColorBorderReach() != null) {
@@ -77,19 +82,52 @@ public class ElementMinimap extends BaseElement {
             RenderUtils.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getColorBorderReach().toInt(), GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getOpacityFilter());
         }
 
-
         colorFrame = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getColorFrame();
 
         drawHollowCircle(centerX, centerY, (float) (getHeight() /2), 7,   colorFrame);
 
 
-
         if (radarPlayer.inMap()) {
+
+            // Блок для отображения маркеров.
+            List<MapMarker> markerList = GtwAPI.getInstance().getMapManagerClient().getMarkerManager().getAllMarkerFilter(minimap.getImageId());
+
+            double proporzia = (double) zoom / getWidth();
+
+
+            for (MapMarker marker : markerList) {
+                MapLocation location = marker.getMapLocation("minimap");
+                ResourceLocation iconImage = marker.getIcon();
+
+                double deltaX = location.getX() - cord.getX();
+                double deltaY = location.getY() - cord.getY();
+
+                double x = (deltaX / proporzia) + centerX;
+                double y = (deltaY / proporzia) + centerY;
+
+//                System.out.println("PROP: " + proporzia);
+//                System.out.println("DeltaX: " + deltaX + " DeltaY: " + deltaY);
+//                System.out.println("X: " + x + " Y: " + y);
+//                System.out.println("CX: " + centerX + " CY: " + centerY);
+                GlStateManager.pushMatrix();
+                RenderUtils.bindTexture(iconImage);
+                GlStateManager.translate(x, y, 0);
+                Gui.drawModalRectWithCustomSizedTexture(
+                        (int) (-zoomRadar / 2),
+                        (int) (-zoomRadar / 2),
+                        0, 0,
+                        zoomRadar, zoomRadar,
+                        zoomRadar, zoomRadar
+                );
+                GlStateManager.popMatrix();
+
+            }
+
             if (GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getDefaultColorFrame() != colorFrame) {
                 colorFrame.useColor();
             }
             GlStateManager.pushMatrix();
-            RenderUtils.bindTexture(radarPlayer.getIcon());
+            RenderUtils.bindTexture(radarImage);
             GlStateManager.translate(getX() + ((float) getWidth() / 2), getY() + ((float) getHeight() / 2), 0);
             GlStateManager.rotate((float) player.getYaw(), 0, 0, 1);
 
@@ -134,7 +172,9 @@ public class ElementMinimap extends BaseElement {
 
         player = new EntityLocation(Minecraft.getMinecraft().player);
 
-        radarPlayer = new RadarPlayer(player, "L-Radar_player", "Ya", radarImage, coef, step);
+        radarPlayer = GtwAPI.getInstance().getMapManagerClient().getRadarPlayer();
+        radarPlayer.setStep(step);
+        radarPlayer.setCoefficient(coef);
 
         DisplayRenderer renderer = getElementOwner().getDisplayRenderer();
         GtwAPI.getInstance().getMapManagerClient().getMinimapManager().updateMinimapManager(renderer);

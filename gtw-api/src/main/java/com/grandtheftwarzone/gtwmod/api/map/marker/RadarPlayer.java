@@ -3,6 +3,8 @@ package com.grandtheftwarzone.gtwmod.api.map.marker;
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.map.marker.BaseDynamicMarker;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
+import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -25,6 +27,11 @@ public class RadarPlayer extends BaseDynamicMarker {
     }
 
 
+    @Override
+    public MapLocation getMapLocation(String targetMap) {
+        getWorldLocation().update(Minecraft.getMinecraft().player);
+        return super.getMapLocation(targetMap);
+    }
 
     public void updateColorFilter() {
         float proximity = getMapImage("minimap").proximityToTheBorder(getWorldLocation().getX(), getWorldLocation().getZ());
@@ -36,13 +43,9 @@ public class RadarPlayer extends BaseDynamicMarker {
     }
 
     public boolean inMap() {
+        getWorldLocation().update(Minecraft.getMinecraft().player);
         return this.getMapImage("minimap").inRealMap(getWorldLocation().getX(), getWorldLocation().getZ());
     }
-
-//    @SubscribeEvent
-//    public void onClientTick(TickEvent.ClientTickEvent event) {
-//        playerLocation.update(Min)
-//    }
 
 
 }

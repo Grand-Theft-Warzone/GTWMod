@@ -8,6 +8,7 @@ import com.grandtheftwarzone.gtwmod.api.map.MapManagerClient;
 import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumersClient;
 import com.grandtheftwarzone.gtwmod.api.map.marker.BaseStaticMarker;
 import com.grandtheftwarzone.gtwmod.api.map.marker.TemplateMarker;
+import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.GtwGlobalmapManager;
 import com.grandtheftwarzone.gtwmod.api.map.marker.RadarPlayer;
 import com.grandtheftwarzone.gtwmod.core.map.minimap.GtwMinimapManager;
@@ -18,6 +19,7 @@ import me.phoenixra.atumconfig.api.config.ConfigType;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.display.DisplayRenderer;
 import me.phoenixra.atumodcore.api.service.AtumModService;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -97,7 +99,7 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
         }else if (fmlEvent instanceof FMLPostInitializationEvent) {
             onPostInit((FMLPostInitializationEvent) fmlEvent);
         }else if(fmlEvent instanceof FMLInitializationEvent){
-            //
+            onInit((FMLInitializationEvent) fmlEvent);
         }
     }
 
@@ -193,15 +195,10 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
 
         this.markerManager = new GtwMarkerManager();
 
-        List<String> aaa = new ArrayList<>();
-        aaa.add("aaa");
-        aaa.add("bbb");
-        markerManager.addLocalMarker(new BaseStaticMarker(new TemplateMarker("Holla", "2", "radar", "222;111;1;1;1", true, aaa, null, true)));
 
         // Инициализация радара
-//        radarPlayer = new RadarPlayer(player, "L-Radar_player", "Ya", radarImage, coef, step);
+        radarPlayer = new RadarPlayer(new EntityLocation(Minecraft.getMinecraft().player), "Radar_player", "Ya", null, 1, 1);
     }
-
 
     @Override
     public void onRemove() {

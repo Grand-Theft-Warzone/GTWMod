@@ -78,7 +78,7 @@ public class BaseStaticMarker implements MapMarker {
         this.identificator = templateMarker.getIdentificator();
         this.name = templateMarker.getName();
         this.lore = templateMarker.getLore();
-        this.icon = GtwAPI.getInstance().getMapManagerClient().getMapImageUtils().getImage("marker/"+templateMarker.getIconId());
+        this.icon = GtwAPI.getInstance().getMapManagerClient().getMapImageUtils().getImage("markers/"+templateMarker.getIconId());
         this.iconId = templateMarker.getIconId();
         this.worldLocation = new EntityLocation(templateMarker.getWorldLocation());
         this.localMarker = templateMarker.isLocalMarker();
@@ -88,9 +88,9 @@ public class BaseStaticMarker implements MapMarker {
     }
 
 
-    public MapLocation getMapLocation(String targetMap) {
+    public MapLocation getMapLocation(String typeMap) {
 
-        MapImage mapImage = getMapImage(targetMap);
+        MapImage mapImage = getMapImage(typeMap);
 
         if (!this.mapImageIds.isEmpty() && !this.mapImageIds.contains(mapImage.getImageId())) {
             GtwLog.getLogger().error("[getMapLocation] Error! Displaying marker " + getIdentificator() + " is not allowed on canvas " + mapImage.getImageId());

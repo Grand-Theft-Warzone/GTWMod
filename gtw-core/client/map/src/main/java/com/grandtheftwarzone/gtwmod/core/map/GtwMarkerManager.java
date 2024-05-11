@@ -77,18 +77,31 @@ public class GtwMarkerManager implements MarkerManager {
     }
 
 
-    public void addLocalMarker(MapMarker marker) {
+    public void addLocalMarker(MapMarker marker, boolean save) {
         MapMarker searchMarker = getMarker(marker.getIdentificator());
         if (searchMarker != null) {
             localMarkerList.remove(searchMarker);
         }
         localMarkerList.add(marker);
-        updateLocalConfig();
+        if (save) {
+            updateLocalConfig();
+        }
     }
 
-    public void removeLocalMarker(String indentificator) {
-        localMarkerList.remove(getMarker(indentificator));
+    public void addLocalMarker(MapMarker marker) {
+        this.addLocalMarker(marker, true);
+    }
+
+    public @Nullable MapMarker removeLocalMarker(String indentificator) {
+
+        MapMarker removedMarker = getMarker(indentificator);
+
+        if (removedMarker != null) {
+            localMarkerList.remove(removedMarker);
+        }
         updateLocalConfig();
+
+        return  removedMarker;
     }
 
     public void updateLocalConfig() {
@@ -98,16 +111,7 @@ public class GtwMarkerManager implements MarkerManager {
         Config newConfig = new AtumConfigSection(configMarker.getConfigOwner(), ConfigType.YAML, null);
 
 
-//        Config newConfig = new AtumConfigSection(configMarker.getConfigOwner(), ConfigType.YAML, null);
-
-//        Config newConfig = new AtumConfigSection(configMarker.getConfigOwner(), ConfigType.JSON, null);
-//        configMarker.set("baobab222.aaaaa", 1111);
-//        configMarker.set("markers", newConfig);
-//        configMarker.set("markers.pritvet.aaaa", "MOU BOI");
-//        configMarker.set("markers.privet.S", true);
-//        configMarker.set("markers.ffff.a", 11111);
-
-//
+        
         for (MapMarker marker : localMarkerList) {
 
 
@@ -148,11 +152,24 @@ public class GtwMarkerManager implements MarkerManager {
     }
 
 
-    public List<MapMarker> getMarkerList() {
+    public List<MapMarker> getAllMarker() {
         List<MapMarker> combinedList = new ArrayList<>();
         combinedList.addAll(localMarkerList);
         combinedList.addAll(serverMarkerList);
         return combinedList;
+    }
+
+    public List<MapMarker> getAllMarkerFilter(String mapImageId) {
+        List<MapMarker> combinedList = new ArrayList<>();
+        combinedList.addAll(localMarkerList);
+        combinedList.addAll(serverMarkerList);
+        List<MapMarker> filteredList = new ArrayList<>();
+        for (MapMarker marker : combinedList) {
+            if (marker.getMapImageIds() == null || marker.getMapImageIds().contains(mapImageId)) {
+                filteredList.add(marker);
+            }
+        }
+        return filteredList;
     }
 
 }
