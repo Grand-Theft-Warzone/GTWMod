@@ -31,7 +31,7 @@ public class MapImageUtils extends FileImageUtils {
 
     @Override
     public ResourceLocation getImage(String idName) {
-        return super.getImage(idName, "textures/gui/minimap/");
+        return super.getImage(idName, "textures/gui/map/");
     }
 
 
@@ -53,7 +53,7 @@ public class MapImageUtils extends FileImageUtils {
             GtwLog.getLogger().debug("[getMapImage] I'm looking for a mod in resources...");
 
             IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
-            ResourceLocation resourceLocation = new ResourceLocation("gtwmod", "textures/gui/minimap/maps/" + id + ".png");
+            ResourceLocation resourceLocation = new ResourceLocation("gtwmod", "textures/gui/map/maps/" + id + ".png");
 
             try {
                 IResource resource = resourceManager.getResource(resourceLocation);
@@ -80,7 +80,7 @@ public class MapImageUtils extends FileImageUtils {
 
 
         if (colorBackground == null) {
-            return super.getImage("maps/" + id, "textures/gui/minimap/");
+            return super.getImage("maps/" + id, "textures/gui/map/");
         }
 
         try {

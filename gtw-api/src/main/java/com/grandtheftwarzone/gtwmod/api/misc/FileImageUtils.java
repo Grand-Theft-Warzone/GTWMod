@@ -19,7 +19,7 @@ import java.security.NoSuchAlgorithmException;
 public class FileImageUtils {
 
 
-    public static ResourceLocation nullImage = new ResourceLocation("gtwmod", "textures/gui/minimap/nullable.png");
+    public static ResourceLocation nullImage = new ResourceLocation("gtwmod", "textures/gui/map/nullable.png");
 
     @Getter
     private File rootDir;
@@ -46,6 +46,8 @@ public class FileImageUtils {
         if (!rootDir.exists()) {
             rootDir.mkdir();
         }
+
+
 
         String id = idName + ".png";
         File file = new File(rootDir, id);
@@ -83,6 +85,11 @@ public class FileImageUtils {
         if (!rootDir.exists()) {
             rootDir.mkdir();
         }
+        if (idName.contains("/")) {
+            File dir = new File(rootDir, idName.substring(0, idName.lastIndexOf("/")));
+            dir.mkdir();
+        }
+
 
         String id = idName + ".png";
         File file = new File(rootDir, id);
@@ -97,6 +104,7 @@ public class FileImageUtils {
             ResourceLocation resourceLocation = new ResourceLocation("gtwmod", localSearchDir + id);
 
             try {
+                System.out.println(resourceLocation);
                 IResource resource = resourceManager.getResource(resourceLocation);
                 GtwLog.getLogger().debug("[getMapImage] Image "+idName+" detected.");
                 InputStream inputStream = resource.getInputStream();
@@ -115,6 +123,7 @@ public class FileImageUtils {
                 return resourceLocation;
             } catch (IOException e) {
                 // Ресурс не найден
+                System.out.println(e);
                 return nullImage;
             }
         }

@@ -26,8 +26,8 @@ public class ProcessConsumer {
                     // @TODO У нас ещё есть ограничение - разрешены ли локальные маркеры. Реализовать позже.
 
                     // working with maps.
-//                    ResourceLocation temporaryImage = new ResourceLocation("gtwmod", "textures/gui/minimap/general_map_hd.png");
-//                    ResourceLocation radarImage = new ResourceLocation("gtwmod", "textures/gui/minimap/general_map_hd.png");
+//                    ResourceLocation temporaryImage = new ResourceLocation("gtwmod", "textures/gui/map/general_map_hd.png");
+//                    ResourceLocation radarImage = new ResourceLocation("gtwmod", "textures/gui/map/general_map_hd.png");
 
                     if (it.getMinimapData() == null) {
                         System.out.println("minimap null");

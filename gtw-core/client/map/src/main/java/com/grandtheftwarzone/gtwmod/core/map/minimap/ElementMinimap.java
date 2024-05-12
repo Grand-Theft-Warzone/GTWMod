@@ -109,15 +109,16 @@ public class ElementMinimap extends BaseElement {
 //                System.out.println("DeltaX: " + deltaX + " DeltaY: " + deltaY);
 //                System.out.println("X: " + x + " Y: " + y);
 //                System.out.println("CX: " + centerX + " CY: " + centerY);
+                int zoomMarker = (int) (zoomRadar + zoomRadar*0.2);
                 GlStateManager.pushMatrix();
                 RenderUtils.bindTexture(iconImage);
                 GlStateManager.translate(x, y, 0);
                 Gui.drawModalRectWithCustomSizedTexture(
-                        (int) (-zoomRadar / 2),
-                        (int) (-zoomRadar / 2),
+                        (int) (-zoomMarker / 2),
+                        (int) (-zoomMarker / 2),
                         0, 0,
-                        zoomRadar, zoomRadar,
-                        zoomRadar, zoomRadar
+                        zoomMarker, zoomMarker,
+                        zoomMarker, zoomMarker
                 );
                 GlStateManager.popMatrix();
 

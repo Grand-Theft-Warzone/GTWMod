@@ -112,8 +112,8 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
 //        MapLocation N3 = new MapLocation(1887, 159);
 //        MapLocation N4 = new MapLocation(1887, -1952);
 //
-//        MapImage mapImage = new MapImage(new ResourceLocation("gtwmod", "textures/gui/minimap/general_map_hd.png"), N4, N3, N2, N1);
-//        this.minimapManager.updateData(mapImage, new ResourceLocation("gtwmod", "textures/gui/minimap/general_map_hd.png"), true);
+//        MapImage mapImage = new MapImage(new ResourceLocation("gtwmod", "textures/gui/map/general_map_hd.png"), N4, N3, N2, N1);
+//        this.minimapManager.updateData(mapImage, new ResourceLocation("gtwmod", "textures/gui/map/general_map_hd.png"), true);
 //
 //    }
 
