@@ -5,7 +5,6 @@ import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import com.grandtheftwarzone.gtwmod.api.map.data.server.PlayerMapData;
 import com.grandtheftwarzone.gtwmod.core.map.dataobject.PlayerHudData;
-import com.grandtheftwarzone.gtwmod.core.map.dataobject.StaticMarker;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.utils.StringUtils;
 import me.phoenixra.atumodcore.api.database.Database;
@@ -34,10 +33,10 @@ public class StorageManager {
         core = new SQLiteDatabase(GtwAPI.getInstance().getGtwMod(), name, location);
 
         if (core.checkConnection()) { //@TODO         optimize with String.format
-            GtwLog.getLogger().info(StringUtils.formatMinecraftColors("&aDatabase successfully established connection :) &7(Type: SQLite)"));
+            GtwLog.getLogger().info(StringUtils.formatMinecraftColors("&e[GTWMap] &aDatabase successfully established connection :) &7(Type: SQLite)"));
 
-            if (!core.existsTable("player") || !core.existsTable("playerData") || core.existsTable("StaticMarker")) {
-                GtwLog.getLogger().info(StringUtils.formatMinecraftColors("&eCreate table: player, playerData, StaticMarker"));
+            if (!core.existsTable("player") || !core.existsTable("playerData") || core.existsTable("Marker")) {
+                GtwLog.getLogger().info(StringUtils.formatMinecraftColors("&e[GTWMap] &eCreate table: player, playerData, Marker"));
 
                 String query = ("CREATE TABLE IF NOT EXISTS player (\n" +
                         "  UUID VARCHAR(36) PRIMARY KEY UNIQUE,\n" +
@@ -54,18 +53,21 @@ public class StorageManager {
                         ");");
                 core.execute(query);
 
-                query = ("CREATE TABLE IF NOT EXISTS StaticMarker (\n" +
-                        "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                        "    name VARCHAR(64),\n" +
+                query = ("CREATE TABLE IF NOT EXISTS Marker (\n" +
+                        "    identificator TEXT PRIMARY KEY,\n" +
+                        "    name TEXT,\n" +
                         "    lore TEXT,\n" +
-                        "    map_id VARCHAR,\n" +
-                        "    cord TEXT,\n" +
-                        "    icon_id VARCHAR(64),\n" +
-                        "    permission TEXT\n" +
+                        "    iconId TEXT,\n" +
+                        "    worldLocation TEXT,\n" +
+                        "    data TEXT,\n" +
+                        "    mapImageIds TEXT,\n" +
+                        "    permissions TEXT,\n" +
+                        "    actionList TEXT,\n" +
+                        "    draw INTEGER\n" +
                         ");");
                 core.execute(query);
 
-                GtwLog.getLogger().info(StringUtils.formatMinecraftColors("&aCreating successfully completed!"));
+                GtwLog.getLogger().info(StringUtils.formatMinecraftColors("&e[GTWMap] &aCreating successfully completed!"));
             }
 
         }
@@ -128,8 +130,8 @@ public class StorageManager {
         return null;
     }
 
-    public @Nullable StaticMarker getStaticMarker(int id) {
-        StringBuilder query = new StringBuilder("SELECT * FROM `StaticMarker` WHERE id = '").append(id).append("';");
+    public @Nullable Marker getMarker(int id) {
+        StringBuilder query = new StringBuilder("SELECT * FROM `Marker` WHERE id = '").append(id).append("';");
 
         ResultSet result = core.select(query.toString());
         if (result==null) {
@@ -149,7 +151,7 @@ public class StorageManager {
             String table_iconId = result.getString("icon_id");
             String[] table_permission = result.getString("permission").split(";");
 
-            return new StaticMarker(tab_id, table_zoom, table_lore, table_mapId, table_cord, table_iconId, table_permission);
+            return new Marker(tab_id, table_zoom, table_lore, table_mapId, table_cord, table_iconId, table_permission);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -158,9 +160,9 @@ public class StorageManager {
         return null;
     }
 
-    public @Nullable StaticMarker getStaticMarker(MapLocation location) {
+    public @Nullable Marker getMarker(MapLocation location) {
         String cord = location.toString();
-        StringBuilder query = new StringBuilder("SELECT * FROM `StaticMarker` WHERE cord = '").append(cord).append("';");
+        StringBuilder query = new StringBuilder("SELECT * FROM `Marker` WHERE cord = '").append(cord).append("';");
 
         ResultSet result = core.select(query.toString());
         if (result==null) {
@@ -180,7 +182,7 @@ public class StorageManager {
             String table_iconId = result.getString("icon_id");
             String[] table_permission = result.getString("permission").split(";");
 
-            return new StaticMarker(tab_id, table_zoom, table_lore, table_mapId, table_cord, table_iconId, table_permission);
+            return new Marker(tab_id, table_zoom, table_lore, table_mapId, table_cord, table_iconId, table_permission);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -190,10 +192,10 @@ public class StorageManager {
     }
 
     public 
-    void addStaticMarker(StaticMarker marker) {
+    void addMarker(Marker marker) {
         //@TODO         optimize with String.format
         StringBuilder query = new StringBuilder("insert into").append(
-                "  `StaticMarker` (").append(
+                "  `Marker` (").append(
                 "    `cord`,").append(
                 "    `icon_id`,").append(
                 "    `id`,").append(
@@ -208,8 +210,8 @@ public class StorageManager {
         core.executeUpdate(query.toString(), true);
     }
 
-    public void removeStaticMarker(int id) {
-        StringBuilder query = new StringBuilder("DELETE FROM StaticMarker WHERE id = '").append(id).append("';");
+    public void removeMarker(int id) {
+        StringBuilder query = new StringBuilder("DELETE FROM Marker WHERE id = '").append(id).append("';");
         core.executeUpdate(query.toString(), true);
     }
 

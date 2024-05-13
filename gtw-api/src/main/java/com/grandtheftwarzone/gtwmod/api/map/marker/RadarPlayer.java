@@ -12,18 +12,16 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class RadarPlayer extends BaseDynamicMarker {
 
-    private EntityLocation playerLocation;
-
     public RadarPlayer(EntityLocation playerLocation, String identificator,  String name, ResourceLocation icon, String iconId, double coef, double step) {
-        super(identificator, name, null, icon, iconId, playerLocation, coef, step, true, null, null, true);
+        super(identificator, name, null, icon, iconId, playerLocation, coef, step, null, true, null, null, true);
     }
 
     public RadarPlayer(EntityLocation playerLocation, String identificator,  String name, double coef, double step) {
-        super(identificator, name, null, null, null, playerLocation, coef, step, true, null, null, true);
+        super(identificator, name, null, null, null, playerLocation, coef, step, null, true, null, null, true);
     }
 
     public RadarPlayer(EntityLocation playerLocation, String identificator,  String name, ResourceLocation icon, double coef, double step) {
-        super(identificator, name, null, icon, null, playerLocation, coef, step, true, null, null, true);
+        super(identificator, name, null, icon, null, playerLocation, coef, step,  null,true, null, null, true);
     }
 
 
@@ -45,6 +43,7 @@ public class RadarPlayer extends BaseDynamicMarker {
     public boolean inMap() {
         getWorldLocation().update(Minecraft.getMinecraft().player);
         return this.getMapImage("minimap").inRealMap(getWorldLocation().getX(), getWorldLocation().getZ());
+
     }
 
 

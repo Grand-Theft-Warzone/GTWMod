@@ -7,6 +7,7 @@ import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import lombok.Getter;
 import lombok.Setter;
+import me.phoenixra.atumconfig.api.config.Config;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,16 +29,18 @@ public class BaseDynamicMarker extends BaseStaticMarker {
     protected MapImage mapImage;
 
 
-    public BaseDynamicMarker(String indentificator, @Nullable String name, @Nullable String lore, ResourceLocation icon, @Nullable String iconId, EntityLocation worldLocation, double coef, double step, boolean localMarker, @Nullable List<String> mapImageIds, @Nullable List<String> actionList, boolean draw) {
-        super(indentificator, name, lore, icon, iconId, worldLocation, localMarker, mapImageIds, actionList, draw);
+    public BaseDynamicMarker(String indentificator, @Nullable String name, @Nullable String lore, ResourceLocation icon, @Nullable String iconId, EntityLocation worldLocation, double coef, double step, @Nullable Config data, boolean localMarker, @Nullable List<String> mapImageIds, @Nullable List<String> actionList, boolean draw) {
+        super(indentificator, name, lore, icon, iconId, worldLocation, data, localMarker, mapImageIds, actionList, draw);
         this.coefficient = coef;
         this.step = step;
         this.mapInterpolations = new ArrayList<>();
     }
 
-    public BaseDynamicMarker(String indentificator, @Nullable String name, @Nullable String lore, ResourceLocation icon, @Nullable String iconId, EntityLocation worldLocation, double coef, double step, boolean localMarker, @Nullable List<String> mapImageIds, @Nullable List<String> actionList) {
-        this(indentificator, name, lore, icon, iconId, worldLocation, coef, step, localMarker, mapImageIds, actionList, true);
+    public BaseDynamicMarker(String indentificator, @Nullable String name, @Nullable String lore, ResourceLocation icon, @Nullable String iconId, EntityLocation worldLocation, double coef, double step, @Nullable Config data, boolean localMarker, @Nullable List<String> mapImageIds, @Nullable List<String> actionList) {
+        this(indentificator, name, lore, icon, iconId, worldLocation, coef, step, data, localMarker, mapImageIds, actionList, true);
     }
+
+
 
     @Override
     public MapLocation getMapLocation(String typeMap) {

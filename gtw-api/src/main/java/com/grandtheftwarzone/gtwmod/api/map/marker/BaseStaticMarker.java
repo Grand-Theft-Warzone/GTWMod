@@ -56,13 +56,18 @@ public class BaseStaticMarker implements MapMarker {
     @Getter @Setter
     private EntityLocation worldLocation;
 
+    @Getter @Setter
+    @Nullable
+    private Config data;
 
-    public BaseStaticMarker(String indentificator, @Nullable String name, @Nullable String lore, ResourceLocation icon, String iconId, EntityLocation worldLocation, boolean localMarker, List<String> mapImageIds, @Nullable List<String> actionList, boolean draw) {
+
+    public BaseStaticMarker(String indentificator, @Nullable String name, @Nullable String lore, ResourceLocation icon, String iconId, EntityLocation worldLocation, @Nullable Config data, boolean localMarker, List<String> mapImageIds, @Nullable List<String> actionList, boolean draw) {
         this.identificator = indentificator;
         this.name = name;
         this.lore = lore;
         this.icon = icon;
         this.iconId = iconId;
+        this.data = data;
         this.worldLocation = worldLocation;
         this.localMarker = localMarker;
         this.mapImageIds = mapImageIds;
@@ -70,8 +75,8 @@ public class BaseStaticMarker implements MapMarker {
         this.draw = draw;
     }
 
-    public BaseStaticMarker(String indentificator, @Nullable String name, @Nullable String lore, ResourceLocation icon, String iconId, EntityLocation worldLocation, boolean localMarker, List<String> mapImageIds, @Nullable List<String> actionList) {
-        this(indentificator, name, lore, icon, iconId, worldLocation, localMarker, mapImageIds, actionList, true);
+    public BaseStaticMarker(String indentificator, @Nullable String name, @Nullable String lore, ResourceLocation icon, String iconId, EntityLocation worldLocation, @Nullable Config data, boolean localMarker, List<String> mapImageIds, @Nullable List<String> actionList) {
+        this(indentificator, name, lore, icon, iconId, worldLocation, data, localMarker, mapImageIds, actionList, true);
     }
 
     public BaseStaticMarker(TemplateMarker templateMarker) {
@@ -80,6 +85,7 @@ public class BaseStaticMarker implements MapMarker {
         this.lore = templateMarker.getLore();
         this.icon = GtwAPI.getInstance().getMapManagerClient().getMapImageUtils().getImage("markers/"+templateMarker.getIconId());
         this.iconId = templateMarker.getIconId();
+        this.data = templateMarker.getData();
         this.worldLocation = new EntityLocation(templateMarker.getWorldLocation());
         this.localMarker = templateMarker.isLocalMarker();
         this.mapImageIds = templateMarker.getMapImageIds();
@@ -130,6 +136,7 @@ public class BaseStaticMarker implements MapMarker {
         subsec.set("name", this.getName());
         subsec.set("lore", this.getLore());
         subsec.set("icon", this.getIconId());
+        subsec.set("data", this.getData() != null ? this.getData().toPlaintext() : null);
         subsec.set("worldLocation", this.getWorldLocation().toString());
         subsec.set("localMarker", this.isLocalMarker());
         subsec.set("mapImageIds", this.getMapImageIds());

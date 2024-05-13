@@ -22,22 +22,34 @@ public class GtwCommandManager extends CommandBase {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/mapmanager <reload|help>";
+        return "/mapmanager <reload|create|remove|help>";
     }
 
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        if (!PermissionAPI.hasPermission(Objects.requireNonNull(server.getPlayerList().getPlayerByUsername(sender.getName())), "gtwmod.map.command.reload")) {
+        if (!(sender instanceof MinecraftServer) && server.getPlayerList().getPlayerByUsername(sender.getName()) != null && !PermissionAPI.hasPermission(Objects.requireNonNull(server.getPlayerList().getPlayerByUsername(sender.getName())), "gtwmod.map.command.*")) {
             return false;
         }
         return true;
     }
 
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (!checkPermission(server, sender)) {
+            return null;
+        }
         List<String> tab = new ArrayList<>();
-        tab.add("reload");
-        tab.add("help");
-        return tab;
+        if (args.length == 0) {
+            tab.add("reload");
+            tab.add("create");
+            tab.add("remove");
+            tab.add("edit");
+            tab.add("list");
+            tab.add("info");
+            tab.add("help");
+            return tab;
+        }
+
+
     }
 
     @Override
@@ -65,6 +77,8 @@ public class GtwCommandManager extends CommandBase {
             sender.sendMessage(new TextComponentString("Unknown command. Usage: " + getUsage(sender)));
         }
     }
+
+
 
 
 }

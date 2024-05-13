@@ -65,7 +65,7 @@ public class GtwMarkerManager implements MarkerManager {
             System.out.println(mapImageIds);
             List<String> actionList = null;
             boolean draw = true;
-            TemplateMarker templateMarker = new TemplateMarker(identificator, name, lore, iconId, worldLocation, localMarker, mapImageIds, actionList, draw);
+            TemplateMarker templateMarker = new TemplateMarker(identificator, name, lore, iconId, worldLocation, null, localMarker, mapImageIds, actionList, draw);
 
             System.out.println("\n============================");
             System.out.println(templateMarker);

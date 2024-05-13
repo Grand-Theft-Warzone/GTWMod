@@ -104,7 +104,7 @@ public class CommandMapChat {
                 List<String> mapImageId = new ArrayList<>();
                 mapImageId.add(GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getMinimapImage().getImageId());
 
-                TemplateMarker templateMarker = new TemplateMarker(nameMarker, null, iconId, location.toString(), true, mapImageId, null, true);
+                TemplateMarker templateMarker = new TemplateMarker(nameMarker, null, iconId, location.toString(), null, true, mapImageId, null, true);
 
                 GtwAPI.getInstance().getMapManagerClient().getMarkerManager().addLocalMarker(new BaseStaticMarker(templateMarker));
 
@@ -132,11 +132,11 @@ public class CommandMapChat {
         List<MapMarker> markerList = GtwAPI.getInstance().getMapManagerClient().getMarkerManager().getLocalMarkerList();
 
 
-        mc.player.sendMessage(new TextComponentString("§7\n--=== §aLocal Marker List §7===--"));
+        mc.player.sendMessage(new TextComponentString("\n§7--=== §aLocal Marker List §7===--"));
 
         int i = 0;
         if (markerList.isEmpty()) {
-            mc.player.sendMessage(new TextComponentString("§fit's empty!"));
+            mc.player.sendMessage(new TextComponentString("\n§fit's empty!\n"));
         }
         for (MapMarker marker : markerList) {
             i++;
