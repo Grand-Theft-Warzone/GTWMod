@@ -1,5 +1,6 @@
-package com.grandtheftwarzone.gtwmod.api.map;
+package com.grandtheftwarzone.gtwmod.api.map.manager.client;
 
+import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.data.server.UpdateGlobalmapData;
 import com.grandtheftwarzone.gtwmod.api.map.misc.GlobalCentrCoord;
 import com.grandtheftwarzone.gtwmod.api.map.misc.GlobalZoom;

@@ -63,5 +63,30 @@ public class TemplateMarker {
                 data, localMarker, mapImageIds, actionList, draw);
     }
 
+    public void updateData(TemplateMarker updateTemplateData) {
+        this.name = updateTemplateData.getName();
+        this.lore = updateTemplateData.getLore();
+        this.iconId = updateTemplateData.getIconId();
+        this.worldLocation = updateTemplateData.getWorldLocation();
+        this.data = updateTemplateData.getData();
+        this.mapImageIds = updateTemplateData.getMapImageIds();
+        this.actionList = updateTemplateData.getActionList();
+        this.draw = updateTemplateData.isDraw();
+        this.localMarker = updateTemplateData.isLocalMarker();
+        this.identificator = updateTemplateData.getIdentificator();
+    }
+
+    public @Nullable String getMapImageIdsString() {
+        return (mapImageIds!= null &&!mapImageIds.isEmpty())? String.join(";", mapImageIds) : null;
+    }
+
+    public @Nullable String getActionListString() {
+        return (actionList!= null &&!actionList.isEmpty())? String.join("ъ", actionList) : null;
+    }
+
+    public int isDrawInt() {
+        return draw? 1 : 0;
+    }
+
 
 }

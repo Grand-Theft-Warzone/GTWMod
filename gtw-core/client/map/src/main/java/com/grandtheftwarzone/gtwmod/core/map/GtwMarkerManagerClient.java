@@ -2,16 +2,14 @@ package com.grandtheftwarzone.gtwmod.core.map;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
-import com.grandtheftwarzone.gtwmod.api.map.MarkerManager;
+import com.grandtheftwarzone.gtwmod.api.map.manager.client.MarkerManagerClient;
 import com.grandtheftwarzone.gtwmod.api.map.marker.BaseStaticMarker;
 import com.grandtheftwarzone.gtwmod.api.map.marker.MapMarker;
 import com.grandtheftwarzone.gtwmod.api.map.marker.TemplateMarker;
 import lombok.Getter;
-import me.phoenixra.atumconfig.api.ConfigOwner;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.config.ConfigType;
 import me.phoenixra.atumconfig.api.config.LoadableConfig;
-import me.phoenixra.atumconfig.core.config.AtumConfig;
 import me.phoenixra.atumconfig.core.config.AtumConfigSection;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GtwMarkerManager implements MarkerManager {
+public class GtwMarkerManagerClient implements MarkerManagerClient {
 
     @Getter
     private List<MapMarker> localMarkerList = new ArrayList<>();
@@ -30,7 +28,7 @@ public class GtwMarkerManager implements MarkerManager {
     @Getter
     private Config configMarker;
 
-    public GtwMarkerManager() {
+    public GtwMarkerManagerClient() {
         configMarker = GtwAPI.getInstance().getGtwMod().getConfigManager()
                 .createLoadableConfig(
                         "markers",

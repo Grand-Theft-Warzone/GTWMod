@@ -49,7 +49,7 @@ public class GtwCommandManager extends CommandBase {
             return tab;
         }
 
-
+        return null;
     }
 
     @Override

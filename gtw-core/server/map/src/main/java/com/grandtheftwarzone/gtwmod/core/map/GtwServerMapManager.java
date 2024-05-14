@@ -2,9 +2,10 @@ package com.grandtheftwarzone.gtwmod.core.map;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
-import com.grandtheftwarzone.gtwmod.api.map.MapManagerServer;
+import com.grandtheftwarzone.gtwmod.api.map.manager.server.MapManagerServer;
 import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumersServer;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
+import com.grandtheftwarzone.gtwmod.core.map.database.GtwServerMarkerManager;
 import com.grandtheftwarzone.gtwmod.core.map.database.StorageManager;
 import com.grandtheftwarzone.gtwmod.api.map.data.RestrictionsData;
 import com.grandtheftwarzone.gtwmod.api.map.data.server.MapData;
@@ -16,6 +17,7 @@ import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
 import me.phoenixra.atumodcore.api.service.AtumModService;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.server.permission.PermissionAPI;
@@ -45,6 +47,8 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
     private boolean debug;
     @Getter
     private StorageManager db;
+    @Getter
+    private GtwServerMarkerManager markerManager;
 
     @Getter
     private MapConsumersServer mapConsumers;
@@ -136,11 +140,18 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
     @Override
     public void handleFmlEvent(@NotNull FMLEvent fmlEvent) {
         if(fmlEvent instanceof FMLInitializationEvent) {
-            initConfig();
-            this.db = new StorageManager(config);
-            this.processConsumer = new ProcessConsumer();
+            onInit((FMLInitializationEvent) fmlEvent);
         }
     }
+
+    public void onInit(FMLInitializationEvent event) {
+        initConfig();
+        this.db = new StorageManager(config);
+        this.markerManager = new GtwServerMarkerManager(this.db);
+        this.processConsumer = new ProcessConsumer();
+
+    }
+
 
 //    @SubscribeEvent
 //    public void onPlayerChat(ServerChatEvent event) {

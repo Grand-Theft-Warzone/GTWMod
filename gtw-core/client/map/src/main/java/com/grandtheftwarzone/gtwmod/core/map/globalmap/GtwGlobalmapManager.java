@@ -1,7 +1,7 @@
 package com.grandtheftwarzone.gtwmod.core.map.globalmap;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
-import com.grandtheftwarzone.gtwmod.api.map.GlobalmapManager;
+import com.grandtheftwarzone.gtwmod.api.map.manager.client.GlobalmapManager;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.data.MapImageData;
 import com.grandtheftwarzone.gtwmod.api.map.data.server.UpdateGlobalmapData;
@@ -11,14 +11,11 @@ import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.lwjgl.input.Keyboard;
 
 import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 

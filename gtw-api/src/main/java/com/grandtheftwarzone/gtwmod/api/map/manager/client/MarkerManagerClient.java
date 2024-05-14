@@ -1,10 +1,10 @@
-package com.grandtheftwarzone.gtwmod.api.map;
+package com.grandtheftwarzone.gtwmod.api.map.manager.client;
 
 import com.grandtheftwarzone.gtwmod.api.map.marker.MapMarker;
 
 import java.util.List;
 
-public interface MarkerManager {
+public interface MarkerManagerClient {
 
     List<MapMarker> getLocalMarkerList();
 

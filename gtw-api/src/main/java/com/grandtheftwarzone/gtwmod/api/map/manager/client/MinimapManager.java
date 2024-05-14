@@ -1,5 +1,6 @@
-package com.grandtheftwarzone.gtwmod.api.map;
+package com.grandtheftwarzone.gtwmod.api.map.manager.client;
 
+import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.data.client.UpdateMinimapData;
 import me.phoenixra.atumodcore.api.display.DisplayRenderer;
 import me.phoenixra.atumodcore.api.misc.AtumColor;

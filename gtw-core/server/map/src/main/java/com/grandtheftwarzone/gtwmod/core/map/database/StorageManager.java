@@ -2,9 +2,9 @@ package com.grandtheftwarzone.gtwmod.core.map.database;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
-import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import com.grandtheftwarzone.gtwmod.api.map.data.server.PlayerMapData;
 import com.grandtheftwarzone.gtwmod.core.map.dataobject.PlayerHudData;
+import com.grandtheftwarzone.gtwmod.api.map.marker.ServerMarker;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.utils.StringUtils;
 import me.phoenixra.atumodcore.api.database.Database;
@@ -14,6 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class StorageManager {
@@ -130,29 +132,26 @@ public class StorageManager {
         return null;
     }
 
-    public @Nullable Marker getMarker(int id) {
-        StringBuilder query = new StringBuilder("SELECT * FROM `Marker` WHERE id = '").append(id).append("';");
+    // -----------------------------------------------------------------------------
 
-        ResultSet result = core.select(query.toString());
-        if (result==null) {
-            return null;
-        }
-
+    public @Nullable ServerMarker getMarkerFromId(String identificator) {
+        String query = "SELECT * FROM Marker WHERE identificator = '" +  identificator + "';";
+        ResultSet resultSet = core.select(query);
         try {
-            if (!result.next()) {
-                return null;
+            if (resultSet != null && resultSet.next()) {
+                String tab_id = resultSet.getString("identificator");
+                String name = resultSet.getString("name");
+                String lore = resultSet.getString("lore");
+                String iconId = resultSet.getString("iconId");
+                String worldLocation = resultSet.getString("worldLocation");
+                String data = resultSet.getString("data");
+                String mapImageIds = resultSet.getString("mapImageIds");
+                String permissions = resultSet.getString("permissions");
+                String actionList = resultSet.getString("actionList");
+                boolean draw = resultSet.getBoolean("draw");
+
+                return new ServerMarker(tab_id, name, lore, iconId, worldLocation, data, false, mapImageIds, permissions, actionList, draw);
             }
-
-            int tab_id = result.getInt("id");
-            String table_zoom = result.getString("name");
-            String table_lore = result.getString("lore");
-            String table_mapId = result.getString("lore");
-            MapLocation table_cord = new MapLocation(result.getString("cord"));
-            String table_iconId = result.getString("icon_id");
-            String[] table_permission = result.getString("permission").split(";");
-
-            return new Marker(tab_id, table_zoom, table_lore, table_mapId, table_cord, table_iconId, table_permission);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -160,60 +159,80 @@ public class StorageManager {
         return null;
     }
 
-    public @Nullable Marker getMarker(MapLocation location) {
-        String cord = location.toString();
-        StringBuilder query = new StringBuilder("SELECT * FROM `Marker` WHERE cord = '").append(cord).append("';");
-
-        ResultSet result = core.select(query.toString());
-        if (result==null) {
-            return null;
-        }
-
+    public List<ServerMarker> getAllMarkers() {
+        List<ServerMarker> markers = new ArrayList<>();
+        String query = "SELECT * FROM Marker";
+        ResultSet resultSet = core.select(query);
         try {
-            if (!result.next()) {
-                return null;
+            while (resultSet != null && resultSet.next()) {
+                String tab_id = resultSet.getString("identificator");
+                String name = resultSet.getString("name");
+                String lore = resultSet.getString("lore");
+                String iconId = resultSet.getString("iconId");
+                String worldLocation = resultSet.getString("worldLocation");
+                String data = resultSet.getString("data");
+                String mapImageIds = resultSet.getString("mapImageIds");
+                String permissions = resultSet.getString("permissions");
+                String actionList = resultSet.getString("actionList");
+                boolean draw = resultSet.getBoolean("draw");
+
+                ServerMarker marker = new ServerMarker(tab_id, name, lore, iconId, worldLocation, data, false, mapImageIds, permissions, actionList, draw);
+                markers.add(marker);
             }
-
-            int tab_id = result.getInt("id");
-            String table_zoom = result.getString("name");
-            String table_lore = result.getString("lore");
-            String table_mapId = result.getString("lore");
-            MapLocation table_cord = new MapLocation(result.getString("cord"));
-            String table_iconId = result.getString("icon_id");
-            String[] table_permission = result.getString("permission").split(";");
-
-            return new Marker(tab_id, table_zoom, table_lore, table_mapId, table_cord, table_iconId, table_permission);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return null;
+        return markers;
     }
 
-    public 
-    void addMarker(Marker marker) {
-        //@TODO         optimize with String.format
-        StringBuilder query = new StringBuilder("insert into").append(
-                "  `Marker` (").append(
-                "    `cord`,").append(
-                "    `icon_id`,").append(
-                "    `id`,").append(
-                "    `lore`,").append(
-                "    `map_id`,").append(
-                "    `name`,").append(
-                "    `permission`").append(
-                "  )\n").append(
-                "values\n").append(
-                "  (").append("    '").append(marker.getCord().toString()).append("',\n").append("    '").append(marker.getIconId()).append("',\n").append("    '").append(marker.getId()).append("',\n").append("    '").append(marker.getLore()).append("',\n").append("    '").append(marker.getMapId()).append("',\n").append("    '").append(marker.getName()).append("',\n").append("    '").append(marker.getPermissionOfString()).append("'\n").append("  );");
-
-        core.executeUpdate(query.toString(), true);
+    public void createOrUpdateMarker(ServerMarker marker) {
+        String checkQuery = "SELECT COUNT(*) AS count FROM Marker WHERE identificator = '" + marker.getIdentificator() + "';";
+        ResultSet checkResult = core.select(checkQuery);
+        try {
+            if (checkResult != null && checkResult.next()) {
+                int count = checkResult.getInt("count");
+                if (count > 0) {
+                    // Если элемент с таким идентификатором уже существует, обновляем его
+                    String updateQuery = "UPDATE Marker SET name = '"+ marker.getName() +
+                            "', lore = '" + marker.getLore() +
+                            "', iconId = '" + marker.getIconId() +
+                            "', worldLocation = '" + marker.getWorldLocation() +
+                            "', data = '" + (marker.getData() != null ? marker.getData().toPlaintext() : null) +
+                            "', mapImageIds = '" + marker.getMapImageIdsString() +
+                            "', permissions = '" + marker.getPermissionsString() +
+                            "', actionList = '" + marker.getActionListString() +
+                            "', draw = '" + marker.isDrawInt() + "' " +
+                            "WHERE identificator = '" + marker.getIdentificator() + "'";
+                    core.execute(updateQuery);
+                } else {
+                    // Если элемент с таким идентификатором не существует, создаем новый
+                    String insertQuery = "INSERT INTO Marker (identificator, name, lore, iconId, worldLocation, " +
+                            "data, mapImageIds, permissions, actionList, draw) " +
+                            "VALUES ('" + marker.getIdentificator() +
+                            "', '" + marker.getName() +
+                            "', '" + marker.getLore()
+                            + "', '" + marker.getIconId() +
+                            "', '" + marker.getWorldLocation() +
+                            "', '" + (marker.getData() != null ? marker.getData().toPlaintext() : null) +
+                            "', '" + marker.getMapImageIdsString() +
+                            "', '" + marker.getPermissionsString() +
+                            "', '" + marker.getActionListString() +
+                            "', '" + marker.isDrawInt() + "')";
+                    core.execute(insertQuery);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void removeMarker(int id) {
-        StringBuilder query = new StringBuilder("DELETE FROM Marker WHERE id = '").append(id).append("';");
-        core.executeUpdate(query.toString(), true);
+    public void removeMarkerFromId(String identifier) {
+        String query = "DELETE FROM Marker WHERE identificator = '" + identifier + "';";
+        core.execute(query);
     }
+
+
+    // ----------------------------------------------------------------------------------------------------------
 
     public void editPlayerData(UUID uuid, @NotNull PlayerMapData newPlayerData) {
 

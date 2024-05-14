@@ -1,4 +1,4 @@
-package com.grandtheftwarzone.gtwmod.api.map;
+package com.grandtheftwarzone.gtwmod.api.map.manager.server;
 
 import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumersServer;
 import com.grandtheftwarzone.gtwmod.api.map.data.server.MapData;
@@ -11,6 +11,8 @@ import java.util.UUID;
 public interface MapManagerServer {
 
     MapConsumersServer getMapConsumers();
+
+    MarkerManagerServer getMarkerManager();
 
     void initConfig();
     String getDefaultMinimapId();

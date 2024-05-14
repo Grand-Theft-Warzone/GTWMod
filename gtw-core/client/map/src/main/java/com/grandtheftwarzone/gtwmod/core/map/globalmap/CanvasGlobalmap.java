@@ -2,7 +2,7 @@ package com.grandtheftwarzone.gtwmod.core.map.globalmap;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
-import com.grandtheftwarzone.gtwmod.api.map.MapManagerClient;
+import com.grandtheftwarzone.gtwmod.api.map.manager.client.MapManagerClient;
 import com.grandtheftwarzone.gtwmod.api.map.misc.GlobalCentrCoord;
 import com.grandtheftwarzone.gtwmod.api.map.misc.GlobalZoom;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
@@ -17,7 +17,6 @@ import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
 import me.phoenixra.atumodcore.api.events.input.InputPressEvent;
 import me.phoenixra.atumodcore.api.events.input.InputReleaseEvent;
 import me.phoenixra.atumodcore.api.input.InputType;
-import me.phoenixra.atumodcore.api.misc.AtumColor;
 import me.phoenixra.atumodcore.api.utils.RenderUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

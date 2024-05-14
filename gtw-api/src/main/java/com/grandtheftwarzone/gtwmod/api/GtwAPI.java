@@ -2,8 +2,8 @@ package com.grandtheftwarzone.gtwmod.api;
 
 import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneManager;
-import com.grandtheftwarzone.gtwmod.api.map.MapManagerClient;
-import com.grandtheftwarzone.gtwmod.api.map.MapManagerServer;
+import com.grandtheftwarzone.gtwmod.api.map.manager.client.MapManagerClient;
+import com.grandtheftwarzone.gtwmod.api.map.manager.server.MapManagerServer;
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;

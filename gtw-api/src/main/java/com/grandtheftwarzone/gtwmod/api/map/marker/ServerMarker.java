@@ -1,6 +1,5 @@
-package com.grandtheftwarzone.gtwmod.core.map.dataobject;
+package com.grandtheftwarzone.gtwmod.api.map.marker;
 
-import com.grandtheftwarzone.gtwmod.api.map.marker.TemplateMarker;
 import lombok.Getter;
 
 import javax.annotation.Nullable;
@@ -20,6 +19,15 @@ public class ServerMarker extends TemplateMarker {
     public ServerMarker(@Nullable String name, @Nullable String lore, String iconId, String worldLocation, @Nullable String data, boolean localMarker, @Nullable String mapImageIds, @Nullable String permissions, @Nullable String actionList, boolean draw) {
         super(name, lore, iconId, worldLocation, data, localMarker, mapImageIds, actionList, draw);
         this.permissions = (permissions != null && !permissions.isEmpty() && !permissions.equals("null"))? Arrays.asList(permissions.split(";")) : null;
+    }
+
+    public void updateData(ServerMarker updateMarkerData) {
+        super.updateData(updateMarkerData);
+        this.permissions = updateMarkerData.getPermissions();
+    }
+
+    public String getPermissionsString() {
+        return (permissions!= null &&!permissions.isEmpty())? String.join(";", permissions) : null;
     }
 
 
