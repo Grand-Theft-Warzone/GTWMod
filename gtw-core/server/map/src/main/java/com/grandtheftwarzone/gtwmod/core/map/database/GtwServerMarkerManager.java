@@ -47,18 +47,17 @@ public class GtwServerMarkerManager implements MarkerManagerServer {
      * @param serverMarker marker object.
      * @return false - the marker did not previously exist. true - the marker previously existed.
      */
-    public boolean createOrUpdateMarker(ServerMarker serverMarker) {
+    public void createOrUpdateMarker(ServerMarker serverMarker) {
         String updateServerMarkerId = serverMarker.getIdentificator();
         ServerMarker oldServerMarker = getMarker(updateServerMarkerId);
         if (oldServerMarker == null) {
             storageManager.createOrUpdateMarker(serverMarker);
             serverMarkerList.add(serverMarker);
-            return false;
+            return;
         }
 
         oldServerMarker.updateData(serverMarker);
         storageManager.createOrUpdateMarker(serverMarker);
-        return true;
     }
 
     public @Nullable ServerMarker getMarker(String identificator) {

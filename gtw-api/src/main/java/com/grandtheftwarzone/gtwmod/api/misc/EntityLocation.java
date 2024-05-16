@@ -20,6 +20,14 @@ public class EntityLocation {
         this.pitch = pitch;
     }
 
+    public EntityLocation() {
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+        this.yaw = 0;
+        this.pitch = 0;
+    }
+
     public EntityLocation(String position) {
         String[] split = position.split(";");
         this.x = Double.parseDouble(split[0]);

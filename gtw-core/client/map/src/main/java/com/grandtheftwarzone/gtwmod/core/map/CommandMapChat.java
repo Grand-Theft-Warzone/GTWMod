@@ -10,6 +10,7 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -55,7 +56,8 @@ public class CommandMapChat {
             String msg = "§b---== §aAll commands: §b==---\n" +
                     "§d• §a/lmm help §f- Show all commands\n\n" +
                     "§d• §a/lmm create <name> <iconId> §7[X Y Z] §f- Create a local marker\n\n" +
-                    "§d• §a/lmm remove §f- Remove local marker";
+                    "§d• §a/lmm remove §f- Remove local marker" +
+                    "§b---=======================---";
 
             mc.player.sendMessage(new TextComponentString(msg));
             return;
@@ -146,7 +148,7 @@ public class CommandMapChat {
 
             TextComponentString clickableMsg = new TextComponentString(msg);
 
-            Style clickableStyle = new Style().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, commands.get(0) +" remove " + marker.getIdentificator()));
+            Style clickableStyle = new Style().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, commands.get(0) +" remove " + marker.getIdentificator())).setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("§cRemove marker")));
             clickableMsg.setStyle(clickableStyle);
             mc.player.sendMessage(clickableMsg);
         }
