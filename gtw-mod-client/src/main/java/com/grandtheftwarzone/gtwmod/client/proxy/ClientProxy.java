@@ -60,10 +60,6 @@ public class ClientProxy implements AtumModService {
 
     public void preInit(FMLPreInitializationEvent event) {
 
-        NetworkRegistry.INSTANCE.registerGuiHandler(
-                GTWModClient.instance,
-                GTWModClient.instance.getFactoryGuiHandler()
-        );
         File minecraftDir = event.getModConfigurationDirectory().getParentFile();
 
         File modDir = new File(minecraftDir, "gtwdata");

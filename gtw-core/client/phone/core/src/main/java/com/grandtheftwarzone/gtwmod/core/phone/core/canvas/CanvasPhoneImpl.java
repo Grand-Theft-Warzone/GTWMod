@@ -161,6 +161,7 @@ public class CanvasPhoneImpl extends CanvasPhone {
 
         GL11.glDisable(GL_SCISSOR_TEST);
 
+
     }
 
     @Override
@@ -273,12 +274,12 @@ public class CanvasPhoneImpl extends CanvasPhone {
 
     @Override
     public int getDisplayX() {
-        return phoneDisplayDefault.getX();
+        return phoneDisplayDefault.getGlobalX();
     }
 
     @Override
     public int getDisplayY() {
-        return phoneDisplayDefault.getY();
+        return phoneDisplayDefault.getGlobalY();
     }
 
     @Override

@@ -13,7 +13,7 @@
         "change_type": "SET_TEMPORARY"
       },
       "actions": {
-        "1": "play_sound@gtwmod:levelup;6;0.7"
+        "1": "play_sound@gtwmod:levelup;6;0.8"
       }
     }
   },

@@ -14,9 +14,8 @@
     "CLOSING": 15,
     "VERTICAL_TO_HORIZONTAL": 25,
     "HORIZONTAL_TO_VERTICAL": 25
-
   },
-  "background": {
+  "phoneModel": {
     "settings": {
       "image": "gtwmod:textures/gui/phone/phone_background.png",
       "color": "#ffffff"
@@ -27,21 +26,178 @@
   },
   "phoneDisplay": {
     "settings": {
-      "image": "gtwmod:textures/gui/phone/phone_display.png",
-      "color": "#ffffff"
+      "image": "blank",
+      "color": "#1a1a1a"
     },
-    "template": "image",
-    "layer": "FOREGROUND",
-    "posX": 40.0,
-    "posY": 125.0,
-    "width": -75.0,
-    "height": -258.0
+    "posX": 28.0,
+    "posY": 24.0,
+    "width": -58.0,
+    "height": -49.0,
+    "locked": {
+      "elements": {
+        "image_main": {
+          "settings": {
+            "image": "gtwmod:textures/gui/phone/phone_display.png"
+          },
+          "template": "image",
+          "layer": "BACKGROUND",
+          "width": "max",
+          "height": "max"
+        },
+        "image_locked": {
+          "settings": {
+            "image": "gtwmod:textures/gui/phone/locked/locked.png"
+          },
+          "template": "image",
+          "layer": "FOREGROUND",
+          "posX": 200,
+          "posY": 16,
+          "width": 7,
+          "height": 11
+        },
+        "image_phoneStaff": {
+          "settings": {
+            "image": "gtwmod:textures/gui/phone/phoneIcons.png"
+          },
+          "template": "image",
+          "layer": "FOREGROUND",
+          "posX": 330,
+          "posY": 15,
+          "width": 70,
+          "height": 12
+        },
+        "image_lockedBubble": {
+          "settings": {
+            "image": "gtwmod:textures/gui/phone/locked/phoneLockedBubble.png"
+          },
+          "template": "image",
+          "layer": "FOREGROUND",
+          "posX": 200,
+          "posY": 800, //-(300*%data_locked_swiping%)
+          "width": 9,
+          "height": 9
+        },
+        "text_time": {
+          "settings": {
+            "fontSize": 130,
+            "text": "%current_time%",
+            "font": "main_menu.otf"
+          },
+          "template": "text",
+          "layer": "FOREGROUND",
+          "posX": 127,
+          "posY": 80,
+          "width": 150,
+          "height": 200
+        },
+        "text_swipeUp": {
+          "settings": {
+            "fontSize": 30,
+            "text": "Swipe up to unlock",
+            "font": "main_menu.otf"
+          },
+          "template": "text",
+          "layer": "FOREGROUND",
+          "posX": 127,
+          "posY": 680, //-(300*%data_locked_swiping%)
+          "width": 800,
+          "height": 200
+        }
+      }
+    },
+    "mainPage": {
+      "elements": {
+        "image_main": {
+          "settings": {
+            "image": "gtwmod:textures/gui/phone/phone_display.png"
+          },
+          "template": "image",
+          "layer": "BACKGROUND",
+          "width": "max",
+          "height": "max"
+        },
+        "image_phoneStaff": {
+          "settings": {
+            "image": "gtwmod:textures/gui/phone/phoneIcons.png"
+          },
+          "template": "image",
+          "layer": "FOREGROUND",
+          "posX": 330,
+          "posY": 15,
+          "width": 70,
+          "height": 12
+        },
+        "text_time": {
+          "settings": {
+            "fontSize": 30,
+            "text": "%current_time%",
+            "font": "main_menu.otf"
+          },
+          "template": "text",
+          "layer": "FOREGROUND",
+          "posX": 30,
+          "posY": 18,
+          "width": 70,
+          "height": 12
+        },
+        "app_settings": {
+          "settings": {
+            "appId": "settings",
+            "size": 65
+          },
+          "template": "phone_app_icon",
+          "layer": "FOREGROUND",
+          "posX": 32,
+          "posY": 725
+        },
+        "app_property": {
+          "settings": {
+            "appId": "property",
+            "size": 65
+          },
+          "template": "phone_app_icon",
+          "layer": "FOREGROUND",
+          "posX": 130,
+          "posY": 725
+        },
+        "app_notifications": {
+          "settings": {
+            "appId": "notifications",
+            "size": 65
+          },
+          "template": "phone_app_icon",
+          "layer": "FOREGROUND",
+          "posX": 220,
+          "posY": 725
+        }
+
+
+      }
+    }
 
   },
 
   "apps": {
     "settings":{
       "elements": {
+        "button_discord": {
+          "settings": {
+            "brightness-onClick": "20;20;20",
+            "image": "gtwmod:textures/main_menu/discord_button.png",
+            "brightness": "1;1;1",
+            "brightness-onHover": "0.85;0.85;0.85",
+            "actions-onRelease": {
+              "1": "send_display_event@2"
+            }
+          },
+          "fixRatio": true,
+          "template": "button",
+          "layer": "FOREGROUND",
+          "posX": 100,
+          "posY": 353,
+          "width": 122,
+          "height": 118
+        },
         "text_animate": {
           "settings": {
             "fontSize": 40,

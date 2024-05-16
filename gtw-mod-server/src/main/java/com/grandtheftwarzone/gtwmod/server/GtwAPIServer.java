@@ -34,11 +34,6 @@ public class GtwAPIServer implements GtwAPI {
     }
 
     @Override
-    public @NotNull FactoryGuiHandler getFactoryGuiHandler() {
-        throw new RuntimeException("Client side only!");
-    }
-
-    @Override
     public @NotNull PhoneManager getPhoneManager() {
         throw new RuntimeException("Client side only!");
     }

@@ -1,7 +1,6 @@
 package com.grandtheftwarzone.gtwmod.client;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
-import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneManager;
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
@@ -31,10 +30,6 @@ public class GtwAPIClient implements GtwAPI {
         return GTWModClient.instance.getScreensManager();
     }
 
-    @Override
-    public @NotNull FactoryGuiHandler getFactoryGuiHandler() {
-        return GTWModClient.instance.getFactoryGuiHandler();
-    }
 
     @Override
     public @NotNull PhoneManager getPhoneManager() {
