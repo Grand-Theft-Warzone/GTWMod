@@ -4,6 +4,7 @@ import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.map.manager.server.MapManagerServer;
 import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumersServer;
+import com.grandtheftwarzone.gtwmod.api.map.marker.ServerMarker;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import com.grandtheftwarzone.gtwmod.core.map.database.GtwServerMarkerManager;
 import com.grandtheftwarzone.gtwmod.core.map.database.StorageManager;
@@ -17,17 +18,19 @@ import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
 import me.phoenixra.atumodcore.api.service.AtumModService;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.server.permission.PermissionAPI;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
+import static jdk.nashorn.internal.runtime.regexp.joni.constants.TokenType.INTERVAL;
 
 public class GtwServerMapManager implements AtumModService, MapManagerServer {
 
@@ -161,6 +164,25 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
 //    }
 
     // -------------------
+
+    @SubscribeEvent
+    public void onServerTick(TickEvent.ServerTickEvent event) {
+        List<EntityPlayerMP> players = GtwAPI.getInstance().getServer().getPlayerList().getPlayers();
+
+        for (EntityPlayerMP playerMP : players) {
+            List<ServerMarker> markers = new ArrayList<>();
+            List<ServerMarker> serverMarkers = this.markerManager.getMarkerFilterUUID(playerMP.getUniqueID());
+            List<ServerMarker> playerMarkers = this.markerManager.getAllPlayerMarker();
+            if (serverMarkers != null) {
+                markers.addAll(serverMarkers);
+            }
+            if (playerMarkers != null) {
+                markers.addAll(playerMarkers);
+            }
+            // Отправляем markers
+        }
+
+    }
 
     private boolean checkAllowDisplay(UUID uuid) {
         return db.getPlayerData(uuid).isAllowMapDisplay() && enableMap;

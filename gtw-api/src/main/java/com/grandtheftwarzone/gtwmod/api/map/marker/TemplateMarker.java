@@ -2,6 +2,7 @@ package com.grandtheftwarzone.gtwmod.api.map.marker;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import lombok.Data;
+import lombok.Setter;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.config.ConfigType;
 
@@ -20,7 +21,9 @@ public class TemplateMarker {
     @Nullable Config data;
     boolean localMarker;
     @Nullable List<String> mapImageIds;
+    @Setter
     @Nullable List<String> actionList;
+    @Setter
     boolean draw;
 
     public TemplateMarker(String identificator, @Nullable String name, @Nullable String lore, String iconId, String worldLocation, @Nullable Config data, boolean localMarker, @Nullable List<String> mapImadeIds, @Nullable List<String> actionList, boolean draw) {
@@ -86,6 +89,22 @@ public class TemplateMarker {
 
     public int isDrawInt() {
         return draw? 1 : 0;
+    }
+
+    public void setMapImageIds(String var) {
+        this.mapImageIds = (var != null && !var.isEmpty() && !var.equals("null")) ? Arrays.asList(var.split(";")) : null;
+    }
+
+    public void setMapImageIds(List<String> var) {
+        this.mapImageIds = var;
+    }
+
+    public void setActionList(String var) {
+        this.actionList = (var != null && !var.isEmpty() && !var.equals("null")) ? Arrays.asList(var.split("ъ")) : null;
+    }
+
+    public void setData(String data) {
+        this.data = (data != null && !data.equals("null")) ? GtwAPI.getInstance().getGtwMod().getConfigManager().createConfigFromString(data, ConfigType.YAML) : null;
     }
 
 

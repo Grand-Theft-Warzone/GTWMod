@@ -1,12 +1,11 @@
 package com.grandtheftwarzone.gtwmod.core.map;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
-import com.grandtheftwarzone.gtwmod.api.map.marker.MapMarker;
 import com.grandtheftwarzone.gtwmod.api.map.marker.ServerMarker;
-import com.grandtheftwarzone.gtwmod.api.map.marker.TemplateMarker;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.mojang.authlib.GameProfile;
 import me.phoenixra.atumconfig.api.config.Config;
+import me.phoenixra.atumconfig.api.utils.StringUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -19,7 +18,10 @@ import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.server.permission.PermissionAPI;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 
 public class GtwCommandManager extends CommandBase {
@@ -30,12 +32,12 @@ public class GtwCommandManager extends CommandBase {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/mapmanager <reload|create|remove|help>";
+        return "/mapmanager <reload|list>";
     }
 
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        if (!(sender instanceof MinecraftServer) && server.getPlayerList().getPlayerByUsername(sender.getName()) != null && !PermissionAPI.hasPermission(Objects.requireNonNull(server.getPlayerList().getPlayerByUsername(sender.getName())), "gtwmod.map.command.*")) {
+        if (!(sender instanceof MinecraftServer) && server.getPlayerList().getPlayerByUsername(sender.getName()) != null && !PermissionAPI.hasPermission(Objects.requireNonNull(server.getPlayerList().getPlayerByUsername(sender.getName())), "gtwmod.map.command.admin")) {
             return false;
         }
         return true;
@@ -116,7 +118,7 @@ public class GtwCommandManager extends CommandBase {
 
             for (int i = startIndex; i < endIndex; i++) {
                 ServerMarker marker = markers.get(i);
-                TextComponentString markerMsg = new TextComponentString("\n§7" + (i+1) + ". ");
+                TextComponentString markerMsg = new TextComponentString(StringUtils.formatMinecraftColors("\n§7" + (i+1) + ". "));
 
                 EntityLocation posMarker = new EntityLocation(marker.getWorldLocation());
                 TextComponentString margerName = getClicableMsg("§f" +(marker.getName() != null ? marker.getName() : "-") + " ", ClickEvent.Action.RUN_COMMAND, "/tp " + ((EntityPlayerMP)sender).getName() + " " + posMarker.getX() + " " + posMarker.getZ() + " " + posMarker.getY(), "§8" + (int)posMarker.getX() + " " + (int)posMarker.getZ() + " " + (int)posMarker.getY());
@@ -189,7 +191,7 @@ public class GtwCommandManager extends CommandBase {
                 sender.sendMessage(msg);
             } else {
 
-                TextComponentString msg = new TextComponentString("§b---========§a<< " + marker.getName() + " §a>>§b========---\n");
+                TextComponentString msg = new TextComponentString(StringUtils.formatMinecraftColors("§b---========§a<< " + marker.getName() + " §a>>§b========---\n"));
 
                 TextComponentString msgId = getClicableMsg("\n§7• §fID: §8" + marker.getIdentificator(), ClickEvent.Action.SUGGEST_COMMAND, marker.getIdentificator(), "§8Copy ID");
                 msg.appendSibling(msgId);
@@ -202,7 +204,7 @@ public class GtwCommandManager extends CommandBase {
                 TextComponentString msgLore = getClicableMsg("\n§b• §aLore: §f" + marker.getLore(), ClickEvent.Action.SUGGEST_COMMAND, cmdPrefix + "lore " + marker.getLore(), "§8Change description");
                 msg.appendSibling(msgLore);
 
-                TextComponentString msgIconId = getClicableMsg("\n§d• §aIcon Id: §f" + marker.getIconId(), ClickEvent.Action.SUGGEST_COMMAND, cmdPrefix + "iconid " + marker.getIconId(), "§8Change icon id");
+                TextComponentString msgIconId = getClicableMsg("\n§b• §aIcon Id: §f" + marker.getIconId(), ClickEvent.Action.SUGGEST_COMMAND, cmdPrefix + "iconid " + marker.getIconId(), "§8Change icon id");
                 msg.appendSibling(msgIconId);
 
                 EntityLocation worldLocation = new EntityLocation(marker.getWorldLocation());
@@ -221,15 +223,17 @@ public class GtwCommandManager extends CommandBase {
                 msg.appendSibling(msgPermissions);
 
                 TextComponentString msgAction = getClicableMsg("\n§d• §aAction: §f" + marker.getActionList(), ClickEvent.Action.SUGGEST_COMMAND, cmdPrefix + "actions " + marker.getActionListString(), "§8Change actions");
+                TextComponentString msgActionInfo = getClicableMsg(" §b[i]", ClickEvent.Action.SUGGEST_COMMAND, "ъ", "§fSymbol for separating elements - §e\"ъ\"\n\n§e! Click on me to copy the symbol\"ъ\"");
+                msgAction.appendSibling(msgActionInfo);
                 msg.appendSibling(msgAction);
 
                 TextComponentString msgDraw = getClicableMsg("\n\n§f• §aDraw: §f" + marker.isDraw(), ClickEvent.Action.SUGGEST_COMMAND, cmdPrefix + "draw " + marker.isDraw(), "§8Change draw");
                 msg.appendSibling(msgDraw);
 
-                TextComponentString msgDelete = getClicableMsg("\n\n§e✘ §cDelete? §f§a[Yes]", ClickEvent.Action.SUGGEST_COMMAND,  "/" + getName() + " remove " + marker.getIdentificator(), "§eDelete marker");
+                TextComponentString msgDelete = getClicableMsg("\n\n§c[DELITE]", ClickEvent.Action.SUGGEST_COMMAND,  "/" + getName() + " remove " + marker.getIdentificator(), "§eClick here to remove marker");
                 msg.appendSibling(msgDelete);
 
-                TextComponentString msgEnd = new TextComponentString("\n\n        §7(Click to edit) \n§b---==========================---");
+                TextComponentString msgEnd = new TextComponentString("\n\n     §7(Click on parametr to edit) \n§b---==========================---");
                 msg.appendSibling(msgEnd);
 
                 sender.sendMessage(msg);
@@ -291,7 +295,67 @@ public class GtwCommandManager extends CommandBase {
             return;
         }
 
+        if (args[0].equalsIgnoreCase("edit")) {
+            if (args.length == 1) {
+                String msgStr = "§e[GTWMap] §fSyntax: §a/" + getName() + " edit <id> name/lore/iconid/worldlocation/data/mapimageid/permissions/actions/draw <newVar> §7[Show markers]";
+                TextComponentString msg = getClicableMsg(msgStr, ClickEvent.Action.RUN_COMMAND, "/" + getName() + " list", "§8Show markers");
+                sender.sendMessage(msg);
+                return;
+            }
+            if (args.length <= 3) {
+                String msgStr = "§e[GTWMap] §fThere is no required command argument. §7[Show markers]";
+                TextComponentString msg = getClicableMsg(msgStr, ClickEvent.Action.RUN_COMMAND, "/" + getName() + " list", "§8Show markers");
+                sender.sendMessage(msg);
+                return;
+            }
 
+            String identificator = args[1];
+            ServerMarker marker = GtwAPI.getInstance().getMapManagerServer().getMarkerManager().getMarker(identificator);
+            if (marker == null) {
+                String msgStr = "§e[GTWMap] §cToken with id §f" + identificator + "§c was not found! §7[Show markers]";
+                TextComponentString msg = getClicableMsg(msgStr, ClickEvent.Action.RUN_COMMAND, "/" + getName() + " list", "§8Show markers");
+                sender.sendMessage(msg);
+            } else {
+
+                String action = args[2];
+                String newVar = String.join(" ", Arrays.copyOfRange(args, 3, args.length));
+                if (action.equalsIgnoreCase("name")) {
+                    marker.setName(newVar);
+                } else if (action.equalsIgnoreCase("lore")) {
+                    marker.setLore(newVar);
+                } else if (action.equalsIgnoreCase("iconid")) {
+                    marker.setIconId(newVar);
+                } else if (action.equalsIgnoreCase("worldlocation")) {
+                    marker.setWorldLocation(newVar);
+                } else if (action.equalsIgnoreCase("data")) {
+                    marker.setData(newVar);
+                } else if (action.equalsIgnoreCase("mapimageid")) {
+                    if (args.length > 4) {
+                        marker.setMapImageIds(Arrays.asList(Arrays.copyOfRange(args, 3, args.length)));
+                    } else {
+                        marker.setMapImageIds(newVar);
+                    }
+                } else if (action.equalsIgnoreCase("permissions")) {
+                    if (args.length > 4) {
+                        marker.setPermissions(Arrays.asList(Arrays.copyOfRange(args, 3, args.length)));
+                    } else {
+                        marker.setPermissions(newVar);
+                    }
+                } else if (action.equalsIgnoreCase("actions")) {
+                    marker.setActionList(newVar);
+                } else if (action.equalsIgnoreCase("draw")) {
+                    marker.setDraw(Boolean.parseBoolean(newVar));
+                }
+                GtwAPI.getInstance().getMapManagerServer().getMarkerManager().createOrUpdateMarker(marker);
+
+                server.getCommandManager().executeCommand(sender, getName() + " info " + identificator);
+
+                TextComponentString msg = getClicableMsg("§e[GTWMap] §aParameter " + action + " changed! §7[Edit]", ClickEvent.Action.SUGGEST_COMMAND, "/" + getName() + " edit " + action + " " + newVar, "§7Change this parameter again");
+                sender.sendMessage(msg);
+                return;
+            }
+
+            }
 
 
         sender.sendMessage(new TextComponentString("Unknown command. Usage: " + getUsage(sender)));
@@ -305,7 +369,7 @@ public class GtwCommandManager extends CommandBase {
     }
 
     public TextComponentString getClicableMsg(String textMsg, ClickEvent.Action eventClick, String argClick, String argHover) {
-        return this.getClicableMsg(textMsg, eventClick, argClick, HoverEvent.Action.SHOW_TEXT, argHover);
+        return this.getClicableMsg(StringUtils.formatMinecraftColors(textMsg), eventClick, argClick, HoverEvent.Action.SHOW_TEXT, StringUtils.formatMinecraftColors(argHover));
     }
 
 }
