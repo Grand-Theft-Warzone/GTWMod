@@ -43,7 +43,6 @@ public class GtwNetworkAPI implements NetworkAPI, AtumModService {
     @Override
     public void handleFmlEvent(@NotNull FMLEvent fmlEvent) {
         if(fmlEvent instanceof FMLInitializationEvent){
-            System.out.println("PRIVET MIR");
 
             atumNetwork.registerMessage(PacketHandlerPlayerData.class, PacketPlayerData.class, Side.CLIENT);
             atumNetwork.registerMessage(PacketHandlerNotification.class, PacketNotification.class, Side.CLIENT);
@@ -59,6 +58,7 @@ public class GtwNetworkAPI implements NetworkAPI, AtumModService {
              atumNetwork.registerMessage(PacketMapClientHandlerStartData.class, PacketMapStartData.class, Side.CLIENT);
 
 
+
              atumNetwork.registerMessage(PacketTestHandlerClinet.class, PacketTest.class, Side.CLIENT);
              atumNetwork.registerMessage(PacketTestHandlerServer.class, PacketTest.class, Side.SERVER);
 
@@ -66,7 +66,6 @@ public class GtwNetworkAPI implements NetworkAPI, AtumModService {
              // EVENT
             atumNetwork.registerMessage(PacketHandlerEventConnect.class, PacketEventConnect.class, Side.CLIENT);
 
-            System.out.println("POKA MIR");
 
         }
     }

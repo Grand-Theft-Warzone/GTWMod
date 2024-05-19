@@ -83,6 +83,14 @@ public class TemplateMarker {
         return (mapImageIds!= null &&!mapImageIds.isEmpty())? String.join(";", mapImageIds) : null;
     }
 
+    public static @Nullable List<String> getMapImageIdsFromString(String var) {
+        return (var != null && !var.isEmpty() && !var.equals("null")) ? Arrays.asList(var.split(";")) : null;
+    }
+
+    public static @Nullable List<String> getActionListFromString(String var) {
+        return (var != null && !var.isEmpty() && !var.equals("null")) ? Arrays.asList(var.split("ъ")) : null;
+    }
+
     public @Nullable String getActionListString() {
         return (actionList!= null &&!actionList.isEmpty())? String.join("ъ", actionList) : null;
     }

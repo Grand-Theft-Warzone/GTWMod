@@ -5,6 +5,7 @@ import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.map.manager.server.MapManagerServer;
 import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumersServer;
 import com.grandtheftwarzone.gtwmod.api.map.marker.ServerMarker;
+import com.grandtheftwarzone.gtwmod.api.map.marker.TemplateMarker;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import com.grandtheftwarzone.gtwmod.core.map.database.GtwServerMarkerManager;
 import com.grandtheftwarzone.gtwmod.core.map.database.StorageManager;

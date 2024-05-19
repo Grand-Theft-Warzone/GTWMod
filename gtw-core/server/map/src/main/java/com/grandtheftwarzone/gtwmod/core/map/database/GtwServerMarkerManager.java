@@ -110,6 +110,7 @@ public class GtwServerMarkerManager implements MarkerManagerServer {
         return markers;
     }
 
+
     public List<ServerMarker> getAllPlayerMarker() {
 
         List<ServerMarker> markers = new ArrayList<>();
