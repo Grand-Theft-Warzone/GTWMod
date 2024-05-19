@@ -63,6 +63,7 @@ public class CommandMapChat {
             return;
         }
 
+
         // REMOVE MARKER
 
         if (args.size() == 3 && args.get(1).equalsIgnoreCase("remove")) {

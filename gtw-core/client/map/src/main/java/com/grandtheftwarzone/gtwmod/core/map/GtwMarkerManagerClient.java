@@ -7,6 +7,7 @@ import com.grandtheftwarzone.gtwmod.api.map.marker.BaseStaticMarker;
 import com.grandtheftwarzone.gtwmod.api.map.marker.MapMarker;
 import com.grandtheftwarzone.gtwmod.api.map.marker.TemplateMarker;
 import lombok.Getter;
+import lombok.Setter;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.config.ConfigType;
 import me.phoenixra.atumconfig.api.config.LoadableConfig;
@@ -22,7 +23,7 @@ public class GtwMarkerManagerClient implements MarkerManagerClient {
     @Getter
     private List<MapMarker> localMarkerList = new ArrayList<>();
 
-    @Getter
+    @Getter @Setter
     private List<MapMarker> serverMarkerList = new ArrayList<>();
 
     @Getter

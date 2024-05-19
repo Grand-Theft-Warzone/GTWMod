@@ -1,6 +1,7 @@
 package com.grandtheftwarzone.gtwmod.api.map.manager.client;
 
 import com.grandtheftwarzone.gtwmod.api.map.marker.MapMarker;
+import com.grandtheftwarzone.gtwmod.api.map.marker.TemplateMarker;
 
 import java.util.List;
 
@@ -16,5 +17,6 @@ public interface MarkerManagerClient {
     void addLocalMarker(MapMarker marker);
 
     void addLocalMarker(MapMarker marker, boolean save);
+
 
 }

@@ -3,6 +3,7 @@ package com.grandtheftwarzone.gtwmod.core.network;
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.gui.GuiAction;
 import com.grandtheftwarzone.gtwmod.api.map.data.CStartData;
+import com.grandtheftwarzone.gtwmod.api.map.marker.TemplateMarker;
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 import com.grandtheftwarzone.gtwmod.api.player.NotificationRequest;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
@@ -13,8 +14,10 @@ import com.grandtheftwarzone.gtwmod.core.network.impl.gui.PacketFactoryGUI;
 import com.grandtheftwarzone.gtwmod.core.network.impl.gui.PacketGUIAction;
 import com.grandtheftwarzone.gtwmod.core.network.impl.gui.PacketHandlerFactoryGUI;
 import com.grandtheftwarzone.gtwmod.core.network.impl.gui.PacketHandlerGUIAction;
+import com.grandtheftwarzone.gtwmod.core.network.impl.map.client.PacketMapClientHandlerMarkers;
 import com.grandtheftwarzone.gtwmod.core.network.impl.map.client.PacketMapClientHandlerRequest;
 import com.grandtheftwarzone.gtwmod.core.network.impl.map.client.PacketMapClientHandlerStartData;
+import com.grandtheftwarzone.gtwmod.core.network.impl.map.packet.PacketMapMarkers;
 import com.grandtheftwarzone.gtwmod.core.network.impl.map.packet.PacketMapRequest;
 import com.grandtheftwarzone.gtwmod.core.network.impl.map.packet.PacketMapStartData;
 import com.grandtheftwarzone.gtwmod.core.network.impl.map.server.PacketMapServerHandlerRequest;
@@ -30,6 +33,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -57,7 +61,7 @@ public class GtwNetworkAPI implements NetworkAPI, AtumModService {
 
              atumNetwork.registerMessage(PacketMapClientHandlerStartData.class, PacketMapStartData.class, Side.CLIENT);
 
-
+             atumNetwork.registerMessage(PacketMapClientHandlerMarkers.class, PacketMapMarkers.class, Side.CLIENT);
 
              atumNetwork.registerMessage(PacketTestHandlerClinet.class, PacketTest.class, Side.CLIENT);
              atumNetwork.registerMessage(PacketTestHandlerServer.class, PacketTest.class, Side.SERVER);
@@ -77,10 +81,14 @@ public class GtwNetworkAPI implements NetworkAPI, AtumModService {
         atumNetwork.sendTo(new PacketEventConnect(), player);
     }
 
-    //
+    // MAP
 
     public void sendMapStartData(CStartData cStartData, EntityPlayerMP player) {
         atumNetwork.sendTo(new PacketMapStartData(cStartData), player);
+    }
+
+    public void sendMapMarkers(List<TemplateMarker> cMarkers, EntityPlayerMP player) {
+        atumNetwork.sendTo(new PacketMapMarkers(cMarkers), player);
     }
 
     public void sendTest(String str, EntityPlayerMP player) {
@@ -97,6 +105,7 @@ public class GtwNetworkAPI implements NetworkAPI, AtumModService {
         ));
     }
 
+    // --------
 
 
     public void sendPlayerData(@NotNull PlayerData pd, @NotNull UUID playerUUID){

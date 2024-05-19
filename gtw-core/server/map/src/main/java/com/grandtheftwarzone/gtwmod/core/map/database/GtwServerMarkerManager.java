@@ -149,7 +149,10 @@ public class GtwServerMarkerManager implements MarkerManagerServer {
 
             Config config = GtwAPI.getInstance().getGtwMod().getConfigManager().createConfig(hashMap, ConfigType.YAML);
             EntityLocation location = new EntityLocation(playerMP.posX, playerMP.posZ, playerMP.posY, playerMP.rotationYaw, playerMP.rotationPitch);
-            ServerMarker marker = new ServerMarker(id, playerMP.getName(), null, "@player_head=" + playerMP.getName(), location.toString(), config.toPlaintext(), null, null, true);
+//            ServerMarker marker = new ServerMarker(id, playerMP.getName(), null, "@player_head=" + playerMP.getName(), location.toString(), config.toPlaintext(), null, null, true);
+
+            ServerMarker marker = new ServerMarker(id, playerMP.getName(), null, "@player_head=" + playerMP.getName(), location.toString(), config.toPlaintext(), null, null, null, true);
+
             markers.add(marker);
         }
 

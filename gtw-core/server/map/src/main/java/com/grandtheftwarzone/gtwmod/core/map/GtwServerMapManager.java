@@ -169,18 +169,19 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
     @SubscribeEvent
     public void onServerTick(TickEvent.ServerTickEvent event) {
         List<EntityPlayerMP> players = GtwAPI.getInstance().getServer().getPlayerList().getPlayers();
+        List<ServerMarker> playerMarkers = this.markerManager.getAllPlayerMarker();
 
         for (EntityPlayerMP playerMP : players) {
-            List<ServerMarker> markers = new ArrayList<>();
+            List<TemplateMarker> markers = new ArrayList<>();
             List<ServerMarker> serverMarkers = this.markerManager.getMarkerFilterUUID(playerMP.getUniqueID());
-            List<ServerMarker> playerMarkers = this.markerManager.getAllPlayerMarker();
             if (serverMarkers != null) {
                 markers.addAll(serverMarkers);
             }
             if (playerMarkers != null) {
                 markers.addAll(playerMarkers);
             }
-            // Отправляем markers
+            System.out.print("ASA");
+            GtwAPI.getInstance().getNetworkAPI().sendMapMarkers(markers, playerMP);
         }
 
     }

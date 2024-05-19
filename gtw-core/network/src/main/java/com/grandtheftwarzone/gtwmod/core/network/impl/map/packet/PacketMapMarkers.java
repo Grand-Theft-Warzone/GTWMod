@@ -11,6 +11,7 @@ import me.phoenixra.atumconfig.api.config.ConfigType;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,7 +20,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class PacketMapMarkers implements IMessage {
 
-    private List<TemplateMarker> markers;
+    private List<TemplateMarker> markers = new ArrayList<>();
 
     @Override
     public void fromBytes(ByteBuf buf) {
@@ -100,19 +101,19 @@ public class PacketMapMarkers implements IMessage {
             boolean draw = buf.readBoolean();
 
             TemplateMarker marker = new TemplateMarker(id, name, lore, iconId, worldLocation, data, localMarker, mapImageIds, actionList, draw);
-            System.out.print("=================================" +
-                    "\nДанные маркера " + marker.getName() + ": " +
-                    "\n\nID: " + marker.getIdentificator() +
+            System.out.print("\n=================================" +
+//                    "\nДанные маркера " + marker.getName() + ": " +
+//                    "\n\nID: " + marker.getIdentificator() +
                     "\nName: " + marker.getName() +
-                    "\nLore: " + marker.getLore() +
-                    "\nIcon ID: " + iconId +
-                    "\nWL: " + marker.getWorldLocation() +
+//                    "\nLore: " + marker.getLore() +
+//                    "\nIcon ID: " + iconId +
+//                    "\nWL: " + marker.getWorldLocation() +
                     "\nData: " + marker.getData() +
-                    "\nLocal: " + marker.isLocalMarker() +
-                    "\nMap Images: " + marker.getMapImageIds() +
-                    "\nActions: " + marker.getActionList() +
-                    "\nDraw: " + marker.isDraw() +
-                    "=================================") ;
+//                    "\nLocal: " + marker.isLocalMarker() +
+//                    "\nMap Images: " + marker.getMapImageIds() +
+//                    "\nActions: " + marker.getActionList() +
+//                    "\nDraw: " + marker.isDraw() +
+                    "\n=================================") ;
             markers.add(marker);
         }
     }
