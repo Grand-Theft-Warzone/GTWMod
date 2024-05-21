@@ -6,10 +6,12 @@ import com.grandtheftwarzone.gtwmod.api.map.data.server.PlayerMapData;
 import com.grandtheftwarzone.gtwmod.api.map.data.RestrictionsData;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.UUID;
 
 public interface MapManagerServer {
 
+    @Nullable MapData getMapData(String mapId);
     MapConsumersServer getMapConsumers();
 
     MarkerManagerServer getMarkerManager();

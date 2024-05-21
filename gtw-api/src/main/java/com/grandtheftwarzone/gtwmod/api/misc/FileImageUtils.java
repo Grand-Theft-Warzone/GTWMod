@@ -1,11 +1,18 @@
 package com.grandtheftwarzone.gtwmod.api.misc;
 
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import com.mojang.authlib.minecraft.MinecraftSessionService;
 import lombok.Getter;
 import me.phoenixra.atumodcore.api.display.misc.resources.BufferTextureResource;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.SkinManager;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
@@ -14,6 +21,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 
 public class FileImageUtils {
@@ -199,5 +207,43 @@ public class FileImageUtils {
 
         return hexString.toString();
     }
+
+//    public static ResourceLocation getPlayerHead(String username) {
+//        MinecraftSessionService sessionService = Minecraft.getMinecraft().getSessionService();
+//        GameProfile profile = new GameProfile(null, username);
+//        sessionService.fillProfileProperties(profile, true);
+//
+//        SkinManager skinManager = Minecraft.getMinecraft().getSkinManager();
+//        Map<Type, MinecraftProfileTexture> map = skinManager.loadSkinFromCache(profile);
+//
+//        if (map.containsKey(Type.SKIN)) {
+//            MinecraftProfileTexture profileTexture = map.get(Type.SKIN);
+//            return skinManager.loadSkin(profileTexture, Type.SKIN);
+//        }
+//
+//        GtwLog.getLogger().error("[getPlayerHead] Failed to get head " + username);
+//        return DefaultPlayerSkin.getDefaultSkinLegacy();
+//
+//    }
+
+
+
+    public static ResourceLocation getPlayerHead(String username) {
+        Minecraft minecraft = Minecraft.getMinecraft();
+        if (minecraft.getConnection() != null && minecraft.getConnection().getPlayerInfo(username) != null) {
+            NetworkPlayerInfo playerInfo = minecraft.getConnection().getPlayerInfo(username);
+            if (playerInfo != null) {
+                ResourceLocation skinLocation = playerInfo.getLocationSkin();
+                if (skinLocation != null) {
+                    return skinLocation;
+                }
+            }
+        }
+        // Возвращаем пустой ResourceLocation, если не удалось найти скин
+        return new ResourceLocation("minecraft", "textures/entity/steve.png");
+    }
+
+
+
 
 }

@@ -96,6 +96,7 @@ public class ElementMinimap extends BaseElement {
 
 
             for (MapMarker marker : markerList) {
+                System.out.print(marker.toString());
                 MapLocation location = marker.getMapLocation("minimap");
                 ResourceLocation iconImage = marker.getIcon();
 

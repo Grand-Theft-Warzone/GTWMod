@@ -82,11 +82,9 @@ public class GtwServerMarkerManager implements MarkerManagerServer {
 
     }
 
-    public @Nullable List<ServerMarker> getMarkerFilterUUID(UUID uuid) {
+
+    public @Nullable List<ServerMarker> getMarkerFilterPlayer(EntityPlayer player) {
         List<ServerMarker> markers = new ArrayList<>();
-
-        EntityPlayer player = GtwAPI.getInstance().getServer().getEntityWorld().getPlayerEntityByUUID(uuid);
-
 
         if (player == null) {
             return null;
@@ -108,7 +106,14 @@ public class GtwServerMarkerManager implements MarkerManagerServer {
         }
 
         return markers;
+
     }
+
+    public @Nullable List<ServerMarker> getMarkerFilterUUID(UUID uuid) {
+        EntityPlayer player = GtwAPI.getInstance().getServer().getEntityWorld().getPlayerEntityByUUID(uuid);
+        return getMarkerFilterPlayer(player);
+    }
+
 
 
     public List<ServerMarker> getAllPlayerMarker() {
@@ -148,7 +153,7 @@ public class GtwServerMarkerManager implements MarkerManagerServer {
             }});
 
             Config config = GtwAPI.getInstance().getGtwMod().getConfigManager().createConfig(hashMap, ConfigType.YAML);
-            EntityLocation location = new EntityLocation(playerMP.posX, playerMP.posZ, playerMP.posY, playerMP.rotationYaw, playerMP.rotationPitch);
+            EntityLocation location = new EntityLocation(playerMP.posX, playerMP.posY, playerMP.posZ, playerMP.cameraYaw, playerMP.cameraPitch);
 //            ServerMarker marker = new ServerMarker(id, playerMP.getName(), null, "@player_head=" + playerMP.getName(), location.toString(), config.toPlaintext(), null, null, true);
 
             ServerMarker marker = new ServerMarker(id, playerMP.getName(), null, "@player_head=" + playerMP.getName(), location.toString(), config.toPlaintext(), null, null, null, true);

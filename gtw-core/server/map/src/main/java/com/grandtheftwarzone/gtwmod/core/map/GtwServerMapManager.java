@@ -173,14 +173,13 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
 
         for (EntityPlayerMP playerMP : players) {
             List<TemplateMarker> markers = new ArrayList<>();
-            List<ServerMarker> serverMarkers = this.markerManager.getMarkerFilterUUID(playerMP.getUniqueID());
+            List<ServerMarker> serverMarkers = this.markerManager.getMarkerFilterPlayer(playerMP);
             if (serverMarkers != null) {
                 markers.addAll(serverMarkers);
             }
             if (playerMarkers != null) {
                 markers.addAll(playerMarkers);
             }
-            System.out.print("ASA");
             GtwAPI.getInstance().getNetworkAPI().sendMapMarkers(markers, playerMP);
         }
 
@@ -237,6 +236,10 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
 
     public PlayerMapData getPlayerData(UUID uuid) {
         return db.getPlayerData(uuid);
+    }
+
+    public @Nullable MapData getMapData(String mapId) {
+        return this.maps.getOrDefault(mapId, null);
     }
 
     public RestrictionsData getRestrictionsData(UUID uuid) {

@@ -12,7 +12,7 @@ import java.util.List;
 public class PacketMapClientHandlerMarkers implements IMessageHandler<PacketMapMarkers, IMessage> {
     @Override
     public IMessage onMessage(PacketMapMarkers message, MessageContext ctx) {
-        System.out.println("Вызывается onMessage " + getClass().getSimpleName());
+//        System.out.println("Вызывается onMessage " + getClass().getSimpleName());
         List<TemplateMarker> markers = message.getMarkers();
         if (markers == null) {
             System.out.print("AQA");

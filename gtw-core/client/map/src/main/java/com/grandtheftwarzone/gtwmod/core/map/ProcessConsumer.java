@@ -61,13 +61,9 @@ public class ProcessConsumer {
                 }
         );
 
-        System.out.print("HHHHH");
         GtwAPI.getInstance().getMapManagerClient().getMapConsumers().setCMarkersList(
                 (it) -> {
-                    System.out.println("МЫ ПОЛУЧИЛИ ДАННЫЕ ОТ СЕРВЕРА {Markerms}! ...");
-
                     GtwAPI.getInstance().getMapManagerClient().getMarkerManager().updateServerMarkers(it);
-
                 }
 
         );

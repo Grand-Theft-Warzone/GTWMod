@@ -24,7 +24,7 @@ public class PacketMapMarkers implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        System.out.print("Вызывается fromBytes " + getClass().getSimpleName());
+//        System.out.print("Вызывается fromBytes " + getClass().getSimpleName());
         byte[] bytes;
         boolean notNull;
 
@@ -101,26 +101,26 @@ public class PacketMapMarkers implements IMessage {
             boolean draw = buf.readBoolean();
 
             TemplateMarker marker = new TemplateMarker(id, name, lore, iconId, worldLocation, data, localMarker, mapImageIds, actionList, draw);
-            System.out.print("\n=================================" +
+//            System.out.print("\n=================================" +
 //                    "\nДанные маркера " + marker.getName() + ": " +
 //                    "\n\nID: " + marker.getIdentificator() +
-                    "\nName: " + marker.getName() +
+//                    "\nName: " + marker.getName() +
 //                    "\nLore: " + marker.getLore() +
 //                    "\nIcon ID: " + iconId +
 //                    "\nWL: " + marker.getWorldLocation() +
-                    "\nData: " + marker.getData() +
+//                    "\nData: " + marker.getData() +
 //                    "\nLocal: " + marker.isLocalMarker() +
 //                    "\nMap Images: " + marker.getMapImageIds() +
 //                    "\nActions: " + marker.getActionList() +
 //                    "\nDraw: " + marker.isDraw() +
-                    "\n=================================") ;
+//                    "\n=================================") ;
             markers.add(marker);
         }
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        System.out.println("Вызывается toBytes " + getClass().getSimpleName());
+//        System.out.println("Вызывается toBytes " + getClass().getSimpleName());
         byte[] bytes;
 
         buf.writeInt(markers.size());

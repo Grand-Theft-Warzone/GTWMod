@@ -10,7 +10,6 @@ import lombok.Setter;
 import me.phoenixra.atumconfig.api.ConfigOwner;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.config.ConfigType;
-import me.phoenixra.atumconfig.api.config.serialization.ConfigSerializer;
 import me.phoenixra.atumconfig.core.config.AtumConfigSection;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -98,7 +97,7 @@ public class BaseStaticMarker implements MapMarker {
 
         MapImage mapImage = getMapImage(typeMap);
 
-        if (!this.mapImageIds.isEmpty() && !this.mapImageIds.contains(mapImage.getImageId())) {
+        if (this.mapImageIds != null && !this.mapImageIds.isEmpty() && !this.mapImageIds.contains(mapImage.getImageId())) {
             GtwLog.getLogger().error("[getMapLocation] Error! Displaying marker " + getIdentificator() + " is not allowed on canvas " + mapImage.getImageId());
             return new MapLocation(-999999999,-999999999,-404);
         }
@@ -164,5 +163,22 @@ public class BaseStaticMarker implements MapMarker {
         config.set(this.getIdentificator(), subsec);
 
         return config;
+    }
+
+    @Override
+    public String toString() {
+        return "\n========================" +
+                "\nClass: " + getClass().getSimpleName() +
+                "\nID: " + getIdentificator() +
+                "\nName: " + getName() +
+                "\nLore: " + getLore() +
+                "\nIcon: " + getIconId() +
+                "\nData: " + getData() +
+                "\nWorldLocation: " + getWorldLocation() +
+                "\nLocalMarker: " + isLocalMarker() +
+                "\nMap Binding: " + getMapImageIds() +
+                "\nActions: " + getActionList() +
+                "\nDraw: " + isDraw() +
+                "\n========================";
     }
 }

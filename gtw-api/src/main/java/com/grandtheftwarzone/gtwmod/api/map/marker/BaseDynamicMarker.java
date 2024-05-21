@@ -79,7 +79,7 @@ public class BaseDynamicMarker extends BaseStaticMarker {
         MapLocation startLocation = this.mapInterpolations.get(mapInterpolations.size() - 1);
         MapLocation endLocation = mapImage.calculateImageCoord(getWorldLocation().getX(), getWorldLocation().getZ());
 
-        if (Math.abs(endLocation.getX() - startLocation.getX()) > 15 || Math.abs(endLocation.getY() - startLocation.getY()) > 15) {
+        if (Math.abs(endLocation.getX() - startLocation.getX()) > 30 || Math.abs(endLocation.getY() - startLocation.getY()) > 30) {
             this.mapInterpolations.clear();
             this.mapInterpolations.add(endLocation);
             return getRemoveFirstLocation();

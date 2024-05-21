@@ -282,7 +282,7 @@ public class GtwCommandManager extends CommandBase {
             List<String> mapImageId = new ArrayList<>();
             if (sender instanceof EntityPlayerMP) {
                 EntityPlayerMP player = (EntityPlayerMP) sender;
-                mapImageId.add(GtwAPI.getInstance().getMapManagerServer().getPlayerData(player.getUniqueID()).getMinimapId());
+                mapImageId.add(GtwAPI.getInstance().getMapManagerServer().getMapData(GtwAPI.getInstance().getMapManagerServer().getPlayerData(player.getUniqueID()).getMinimapId()).getImageId());
             }
             String mapImageIdStr = !mapImageId.isEmpty() ? String.join(";", mapImageId) : null;
 
