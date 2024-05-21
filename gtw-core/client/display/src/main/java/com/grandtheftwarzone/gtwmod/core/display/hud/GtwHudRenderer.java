@@ -33,6 +33,7 @@ public class GtwHudRenderer {
         GtwAPI.getInstance().getGtwMod().getDisplayManager()
                 .setHUDCanvas(canvas);
     }
+
     @SubscribeEvent
     public void onGameOverlayRender(RenderGameOverlayEvent event) {
         RenderGameOverlayEvent.ElementType type = event.getType();

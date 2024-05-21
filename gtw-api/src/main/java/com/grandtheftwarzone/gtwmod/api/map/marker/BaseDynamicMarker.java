@@ -39,6 +39,17 @@ public class BaseDynamicMarker extends BaseStaticMarker {
     public BaseDynamicMarker(String indentificator, @Nullable String name, @Nullable String lore, ResourceLocation icon, @Nullable String iconId, EntityLocation worldLocation, double coef, double step, @Nullable Config data, boolean localMarker, @Nullable List<String> mapImageIds, @Nullable List<String> actionList) {
         this(indentificator, name, lore, icon, iconId, worldLocation, coef, step, data, localMarker, mapImageIds, actionList, true);
     }
+    public BaseDynamicMarker(TemplateMarker templateMarker) {
+        super(templateMarker);
+        this.mapInterpolations = new ArrayList<>();
+    }
+
+    public BaseDynamicMarker(TemplateMarker templateMarker, double coef, double step) {
+        super(templateMarker);
+        this.coefficient = coef;
+        this.step = step;
+        this.mapInterpolations = new ArrayList<>();
+    }
 
 
 
@@ -94,9 +105,6 @@ public class BaseDynamicMarker extends BaseStaticMarker {
 
         return getRemoveFirstLocation();
     }
-
-
-
 
     // ОТРЕДАЧИТЬ НАЗВАНИЕ!!!! МОЖЕТ ТЫ СТЕК УЖЕ НАЧНЁШЬ ИСПОЛЬЗОВАТЬ?  А?
     protected MapLocation getRemoveFirstLocation() {

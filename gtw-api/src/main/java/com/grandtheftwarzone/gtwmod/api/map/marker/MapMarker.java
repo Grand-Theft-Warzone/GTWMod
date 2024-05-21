@@ -38,6 +38,8 @@ public interface MapMarker extends ConfigSerializer<MapMarker> {
     @Nullable
     List<String> getActionList();
 
+    void update(TemplateMarker var);
+
 
     // ==============
 

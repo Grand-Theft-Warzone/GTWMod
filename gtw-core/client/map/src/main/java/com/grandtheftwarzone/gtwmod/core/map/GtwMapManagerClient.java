@@ -8,7 +8,7 @@ import com.grandtheftwarzone.gtwmod.api.map.manager.client.MapManagerClient;
 import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumersClient;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.GtwGlobalmapManager;
-import com.grandtheftwarzone.gtwmod.api.map.marker.RadarPlayer;
+import com.grandtheftwarzone.gtwmod.api.map.marker.impl.RadarClient;
 import com.grandtheftwarzone.gtwmod.core.map.minimap.GtwMinimapManager;
 import lombok.Getter;
 import lombok.Setter;
@@ -72,7 +72,7 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
     //
 
     @Getter @Setter
-    private RadarPlayer radarPlayer;
+    private RadarClient radarPlayer;
 
 
     public GtwMapManagerClient(AtumMod atumMod) {
@@ -192,7 +192,7 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
 
 
         // Инициализация радара
-        radarPlayer = new RadarPlayer(new EntityLocation(Minecraft.getMinecraft().player), "Radar_player", "Ya", null, 1, 1);
+        radarPlayer = new RadarClient(new EntityLocation(Minecraft.getMinecraft().player), "Radar_player", "Ya", null, 1, 1);
     }
 
     @Override

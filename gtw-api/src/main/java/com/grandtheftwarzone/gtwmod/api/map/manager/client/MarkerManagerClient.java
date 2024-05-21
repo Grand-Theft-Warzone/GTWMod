@@ -18,5 +18,7 @@ public interface MarkerManagerClient {
 
     void addLocalMarker(MapMarker marker, boolean save);
 
+    void updateServerMarkers(List<TemplateMarker> markers);
+
 
 }

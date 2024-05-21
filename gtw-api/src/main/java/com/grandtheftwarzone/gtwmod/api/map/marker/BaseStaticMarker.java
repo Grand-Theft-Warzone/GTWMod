@@ -111,6 +111,24 @@ public class BaseStaticMarker implements MapMarker {
         return mapImage.calculateImageCoord(worldLocation.getX(), worldLocation.getY());
     }
 
+    @Override
+    public void update(TemplateMarker templateMarker) {
+        // ID is not updated.
+        this.name = templateMarker.getName();
+        this.lore = templateMarker.getLore();
+
+        if (this.iconId != null && !this.iconId.equals(templateMarker.getIconId())) {
+            this.icon = GtwAPI.getInstance().getMapManagerClient().getMapImageUtils().getImage("markers/"+templateMarker.getIconId());
+        }
+        this.iconId = templateMarker.getIconId();
+        this.data = templateMarker.getData();
+        this.worldLocation = new EntityLocation(templateMarker.getWorldLocation());
+        this.localMarker = templateMarker.isLocalMarker();
+        this.mapImageIds = templateMarker.getMapImageIds();
+        this.actionList = templateMarker.getActionList();
+        this.draw = templateMarker.isDraw();
+    }
+
     public MapLocation getMapLocation() {
         return this.getMapLocation("globalmap");
     }

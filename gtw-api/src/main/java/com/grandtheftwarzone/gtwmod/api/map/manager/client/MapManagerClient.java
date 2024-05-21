@@ -3,7 +3,7 @@ package com.grandtheftwarzone.gtwmod.api.map.manager.client;
 
 import com.grandtheftwarzone.gtwmod.api.map.MapImageUtils;
 import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumersClient;
-import com.grandtheftwarzone.gtwmod.api.map.marker.RadarPlayer;
+import com.grandtheftwarzone.gtwmod.api.map.marker.impl.RadarClient;
 import net.minecraft.client.settings.KeyBinding;
 
 public interface MapManagerClient {
@@ -16,7 +16,7 @@ public interface MapManagerClient {
 
     // ------------------------------------------
 
-    RadarPlayer getRadarPlayer();
+    RadarClient getRadarPlayer();
 
 
     // ------------------------------------------

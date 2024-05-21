@@ -5,11 +5,14 @@ import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.data.MapImageData;
 import com.grandtheftwarzone.gtwmod.api.map.data.client.UpdateMinimapData;
 import com.grandtheftwarzone.gtwmod.api.map.data.server.UpdateGlobalmapData;
+import com.grandtheftwarzone.gtwmod.api.map.marker.MapMarker;
 import me.phoenixra.atumodcore.api.display.misc.resources.BufferTextureResource;
 import net.minecraft.util.ResourceLocation;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class ProcessConsumer {
@@ -19,6 +22,7 @@ public class ProcessConsumer {
     }
 
     public void blablabla() {
+
         GtwAPI.getInstance().getMapManagerClient().getMapConsumers().setCStartData(
                 (it) ->{
                     System.out.println("МЫ ПОЛУЧИЛИ ДАННЫЕ ОТ СЕРВЕРА {StartData}! ...");
@@ -62,7 +66,8 @@ public class ProcessConsumer {
                 (it) -> {
                     System.out.println("МЫ ПОЛУЧИЛИ ДАННЫЕ ОТ СЕРВЕРА {Markerms}! ...");
 
-//                    GtwAPI.getInstance().getMapManagerClient().getMarkerManager().setServerMarkerList(it);
+                    GtwAPI.getInstance().getMapManagerClient().getMarkerManager().updateServerMarkers(it);
+
                 }
 
         );

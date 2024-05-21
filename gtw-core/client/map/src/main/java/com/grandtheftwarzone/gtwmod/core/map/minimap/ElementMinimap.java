@@ -5,7 +5,7 @@ import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.marker.MapMarker;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
-import com.grandtheftwarzone.gtwmod.api.map.marker.RadarPlayer;
+import com.grandtheftwarzone.gtwmod.api.map.marker.impl.RadarClient;
 import lombok.SneakyThrows;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.placeholders.context.PlaceholderContext;
@@ -37,7 +37,7 @@ public class ElementMinimap extends BaseElement {
     private ResourceLocation minimapImage, radarImage;
     private MapImage minimap;
     private EntityLocation player;
-    private RadarPlayer radarPlayer;
+    private RadarClient radarPlayer;
     private AtumColor colorFrame;
 
 

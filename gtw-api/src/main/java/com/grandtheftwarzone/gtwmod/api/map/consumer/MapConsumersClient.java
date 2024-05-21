@@ -16,4 +16,5 @@ public class MapConsumersClient {
 
     @Setter
     private Consumer<List<TemplateMarker>> cMarkersList;
+
 }

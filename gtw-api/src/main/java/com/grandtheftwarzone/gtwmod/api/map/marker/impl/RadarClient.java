@@ -1,4 +1,4 @@
-package com.grandtheftwarzone.gtwmod.api.map.marker;
+package com.grandtheftwarzone.gtwmod.api.map.marker.impl;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.map.marker.BaseDynamicMarker;
@@ -6,21 +6,18 @@ import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-public class RadarPlayer extends BaseDynamicMarker {
+public class RadarClient extends BaseDynamicMarker {
 
-    public RadarPlayer(EntityLocation playerLocation, String identificator,  String name, ResourceLocation icon, String iconId, double coef, double step) {
+    public RadarClient(EntityLocation playerLocation, String identificator, String name, ResourceLocation icon, String iconId, double coef, double step) {
         super(identificator, name, null, icon, iconId, playerLocation, coef, step, null, true, null, null, true);
     }
 
-    public RadarPlayer(EntityLocation playerLocation, String identificator,  String name, double coef, double step) {
+    public RadarClient(EntityLocation playerLocation, String identificator, String name, double coef, double step) {
         super(identificator, name, null, null, null, playerLocation, coef, step, null, true, null, null, true);
     }
 
-    public RadarPlayer(EntityLocation playerLocation, String identificator,  String name, ResourceLocation icon, double coef, double step) {
+    public RadarClient(EntityLocation playerLocation, String identificator, String name, ResourceLocation icon, double coef, double step) {
         super(identificator, name, null, icon, null, playerLocation, coef, step,  null,true, null, null, true);
     }
 
