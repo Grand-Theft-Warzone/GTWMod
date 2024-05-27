@@ -92,7 +92,7 @@ public class TemplateMarker {
     }
 
     public @Nullable String getActionListString() {
-        return (actionList!= null &&!actionList.isEmpty())? String.join("ъ", actionList) : null;
+        return (actionList!= null && !actionList.isEmpty()) ? String.join("ъ", actionList) : null;
     }
 
     public int isDrawInt() {

@@ -15,6 +15,7 @@ import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.config.ConfigType;
 import me.phoenixra.atumconfig.api.config.LoadableConfig;
 import me.phoenixra.atumconfig.core.config.AtumConfigSection;
+import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -30,6 +31,9 @@ public class GtwMarkerManagerClient implements MarkerManagerClient {
 
     @Getter @Setter
     private HashMap<String, MapMarker> serverMarkerMap = new HashMap<>();
+
+    @Getter
+    private PlayerMarker playerMarker = null;
 
     @Getter
     private Config configMarker;
@@ -158,7 +162,7 @@ public class GtwMarkerManagerClient implements MarkerManagerClient {
 
 
     public List<MapMarker> getServerMarkersList() {
-        System.out.print("SML: " + serverMarkerMap);
+//        System.out.print("SML: " + serverMarkerMap);
         return new ArrayList<>(serverMarkerMap.values());
     }
 
@@ -193,6 +197,11 @@ public class GtwMarkerManagerClient implements MarkerManagerClient {
                 marekr = new BaseStaticMarker(templateMarker);
             } else if (type.equals("player")) {
                 marekr = new PlayerMarker(templateMarker);
+                if (templateMarker.getData().getSubsection("data").getString("player_name").equals(Minecraft.getMinecraft().player.getName())) {
+                    // @TODO ИЗМЕНИТЬ НА ПРОДЕ!
+                    marekr.setDraw(true);
+                    playerMarker = (PlayerMarker) marekr;
+                }
             } else if (type.equals("dynamic")) {
                 marekr = new BaseDynamicMarker(templateMarker);
             } else {

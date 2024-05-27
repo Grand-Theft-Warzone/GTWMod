@@ -14,8 +14,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.UUID;
 
 public interface GtwAPI {
 
@@ -85,6 +88,12 @@ public interface GtwAPI {
 
     @SideOnly(Side.CLIENT)
     @NotNull File getMinecraftDir();
+
+    @SideOnly(Side.SERVER)
+    @NotNull HashMap<UUID, Long> getGangsterMap();
+
+    @SideOnly(Side.SERVER)
+    void setGangsterMap(HashMap<UUID, Long> var);
 
     /**
      * Get GTW mod instance

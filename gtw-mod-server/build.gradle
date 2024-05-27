@@ -16,6 +16,7 @@ dependencies {
     implementation(project(":gtw-core:network"))
     //dont ask))
     implementation(project(":gtw-core:client:misc"))
+
 }
 
 shadowJar {

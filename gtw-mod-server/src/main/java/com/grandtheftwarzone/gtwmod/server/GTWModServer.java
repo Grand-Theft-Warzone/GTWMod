@@ -25,6 +25,9 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 @Mod(modid = GtwProperties.MOD_ID,
         version = GtwProperties.VERSION,
         name = GtwProperties.MOD_NAME)
@@ -49,6 +52,9 @@ public class GTWModServer extends AtumMod {
     @Getter
     private MinecraftServer server;
 
+
+    @Getter @Setter
+    private HashMap<UUID, Long> gangsterMap = new HashMap<>();
 
     public GTWModServer(){
         if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {

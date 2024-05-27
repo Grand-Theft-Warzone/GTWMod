@@ -9,6 +9,8 @@ import lombok.Getter;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.config.ConfigType;
 import me.phoenixra.atumconfig.api.utils.StringUtils;
+import me.zeevss.gangs.Gang;
+import me.zeevss.gangs.dataobject.GangUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.server.permission.PermissionAPI;
@@ -19,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+
 public class GtwServerMarkerManager implements MarkerManagerServer {
 
     @Getter
@@ -28,6 +31,7 @@ public class GtwServerMarkerManager implements MarkerManagerServer {
 
     public GtwServerMarkerManager(StorageManager storageManager) {
         this.storageManager = storageManager;
+
         initMarker();
     }
 
@@ -60,6 +64,7 @@ public class GtwServerMarkerManager implements MarkerManagerServer {
             return;
         }
 
+
         oldServerMarker.updateData(serverMarker);
         storageManager.createOrUpdateMarker(serverMarker);
     }
@@ -74,6 +79,8 @@ public class GtwServerMarkerManager implements MarkerManagerServer {
             }
         }
         return null;
+
+
     }
 
 
@@ -114,8 +121,6 @@ public class GtwServerMarkerManager implements MarkerManagerServer {
         return getMarkerFilterPlayer(player);
     }
 
-
-
     public List<ServerMarker> getAllPlayerMarker() {
 
         List<ServerMarker> markers = new ArrayList<>();
@@ -125,6 +130,7 @@ public class GtwServerMarkerManager implements MarkerManagerServer {
         for (EntityPlayerMP playerMP : players) {
             // Сюда
 
+
             String id = "SP-" + playerMP.getUniqueID();
 
             /*
@@ -133,11 +139,7 @@ public class GtwServerMarkerManager implements MarkerManagerServer {
             data:
             - player_name: playerName
             - world: world_name
-            - pos_x: posX
-            - pos_y: posY
-            - pos_z: posZ
-            - pos_yaw: posYaw
-            - pos_pitch: posPitch
+            - gang_id: gangId
              */
 
             HashMap<String, Object> hashMap = new HashMap<>();
@@ -145,11 +147,7 @@ public class GtwServerMarkerManager implements MarkerManagerServer {
             hashMap.put("data", new HashMap<String, Object>() {{
                 put("player_name", playerMP.getName());
                 put("world", playerMP.world.getWorldInfo().getWorldName());
-                put("pos_x", playerMP.posX);
-                put("pos_y", playerMP.posY);
-                put("pos_z", playerMP.posZ);
-                put("pos_yaw", playerMP.cameraYaw);
-                put("pos_pitch", playerMP.cameraPitch);
+                put("gang_id", GtwAPI.getInstance().getGangsterMap().getOrDefault(playerMP.getUniqueID(), null));
             }});
 
             Config config = GtwAPI.getInstance().getGtwMod().getConfigManager().createConfig(hashMap, ConfigType.YAML);
@@ -164,5 +162,6 @@ public class GtwServerMarkerManager implements MarkerManagerServer {
         return markers;
 
     }
+
 
 }

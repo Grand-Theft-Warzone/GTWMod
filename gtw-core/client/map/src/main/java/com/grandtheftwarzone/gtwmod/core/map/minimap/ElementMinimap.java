@@ -3,6 +3,7 @@ package com.grandtheftwarzone.gtwmod.core.map.minimap;
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.marker.MapMarker;
+import com.grandtheftwarzone.gtwmod.api.map.marker.impl.PlayerMarker;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import com.grandtheftwarzone.gtwmod.api.map.marker.impl.RadarClient;
@@ -96,7 +97,7 @@ public class ElementMinimap extends BaseElement {
 
 
             for (MapMarker marker : markerList) {
-                System.out.print(marker.toString());
+//                System.out.print(marker.toString());
                 MapLocation location = marker.getMapLocation("minimap");
                 ResourceLocation iconImage = marker.getIcon();
 
@@ -111,16 +112,49 @@ public class ElementMinimap extends BaseElement {
 //                System.out.println("X: " + x + " Y: " + y);
 //                System.out.println("CX: " + centerX + " CY: " + centerY);
                 int zoomMarker = (int) (zoomRadar + zoomRadar*0.2);
+
                 GlStateManager.pushMatrix();
                 RenderUtils.bindTexture(iconImage);
                 GlStateManager.translate(x, y, 0);
-                Gui.drawModalRectWithCustomSizedTexture(
-                        (int) (-zoomMarker / 2),
-                        (int) (-zoomMarker / 2),
-                        0, 0,
-                        zoomMarker, zoomMarker,
-                        zoomMarker, zoomMarker
-                );
+
+                if (marker instanceof PlayerMarker) {
+//                    System.out.print(((PlayerMarker) marker).getData().getString("gang"));
+//                    System.out.print("Уи: " + GtwAPI.getInstance().getPlayerData().getGangmates());
+                    System.out.print("GANGSS: " + ((PlayerMarker) marker).getData().getSubsection("data").getStringOrNull("gang_id"));
+
+                    int iconX = (int) (-zoomMarker / 2);
+                    int iconY = (int) (-zoomMarker / 2);
+                    int iconSize = 8;
+
+
+                    int borderThickness = 1;
+                    AtumColor color = AtumColor.GRAY;
+                    String gangMarkerStr = ((PlayerMarker) marker).getData().getSubsection("data").getStringOrNull("gang_id");
+                    String playerGangId = (GtwAPI.getInstance().getMapManagerClient().getMarkerManager().getPlayerMarker() != null) ? GtwAPI.getInstance().getMapManagerClient().getMarkerManager().getPlayerMarker().getData().getSubsection("data").getStringOrNull("gang_id") : null;
+                    if (gangMarkerStr != null && playerGangId != null && gangMarkerStr.equals(playerGangId)) {
+                        color = AtumColor.LIME;
+                    }
+                    RenderUtils.drawRect(iconX - borderThickness, iconY - borderThickness, iconSize + borderThickness*2, iconSize + borderThickness*2, color);
+
+
+                    Gui.drawModalRectWithCustomSizedTexture(
+                            (int) (-zoomMarker / 2),
+                            (int) (-zoomMarker / 2),
+                            iconSize, iconSize,
+                            iconSize, iconSize,
+                            64, 64
+                    );
+
+                } else {
+                    Gui.drawModalRectWithCustomSizedTexture(
+                            (int) (-zoomMarker / 2),
+                            (int) (-zoomMarker / 2),
+                            0, 0,
+                            zoomMarker, zoomMarker,
+                            zoomMarker, zoomMarker
+                    );
+                }
+
                 GlStateManager.popMatrix();
 
             }

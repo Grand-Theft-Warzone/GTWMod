@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.SkinManager;
@@ -239,9 +240,38 @@ public class FileImageUtils {
                 }
             }
         }
-        // Возвращаем пустой ResourceLocation, если не удалось найти скин
+
         return new ResourceLocation("minecraft", "textures/entity/steve.png");
     }
+
+
+//    public static ResourceLocation getPlayerHead(String username) {
+//        Minecraft minecraft = Minecraft.getMinecraft();
+//        if (minecraft != null && minecraft.getConnection() != null && minecraft.getConnection().getPlayerInfo(username) != null) {
+//            NetworkPlayerInfo playerInfo = minecraft.getConnection().getPlayerInfo(username);
+//            if (playerInfo != null) {
+//                ResourceLocation skinLocation = playerInfo.getLocationSkin();
+//                if (skinLocation != null) {
+//                    try {
+//                        // Загружаем текстуру скина
+//                        BufferedImage skinImage = ImageIO.read(minecraft.getResourceManager().getResource(skinLocation).getInputStream());
+//                        // Вырезаем голову (8x8 пикселей, начинается с координат (8, 8))
+//                        BufferedImage headImage = skinImage.getSubimage(8, 8, 8, 8);
+//
+//                        // Создаем новую текстуру для головы
+//                        ResourceLocation headLocation = new ResourceLocation("yourmodid", "textures/head/" + username + ".png");
+//                        TextureUtil.uploadTextureImageAllocate(TextureUtil.glGenTextures(), headImage, false, false);
+//
+//                        return headLocation;
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        }
+//        // Возвращаем стандартный скин головы Стива в случае ошибки
+//        return new ResourceLocation("minecraft", "textures/entity/steve.png");
+//    }
 
 
 

@@ -14,6 +14,8 @@ import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class GtwAPIClient implements GtwAPI {
     @Override
@@ -71,6 +73,15 @@ public class GtwAPIClient implements GtwAPI {
         return GTWModClient.instance.getMinecraftDir();
     }
 
+    @Override
+    public @NotNull HashMap<UUID, Long> getGangsterMap() {
+        throw new RuntimeException("Server side only!");
+    }
+
+    @Override
+    public void setGangsterMap(HashMap<UUID, Long> var) {
+        throw new RuntimeException("Server side only!");
+    }
 
 
 }
