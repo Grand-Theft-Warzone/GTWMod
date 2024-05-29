@@ -1,7 +1,6 @@
 package com.grandtheftwarzone.gtwmod.server;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
-import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneManager;
 
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
