@@ -69,8 +69,8 @@ public class ElementMinimap extends BaseElement {
         RenderUtils.bindTexture(minimapImage);
 
 
-        float centerX = getX() + (float) getWidth() /2;
-        float centerY = getY() + (float) getHeight() /2;
+        float centerX = getX() + (float) getWidth() / 2;
+        float centerY = getY() + (float) getHeight() / 2;
         enableCircleStencil(centerX, centerY, (float) (getHeight() /2));
 
         MapLocation radarCordImage = new MapLocation(cord.getX() - (zoom / 2), cord.getY() - (zoom / 2));
@@ -85,8 +85,6 @@ public class ElementMinimap extends BaseElement {
 
         colorFrame = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getColorFrame();
 
-        drawHollowCircle(centerX, centerY, (float) (getHeight() /2), 7,   colorFrame);
-
 
         if (radarPlayer.inMap()) {
 
@@ -97,6 +95,10 @@ public class ElementMinimap extends BaseElement {
 
 
             for (MapMarker marker : markerList) {
+//                System.out.println("Draw " + marker.getName() + " " + marker.isDraw());
+                if (!marker.isDraw()) {
+                    continue;
+                }
 //                System.out.print(marker.toString());
                 MapLocation location = marker.getMapLocation("minimap");
                 ResourceLocation iconImage = marker.getIcon();
@@ -120,7 +122,7 @@ public class ElementMinimap extends BaseElement {
                 if (marker instanceof PlayerMarker) {
 //                    System.out.print(((PlayerMarker) marker).getData().getString("gang"));
 //                    System.out.print("Уи: " + GtwAPI.getInstance().getPlayerData().getGangmates());
-                    System.out.print("GANGSS: " + ((PlayerMarker) marker).getData().getSubsection("data").getStringOrNull("gang_id"));
+//                    System.out.print("GANGSS: " + ((PlayerMarker) marker).getData().getSubsection("data").getStringOrNull("gang_id"));
 
                     int iconX = (int) (-zoomMarker / 2);
                     int iconY = (int) (-zoomMarker / 2);

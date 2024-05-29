@@ -83,7 +83,7 @@ public class GlobalCentrCoord {
             double interpolatedY = lastCenter.getY() + i * stepSizeY;
             MapLocation interpolatedLocation = new MapLocation(interpolatedX, interpolatedY);
 
-            System.out.println("DEB " + !isAccessZone(interpolatedLocation, GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage()));
+//            System.out.println("DEB " + !isAccessZone(interpolatedLocation, GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage()));
 
             if (checkCorrectCord && !isAccessZone(interpolatedLocation, GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage())) {
                 interpolatedLocation = getVerifiedCoordinates(interpolatedLocation, GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage());
@@ -119,23 +119,29 @@ public class GlobalCentrCoord {
                 interpZoom = zoomInterpolation.get(zoomInterpolation.size() - 1);
             }
 
+            System.out.print("ZI:" + zoomInterpolation);
+
             if (!isAccessZone(interpolatedLocation, GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage(), interpZoom)) {
 
-                if (i==0) {
-                    if (interpZoom == zoomInterpolation.get(i+1)) {
-                        interpolatedLocation = getFirstCoordInter();
-                    }
-                } else if (i == zoomInterpolation.size()-1) {
-                    if (interpZoom == zoomInterpolation.get(i-1)) {
-                        interpolatedLocation = addCentrCoordInterpolations.get(i-1);
-                    }
-                } else if (interpZoom == zoomInterpolation.get(i+1)) {
-                    interpolatedLocation = addCentrCoordInterpolations.get(i-1);
-                }
 
                 interpolatedLocation = getVerifiedCoordinates(interpolatedLocation, GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage(), interpZoom);
 
 
+            }
+
+            if (i==0) {
+                if (interpZoom == zoomInterpolation.get(i+1)) {
+                    System.out.print("1");
+                    interpolatedLocation = getFirstCoordInter();
+                }
+            } else if (i == zoomInterpolation.size()-1) {
+                if (interpZoom == zoomInterpolation.get(i-1)) {
+                    System.out.print("2");
+                    interpolatedLocation = addCentrCoordInterpolations.get(i-1);
+                }
+            } else if (interpZoom == zoomInterpolation.get(i+1)) {
+                System.out.print("3");
+                interpolatedLocation = addCentrCoordInterpolations.get(i-1);
             }
 
             addCentrCoordInterpolations.add(interpolatedLocation);
@@ -158,6 +164,15 @@ public class GlobalCentrCoord {
         } else {
             newList.add(newCenter);
         }
+
+        centrCoordsInterpol = newList;
+    }
+
+    public void setStraightCenter(MapLocation newCenter, MapLocation maxDistance) {
+        ArrayList<MapLocation> newList = new ArrayList<>();
+        MapLocation newLocation = getVerifiedCoordinatesAndCheckZone(newCenter, GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalmapImage());
+        newList.add(newLocation);
+
 
         centrCoordsInterpol = newList;
     }
@@ -241,7 +256,6 @@ public class GlobalCentrCoord {
     }
 
 
-
         public MapLocation getDistanceAccess(int imageWidth, int imageHeight, int zoom) {
 //            System.out.println("DAX: ("+imageWidth + "-" + zoom*this.zoom.getCoefZoomX() +")" +" / "+ 2);
             double distanceAccessX = ((imageWidth - zoom*this.zoom.getCoefZoomX()) / 2);
@@ -271,7 +285,7 @@ public class GlobalCentrCoord {
 
         double DistanceFromTheCenterX = Math.abs(location.getX() - centerX);
         double DistanceFromTheCenterY = Math.abs(location.getY() - centerY);
-        System.out.println("DistanceFrom: " + DistanceFromTheCenterX + " : " + DistanceFromTheCenterY);
+//        System.out.println("DistanceFrom: " + DistanceFromTheCenterX + " : " + DistanceFromTheCenterY);
 
         return new MapLocation(distanceAccess.getX() - DistanceFromTheCenterX, distanceAccess.getY() - DistanceFromTheCenterY);
     }
@@ -315,11 +329,23 @@ public class GlobalCentrCoord {
 
 
     public double getSpringResistance(double distance, double maxDistance) {
-        if (maxDistance == 0) {
-            System.out.println("ЗАМЕЧЕНО ДЕЛЕНИЕ НА 0!!!!!!!!");
+
+//        if (Math.abs(distance) > Math.abs(maxDistance)) {
+//            distance = maxDistance-2;
+//        }
+
+        if (maxDistance <= 0) {
+            System.out.println("ЗАМЕЧЕНО ДЕЛЕНИЕ НА 0 ИЛИ ОТРИЦАТЕЛЬНОЕ ЗНАЧЕНИЕ!!!!!!!!");
             maxDistance = 0.5;
         }
-        return (MathUtils.fastCos((Math.PI * distance) / maxDistance) + 1) / 2;
+        double ratio = (Math.PI * distance) / maxDistance;
+        double cosValue = MathUtils.fastCos(ratio);
+        double coef = (cosValue + 1) / 2;
+
+        if (coef > 1 || coef < 0) {
+            System.out.println("Неверный коэффициент: " + coef);
+        }
+        return coef;
     }
 
 //    public double getSpringResistance(MapLocation location, int imageWidth, int imageHeight, int windowWidth, int windowHeight) {

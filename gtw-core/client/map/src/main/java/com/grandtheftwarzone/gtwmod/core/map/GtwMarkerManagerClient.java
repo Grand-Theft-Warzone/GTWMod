@@ -32,6 +32,8 @@ public class GtwMarkerManagerClient implements MarkerManagerClient {
     @Getter @Setter
     private HashMap<String, MapMarker> serverMarkerMap = new HashMap<>();
 
+    private HashMap<String, Boolean> displayStateType = new HashMap<>();
+
     @Getter
     private PlayerMarker playerMarker = null;
 
@@ -47,6 +49,27 @@ public class GtwMarkerManagerClient implements MarkerManagerClient {
                         false
                 );
         initLocalMarker();
+
+        initDisplayStateType();
+    }
+
+    public void initDisplayStateType() {
+
+        Config dispalyStates = configMarker.getSubsectionOrNull("state");
+
+        if (dispalyStates == null) {
+            displayStateType.clear();
+            return;
+        }
+
+        GtwLog.getLogger().debug("Init display states type marker");
+
+        GtwLog.getLogger().debug("State Type:");
+        for (String key : dispalyStates.getKeys(false)) {
+            displayStateType.put(key, dispalyStates.getBool(key));
+            GtwLog.getLogger().debug(key + " -> " + dispalyStates.getBool(key));
+        }
+        GtwLog.getLogger().debug("===========================");
     }
 
     public void initLocalMarker() {
@@ -185,29 +208,36 @@ public class GtwMarkerManagerClient implements MarkerManagerClient {
         for (TemplateMarker templateMarker : markers) {
             String markerId = templateMarker.getIdentificator();
             MapMarker oldMarker = getServerMarker(markerId);
-            MapMarker marekr;
+            MapMarker marker;
             if (oldMarker != null) {
                 oldMarker.update(templateMarker);
+//                String type = (templateMarker.getData() != null) ? templateMarker.getData().getString("type") : null;
+//                if (type != null && type.equals("player") && templateMarker.getData().getSubsection("data").getString("player_name").equals(Minecraft.getMinecraft().player.getName())) {
+//                    oldMarker.setDraw(false);
+//                }
                 newServerMarkerMap.put(markerId, oldMarker);
                 continue;
             }
 
             String type = (templateMarker.getData() != null) ? templateMarker.getData().getString("type") : null;
             if (type == null) {
-                marekr = new BaseStaticMarker(templateMarker);
+                marker = new BaseStaticMarker(templateMarker);
             } else if (type.equals("player")) {
-                marekr = new PlayerMarker(templateMarker);
+                marker = new PlayerMarker(templateMarker);
                 if (templateMarker.getData().getSubsection("data").getString("player_name").equals(Minecraft.getMinecraft().player.getName())) {
-                    // @TODO ИЗМЕНИТЬ НА ПРОДЕ!
-                    marekr.setDraw(true);
-                    playerMarker = (PlayerMarker) marekr;
+
+                    System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+                    // @TODO ИЗМЕНИТЬ НА false ПРОДЕ!
+                    playerMarker = (PlayerMarker) marker;
+                    marker.setDraw(false);
+
                 }
             } else if (type.equals("dynamic")) {
-                marekr = new BaseDynamicMarker(templateMarker);
+                marker = new BaseDynamicMarker(templateMarker);
             } else {
-                marekr = new BaseStaticMarker(templateMarker);
+                marker = new BaseStaticMarker(templateMarker);
             }
-            newServerMarkerMap.put(markerId, marekr);
+            newServerMarkerMap.put(markerId, marker);
 
         }
         this.serverMarkerMap = newServerMarkerMap;

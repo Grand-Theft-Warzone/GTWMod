@@ -2,6 +2,7 @@ package com.grandtheftwarzone.gtwmod.api.map.marker;
 
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
+import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.config.serialization.ConfigSerializer;
 import net.minecraft.util.ResourceLocation;
 
@@ -34,6 +35,8 @@ public interface MapMarker extends ConfigSerializer<MapMarker> {
     boolean isLocalMarker();
 
     boolean isDraw();
+
+    Config getData();
 
     @Nullable
     List<String> getActionList();
