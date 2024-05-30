@@ -41,6 +41,8 @@ public class CanvasGlobalmap extends BaseCanvas {
 
     private HashMap<String, ElementMarker> markerMap = new HashMap<>();
 
+    private int sizeMarker = 18;
+
     private MapImage globalmap;
     private ResourceLocation globalmapTexture;
 
@@ -209,35 +211,54 @@ public class CanvasGlobalmap extends BaseCanvas {
         registerElementMarkers(markerList);
 
 
-        // Определение переменных
-        // =======================================
-        int sizeMarker = 18;
-        // =======================================
 
         // _ Отрисовка маркеров _
+
+        double krayX = cetnerLocation.getX() - (double) zoomX /2;
+        double krayY = cetnerLocation.getY() - (double) zoomY /2;
+
         for (String markerId : markerMap.keySet()) {
 
             ElementMarker elementMarker = markerMap.get(markerId);
 
             MapMarker marker = elementMarker.marker;
 
+
             if (marker.isDraw()) {
 
                 MapLocation markerCoord = marker.getMapLocation("globalmap");
 
-                double deltaX = markerCoord.getX() - cetnerLocation.getX();
-                double deltaY = markerCoord.getY() - cetnerLocation.getY();
+                double deltaX = markerCoord.getX() - krayX;
+                double deltaY = markerCoord.getY() - krayY;
 
-                int drawX = (int) ((deltaX / ((double) zoomX / getOriginWidth().getValue(displayResolution))) + getOriginX().getValue(displayResolution) + getOriginWidth().getValue(displayResolution) /2) - sizeMarker/2;
-                int drawY = (int) ((deltaY / ((double) zoomY / getOriginHeight().getValue(displayResolution))) + getOriginY().getValue(displayResolution) + getOriginHeight().getValue(displayResolution) /2) - sizeMarker/2;
+                double proporziaXX = (double) getOriginWidth().getValue(displayResolution) / zoomX;
+                double proporziaYY = (double) getOriginHeight().getValue(displayResolution) / zoomY;
 
+                double drawX = proporziaXX * deltaX;
+                double drawY = proporziaYY * deltaY;
+//                double deltaX = markerCoord.getX() - cetnerLocation.getX();
+//                double deltaY = markerCoord.getY() - cetnerLocation.getY();
+//
+//                int drawX = (int) ((deltaX / ((double) zoomX / getOriginWidth().getValue(displayResolution))) + getOriginX().getValue(displayResolution) + getOriginWidth().getValue(displayResolution) /2);
+//                int drawY = (int) ((deltaY / ((double) zoomY / getOriginHeight().getValue(displayResolution))) + getOriginY().getValue(displayResolution) + getOriginHeight().getValue(displayResolution) /2);
+//
+////                double drawX = deltaX / zoomX / getWidth() + getX() + (double) getWidth() / 2;
+////                double drawY = deltaY / zoomY / getHeight() + getY() + (double) getHeight() / 2;
+
+                System.out.println("||||||||||||||||||||");
+                System.out.println(marker.getName());
+                System.out.println("delta: " + deltaX + " <> " + deltaY);
+                System.out.println("CENTER: " + cetnerLocation.getX() + " <> " + cetnerLocation.getY());
+                System.out.println("Razmer: " + getOriginWidth().getValue(displayResolution) + " <> "+ getOriginHeight().getValue(displayResolution));
+                System.out.println("ZOOM: " + zoomX + " <> " + zoomY);
                 System.out.println("SAS: " + drawX + " <> " + drawY);
+                System.out.println("||||||||||||||||||||");
 
-                    elementMarker.setSize(sizeMarker);
-                    elementMarker.setXY(drawX, drawY);
+//                    elementMarker.setSize(sizeMarker);
+                    elementMarker.setXY((int) drawX, (int) drawY);
                     elementMarker.draw(displayResolution, v, i, i1);
 
-    //                RenderUtils.drawRect(drawX, drawY, 16, 16, AtumColor.LIME);
+//                    RenderUtils.drawRect((int) drawX, (int) drawY, 16, 16, AtumColor.LIME);
 
             }
         }
@@ -277,19 +298,21 @@ public class CanvasGlobalmap extends BaseCanvas {
     // @TODO It's better to redo it, because... greater difficulty with long markers
     private void registerElementMarkers(List<MapMarker> markers) {
 
-        for (String markerId : markerMap.keySet()) {
-            boolean ostavl = false;
-            for (MapMarker marker : markers) {
-                if (marker.getIdentificator().equals(markerId)) {
-                    ostavl = true;
-                    markers.remove(marker);
-                    break ;
+        if (!markerMap.isEmpty()) {
+            for (String markerId : markerMap.keySet()) {
+                boolean ostavl = false;
+                for (MapMarker marker : markers) {
+                    if (marker.getIdentificator().equals(markerId)) {
+                        ostavl = true;
+                        markers.remove(marker);
+                        break ;
+                    }
                 }
-            }
-            if (!ostavl) {
-                removeElementMarker(markerMap.get(markerId));
-            }
+                if (!ostavl) {
+                    removeElementMarker(markerMap.get(markerId));
+                }
 
+            }
         }
         for (MapMarker marker : markers) {
             addElementMarker(marker);
@@ -297,7 +320,7 @@ public class CanvasGlobalmap extends BaseCanvas {
     }
 
     private void addElementMarker(MapMarker marker) {
-        ElementMarker elementMarker = new ElementMarker(getAtumMod(), this, marker);
+        ElementMarker elementMarker = new ElementMarker(getAtumMod(), this, marker, 16);
         this.addElement(elementMarker);
         markerMap.put(marker.getIdentificator(), elementMarker);
         System.out.println("[Canvas GlobalMap] Маркер " + marker.getName() + " добавлен.");

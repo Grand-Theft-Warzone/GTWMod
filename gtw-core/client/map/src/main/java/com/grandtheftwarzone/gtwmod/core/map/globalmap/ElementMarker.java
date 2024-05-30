@@ -10,6 +10,7 @@ import lombok.Setter;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.display.DisplayCanvas;
+import me.phoenixra.atumodcore.api.display.DisplayLayer;
 import me.phoenixra.atumodcore.api.display.impl.BaseElement;
 import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
 import me.phoenixra.atumodcore.api.display.misc.variables.OptimizedVarInt;
@@ -24,8 +25,8 @@ public class ElementMarker extends BaseElement {
 
     MapMarker marker;
 
-    public ElementMarker(@NotNull AtumMod atumMod, @Nullable DisplayCanvas elementOwner, MapMarker marker) {
-        super(atumMod, elementOwner);
+    public ElementMarker(@NotNull AtumMod atumMod, @Nullable DisplayCanvas elementOwner, MapMarker marker, int size) {
+        super(atumMod, DisplayLayer.MIDDLE, 0, 0, size, size, elementOwner);
         this.marker = marker;
 
     }
@@ -33,37 +34,12 @@ public class ElementMarker extends BaseElement {
     @Override
     protected void onDraw(DisplayResolution displayResolution, float v, int i, int i1) {
 
-        if (marker instanceof PlayerMarker) {
-            System.out.println("P");
-            GlStateManager.pushMatrix();
-            RenderUtils.bindTexture(marker.getIcon());
-            GlStateManager.translate(getX(), getY(), 0);
-            int iconRez = (int) (-getWidth() / 2);
-            int borderThickness = 1;
-            AtumColor color = AtumColor.GRAY;
-            String gangMarkerStr = ((PlayerMarker) marker).getData().getSubsection("data").getStringOrNull("gang_id");
-            String playerGangId = (GtwAPI.getInstance().getMapManagerClient().getMarkerManager().getPlayerMarker() != null) ? GtwAPI.getInstance().getMapManagerClient().getMarkerManager().getPlayerMarker().getData().getSubsection("data").getStringOrNull("gang_id") : null;
-            if (gangMarkerStr != null && playerGangId != null && gangMarkerStr.equals(playerGangId)) {
-                color = AtumColor.LIME;
-            }
-            RenderUtils.drawRect(iconRez - borderThickness, iconRez - borderThickness, iconRez + borderThickness*2, iconRez + borderThickness*2, color);
 
+//
+//            RenderUtils.bindTexture(marker.getIcon());
+//            RenderUtils.drawCompleteImage(getX(), getY(), getWidth(), getWidth());
 
-            Gui.drawModalRectWithCustomSizedTexture(
-                    (int) (-getWidth() / 2),
-                    (int) (-getWidth() / 2),
-                    iconRez, iconRez,
-                    iconRez, iconRez,
-                    64, 64
-            );
-            GlStateManager.popMatrix();
-
-        } else {
-
-            RenderUtils.bindTexture(marker.getIcon());
-            RenderUtils.drawCompleteImage(getX(), getY(), getWidth(), getWidth());
-
-        }
+        RenderUtils.drawRect(getX(), getY(), getWidth(), getHeight(), AtumColor.BLUE);
     }
 
 
@@ -73,6 +49,7 @@ public class ElementMarker extends BaseElement {
     }
 
     public void setSize(int size) {
+
         getOriginWidth().setDefaultValue(size);
         getOriginHeight().setDefaultValue(size);
     }

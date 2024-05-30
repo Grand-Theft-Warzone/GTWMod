@@ -85,6 +85,7 @@ public class ElementMinimap extends BaseElement {
 
         colorFrame = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getColorFrame();
 
+        drawHollowCircle(centerX, centerY, (float) (getHeight() /2), 7,   colorFrame);
 
         if (radarPlayer.inMap()) {
 
@@ -158,7 +159,6 @@ public class ElementMinimap extends BaseElement {
                 }
 
                 GlStateManager.popMatrix();
-
             }
 
             if (GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getDefaultColorFrame() != colorFrame) {
