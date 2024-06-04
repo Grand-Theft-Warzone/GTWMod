@@ -22,6 +22,18 @@ public class RadarClient extends BaseDynamicMarker {
     }
 
 
+//    GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getResourceLocation("radarImage")
+
+
+    @Override
+    public ResourceLocation getIcon() {
+        try {
+            return GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getResourceLocation("radarImage");
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public MapLocation getMapLocation(String targetMap) {
         getWorldLocation().update(Minecraft.getMinecraft().player);

@@ -3,10 +3,14 @@ package com.grandtheftwarzone.gtwmod.api.utils;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import static me.phoenixra.atumodcore.api.utils.RenderUtils.drawRect;
 import static org.lwjgl.opengl.GL11.*;
 
 public class GLUtils {
@@ -154,40 +158,57 @@ public class GLUtils {
 
     }
 
+    public static void drawRoundedRect(int posX, int posY,
+                                       int width, int height,
+                                       int radius, // радиус закругления углов
+                                       AtumColor color) {
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+        color.useColor();
+        GlStateManager.disableDepth();
+        buffer.begin(7, DefaultVertexFormats.POSITION);
+
+        // Верхняя левая часть
+        drawRoundedRectSegment(buffer, posX + radius, posY + radius, radius, 180, 270);
+        // Верхняя правая часть
+        drawRoundedRectSegment(buffer, posX + width - radius, posY + radius, radius, 270, 360);
+        // Нижняя правая часть
+        drawRoundedRectSegment(buffer, posX + width - radius, posY + height - radius, radius, 0, 90);
+        // Нижняя левая часть
+        drawRoundedRectSegment(buffer, posX + radius, posY + height - radius, radius, 90, 180);
+
+        // Соединение частей прямыми линиями
+        buffer.pos(posX + radius, posY, 0).endVertex(); // левая верхняя точка
+        buffer.pos(posX + width - radius, posY, 0).endVertex(); // правая верхняя точка
+        buffer.pos(posX + width, posY + radius, 0).endVertex(); // верхняя правая точка
+        buffer.pos(posX + width, posY + height - radius, 0).endVertex(); // нижняя правая точка
+        buffer.pos(posX + width - radius, posY + height, 0).endVertex(); // правая нижняя точка
+        buffer.pos(posX + radius, posY + height, 0).endVertex(); // левая нижняя точка
+        buffer.pos(posX, posY + height - radius, 0).endVertex(); // нижняя левая точка
+        buffer.pos(posX, posY + radius, 0).endVertex(); // верхняя левая точка
+
+        tessellator.draw();
+
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+        GlStateManager.enableDepth();
+        GlStateManager.color(1f, 1f, 1f);
+    }
+
+    private static void drawRoundedRectSegment(BufferBuilder buffer, double centerX, double centerY, double radius, int startAngle, int endAngle) {
+        double step = Math.PI / 12; // шаг аппроксимации окружности
+        for (double angle = Math.toRadians(startAngle); angle <= Math.toRadians(endAngle); angle += step) {
+            double x = centerX + Math.cos(angle) * radius;
+            double y = centerY + Math.sin(angle) * radius;
+            buffer.pos(x, y, 0).endVertex();
+        }
+    }
+
 
 
     public static void drawPartialImage(int posX, int posY, int width, int height, double textureX, double textureY, int texturePartWidth, int texturePartHeight) {
-//        double imageWidth = (double) GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
-//        double imageHeight = (double) GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
-//        double einsTeilerWidth = 1.0 / imageWidth;
-//        double uvWidth = einsTeilerWidth * (double)texturePartWidth;
-//        double uvX = einsTeilerWidth * (double)textureX;
-//        double einsTeilerHeight = 1.0 / imageHeight;
-//        double uvHeight = einsTeilerHeight * (double)texturePartHeight;
-//        double uvY = einsTeilerHeight * (double)textureY;
-//
-//        // Установите режим зажима текстуры
-//        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
-//        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-//        GL11.glEnable(GL11.GL_TEXTURE_2D);
-//        GL11.glEnable(GL11.GL_BLEND);
-//        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-//
-//        GL11.glTranslatef((float)posX, (float)posY, 0.0F);
-//        GL11.glBegin(GL11.GL_QUADS);
-//        GL11.glTexCoord2d(uvX, uvY);
-//        GL11.glVertex3f(0.0F, 0.0F, 0.0F);
-//        GL11.glTexCoord2d(uvX, uvY + uvHeight);
-//        GL11.glVertex3f(0.0F, (float)height, 0.0F);
-//        GL11.glTexCoord2d(uvX + uvWidth, uvY + uvHeight);
-//        GL11.glVertex3f((float)width, (float)height, 0.0F);
-//        GL11.glTexCoord2d(uvX + uvWidth, uvY);
-//        GL11.glVertex3f((float)width, 0.0F, 0.0F);
-//        GL11.glEnd();
-//        GL11.glTranslatef((float)(-posX), (float)(-posY), 0.0F);
-//
-//        GL11.glDisable(GL11.GL_BLEND);
-//        GL11.glDisable(GL11.GL_TEXTURE_2D);
 
         double imageWidth = glGetTexLevelParameteri(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH);
         double imageHeight = glGetTexLevelParameteri(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT);
@@ -235,6 +256,23 @@ public class GLUtils {
 
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
         fontRenderer.drawString(text, x, y, color.toInt(), true);
+
+    }
+
+    public static void drawText(int x, int y, String text, AtumColor color, int fontSize) {
+
+        float red = color.getRed() / 255.0f;
+        float green = color.getGreen() / 255.0f;
+        float blue = color.getBlue() / 255.0f;
+        float alpha = color.getAlpha() / 255.0f;
+        GlStateManager.color(red, green, blue, alpha);
+
+        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+
+        GlStateManager.pushMatrix();
+        GlStateManager.scale(fontSize / 12.0f, fontSize / 12.0f, 1.0f);
+        fontRenderer.drawString(text, (int)(x / (fontSize / 12.0f)), (int)(y / (fontSize / 12.0f)), color.toInt(), true);
+        GlStateManager.popMatrix();
 
     }
 }

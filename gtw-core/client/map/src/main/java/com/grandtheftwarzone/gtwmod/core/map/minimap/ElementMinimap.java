@@ -37,7 +37,6 @@ public class ElementMinimap extends BaseElement {
     private double coef, step;
     private ResourceLocation minimapImage, radarImage;
     private MapImage minimap;
-    private EntityLocation player;
     private RadarClient radarPlayer;
     private AtumColor colorFrame;
 
@@ -62,8 +61,6 @@ public class ElementMinimap extends BaseElement {
 
         if (!GtwAPI.getInstance().getMapManagerClient().getMinimapManager().isActive()) {return;}
 
-        player.update(Minecraft.getMinecraft().player);
-
         MapLocation cord = radarPlayer.getMapLocation("minimap");
 
         RenderUtils.bindTexture(minimapImage);
@@ -85,6 +82,7 @@ public class ElementMinimap extends BaseElement {
 
         colorFrame = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getColorFrame();
 
+        drawHollowCircle(centerX, centerY, (float) (getHeight() /2), 7,   colorFrame);
 
         if (radarPlayer.inMap()) {
 
@@ -147,6 +145,9 @@ public class ElementMinimap extends BaseElement {
                             64, 64
                     );
 
+                } else if (marker instanceof RadarClient) {
+                    GlStateManager.popMatrix();
+                    continue;
                 } else {
                     Gui.drawModalRectWithCustomSizedTexture(
                             (int) (-zoomMarker / 2),
@@ -161,13 +162,16 @@ public class ElementMinimap extends BaseElement {
 
             }
 
+            // Цветовая подложка
             if (GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getDefaultColorFrame() != colorFrame) {
                 colorFrame.useColor();
             }
+
+            // Отображение радара
             GlStateManager.pushMatrix();
             RenderUtils.bindTexture(radarImage);
             GlStateManager.translate(getX() + ((float) getWidth() / 2), getY() + ((float) getHeight() / 2), 0);
-            GlStateManager.rotate((float) player.getYaw(), 0, 0, 1);
+            GlStateManager.rotate((float) Minecraft.getMinecraft().player.rotationYaw, 0, 0, 1);
 
             Gui.drawModalRectWithCustomSizedTexture(
                     (int) (-zoomRadar / 2),
@@ -207,8 +211,6 @@ public class ElementMinimap extends BaseElement {
         minimapImage = minimap.getImage();
 
         this.radarImage = GtwAPI.getInstance().getMapManagerClient().getMinimapManager().getResourceLocation("radarImage");
-
-        player = new EntityLocation(Minecraft.getMinecraft().player);
 
         radarPlayer = GtwAPI.getInstance().getMapManagerClient().getRadarPlayer();
         radarPlayer.setStep(step);

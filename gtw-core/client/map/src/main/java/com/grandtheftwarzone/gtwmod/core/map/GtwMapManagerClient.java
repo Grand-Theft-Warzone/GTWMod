@@ -193,7 +193,7 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
 
         // Инициализация радара
         radarPlayer = new RadarClient(new EntityLocation(Minecraft.getMinecraft().player), "Radar_player", "Ya", null, 1, 1);
-
+        markerManager.addLocalMarker(radarPlayer);
     }
 
     @Override

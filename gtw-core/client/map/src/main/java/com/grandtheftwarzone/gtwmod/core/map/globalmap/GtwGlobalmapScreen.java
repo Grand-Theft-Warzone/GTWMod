@@ -1,8 +1,7 @@
 package com.grandtheftwarzone.gtwmod.core.map.globalmap;
 
-import com.grandtheftwarzone.gtwmod.api.gui.phone.canvas.CanvasPhone;
+import com.grandtheftwarzone.gtwmod.core.map.globalmap.canvas.CanvasGlobalmap;
 import me.phoenixra.atumodcore.api.AtumMod;
-import me.phoenixra.atumodcore.api.display.DisplayCanvas;
 import me.phoenixra.atumodcore.api.display.impl.BaseScreen;
 import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.NotNull;

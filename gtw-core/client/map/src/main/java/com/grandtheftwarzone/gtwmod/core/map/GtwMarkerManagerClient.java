@@ -37,6 +37,8 @@ public class GtwMarkerManagerClient implements MarkerManagerClient {
     @Getter
     private PlayerMarker playerMarker = null;
 
+    private String playerName = null;
+
     @Getter
     private Config configMarker;
 
@@ -59,6 +61,7 @@ public class GtwMarkerManagerClient implements MarkerManagerClient {
 
         if (dispalyStates == null) {
             displayStateType.clear();
+            displayStateType.put("self-player", false);
             return;
         }
 
@@ -203,22 +206,36 @@ public class GtwMarkerManagerClient implements MarkerManagerClient {
     }
     public void updateServerMarkers(List<TemplateMarker> markers) {
 
+        if (playerName == null) {
+            playerName = Minecraft.getMinecraft().player.getName();
+        }
+
         HashMap<String, MapMarker> newServerMarkerMap = new HashMap<>();
 
         for (TemplateMarker templateMarker : markers) {
             String markerId = templateMarker.getIdentificator();
             MapMarker oldMarker = getServerMarker(markerId);
-            MapMarker marker;
             if (oldMarker != null) {
                 oldMarker.update(templateMarker);
 //                String type = (templateMarker.getData() != null) ? templateMarker.getData().getString("type") : null;
 //                if (type != null && type.equals("player") && templateMarker.getData().getSubsection("data").getString("player_name").equals(Minecraft.getMinecraft().player.getName())) {
 //                    oldMarker.setDraw(false);
 //                }
+                String type = (templateMarker.getData() != null) ? templateMarker.getData().getString("type") : null;
+                if (type != null) {
+                    if (type.equals("player") && templateMarker.getData().getSubsection("data").getString("player_name").equals(playerName) && !displayStateType.getOrDefault("self-player", false)) {
+                        oldMarker.setDraw(false);
+                    } else if (displayStateType.containsKey(type)) {
+                        oldMarker.setDraw(displayStateType.get(type));
+                    } else if (!displayStateType.getOrDefault("other", true)) {
+                        oldMarker.setDraw(false);
+                    }
+                }
                 newServerMarkerMap.put(markerId, oldMarker);
                 continue;
             }
 
+            MapMarker marker;
             String type = (templateMarker.getData() != null) ? templateMarker.getData().getString("type") : null;
             if (type == null) {
                 marker = new BaseStaticMarker(templateMarker);
@@ -237,11 +254,24 @@ public class GtwMarkerManagerClient implements MarkerManagerClient {
             } else {
                 marker = new BaseStaticMarker(templateMarker);
             }
+
+            if (type != null) {
+                if (type.equals("player") && marker.getData().getSubsection("data").getString("player_name").equals(Minecraft.getMinecraft().player.getName()) && !displayStateType.getOrDefault("self-player", false)) {
+                    marker.setDraw(false);
+                } else if (displayStateType.containsKey(type)) {
+                    marker.setDraw(displayStateType.get(type));
+                } else if (!displayStateType.getOrDefault("other", true)) {
+                    marker.setDraw(false);
+                }
+            }
+
+
             newServerMarkerMap.put(markerId, marker);
 
         }
         this.serverMarkerMap = newServerMarkerMap;
     }
+
 
     public List<MapMarker> getAllMarker() {
         List<MapMarker> combinedList = new ArrayList<>();
