@@ -114,6 +114,7 @@ public class CanvasGlobalmap extends BaseCanvas {
             int mouseX = getLastMouseX();
             int mouseY = getLastMouseY();
 
+
             double step = getSettingsConfig().getSubsection("settings").getSubsection("scroll").getDouble("step");
 
             Vector2d vectorCenterCursor = new Vector2d(mouseX-centerScreenX, mouseY-centerScreenY);
