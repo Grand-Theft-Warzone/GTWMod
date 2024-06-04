@@ -159,7 +159,6 @@ public class ElementMinimap extends BaseElement {
                 }
 
                 GlStateManager.popMatrix();
-
             }
 
             // Цветовая подложка
