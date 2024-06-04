@@ -87,11 +87,7 @@ public class SettingsApp implements PhoneApp {
                 config,
                 "canvas"
         );
-        for(DisplayElement element : canvas.getDisplayedElements()){
-            System.out.println("Element id: "+element.getId());
-            System.out.println("Element pos: "+element.getX()+";"+element.getY());
-            System.out.println("Element size: "+element.getWidth()+";"+element.getHeight());
-        }
+
     }
 
     @Override
