@@ -11,17 +11,23 @@ import com.grandtheftwarzone.gtwmod.api.utils.GLUtils;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.data.DataDrawTextMarker;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.element.ElementMarker;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.element.ElementNameMarker;
+import lombok.Getter;
 import lombok.Setter;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.config.ConfigType;
 import me.phoenixra.atumconfig.api.config.LoadableConfig;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.display.DisplayCanvas;
+import me.phoenixra.atumodcore.api.display.DisplayElement;
 import me.phoenixra.atumodcore.api.display.DisplayLayer;
+import me.phoenixra.atumodcore.api.display.actions.ActionArgs;
+import me.phoenixra.atumodcore.api.display.actions.ActionData;
+import me.phoenixra.atumodcore.api.display.actions.DisplayAction;
 import me.phoenixra.atumodcore.api.display.annotations.RegisterDisplayElement;
 import me.phoenixra.atumodcore.api.display.impl.BaseCanvas;
 import me.phoenixra.atumodcore.api.display.impl.BaseElement;
 import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
+import me.phoenixra.atumodcore.api.events.display.ElementInputPressEvent;
 import me.phoenixra.atumodcore.api.events.input.InputPressEvent;
 import me.phoenixra.atumodcore.api.events.input.InputReleaseEvent;
 import me.phoenixra.atumodcore.api.input.InputType;
@@ -47,6 +53,7 @@ public class CanvasGlobalmap extends BaseCanvas {
     private HashMap<String, ElementMarker> markerMap = new HashMap<>();
 
     private MapImage globalmap;
+
     private ResourceLocation globalmapTexture;
 
     private GlobalZoom zoom;
@@ -54,7 +61,9 @@ public class CanvasGlobalmap extends BaseCanvas {
     private GlobalCentrCoord centrCoord;
 
     private boolean pressIncreaseZoom;
+
     private boolean pressDecreaseZoom;
+
     private boolean pressLCM;
 
     private boolean pressWheel;
@@ -65,12 +74,17 @@ public class CanvasGlobalmap extends BaseCanvas {
 
     @Setter
     private DataDrawTextMarker drawTextMarker = null;
+
     private ElementNameMarker elementNameMarker;
+
     private MapLocation lastDeltaCoords = new MapLocation(0, 0);
+
     private boolean blockReturnLCM = false;
+
     private MapLocation firstMouseLocation;
 
-    private BaseCanvas subCanvas;
+    @Getter @Setter
+    private BaseCanvas subCanvas = null;
 
     public CanvasGlobalmap(@NotNull AtumMod atumMod, @Nullable DisplayCanvas elementOwner) {
         super(atumMod, elementOwner);
@@ -90,12 +104,19 @@ public class CanvasGlobalmap extends BaseCanvas {
 
         // Блок отслеживания нажатия на клавиши зума.
         // ------------------------------------------------
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+        // Блок отслеживания нажатия на клавиши зума.
+        // ------------------------------------------------
         if (pressDecreaseZoom) {
             System.out.println("Отдаление...");
+            undrawSubMenu();
             int step = getSettingsConfig().getSubsection("settings").getSubsection("zoom").getInt("step");
             zoom.addZoom(step);
             centrCoord.setStraightCenter(centrCoord.getVerifiedCoordinates(centrCoord.getFirstCoordInter(), globalmap));
         } else if (pressIncreaseZoom) {
+            undrawSubMenu();
             System.out.println("Приближение...");
             int step = getSettingsConfig().getSubsection("settings").getSubsection("zoom").getInt("step");
             zoom.removeZoom(step);
@@ -108,6 +129,7 @@ public class CanvasGlobalmap extends BaseCanvas {
         // ------------------------------------------
         if (pressWheel) {
             System.out.println("Вижу нажатие колесика...");
+            undrawSubMenu();
             int centerScreenX = getWidth() / 2;
             int centerScreenY = getHeight() / 2;
 
@@ -153,7 +175,7 @@ public class CanvasGlobalmap extends BaseCanvas {
 
         // Блок перемещения через LCM
         // ------------------------------------------------
-        if (pressLCM) {
+        if (pressLCM && subCanvas == null) {
 
             MapLocation distanceAccess = centrCoord.getDistanceAccess(globalmap);
             MapLocation deltaCoords = centrCoord.getDeltaCoords(centrCoord.getFirstCoordInter(), globalmap, distanceAccess);
@@ -278,6 +300,14 @@ public class CanvasGlobalmap extends BaseCanvas {
 
 
 
+        // Отрисовка второго слоя
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        if (subCanvas != null) {
+            subCanvas.draw(displayResolution, v, i, i1);
+        }
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
 
     }
 
@@ -381,34 +411,30 @@ public class CanvasGlobalmap extends BaseCanvas {
         clearElementMarker();
     }
 
-    public void saveZoomInConfig() {
-        LoadableConfig config = (LoadableConfig) getSettingsConfig();
-        config.getSubsection("settings").getSubsection("zoom").set("zoom", GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalZoom().getLastZoomAndClearList());
-        try {
-            config.save();
-            System.out.println("Zoom успешно сохранено в config");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+    public void drawSubMenu(int cordX, int cordY, @Nullable DisplayElement element) {
+        subCanvas = new CanvasMapSubmenu(getAtumMod(), DisplayLayer.HIGH, cordX, cordY, this, element);
     }
 
-    public void saveCenterCoordInConfig() {
-        LoadableConfig config = (LoadableConfig) getSettingsConfig();
-        config.getSubsection("settings").set("center_coord", GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getCentrCoord().getFirstCoordInter().toString());
-        try {
-            config.save();
-            System.out.println("Center_coord успешно сохранено в config");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public void undrawSubMenu() {
+        if (subCanvas != null) {
+            subCanvas.onRemove();
         }
     }
 
 
-
-
-    @Override
-    protected BaseElement onClone(BaseElement baseElement) {
-        return baseElement;
+    @SubscribeEvent
+    public void onPressedElement(ElementInputPressEvent event) {
+        if (event.getParentEvent().getType() == InputType.MOUSE_LEFT) {
+            DisplayElement clickElement = event.getClickedElement();
+            if (clickElement instanceof ElementMarker) {
+                System.out.println("Вижу клик на элемент");
+                ((ElementMarker) clickElement).setHaverTimer(500);
+            }
+        } else if (event.getParentEvent().getType() == InputType.MOUSE_RIGHT) {
+            DisplayElement clickElement = event.getClickedElement();
+            drawSubMenu(getLastMouseX(), getLastMouseY(), clickElement);
+        }
     }
 
 
@@ -508,6 +534,35 @@ public class CanvasGlobalmap extends BaseCanvas {
             saveZoomInConfig();
         }
 
+    }
+
+    public void saveZoomInConfig() {
+        LoadableConfig config = (LoadableConfig) getSettingsConfig();
+        config.getSubsection("settings").getSubsection("zoom").set("zoom", GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalZoom().getLastZoomAndClearList());
+        try {
+            config.save();
+            System.out.println("Zoom успешно сохранено в config");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void saveCenterCoordInConfig() {
+        LoadableConfig config = (LoadableConfig) getSettingsConfig();
+        config.getSubsection("settings").set("center_coord", GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getCentrCoord().getFirstCoordInter().toString());
+        try {
+            config.save();
+            System.out.println("Center_coord успешно сохранено в config");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+    @Override
+    protected BaseElement onClone(BaseElement baseElement) {
+        return baseElement;
     }
 
 

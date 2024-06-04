@@ -10,13 +10,23 @@
       "coef_mul_zoom": 15.0
     },
     "zoom": {
-      "zoom": 397,
+      "zoom": 79,
       "step": 5.0,
       "speed": 100.0
     },
     "correct_scale_zone": "100;500;0",
     "center_coord": "3356.537704918033;3636.865131779785;0.0",
-    "save_coord": false
+    "save_coord": false,
+    "actions": {
+      "delete": {
+        "text": "Delete marker",
+        "icon": "delete_marker"
+      },
+      "create": {
+        "text": "Create marker",
+        "icon": "create_marker"
+      }
+    }
   },
   "fixRatio": true,
   "config_version": 12.0,

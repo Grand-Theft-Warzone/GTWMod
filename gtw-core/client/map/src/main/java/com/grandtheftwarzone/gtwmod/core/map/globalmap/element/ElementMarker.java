@@ -8,6 +8,7 @@ import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.canvas.CanvasGlobalmap;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.data.DataDrawTextMarker;
 import lombok.Getter;
+import lombok.Setter;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.utils.StringUtils;
 import me.phoenixra.atumodcore.api.AtumMod;
@@ -32,6 +33,7 @@ public class ElementMarker extends BaseElement {
     @Getter
     private boolean haver = false;
 
+    @Setter
     private long haverTimer = 0;
 
     public ElementMarker(@NotNull AtumMod atumMod, @Nullable DisplayCanvas elementOwner, MapMarker marker) {
