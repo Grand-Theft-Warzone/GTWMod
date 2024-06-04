@@ -70,6 +70,8 @@ public class CanvasGlobalmap extends BaseCanvas {
     private boolean blockReturnLCM = false;
     private MapLocation firstMouseLocation;
 
+    private BaseCanvas subCanvas;
+
     public CanvasGlobalmap(@NotNull AtumMod atumMod, @Nullable DisplayCanvas elementOwner) {
         super(atumMod, elementOwner);
     }
