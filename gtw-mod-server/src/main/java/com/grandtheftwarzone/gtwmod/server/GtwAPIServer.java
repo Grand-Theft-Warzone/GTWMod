@@ -1,7 +1,6 @@
 package com.grandtheftwarzone.gtwmod.server;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
-import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneManager;
 
 import com.grandtheftwarzone.gtwmod.api.map.manager.client.MapManagerClient;
@@ -36,11 +35,6 @@ public class GtwAPIServer implements GtwAPI {
 
     @Override
     public @NotNull ScreensManager getScreensManager() {
-        throw new RuntimeException("Client side only!");
-    }
-
-    @Override
-    public @NotNull FactoryGuiHandler getFactoryGuiHandler() {
         throw new RuntimeException("Client side only!");
     }
 

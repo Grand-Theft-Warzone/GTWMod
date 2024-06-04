@@ -1,6 +1,5 @@
 package com.grandtheftwarzone.gtwmod.api.networking;
 
-import com.grandtheftwarzone.gtwmod.api.gui.GuiAction;
 import com.grandtheftwarzone.gtwmod.api.player.NotificationRequest;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import me.phoenixra.atumodcore.api.network.NetworkManager;
@@ -9,7 +8,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public interface NetworkAPI {
 

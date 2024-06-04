@@ -9,6 +9,7 @@ import com.grandtheftwarzone.gtwmod.api.gui.phone.canvas.CanvasPhoneApp;
 import me.phoenixra.atumconfig.api.config.Config;
 
 
+import me.phoenixra.atumodcore.api.display.DisplayElement;
 import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
 import me.phoenixra.atumodcore.api.utils.RenderUtils;
@@ -32,14 +33,6 @@ public class SettingsApp implements PhoneApp {
                      float scaleFactor,
                      int displayWidth, int displayHeight,
                      int mouseX, int mouseY) {
-        RenderUtils.fill(
-                0,
-                0,
-                displayWidth,
-                displayHeight,
-                AtumColor.ORANGE.toInt(),
-                1.0f
-        );
         canvas.draw(
                 resolution,
                 scaleFactor,
@@ -94,6 +87,7 @@ public class SettingsApp implements PhoneApp {
                 config,
                 "canvas"
         );
+
     }
 
     @Override

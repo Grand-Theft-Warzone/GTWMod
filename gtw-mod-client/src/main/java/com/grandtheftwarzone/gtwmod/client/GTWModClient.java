@@ -4,14 +4,12 @@ import com.grandtheftwarzone.gtwmod.core.emoji.GTWEmoji;
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.GtwProperties;
-import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneManager;
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import com.grandtheftwarzone.gtwmod.api.screen.ScreensManager;
 import com.grandtheftwarzone.gtwmod.api.sound.SoundsManager;
 import com.grandtheftwarzone.gtwmod.client.proxy.ClientProxy;
-import com.grandtheftwarzone.gtwmod.core.display.GtwFactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.core.display.GtwScreensManager;
 import com.grandtheftwarzone.gtwmod.core.display.loadingscreen.MainSplashRenderer;
 import com.grandtheftwarzone.gtwmod.core.display.loadingscreen.listener.ModLoadingListener;
@@ -65,8 +63,6 @@ public class GTWModClient extends AtumMod {
     @Getter
     private SoundsManager soundsManager;
     @Getter
-    private FactoryGuiHandler factoryGuiHandler;
-    @Getter
     private PhoneManager phoneManager;
     @Getter
     private ScreensManager screensManager;
@@ -109,7 +105,6 @@ public class GTWModClient extends AtumMod {
 
         //other
         playerData = new PlayerData();
-        factoryGuiHandler = new GtwFactoryGuiHandler();
 
         registerConfigCategory();
 

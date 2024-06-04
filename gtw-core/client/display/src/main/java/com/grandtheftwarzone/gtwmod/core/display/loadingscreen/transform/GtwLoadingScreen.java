@@ -128,7 +128,6 @@ public class GtwLoadingScreen implements IClassTransformer, Opcodes {
 
         for (MethodNode m : classNode.methods) {
             if (m.name.equals("run")) {
-                System.out.println("YAY Found run method");
 
                 ListIterator<AbstractInsnNode> iter = m.instructions.iterator();
                 boolean found = false;
