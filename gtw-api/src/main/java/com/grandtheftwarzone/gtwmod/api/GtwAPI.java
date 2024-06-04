@@ -1,24 +1,15 @@
 package com.grandtheftwarzone.gtwmod.api;
 
-import com.grandtheftwarzone.gtwmod.api.gui.FactoryGuiHandler;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneManager;
-import com.grandtheftwarzone.gtwmod.api.map.manager.client.MapManagerClient;
-import com.grandtheftwarzone.gtwmod.api.map.manager.server.MapManagerServer;
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
 
 import com.grandtheftwarzone.gtwmod.api.player.PlayerData;
 import com.grandtheftwarzone.gtwmod.api.screen.ScreensManager;
 import com.grandtheftwarzone.gtwmod.api.sound.SoundsManager;
 import me.phoenixra.atumodcore.api.AtumMod;
-import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.UUID;
 
 public interface GtwAPI {
 
@@ -40,6 +31,7 @@ public interface GtwAPI {
     @NotNull NetworkAPI getNetworkAPI();
 
 
+
     /**
      * Get the sounds manager
      *
@@ -58,16 +50,6 @@ public interface GtwAPI {
     @NotNull ScreensManager getScreensManager();
 
     /**
-     * Get the factory gui handler
-     *
-     * <p>CLIENT SIDE!</p>
-     *
-     * @return The factory gui handler
-     */
-    @SideOnly(Side.CLIENT)
-    @NotNull FactoryGuiHandler getFactoryGuiHandler();
-
-    /**
      * Get the phone gui
      *
      * <p>CLIENT SIDE!</p>
@@ -76,24 +58,6 @@ public interface GtwAPI {
      */
     @SideOnly(Side.CLIENT)
     @NotNull PhoneManager getPhoneManager();
-
-    @SideOnly(Side.SERVER)
-    @NotNull MinecraftServer getServer();
-
-    @SideOnly(Side.CLIENT)
-    @NotNull MapManagerClient getMapManagerClient();
-
-    @SideOnly(Side.SERVER)
-    @NotNull MapManagerServer getMapManagerServer();
-
-    @SideOnly(Side.CLIENT)
-    @NotNull File getMinecraftDir();
-
-    @SideOnly(Side.SERVER)
-    @NotNull HashMap<UUID, Long> getGangsterMap();
-
-    @SideOnly(Side.SERVER)
-    void setGangsterMap(HashMap<UUID, Long> var);
 
     /**
      * Get GTW mod instance

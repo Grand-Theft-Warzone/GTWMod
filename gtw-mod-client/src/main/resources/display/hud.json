@@ -1,385 +1,380 @@
 {
   "template": "canvas",
+  "config_version": 5,
+  "layer": "MIDDLE",
+  "default_data": {
+    "notification": ""
+  },
   "triggers": {
     "notifySound": {
       "template": "data_changed",
       "filters": {
-        "change_type": "SET_TEMPORARY",
-        "data_id": "notification"
+        "data_id": "notification",
+        "change_type": "SET_TEMPORARY"
       },
       "actions": {
         "1": "play_sound@gtwmod:levelup;6;0.7"
       }
     }
   },
-  "config_version": 5.0,
-  "layer": "MIDDLE",
   "elements": {
-    "text_notification": {
-      "template": "text",
+    "image_heldItem": {
       "settings": {
-        "fontSize": 50.0,
-        "text": "%data_notification%",
-        "font": "minecraft.otf"
+        "color": "#ffffff",
+        "defaultImage": {
+          "location": "gtwmod:textures/hud/fist_icon.png",
+          "color": "#ffffff",
+          "textureX": 0,
+          "textureY": 0,
+          "textureWidth": 40,
+          "textureHeight": 50
+        }
       },
-      "layer": "MIDDLE",
-      "posX": 1000.0,
-      "posY": 50.0,
-      "width": 2.0,
-      "height": 19.0
+      "outline": {
+        "color": "#000000",
+        "size": 3
+      },
+      "fixRatio": true,
+      "template": "gtw_image_held_item",
+      "layer": "LOW",
+      "posX": 1490,
+      "posY": 40,
+      "width": 110,
+      "height": 110
     },
     "progressBar_health": {
-      "template": "progress_bar",
       "settings": {
         "color-filled": "#880808",
         "color-empty": "#4c4c4c",
         "progress-expression": "(%player_health%/%player_health_max%) * 100"
+
+      },
+      "outline":{
+        "color": "#000000",
+        "size": 1
       },
       "fixRatio": true,
-      "layer": "MIDDLE",
-      "posX": 1620.0,
-      "posY": 35.0,
-      "outline": {
-        "color": "#000000",
-        "size": 1.0
-      },
-      "width": 270.0,
-      "height": 19.0
-    },
-    "progressBar_armor": {
       "template": "progress_bar",
-      "settings": {
-        "color-filled": "#D3D3D3",
-        "color-empty": "#4c4c4c",
-        "progress-expression": "(%player_armor%/%player_armor_max%) * 100"
-      },
-      "fixRatio": true,
       "layer": "MIDDLE",
-      "posX": 1620.0,
-      "posY": 105.0,
-      "outline": {
-        "color": "#000000",
-        "size": 1.0
-      },
-      "width": 270.0,
-      "height": 19.0
-    },
-    "minimap": {
-      "template": "minimap",
-      "settings": {
-        "coef": 1.0,
-        "zoomRadar": 22.0,
-        "zoom": "%data_zoom_minimap%",
-        "step": 1.0
-      },
-      "active": false,
-      "fixRatio": true,
-      "layer": "MIDDLE",
-      "posX": 10.5,
-      "posY": 10.5,
-      "width": 400.0,
-      "height": 400.0
-    },
-    "text_playerLevel": {
-      "template": "text",
-      "settings": {
-        "fontSize": 40.0,
-        "text": " &eLvl %player_level%",
-        "font": "minecraft.otf"
-      },
-      "fixRatio": true,
-      "layer": "MIDDLE",
-      "posX": 1610.0,
-      "posY": 176.0,
-      "width": 400.0,
-      "height": 19.0
-    },
-    "text_playerRank": {
-      "template": "text",
-      "settings": {
-        "fontSize": 50.0,
-        "text": "%player_rank%",
-        "font": "minecraft.otf"
-      },
-      "fixRatio": true,
-      "layer": "MIDDLE",
-      "posX": 1620.0,
-      "posY": 140.0,
-      "width": 300.0,
-      "height": 19.0
+      "posX": 1620,
+      "posY": 35,
+      "width": 270,
+      "height": 19
+
     },
     "progressBar_food": {
-      "template": "progress_bar",
       "settings": {
         "color-filled": "#8b4513",
         "color-empty": "#4c4c4c",
         "progress-expression": "(%player_food_level%/%player_food_level_max%) * 100"
+
       },
-      "fixRatio": true,
-      "layer": "MIDDLE",
-      "posX": 1620.0,
-      "posY": 70.0,
-      "outline": {
+      "outline":{
         "color": "#000000",
-        "size": 1.0
-      },
-      "width": 270.0,
-      "height": 19.0
-    },
-    "text_playerMoney": {
-      "template": "text",
-      "settings": {
-        "fontSize": 50.0,
-        "text": "&a$%player_money%",
-        "font": "minecraft.otf"
+        "size": 1
       },
       "fixRatio": true,
+      "template": "progress_bar",
       "layer": "MIDDLE",
-      "posX": 1610.0,
-      "posY": 240.0,
-      "width": 400.0,
-      "height": 19.0
+      "posX": 1620,
+      "posY": 70,
+      "width": 270,
+      "height": 19
+
+    },
+    "progressBar_armor": {
+      "settings": {
+        "color-filled": "#D3D3D3",
+        "color-empty": "#4c4c4c",
+        "progress-expression": "(%player_armor%/%player_armor_max%) * 100"
+
+      },
+      "outline":{
+        "color": "#000000",
+        "size": 1
+      },
+      "fixRatio": true,
+      "template": "progress_bar",
+      "layer": "MIDDLE",
+      "posX": 1620,
+      "posY": 105,
+      "width": 270,
+      "height": 19
+
     },
     "progressBar_experience": {
-      "template": "progress_bar",
       "settings": {
         "color-filled": "#32CD32",
         "color-empty": "#4c4c4c",
         "progress-expression": "(%player_experience%/%player_experience_max%) * 100"
+
+      },
+      "outline":{
+        "color": "#000000",
+        "size": 1
       },
       "fixRatio": true,
+      "template": "progress_bar",
       "layer": "MIDDLE",
-      "posX": 1620.0,
-      "posY": 200.0,
-      "outline": {
-        "color": "#000000",
-        "size": 1.0
+      "posX": 1620,
+      "posY": 200,
+      "width": 270,
+      "height": 19
+
+    },
+    "text_playerRank": {
+      "settings": {
+        "fontSize": 50,
+        "text": "%player_rank%",
+        "font": "minecraft.otf"
       },
-      "width": 270.0,
-      "height": 19.0
+      "fixRatio": true,
+      "template": "text",
+      "layer": "MIDDLE",
+      "posX": 1620,
+      "posY": 140,
+      "width": 300,
+      "height": 19
+
     },
     "text_playerGang": {
-      "template": "text",
       "settings": {
-        "fontSize": 50.0,
+        "fontSize": 50,
         "text": "&a%player_gang%",
         "font": "minecraft.otf"
       },
       "fixRatio": true,
+      "template": "text",
       "layer": "MIDDLE",
-      "posX": 1848.0,
-      "posY": 140.0,
-      "width": 2.0,
-      "height": 19.0
+      "posX": 1848,
+      "posY": 140,
+      "width": 2,
+      "height": 19
+
     },
-    "image_heldItem": {
-      "template": "gtw_image_held_item",
+    "text_playerLevel": {
       "settings": {
-        "color": "#ffffff",
-        "defaultImage": {
-          "textureX": 0.0,
-          "textureY": 0.0,
-          "color": "#ffffff",
-          "textureWidth": 40.0,
-          "textureHeight": 50.0,
-          "location": "gtwmod:textures/hud/fist_icon.png"
-        }
+        "fontSize": 40,
+        "text": " &eLvl %player_level%",
+        "font": "minecraft.otf"
       },
       "fixRatio": true,
-      "layer": "LOW",
-      "posX": 1490.0,
-      "posY": 40.0,
-      "outline": {
-        "color": "#000000",
-        "size": 3.0
+      "template": "text",
+      "layer": "MIDDLE",
+      "posX": 1610,
+      "posY": 176,
+      "width": 400,
+      "height": 19
+
+    },
+    "text_playerMoney": {
+      "settings": {
+        "fontSize": 50,
+        "text": "&a$%player_money%",
+        "font": "minecraft.otf"
       },
-      "width": 110.0,
-      "height": 110.0
+      "fixRatio": true,
+      "template": "text",
+      "layer": "MIDDLE",
+      "posX": 1610,
+      "posY": 240,
+      "width": 400,
+      "height": 19
+
+    },
+    "text_notification": {
+      "settings": {
+        "fontSize": 50,
+        "text": "%data_notification%",
+        "font": "minecraft.otf"
+      },
+      "template": "text",
+      "layer": "MIDDLE",
+      "posX": 1000,
+      "posY": 50,
+      "width": 2,
+      "height": 19
+
     }
   },
-  "width": 1920.0,
+  "width": 1920,
+  "height": 1080,
   "resolution_optimization": {
-    "RES_1280x720": {
-      "elements": {
-        "text_playerLevel": {
-          "posX": 1610.0,
-          "settings": {
-            "fontSize": 35.0,
-            "font": "minecraft.otf"
-          },
-          "posY": 195.0
-        },
-        "progressBar_experience": {
-          "posX": 1620.0,
-          "posY": 220.0,
-          "width": 270.0,
-          "height": 19.0
-        },
-        "text_playerGang": {
-          "posX": 1845.0,
-          "settings": {
-            "fontSize": 40.0,
-            "font": "minecraft.otf"
-          },
-          "posY": 140.0
-        },
-        "text_playerMoney": {
-          "posX": 1610.0,
-          "settings": {
-            "fontSize": 40.0,
-            "font": "minecraft.otf"
-          },
-          "posY": 260.0
-        },
-        "text_playerRank": {
-          "posX": 1620.0,
-          "settings": {
-            "fontSize": 40.0,
-            "font": "minecraft.otf"
-          },
-          "posY": 140.0
-        }
-      }
-    },
-    "RES_1600x900": {
-      "elements": {
-        "text_playerLevel": {
-          "posX": 1610.0,
-          "settings": {
-            "fontSize": 35.0,
-            "font": "minecraft.otf"
-          },
-          "posY": 175.0
-        },
-        "text_playerGang": {
-          "posX": 1850.0,
-          "settings": {
-            "fontSize": 42.0,
-            "font": "minecraft.otf"
-          },
-          "posY": 135.0
-        },
-        "text_playerMoney": {
-          "posX": 1615.0,
-          "settings": {
-            "fontSize": 42.0,
-            "font": "minecraft.otf"
-          }
-        },
-        "text_playerRank": {
-          "settings": {
-            "fontSize": 42.0,
-            "font": "minecraft.otf"
-          },
-          "posY": 135.0
-        }
-      }
-    },
     "RES_1024x728": {
       "elements": {
-        "progressBar_food": {
-          "posX": 1520.0,
-          "posY": 85.0,
-          "width": 370.0,
-          "height": 27.0
-        },
-        "text_playerMoney": {
-          "posX": 1510.0,
-          "settings": {
-            "fontSize": 40.0,
-            "font": "minecraft.otf"
-          },
-          "posY": 285.0
+        "image_heldItem": {
+          "posX": 1300,
+          "posY": 70,
+          "width": 180,
+          "height": 180
         },
         "progressBar_health": {
-          "posX": 1520.0,
-          "posY": 45.0,
-          "width": 370.0,
-          "height": 27.0
+          "posX": 1520,
+          "posY": 45,
+          "width": 370,
+          "height": 27
+        },
+        "progressBar_food": {
+          "posX": 1520,
+          "posY": 85,
+          "width": 370,
+          "height": 27
         },
         "progressBar_armor": {
-          "posX": 1520.0,
-          "posY": 125.0,
-          "width": 370.0,
-          "height": 27.0
-        },
-        "text_playerLevel": {
-          "posX": 1510.0,
-          "settings": {
-            "fontSize": 35.0,
-            "font": "minecraft.otf"
-          },
-          "posY": 225.0
+          "posX": 1520,
+          "posY": 125,
+          "width": 370,
+          "height": 27
         },
         "progressBar_experience": {
-          "posX": 1520.0,
-          "posY": 250.0,
-          "width": 370.0,
-          "height": 27.0
-        },
-        "text_playerGang": {
-          "posX": 1840.0,
-          "settings": {
-            "fontSize": 40.0,
-            "font": "minecraft.otf"
-          },
-          "posY": 165.0
-        },
-        "image_heldItem": {
-          "posX": 1300.0,
-          "posY": 70.0,
-          "width": 180.0,
-          "height": 180.0
+          "posX": 1520,
+          "posY": 250,
+          "width": 370,
+          "height": 27
         },
         "text_playerRank": {
-          "posX": 1520.0,
           "settings": {
-            "fontSize": 40.0,
+            "fontSize": 40,
             "font": "minecraft.otf"
           },
-          "posY": 165.0
+          "posX": 1520,
+          "posY": 165
+        },
+        "text_playerGang": {
+          "settings": {
+            "fontSize": 40,
+            "font": "minecraft.otf"
+          },
+          "posX": 1840,
+          "posY": 165
+        },
+        "text_playerLevel": {
+          "settings": {
+            "fontSize": 35,
+            "font": "minecraft.otf"
+          },
+          "posX": 1510,
+          "posY": 225
+        },
+        "text_playerMoney": {
+          "settings": {
+            "fontSize": 40,
+            "font": "minecraft.otf"
+          },
+          "posX": 1510,
+          "posY": 285
+        }
+      }
+    },
+    "RES_1280x720": {
+      "elements": {
+        "progressBar_experience": {
+          "posX": 1620,
+          "posY": 220,
+          "width": 270,
+          "height": 19
+        },
+        "text_playerRank": {
+          "settings": {
+            "fontSize": 40,
+            "font": "minecraft.otf"
+          },
+          "posX": 1620,
+          "posY": 140
+        },
+        "text_playerGang": {
+          "settings": {
+            "fontSize": 40,
+            "font": "minecraft.otf"
+          },
+          "posX": 1845,
+          "posY": 140
+        },
+        "text_playerLevel": {
+          "settings": {
+            "fontSize": 35,
+            "font": "minecraft.otf"
+          },
+          "posX": 1610,
+          "posY": 195
+        },
+        "text_playerMoney": {
+          "settings": {
+            "fontSize": 40,
+            "font": "minecraft.otf"
+          },
+          "posX": 1610,
+          "posY": 260
         }
       }
     },
     "RES_1366x768": {
       "elements": {
-        "text_playerLevel": {
-          "posX": 1610.0,
-          "settings": {
-            "fontSize": 30.0,
-            "font": "minecraft.otf"
-          },
-          "posY": 180.0
-        },
-        "text_playerGang": {
-          "posX": 1850.0,
-          "settings": {
-            "fontSize": 40.0,
-            "font": "minecraft.otf"
-          },
-          "posY": 135.0
-        },
-        "text_playerMoney": {
-          "posX": 1615.0,
-          "settings": {
-            "fontSize": 40.0,
-            "font": "minecraft.otf"
-          }
-        },
         "text_playerRank": {
           "settings": {
-            "fontSize": 40.0,
+            "fontSize": 40,
             "font": "minecraft.otf"
           },
-          "posY": 135.0
+          "posY": 135
+        },
+        "text_playerGang": {
+          "settings": {
+            "fontSize": 40,
+            "font": "minecraft.otf"
+          },
+          "posX": 1850,
+          "posY": 135
+        },
+        "text_playerLevel": {
+          "settings": {
+            "fontSize": 30,
+            "font": "minecraft.otf"
+          },
+          "posX": 1610,
+          "posY": 180
+        },
+        "text_playerMoney": {
+          "settings": {
+            "fontSize": 40,
+            "font": "minecraft.otf"
+          },
+          "posX": 1615
+        }
+      }
+    },
+    "RES_1600x900": {
+      "elements": {
+        "text_playerRank": {
+          "settings": {
+            "fontSize": 42,
+            "font": "minecraft.otf"
+          },
+          "posY": 135
+        },
+        "text_playerGang": {
+          "settings": {
+            "fontSize": 42,
+            "font": "minecraft.otf"
+          },
+          "posX": 1850,
+          "posY": 135
+        },
+        "text_playerLevel": {
+          "settings": {
+            "fontSize": 35,
+            "font": "minecraft.otf"
+          },
+          "posX": 1610,
+          "posY": 175
+        },
+        "text_playerMoney": {
+          "settings": {
+            "fontSize": 42,
+            "font": "minecraft.otf"
+          },
+          "posX": 1615
         }
       }
     }
-  },
-  "default_data": {
-    "notification": "",
-    "active_minimap": "1",
-    "zoom_minimap": "621"
-  },
-  "height": 1080.0
+  }
 }
