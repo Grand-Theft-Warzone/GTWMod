@@ -15,12 +15,14 @@ import me.phoenixra.atumodcore.api.display.DisplayElement;
 import me.phoenixra.atumodcore.api.display.impl.BaseCanvas;
 import me.phoenixra.atumodcore.api.display.impl.BaseElement;
 import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
+import me.phoenixra.atumodcore.api.display.misc.variables.OptimizedVarInt;
 import me.phoenixra.atumodcore.api.misc.AtumColor;
 import me.phoenixra.atumodcore.api.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.opengl.Display;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +78,7 @@ public class CanvasMapSubmenu extends BaseCanvas {
 
         System.out.println("Пытаюсь отобразить");
         System.out.println(getX() + " " + getX());
-
+        RenderUtils.drawRect(coordTopLeftX, coordTopLeftY, textWidthMax, (textHeightMax+indentText)*elementNumber, AtumColor.WHITE);
 
     }
 
@@ -90,18 +92,19 @@ public class CanvasMapSubmenu extends BaseCanvas {
         // Определение списка действий
         // !+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-!
         int sizeText = 12;
-
+        AtumColor colorLocal = AtumColor.BLUE;
+        AtumColor colorServer = AtumColor.RED;
         // Клик на пустое место
         if (elementClick == null) {
             if (admin) {
-                DataMapSubMenu dataMapLocalCreate = new DataMapSubMenu("Create marker", AtumColor.BLACK, sizeText, null, null, "map_create_marker@" + mapCoord.toString());
+                DataMapSubMenu dataMapLocalCreate = new DataMapSubMenu("Create marker", colorLocal, sizeText, null, null, "map_create_marker@" + mapCoord.toString());
                 dataMapSubMenus.add(dataMapLocalCreate);
-                DataMapSubMenu dataMapAdminCreate = new DataMapSubMenu("Create marker", AtumColor.RED, sizeText, null, null, "map_create_marker_server@" + mapCoord.toString());
+                DataMapSubMenu dataMapAdminCreate = new DataMapSubMenu("Create marker", colorServer, sizeText, null, null, "map_create_marker_server@" + mapCoord.toString());
                 dataMapSubMenus.add(dataMapAdminCreate);
-                DataMapSubMenu dataMapTeleport = new DataMapSubMenu("Teleport", AtumColor.RED, sizeText, null, null, "map_teleport@" + mapCoord.toString());
+                DataMapSubMenu dataMapTeleport = new DataMapSubMenu("Teleport", colorServer, sizeText, null, null, "map_teleport@" + mapCoord.toString());
                 dataMapSubMenus.add(dataMapTeleport);
             } else {
-                DataMapSubMenu dataMapLocalCreate = new DataMapSubMenu("Create marker", AtumColor.BLACK, sizeText, null, null, "map_create_marker@" + mapCoord.toString());
+                DataMapSubMenu dataMapLocalCreate = new DataMapSubMenu("Create marker", colorLocal, sizeText, null, null, "map_create_marker@" + mapCoord.toString());
                 dataMapSubMenus.add(dataMapLocalCreate);
             }
 
@@ -126,26 +129,26 @@ public class CanvasMapSubmenu extends BaseCanvas {
             }
             // Если локальный маркер
             if (local) {
-                DataMapSubMenu dataMapEdit = new DataMapSubMenu("Edit makrer", AtumColor.BLACK, sizeText, null, null, "map_edit_marker@" + marker.getIdentificator());
+                DataMapSubMenu dataMapEdit = new DataMapSubMenu("Edit makrer", colorLocal, sizeText, null, null, "map_edit_marker@" + marker.getIdentificator());
                 dataMapSubMenus.add(dataMapEdit);
 
-                DataMapSubMenu dataMapDelete = new DataMapSubMenu("Delete marker", AtumColor.BLACK, sizeText, null, null, "map_delete_marker@" + marker.getIdentificator());
+                DataMapSubMenu dataMapDelete = new DataMapSubMenu("Delete marker", colorLocal, sizeText, null, null, "map_delete_marker@" + marker.getIdentificator());
                 dataMapSubMenus.add(dataMapDelete);
 
             // Если маркер сервера и чел - админ
             } else if (admin) {
 
-                DataMapSubMenu dataMapEdit = new DataMapSubMenu("Edit makrer", AtumColor.RED, sizeText, null, null, "map_edit_marker_server@" + marker.getIdentificator());
+                DataMapSubMenu dataMapEdit = new DataMapSubMenu("Edit makrer", colorServer, sizeText, null, null, "map_edit_marker_server@" + marker.getIdentificator());
                 dataMapSubMenus.add(dataMapEdit);
 
 
-                DataMapSubMenu dataMapDelete = new DataMapSubMenu("Delete marker", AtumColor.RED, sizeText, null, null, "map_delete_marker_server@" + marker.getIdentificator());
+                DataMapSubMenu dataMapDelete = new DataMapSubMenu("Delete marker", colorServer, sizeText, null, null, "map_delete_marker_server@" + marker.getIdentificator());
                 dataMapSubMenus.add(dataMapDelete);
 
             }
         }
 
-        DataMapSubMenu dataCopyCoord = new DataMapSubMenu("Copy coordinates", AtumColor.BLACK, sizeText, null, null, "map_copy_coord@" + mapCoord.toString());
+        DataMapSubMenu dataCopyCoord = new DataMapSubMenu("Copy coordinates", colorLocal, sizeText, null, null, "map_copy_coord@" + mapCoord.toString());
         dataMapSubMenus.add(dataCopyCoord);
         // !+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-!
 
