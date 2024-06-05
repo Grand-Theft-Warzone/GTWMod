@@ -1,9 +1,11 @@
 {
   "template": "canvas",
   "config_version": 5,
-  "layer": "MIDDLE",
+  "layer": 50,
   "default_data": {
-    "notification": ""
+    "notification": "",
+    "active_minimap": "1",
+    "zoom_minimap": "621"
   },
   "triggers": {
     "notifySound": {
@@ -36,7 +38,7 @@
       },
       "fixRatio": true,
       "template": "gtw_image_held_item",
-      "layer": "LOW",
+      "layer": 20,
       "posX": 1490,
       "posY": 40,
       "width": 110,
@@ -55,7 +57,7 @@
       },
       "fixRatio": true,
       "template": "progress_bar",
-      "layer": "MIDDLE",
+      "layer": 50,
       "posX": 1620,
       "posY": 35,
       "width": 270,
@@ -75,12 +77,28 @@
       },
       "fixRatio": true,
       "template": "progress_bar",
-      "layer": "MIDDLE",
+      "layer": 50,
       "posX": 1620,
       "posY": 70,
       "width": 270,
       "height": 19
 
+    },
+    "minimap": {
+      "template": "minimap",
+      "settings": {
+        "coef": 1.0,
+        "zoomRadar": 22.0,
+        "zoom": "%data_zoom_minimap%",
+        "step": 1.0
+      },
+      "active": false,
+      "fixRatio": true,
+      "layer": "MIDDLE",
+      "posX": 10.5,
+      "posY": 10.5,
+      "width": 400.0,
+      "height": 400.0
     },
     "progressBar_armor": {
       "settings": {
@@ -95,7 +113,7 @@
       },
       "fixRatio": true,
       "template": "progress_bar",
-      "layer": "MIDDLE",
+      "layer": 50,
       "posX": 1620,
       "posY": 105,
       "width": 270,
@@ -115,7 +133,7 @@
       },
       "fixRatio": true,
       "template": "progress_bar",
-      "layer": "MIDDLE",
+      "layer": 50,
       "posX": 1620,
       "posY": 200,
       "width": 270,
@@ -130,7 +148,7 @@
       },
       "fixRatio": true,
       "template": "text",
-      "layer": "MIDDLE",
+      "layer": 50,
       "posX": 1620,
       "posY": 140,
       "width": 300,
@@ -145,7 +163,7 @@
       },
       "fixRatio": true,
       "template": "text",
-      "layer": "MIDDLE",
+      "layer": 50,
       "posX": 1848,
       "posY": 140,
       "width": 2,
@@ -160,7 +178,7 @@
       },
       "fixRatio": true,
       "template": "text",
-      "layer": "MIDDLE",
+      "layer": 50,
       "posX": 1610,
       "posY": 176,
       "width": 400,
@@ -175,7 +193,7 @@
       },
       "fixRatio": true,
       "template": "text",
-      "layer": "MIDDLE",
+      "layer": 50,
       "posX": 1610,
       "posY": 240,
       "width": 400,
@@ -189,7 +207,7 @@
         "font": "minecraft.otf"
       },
       "template": "text",
-      "layer": "MIDDLE",
+      "layer": 50,
       "posX": 1000,
       "posY": 50,
       "width": 2,

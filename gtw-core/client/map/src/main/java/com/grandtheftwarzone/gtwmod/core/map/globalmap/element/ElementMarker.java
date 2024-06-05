@@ -36,6 +36,9 @@ public class ElementMarker extends BaseElement {
     @Setter
     private long haverTimer = 0;
 
+    int addNamePosX = 0;
+    int addNamePosY = 0;
+
     public ElementMarker(@NotNull AtumMod atumMod, @Nullable DisplayCanvas elementOwner, MapMarker marker) {
         super(atumMod, elementOwner);
         this.marker = marker;
@@ -89,6 +92,9 @@ public class ElementMarker extends BaseElement {
             );
             GlStateManager.popMatrix();
 
+            addNamePosX = -2;
+            addNamePosY = 2;
+
         } else if (marker instanceof RadarClient) {
 
             GlStateManager.pushMatrix();
@@ -126,27 +132,17 @@ public class ElementMarker extends BaseElement {
             RenderUtils.drawCompleteImage(getX(), getY(), getWidth(), getWidth());
         }
 
-//        // Отрисовка границы вокруг элемента
-//        int outlineSize = 1; // Толщина границы
-//        AtumColor color = AtumColor.RED; // Цвет границы
-//        RenderUtils.drawOutline(this.getGlobalX(), this.getGlobalY(), this.getWidth(), this.getHeight(), outlineSize, color);
-
-        if (isHovered(getLastMouseX(), getLastMouseY())) {
-            System.out.println("Наведение на " + marker.getName());
-        }
 
         if (haverTimer > 200) {
             System.out.println("Show ");
-//            GLUtils.drawRoundedRect(getX(), getY(), getWidth()*2, getHeight()*2, 16, AtumColor.RED);
-//            RenderUtils.drawRect(getX(), getY(), 50/2, 10/2, AtumColor.WHITE);
             CanvasGlobalmap elementOwner = (CanvasGlobalmap) getElementOwner();
             int sizeText = 8;
             float proporziaSize = (float) sizeText / 12;
             String markerName = !StringUtils.removeColorCodes(marker.getName() != null ? marker.getName() : "").isEmpty() ? StringUtils.removeColorCodes(marker.getName()) : "?";
             int textWidth = (int) (Minecraft.getMinecraft().fontRenderer.getStringWidth(markerName) * proporziaSize);
             int textHeight = (int) (Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT * proporziaSize);
-            int textPosX = (int) (getX() + getWidth()/2 - textWidth/2);
-            int textPosY = getY() + getHeight() + getHeight()/10;
+            int textPosX = (int) (getX() + getWidth()/2 - textWidth/2) + addNamePosX;
+            int textPosY = getY() + getHeight() + getHeight()/10 + addNamePosY;
             AtumColor color = AtumColor.WHITE;
             elementOwner.setDrawTextMarker(new DataDrawTextMarker(textPosX, textPosY, textWidth, textHeight, markerName, sizeText, color));
         }

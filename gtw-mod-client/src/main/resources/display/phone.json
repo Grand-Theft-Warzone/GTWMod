@@ -2,7 +2,7 @@
   "template": "canvas_phone",
   "config_version": 4.0,
   "allow_sending_packets": true,
-  "layer": "MIDDLE",
+  "layer": 50,
   "posX": 705,
   "posY": 100,
   "width": 480.0,
@@ -21,7 +21,7 @@
       "color": "#ffffff"
     },
     "template": "image",
-    "layer": "FOREGROUND"
+    "layer": 100
 
   },
   "phoneDisplay": {
@@ -40,7 +40,7 @@
             "image": "gtwmod:textures/gui/phone/phone_display.png"
           },
           "template": "image",
-          "layer": "BACKGROUND",
+          "layer": 0,
           "width": "max",
           "height": "max"
         },
@@ -49,7 +49,7 @@
             "image": "gtwmod:textures/gui/phone/locked/locked.png"
           },
           "template": "image",
-          "layer": "FOREGROUND",
+          "layer": 100,
           "posX": 200,
           "posY": 16,
           "width": 7,
@@ -60,7 +60,7 @@
             "image": "gtwmod:textures/gui/phone/phoneIcons.png"
           },
           "template": "image",
-          "layer": "FOREGROUND",
+          "layer": 100,
           "posX": 330,
           "posY": 15,
           "width": 70,
@@ -71,9 +71,9 @@
             "image": "gtwmod:textures/gui/phone/locked/phoneLockedBubble.png"
           },
           "template": "image",
-          "layer": "FOREGROUND",
+          "layer": 100,
           "posX": 200,
-          "posY": 800, //-(300*%data_locked_swiping%)
+          "posY": 800,
           "width": 9,
           "height": 9
         },
@@ -84,7 +84,7 @@
             "font": "main_menu.otf"
           },
           "template": "text",
-          "layer": "FOREGROUND",
+          "layer": 100,
           "posX": 127,
           "posY": 80,
           "width": 150,
@@ -97,9 +97,9 @@
             "font": "main_menu.otf"
           },
           "template": "text",
-          "layer": "FOREGROUND",
+          "layer": 100,
           "posX": 127,
-          "posY": 680, //-(300*%data_locked_swiping%)
+          "posY": 680,
           "width": 800,
           "height": 200
         }
@@ -112,7 +112,7 @@
             "image": "gtwmod:textures/gui/phone/phone_display.png"
           },
           "template": "image",
-          "layer": "BACKGROUND",
+          "layer": 0,
           "width": "max",
           "height": "max"
         },
@@ -121,7 +121,7 @@
             "image": "gtwmod:textures/gui/phone/phoneIcons.png"
           },
           "template": "image",
-          "layer": "FOREGROUND",
+          "layer": 100,
           "posX": 330,
           "posY": 15,
           "width": 70,
@@ -134,7 +134,7 @@
             "font": "main_menu.otf"
           },
           "template": "text",
-          "layer": "FOREGROUND",
+          "layer": 100,
           "posX": 30,
           "posY": 18,
           "width": 70,
@@ -146,7 +146,7 @@
             "size": 65
           },
           "template": "phone_app_icon",
-          "layer": "FOREGROUND",
+          "layer": 100,
           "posX": 32,
           "posY": 725
         },
@@ -156,7 +156,7 @@
             "size": 65
           },
           "template": "phone_app_icon",
-          "layer": "FOREGROUND",
+          "layer": 100,
           "posX": 130,
           "posY": 725
         },
@@ -166,7 +166,7 @@
             "size": 65
           },
           "template": "phone_app_icon",
-          "layer": "FOREGROUND",
+          "layer": 100,
           "posX": 220,
           "posY": 725
         }
@@ -192,7 +192,7 @@
           },
           "fixRatio": true,
           "template": "button",
-          "layer": "FOREGROUND",
+          "layer": 100,
           "posX": 100,
           "posY": 353,
           "width": 122,
@@ -205,7 +205,7 @@
             "font": "minecraft.otf"
           },
           "template": "text",
-          "layer": "MIDDLE",
+          "layer": 50,
           "posX": 10,
           "posY": 26,
           "width": 200,
@@ -223,7 +223,7 @@
             "maxAnimationTicks": 7
           },
           "template": "choose_bool",
-          "layer": "FOREGROUND",
+          "layer": 100,
           "posX": 210,
           "posY": 20,
           "width": 150,

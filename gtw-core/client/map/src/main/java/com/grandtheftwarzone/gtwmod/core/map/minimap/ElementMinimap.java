@@ -185,6 +185,7 @@ public class ElementMinimap extends BaseElement {
             drawText((int) (getX() + (getWidth() / 4)), (int) (getY() + getHeight() / 2.5), "NO SIGNAL", AtumColor.WHITE);
         }
 
+        drawHollowCircle(centerX, centerY, (float) (getHeight() /2), 7,   colorFrame);
         disableStencil();
 
     }

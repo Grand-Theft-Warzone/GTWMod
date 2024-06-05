@@ -4,10 +4,11 @@ import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.manager.client.MapManagerClient;
 import com.grandtheftwarzone.gtwmod.api.map.marker.MapMarker;
+import com.grandtheftwarzone.gtwmod.api.map.marker.impl.PlayerMarker;
+import com.grandtheftwarzone.gtwmod.api.map.marker.impl.RadarClient;
 import com.grandtheftwarzone.gtwmod.api.map.misc.GlobalCentrCoord;
 import com.grandtheftwarzone.gtwmod.api.map.misc.GlobalZoom;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
-import com.grandtheftwarzone.gtwmod.api.utils.GLUtils;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.data.DataDrawTextMarker;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.element.ElementMarker;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.element.ElementNameMarker;
@@ -19,10 +20,6 @@ import me.phoenixra.atumconfig.api.config.LoadableConfig;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.display.DisplayCanvas;
 import me.phoenixra.atumodcore.api.display.DisplayElement;
-import me.phoenixra.atumodcore.api.display.DisplayLayer;
-import me.phoenixra.atumodcore.api.display.actions.ActionArgs;
-import me.phoenixra.atumodcore.api.display.actions.ActionData;
-import me.phoenixra.atumodcore.api.display.actions.DisplayAction;
 import me.phoenixra.atumodcore.api.display.annotations.RegisterDisplayElement;
 import me.phoenixra.atumodcore.api.display.impl.BaseCanvas;
 import me.phoenixra.atumodcore.api.display.impl.BaseElement;
@@ -31,12 +28,13 @@ import me.phoenixra.atumodcore.api.events.display.ElementInputPressEvent;
 import me.phoenixra.atumodcore.api.events.input.InputPressEvent;
 import me.phoenixra.atumodcore.api.events.input.InputReleaseEvent;
 import me.phoenixra.atumodcore.api.input.InputType;
+import me.phoenixra.atumodcore.api.misc.AtumColor;
 import me.phoenixra.atumodcore.api.utils.RenderUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.opengl.Display;
 
 import javax.vecmath.Vector2d;
 import java.io.IOException;
@@ -52,6 +50,7 @@ public class CanvasGlobalmap extends BaseCanvas {
 
     private HashMap<String, ElementMarker> markerMap = new HashMap<>();
 
+    @Getter
     private MapImage globalmap;
 
     private ResourceLocation globalmapTexture;
@@ -88,6 +87,12 @@ public class CanvasGlobalmap extends BaseCanvas {
 
     public CanvasGlobalmap(@NotNull AtumMod atumMod, @Nullable DisplayCanvas elementOwner) {
         super(atumMod, elementOwner);
+    }
+
+    @Override
+    public void draw(@NotNull DisplayResolution resolution, float scaleFactor, int mouseX, int mouseY) {
+        super.draw(resolution, scaleFactor, mouseX, mouseY);
+        postOnDraw(resolution, scaleFactor, mouseX, mouseX);
     }
 
     @Override
@@ -267,12 +272,21 @@ public class CanvasGlobalmap extends BaseCanvas {
                 int drawX = (int) ((deltaX / ((double) zoomX / getOriginWidth().getValue(displayResolution))) + getOriginX().getValue(displayResolution) + getOriginWidth().getValue(displayResolution) /2) - fixSizeMarker/2;
                 int drawY = (int) ((deltaY / ((double) zoomY / getOriginHeight().getValue(displayResolution))) + getOriginY().getValue(displayResolution) + getOriginHeight().getValue(displayResolution) /2) - fixSizeMarker/2;
 
+                int layer = 50;
+
+                if (marker instanceof PlayerMarker) {
+                    layer = 52;
+                } else if (marker instanceof RadarClient) {
+                    layer = 53;
+                }
+
+                int finalLayer = layer;
                 HashMap<String, Object> config = new HashMap<String, Object>() {{
                     put("posX", String.valueOf((int)(drawX)));
                     put("posY", String.valueOf((int)(drawY)));
                     put("width", String.valueOf(fixSizeMarker));
                     put("height", String.valueOf(fixSizeMarker));
-                    put("layer", "MIDDLE");
+                    put("layer", String.valueOf(finalLayer));
                     put("fixRatio", true);
                     put("active", marker.isDraw());
                 }};
@@ -286,6 +300,12 @@ public class CanvasGlobalmap extends BaseCanvas {
 //             -----------------------------------------
         }
 
+
+
+    }
+
+
+    protected void postOnDraw(DisplayResolution displayResolution, float v, int i, int i1) {
         // Отрисовка при наведении на маркер.
         // |-- -- -- -- -- -- -- -- -- -- -- -- --|
         if (drawTextMarker != null) {
@@ -304,10 +324,9 @@ public class CanvasGlobalmap extends BaseCanvas {
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         if (subCanvas != null) {
             subCanvas.draw(displayResolution, v, i, i1);
+//            RenderUtils.drawRect(0, 0, 30000, 50000, AtumColor.YELLOW);
         }
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-
 
     }
 
@@ -327,7 +346,7 @@ public class CanvasGlobalmap extends BaseCanvas {
         globalmapTexture = globalmap.getImage();
         GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalZoom().updateDiapazon(globalmap);
 
-        elementNameMarker = new ElementNameMarker(getAtumMod(), DisplayLayer.FOREGROUND, this, null);
+        elementNameMarker = new ElementNameMarker(getAtumMod(), 70, this, null);
         GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().setInitCanvasDraw(true);
 
     }
@@ -413,7 +432,7 @@ public class CanvasGlobalmap extends BaseCanvas {
 
 
     public void drawSubMenu(int cordX, int cordY, @Nullable DisplayElement element) {
-        subCanvas = new CanvasMapSubmenu(getAtumMod(), DisplayLayer.HIGH, cordX, cordY, this, element);
+        subCanvas = new CanvasMapSubmenu(getAtumMod(), 80, cordX, cordY, getOriginWidth().getValue(DisplayResolution.getCurrentResolution()), getOriginHeight().getValue(DisplayResolution.getCurrentResolution()), this, element);
     }
 
     public void undrawSubMenu() {
@@ -433,7 +452,7 @@ public class CanvasGlobalmap extends BaseCanvas {
             }
         } else if (event.getParentEvent().getType() == InputType.MOUSE_RIGHT) {
             DisplayElement clickElement = event.getClickedElement();
-            drawSubMenu(getLastMouseX(), getLastMouseY(), clickElement);
+            drawSubMenu(getLastMouseX() * 1920/ Display.getWidth(), getLastMouseY() * 1080/Display.getHeight(), clickElement);
         }
     }
 

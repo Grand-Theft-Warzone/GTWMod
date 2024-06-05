@@ -6,7 +6,6 @@ import lombok.Setter;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.display.DisplayCanvas;
-import me.phoenixra.atumodcore.api.display.DisplayLayer;
 import me.phoenixra.atumodcore.api.display.impl.BaseElement;
 import me.phoenixra.atumodcore.api.display.misc.DisplayResolution;
 import net.minecraft.client.Minecraft;
@@ -18,8 +17,8 @@ public class ElementNameMarker extends BaseElement {
     @Setter
     private DataDrawTextMarker drawTextMarker;
 
-    public ElementNameMarker(@NotNull AtumMod atumMod, @NotNull DisplayLayer layer, @Nullable DisplayCanvas elementOwner, DataDrawTextMarker drawTextMarker) {
-        super(atumMod, layer, 0, 0, 0, 0, elementOwner);
+    public ElementNameMarker(@NotNull AtumMod atumMod, @NotNull int layer, @Nullable DisplayCanvas elementOwner, DataDrawTextMarker drawTextMarker) {
+        super(atumMod, 50, 0, 0, 0, 0, elementOwner);
         this.drawTextMarker = drawTextMarker;
     }
 

@@ -1,7 +1,7 @@
 {
   "template": "canvas",
   "config_version": 12,
-  "layer": "MIDDLE",
+  "layer": 50,
   "elements": {
     "image_main": {
       "settings": {
@@ -9,7 +9,7 @@
         "color": "#ffffff"
       },
       "template": "image",
-      "layer": "BACKGROUND",
+      "layer": 0,
       "posX": 0,
       "posY": 0,
       "width": 1920,
@@ -24,7 +24,7 @@
         "textureHeight": 8
       },
       "template": "image_player_skin",
-      "layer": "FOREGROUND",
+      "layer": 100,
       "posX": 1264,
       "posY": 160,
       "width": 123,
@@ -37,7 +37,7 @@
         "font": "main_menu.otf"
       },
       "template": "text",
-      "layer": "MIDDLE",
+      "layer": 50,
       "posX": 1413,
       "posY": 203,
       "width": 194,
@@ -50,7 +50,7 @@
         "font": "main_menu.otf"
       },
       "template": "text",
-      "layer": "MIDDLE",
+      "layer": 50,
       "posX": 1400,
       "posY": 334,
       "width": 256,
@@ -63,7 +63,7 @@
         "font": "main_menu.otf"
       },
       "template": "text",
-      "layer": "MIDDLE",
+      "layer": 50,
       "posX": 1405,
       "posY": 385,
       "width": 255,
@@ -76,7 +76,7 @@
         "font": "main_menu.otf"
       },
       "template": "text",
-      "layer": "MIDDLE",
+      "layer": 50,
       "posX": 1415,
       "posY": 435,
       "width": 237,
@@ -89,7 +89,7 @@
         "font": "main_menu.otf"
       },
       "template": "text",
-      "layer": "MIDDLE",
+      "layer": 50,
       "posX": 1430,
       "posY": 485,
       "width": 238,
@@ -102,7 +102,7 @@
         "font": "main_menu.otf"
       },
       "template": "text",
-      "layer": "MIDDLE",
+      "layer": 50,
       "posX": 1405,
       "posY": 535,
       "width": 241,
@@ -115,7 +115,7 @@
         "font": "main_menu.otf"
       },
       "template": "text",
-      "layer": "MIDDLE",
+      "layer": 50,
       "posX": 1435,
       "posY": 580,
       "width": 211,
@@ -128,7 +128,7 @@
         "font": "main_menu.otf"
       },
       "template": "text",
-      "layer": "MIDDLE",
+      "layer": 50,
       "posX": 1472,
       "posY": 635,
       "width": 211,
@@ -146,7 +146,7 @@
       },
       "fixRatio": true,
       "template": "button",
-      "layer": "FOREGROUND",
+      "layer": 100,
       "posX": 1775,
       "posY": 153,
       "width": 122,
@@ -164,7 +164,7 @@
       },
       "fixRatio": true,
       "template": "button",
-      "layer": "FOREGROUND",
+      "layer": 100,
       "posX": 7,
       "posY": 769,
       "width": 148,
@@ -182,7 +182,7 @@
       },
       "fixRatio": true,
       "template": "button",
-      "layer": "FOREGROUND",
+      "layer": 100,
       "posX": 220,
       "posY": 730,
       "width": 167,
@@ -200,7 +200,7 @@
       },
       "fixRatio": true,
       "template": "button",
-      "layer": "FOREGROUND",
+      "layer": 100,
       "posX": 6,
       "posY": 919,
       "width": 148,
@@ -218,7 +218,7 @@
       },
       "fixRatio": true,
       "template": "button",
-      "layer": "FOREGROUND",
+      "layer": 100,
       "posX": 725,
       "posY": 733,
       "width": 176,
@@ -236,7 +236,7 @@
       },
       "fixRatio": true,
       "template": "button",
-      "layer": "FOREGROUND",
+      "layer": 100,
       "posX": 14,
       "posY": 632,
       "width": 124,
@@ -254,7 +254,7 @@
       },
       "fixRatio": true,
       "template": "button",
-      "layer": "FOREGROUND",
+      "layer": 100,
       "posX": 408,
       "posY": 735,
       "width": 294,
