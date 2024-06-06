@@ -1,6 +1,7 @@
 package com.grandtheftwarzone.gtwmod.core.map.globalmap.element;
 
 import com.grandtheftwarzone.gtwmod.api.utils.GLUtils;
+import com.grandtheftwarzone.gtwmod.core.map.globalmap.canvas.CanvasGlobalmap;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.data.DataDrawTextMarker;
 import lombok.Setter;
 import me.phoenixra.atumconfig.api.config.Config;
@@ -30,7 +31,11 @@ public class ElementNameMarker extends BaseElement {
 //        System.out.println("TW: " + textWidth + " <> " + textHeight);
 //            RenderUtils.drawRect(drawTextMarker.getPosX(), drawTextMarker.getPosY(), (int) textWidth, (int) textHeight, drawTextMarker.getColor());
 
-        if (drawTextMarker != null) {
+        boolean go = true;
+        if (getElementOwner() instanceof CanvasGlobalmap) {
+            go = ((CanvasGlobalmap) getElementOwner()).getSubCanvas() == null;
+        }
+        if (drawTextMarker != null && go) {
             GLUtils.drawText(drawTextMarker.getPosX(), drawTextMarker.getPosY(), drawTextMarker.getText(), drawTextMarker.getColor(), drawTextMarker.getSizeText());
         }
     }

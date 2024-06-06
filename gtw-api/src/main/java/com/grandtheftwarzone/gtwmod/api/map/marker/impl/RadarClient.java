@@ -10,15 +10,15 @@ import net.minecraft.util.ResourceLocation;
 public class RadarClient extends BaseDynamicMarker {
 
     public RadarClient(EntityLocation playerLocation, String identificator, String name, ResourceLocation icon, String iconId, double coef, double step) {
-        super(identificator, name, null, icon, iconId, playerLocation, coef, step, null, true, null, null, true);
+        super(identificator, name, null, icon, iconId, playerLocation, coef, step, null, false, null, null, true);
     }
 
     public RadarClient(EntityLocation playerLocation, String identificator, String name, double coef, double step) {
-        super(identificator, name, null, null, null, playerLocation, coef, step, null, true, null, null, true);
+        super(identificator, name, null, null, null, playerLocation, coef, step, null, false, null, null, true);
     }
 
     public RadarClient(EntityLocation playerLocation, String identificator, String name, ResourceLocation icon, double coef, double step) {
-        super(identificator, name, null, icon, null, playerLocation, coef, step,  null,true, null, null, true);
+        super(identificator, name, null, icon, null, playerLocation, coef, step,  null,false, null, null, true);
     }
 
 

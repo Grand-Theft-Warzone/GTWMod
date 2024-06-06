@@ -56,7 +56,7 @@ public class CommandMapChat {
             String msg = "§b---== §aAll commands: §b==---\n" +
                     "§d• §a/lmm help §f- Show all commands\n\n" +
                     "§d• §a/lmm create <name> <iconId> §7[X Y Z] §f- Create a local marker\n\n" +
-                    "§d• §a/lmm remove §f- Remove local marker" +
+                    "§d• §a/lmm remove §f- Remove local marker\n" +
                     "§b---=======================---";
 
             mc.player.sendMessage(new TextComponentString(msg));

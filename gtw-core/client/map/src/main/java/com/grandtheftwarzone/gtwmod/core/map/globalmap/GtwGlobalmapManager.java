@@ -93,6 +93,7 @@ public class GtwGlobalmapManager implements GlobalmapManager {
 
             System.out.println("Отследил нажатие на M");
 
+            System.out.println("mc.currentScreen: " + mc.currentScreen);
             if (mc.currentScreen instanceof GtwGlobalmapScreen) {
                 System.out.println("Пытаюсь закрыть карту");
                 mc.displayGuiScreen(null);

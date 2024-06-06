@@ -92,7 +92,7 @@ public class GtwMarkerManagerClient implements MarkerManagerClient {
             String identificator = markerKey;
             String name = marker.getString("name");
             String lore = marker.getString("lore");
-            String iconId = marker.getString("iconId");
+            String iconId = marker.getString("icon");
             String worldLocation = marker.getString("worldLocation");
             boolean localMarker = true;
             List<String> mapImageIds = (List<String>) marker.get("mapImageIds");

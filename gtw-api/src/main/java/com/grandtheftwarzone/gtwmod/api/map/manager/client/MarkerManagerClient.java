@@ -14,6 +14,8 @@ public interface MarkerManagerClient {
     List<MapMarker> getAllMarkerFilter(String mapImageId);
     List<MapMarker> getAllMarker();
 
+    MapMarker getServerMarker(String identificator);
+
     MapMarker removeLocalMarker(String id);
 
     void addLocalMarker(MapMarker marker);

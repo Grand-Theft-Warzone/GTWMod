@@ -250,7 +250,7 @@ public class CanvasGlobalmap extends BaseCanvas {
 
         // Определение переменных
         // =======================================
-        int sizeMarker = 80;
+        int sizeMarker = 100;
         int fixSizeMarker = RenderUtils.fixCoordinates(0, 0, sizeMarker, sizeMarker, true)[2];
         // =======================================
 
@@ -452,6 +452,12 @@ public class CanvasGlobalmap extends BaseCanvas {
             }
         } else if (event.getParentEvent().getType() == InputType.MOUSE_RIGHT) {
             DisplayElement clickElement = event.getClickedElement();
+            if (subCanvas != null) {
+                if (clickElement == subCanvas) {
+                    return;
+                }
+                undrawSubMenu();
+            }
             drawSubMenu(getLastMouseX() * 1920/ Display.getWidth(), getLastMouseY() * 1080/Display.getHeight(), clickElement);
         }
     }

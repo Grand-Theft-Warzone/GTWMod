@@ -55,7 +55,6 @@ public class ElementMarker extends BaseElement {
         haver = isHovered(getLastMouseX(), getLastMouseY());
         if (haver) {
             haverTimer += 1;
-            System.out.println(haverTimer);
         } else {
             haverTimer = 0;
         }
@@ -134,7 +133,6 @@ public class ElementMarker extends BaseElement {
 
 
         if (haverTimer > 200) {
-            System.out.println("Show ");
             CanvasGlobalmap elementOwner = (CanvasGlobalmap) getElementOwner();
             int sizeText = 8;
             float proporziaSize = (float) sizeText / 12;

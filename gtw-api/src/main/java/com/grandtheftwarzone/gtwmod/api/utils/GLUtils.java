@@ -259,7 +259,7 @@ public class GLUtils {
 
     }
 
-    public static void drawText(int x, int y, String text, AtumColor color, int fontSize) {
+    public static void drawText(int x, int y, String text, AtumColor color, int fontSize, boolean drawShadow) {
 
         float red = color.getRed() / 255.0f;
         float green = color.getGreen() / 255.0f;
@@ -271,8 +271,65 @@ public class GLUtils {
 
         GlStateManager.pushMatrix();
         GlStateManager.scale(fontSize / 12.0f, fontSize / 12.0f, 1.0f);
-        fontRenderer.drawString(text, (int)(x / (fontSize / 12.0f)), (int)(y / (fontSize / 12.0f)), color.toInt(), true);
+        fontRenderer.drawString(text, (int)(x / (fontSize / 12.0f)), (int)(y / (fontSize / 12.0f)), color.toInt(), drawShadow);
         GlStateManager.popMatrix();
 
     }
+    public static void drawText(int x, int y, String text, AtumColor color, int fontSize) {
+        drawText(x, y, text, color, fontSize, true);
+    }
+
+    /**
+     * Рисует пунктирную линию.
+     *
+     * @param startX Начальная X-координата.
+     * @param startY Начальная Y-координата.
+     * @param endX   Конечная X-координата.
+     * @param endY   Конечная Y-координата.
+     * @param color  Цвет в формате ARGB (например, 0xFFFF0000 для красного цвета).
+     * @param lineWidth Толщина линии.
+     * @param dashLength Длина одного штриха.
+     * @param gapLength Длина промежутка между штрихами.
+     */
+    public static void drawDashedLine(float startX, float startY, float endX, float endY, int color, float lineWidth, float dashLength, float gapLength) {
+        float r = (float) (color >> 16 & 255) / 255.0F;
+        float g = (float) (color >> 8 & 255) / 255.0F;
+        float b = (float) (color & 255) / 255.0F;
+        float a = (float) (color >> 24 & 255) / 255.0F;
+
+        float dx = endX - startX;
+        float dy = endY - startY;
+        float totalLength = (float) Math.sqrt(dx * dx + dy * dy);
+        float dashCount = totalLength / (dashLength + gapLength);
+        float dashDx = (dx / totalLength) * dashLength;
+        float dashDy = (dy / totalLength) * dashLength;
+        float gapDx = (dx / totalLength) * gapLength;
+        float gapDy = (dy / totalLength) * gapLength;
+
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.glLineWidth(lineWidth);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+
+        buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+
+        for (int i = 0; i < dashCount; i++) {
+            float sx = startX + i * (dashDx + gapDx);
+            float sy = startY + i * (dashDy + gapDy);
+            float ex = sx + dashDx;
+            float ey = sy + dashDy;
+
+            buffer.pos(sx, sy, 0.0).color(r, g, b, a).endVertex();
+            buffer.pos(ex, ey, 0.0).color(r, g, b, a).endVertex();
+        }
+
+        tessellator.draw();
+
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+    }
+
 }
