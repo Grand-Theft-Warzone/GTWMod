@@ -4,15 +4,17 @@ import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
 import com.google.common.collect.Lists;
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
-import com.grandtheftwarzone.gtwmod.core.emoji.api.Emoji;
+import com.grandtheftwarzone.gtwmod.api.emoji.Emoji;
+import com.grandtheftwarzone.gtwmod.api.emoji.EmojiManagerClient;
+import com.grandtheftwarzone.gtwmod.api.emoji.RLEmoji;
 import com.grandtheftwarzone.gtwmod.core.emoji.render.EmojiFontRenderer;
 import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.GtwProperties;
+import com.grandtheftwarzone.gtwmod.core.misc.GTWConfig;
 import me.phoenixra.atumodcore.api.service.AtumModService;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -28,7 +30,7 @@ import java.util.List;
 import java.util.Scanner;
 
 
-public class GTWEmoji implements AtumModService {
+public class GTWEmoji implements AtumModService, EmojiManagerClient {
 
     public static final List<Emoji> EMOJI_LIST = new ArrayList<>();
 
@@ -150,4 +152,25 @@ public class GTWEmoji implements AtumModService {
     public @NotNull String getId() {
         return "emoji";
     }
+
+    @Override
+    public void addRLEmoji(RLEmoji emoji) {
+        EMOJI_LIST.add(emoji);
+    }
+
+    @Override
+    public void removeRLEmoji(RLEmoji emoji) {
+        EMOJI_LIST.remove(emoji);
+    }
+
+    @Override
+    public void setRenderEmoji(boolean renderEmoji) {
+        GTWConfig.render_emoji = renderEmoji;
+    }
+
+    @Override
+    public boolean isRenderEmoji() {
+        return GTWConfig.render_emoji;
+    }
+
 }

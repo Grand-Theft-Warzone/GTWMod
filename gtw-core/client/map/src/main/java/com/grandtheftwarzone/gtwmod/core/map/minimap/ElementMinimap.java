@@ -7,6 +7,7 @@ import com.grandtheftwarzone.gtwmod.api.map.marker.impl.PlayerMarker;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import com.grandtheftwarzone.gtwmod.api.map.marker.impl.RadarClient;
+import com.grandtheftwarzone.gtwmod.api.utils.GLUtils;
 import lombok.SneakyThrows;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumconfig.api.placeholders.context.PlaceholderContext;
@@ -21,10 +22,14 @@ import me.phoenixra.atumodcore.api.misc.AtumColor;
 import me.phoenixra.atumodcore.api.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
@@ -107,10 +112,6 @@ public class ElementMinimap extends BaseElement {
                 double x = (deltaX / proporzia) + centerX;
                 double y = (deltaY / proporzia) + centerY;
 
-//                System.out.println("PROP: " + proporzia);
-//                System.out.println("DeltaX: " + deltaX + " DeltaY: " + deltaY);
-//                System.out.println("X: " + x + " Y: " + y);
-//                System.out.println("CX: " + centerX + " CY: " + centerY);
                 int zoomMarker = (int) (zoomRadar + zoomRadar*0.2);
 
                 GlStateManager.pushMatrix();
@@ -118,9 +119,6 @@ public class ElementMinimap extends BaseElement {
                 GlStateManager.translate(x, y, 0);
 
                 if (marker instanceof PlayerMarker) {
-//                    System.out.print(((PlayerMarker) marker).getData().getString("gang"));
-//                    System.out.print("Уи: " + GtwAPI.getInstance().getPlayerData().getGangmates());
-//                    System.out.print("GANGSS: " + ((PlayerMarker) marker).getData().getSubsection("data").getStringOrNull("gang_id"));
 
                     int iconX = (int) (-zoomMarker / 2);
                     int iconY = (int) (-zoomMarker / 2);
@@ -134,7 +132,11 @@ public class ElementMinimap extends BaseElement {
                     if (gangMarkerStr != null && playerGangId != null && gangMarkerStr.equals(playerGangId)) {
                         color = AtumColor.LIME;
                     }
-                    RenderUtils.drawRect(iconX - borderThickness, iconY - borderThickness, iconSize + borderThickness*2, iconSize + borderThickness*2, color);
+
+
+                    enableCircleStencil(centerX, centerY, (float) (getHeight() /2));
+
+                    drawRect(iconX - borderThickness, iconY - borderThickness, iconSize + borderThickness*2, iconSize + borderThickness*2, color);
 
 
                     Gui.drawModalRectWithCustomSizedTexture(
@@ -221,6 +223,36 @@ public class ElementMinimap extends BaseElement {
 
          GtwAPI.getInstance().getMapManagerClient().getMinimapManager().setInitElementDraw(true);
     }
+
+
+    public void drawRect(int posX, int posY, int width, int height, AtumColor color) {
+        // Enable scissor test and set the scissor rectangle
+        GLUtils.enableScissor(getX(), getY(), getWidth(), getHeight());
+
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+
+        // Draw
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+        color.useColor();
+        GlStateManager.disableDepth();
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+        buffer.pos(posX, posY + height, 0).endVertex();
+        buffer.pos(posX + width, posY + height, 0).endVertex();
+        buffer.pos(posX + width, posY, 0).endVertex();
+        buffer.pos(posX, posY, 0).endVertex();
+        tessellator.draw();
+
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+        GlStateManager.enableDepth();
+        GlStateManager.color(1f, 1f, 1f);
+
+        // Disable scissor test
+        GLUtils.disableScissor();
+    }
+
 
 
     @Override

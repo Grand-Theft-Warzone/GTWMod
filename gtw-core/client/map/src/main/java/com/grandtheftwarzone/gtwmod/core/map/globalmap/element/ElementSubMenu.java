@@ -41,11 +41,11 @@ public class ElementSubMenu extends BaseElement {
 
     @Override
     protected void onDraw(DisplayResolution displayResolution, float v, int i, int i1) {
-
-        if ((getLastMouseX() >= getX() && getLastMouseX() <= getX() + getWidth()) && getLastMouseY() >= getY() && getLastMouseY() <= getY() + getHeight()) {
-            hovered = true;
-            System.out.println("Наведён.");
-        }
+//
+//        if ((getLastMouseX() >= getX() && getLastMouseX() <= getX() + getWidth()) && getLastMouseY() >= getY() && getLastMouseY() <= getY() + getHeight()) {
+//            hovered = true;
+//            System.out.println("Наведён.");
+//        }
 
         int posTextX = getX() + data.getSizeIcon() + data.getIndentIcons() + data.getEdgeMargin();
         int posTextY = getY() + ((CanvasMapSubmenu) getElementOwner()).getIndentText()/2;

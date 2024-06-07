@@ -1,6 +1,7 @@
 package com.grandtheftwarzone.gtwmod.server;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
+import com.grandtheftwarzone.gtwmod.api.emoji.EmojiManagerClient;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneManager;
 
 import com.grandtheftwarzone.gtwmod.api.map.manager.client.MapManagerClient;
@@ -51,6 +52,11 @@ public class GtwAPIServer implements GtwAPI {
     @Override
     public @NotNull MapManagerClient getMapManagerClient() {
         return null;
+    }
+
+    @Override
+    public @NotNull EmojiManagerClient getEmojiManagerClient() {
+        throw new RuntimeException("Client side only!");
     }
 
     @Override

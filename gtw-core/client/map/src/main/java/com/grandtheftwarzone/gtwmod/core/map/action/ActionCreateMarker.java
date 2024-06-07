@@ -1,31 +1,32 @@
 package com.grandtheftwarzone.gtwmod.core.map.action;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
-import com.grandtheftwarzone.gtwmod.api.map.marker.MapMarker;
-import com.grandtheftwarzone.gtwmod.core.map.gui.GuiChatWithCommand;
+import com.grandtheftwarzone.gtwmod.api.emoji.RLEmoji;
+import com.grandtheftwarzone.gtwmod.api.map.marker.MarkerCreationStateMachine;
+import com.grandtheftwarzone.gtwmod.core.map.globalmap.element.ElementSubMenu;
 import me.phoenixra.atumconfig.api.utils.StringUtils;
 import me.phoenixra.atumodcore.api.display.actions.ActionData;
 import me.phoenixra.atumodcore.api.display.actions.DisplayAction;
 import me.phoenixra.atumodcore.api.display.annotations.RegisterDisplayAction;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiChat;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 
-@RegisterDisplayAction(templateId = "map_delete_marker_server")
-public class ActionAdminDeleteMarker implements DisplayAction {
+import java.util.ArrayList;
+import java.util.List;
+
+@RegisterDisplayAction(templateId = "map_create_marker")
+public class ActionCreateMarker implements DisplayAction {
     @Override
     public void perform(ActionData actionData) {
-
-        String id = actionData.getActionArgs().getArgs()[0];
-
-        Minecraft.getMinecraft().displayGuiScreen(new GuiChatWithCommand("/mapmanager remove " + id));
-
-        MapMarker marker = GtwAPI.getInstance().getMapManagerClient().getMarkerManager().getServerMarker(id);
-        TextComponentString msgDelete = getClicableMsg("§7============================================\n\n\n§8[MAP] §ePress Enter to delete the marker §f" + StringUtils.formatMinecraftColors(marker.getName() != null ? marker.getName() : "") + "\n\n\n§7============================================", ClickEvent.Action.SUGGEST_COMMAND,  "/mapmanager remove " + marker.getIdentificator(), "§eClick to enter the delete command.");
-        Minecraft.getMinecraft().player.sendMessage(msgDelete);
+        Minecraft.getMinecraft().displayGuiScreen(new GuiChat());
+        GtwAPI.getInstance().getMapManagerClient().setMarkerCreator(new MarkerCreationStateMachine(String.join(";", actionData.getActionArgs().getArgs()), false));
     }
+
 
     public TextComponentString getClicableMsg(String textMsg, ClickEvent.Action eventClick, String argClick, HoverEvent.Action eventHover, String argHover) {
         TextComponentString text = new TextComponentString(textMsg);
@@ -36,4 +37,5 @@ public class ActionAdminDeleteMarker implements DisplayAction {
     public TextComponentString getClicableMsg(String textMsg, ClickEvent.Action eventClick, String argClick, String argHover) {
         return this.getClicableMsg(StringUtils.formatMinecraftColors(textMsg), eventClick, argClick, HoverEvent.Action.SHOW_TEXT, StringUtils.formatMinecraftColors(argHover));
     }
+
 }

@@ -28,8 +28,8 @@ import me.phoenixra.atumodcore.api.events.display.ElementInputPressEvent;
 import me.phoenixra.atumodcore.api.events.input.InputPressEvent;
 import me.phoenixra.atumodcore.api.events.input.InputReleaseEvent;
 import me.phoenixra.atumodcore.api.input.InputType;
-import me.phoenixra.atumodcore.api.misc.AtumColor;
 import me.phoenixra.atumodcore.api.utils.RenderUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
@@ -38,8 +38,10 @@ import org.lwjgl.opengl.Display;
 
 import javax.vecmath.Vector2d;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.grandtheftwarzone.gtwmod.api.utils.GLUtils.drawPartialImage;
 
@@ -48,15 +50,17 @@ public class CanvasGlobalmap extends BaseCanvas {
 
     boolean isActive = false;
 
-    private HashMap<String, ElementMarker> markerMap = new HashMap<>();
+    private ConcurrentHashMap<String, ElementMarker> markerMap = new ConcurrentHashMap<String, ElementMarker>();
 
     @Getter
     private MapImage globalmap;
 
     private ResourceLocation globalmapTexture;
 
+    @Getter
     private GlobalZoom zoom;
 
+    @Getter
     private GlobalCentrCoord centrCoord;
 
     private boolean pressIncreaseZoom;
@@ -347,6 +351,21 @@ public class CanvasGlobalmap extends BaseCanvas {
         GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalZoom().updateDiapazon(globalmap);
 
         elementNameMarker = new ElementNameMarker(getAtumMod(), 70, this, null);
+
+        if (getSettingsConfig().getSubsection("settings").getBool("save_coord")) {
+            GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getCentrCoord().setStraightCenter(new MapLocation(getSettingsConfig().getSubsection("settings").getString("center_coord")));
+        }
+
+        int configZoom = getSettingsConfig().getSubsection("settings").getSubsection("zoom").getInt("zoom");
+        GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalZoom().setStraightZoom(configZoom);
+        double configZoomSpeed = getSettingsConfig().getSubsection("settings").getSubsection("zoom").getDouble("speed");
+        GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getGlobalZoom().setAnimSpeed(configZoomSpeed);
+
+
+        if (GtwAPI.getInstance().getMapManagerClient().getMarkerCreator() != null) {
+            GtwAPI.getInstance().getMapManagerClient().getMarkerCreator().stop();
+            GtwAPI.getInstance().getMapManagerClient().setMarkerCreator(null);
+        }
         GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().setInitCanvasDraw(true);
 
     }
@@ -355,12 +374,14 @@ public class CanvasGlobalmap extends BaseCanvas {
     // @TODO It's better to redo it, because... greater difficulty with long markers
     private void registerElementMarkers(List<MapMarker> markers) {
 
+        List<MapMarker> newlist = new ArrayList<>(markers);
+
         for (String markerId : markerMap.keySet()) {
             boolean ostavl = false;
             for (MapMarker marker : markers) {
                 if (marker.getIdentificator().equals(markerId)) {
                     ostavl = true;
-                    markers.remove(marker);
+                    newlist.remove(marker);
                     break ;
                 }
             }
@@ -369,7 +390,7 @@ public class CanvasGlobalmap extends BaseCanvas {
             }
 
         }
-        for (MapMarker marker : markers) {
+        for (MapMarker marker : newlist) {
             addElementMarker(marker);
         }
     }
@@ -394,6 +415,7 @@ public class CanvasGlobalmap extends BaseCanvas {
 
     @Override
     public void updateElementVariables(@NotNull Config config) {
+
         System.out.println("Вызываю updateElementVariables в CanvasGlobalmap");
 //        String debugCordStr = config.getString("debug_cord");
 //        imageLocation = new MapLocation(debugCordStr);
@@ -407,11 +429,9 @@ public class CanvasGlobalmap extends BaseCanvas {
         // centr coord
         System.out.println("DEBUG " + config.getSubsection("center").getDouble("speed"));
         GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getCentrCoord().setAnimSpeed(config.getSubsection("center").getDouble("speed"));
-        if (getSettingsConfig().getSubsection("settings").getBool("save_coord")) {
-            GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().getCentrCoord().setStraightCenter(new MapLocation(config.getString("center_coord")));
-        }
         isActive = false;
         GtwAPI.getInstance().getMapManagerClient().getGlobalmapManager().setInitCanvasDraw(false);
+
     }
 
     @Override
@@ -517,6 +537,17 @@ public class CanvasGlobalmap extends BaseCanvas {
 
 
 
+    @SubscribeEvent
+    protected void onPressM(InputPressEvent event) {
+
+        if (!isActive()) {
+            return;
+        }
+
+        if (event.getKeyboardKey() == GtwAPI.getInstance().getMapManagerClient().getKeyShowGlobalmap().getKeyCode()) {
+            Minecraft.getMinecraft().displayGuiScreen(null);
+        }
+    }
 
 
     @SubscribeEvent

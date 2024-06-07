@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -112,6 +113,28 @@ public class GLUtils {
         GlStateManager.colorMask(true, true, true, true);
         GlStateManager.depthMask(false);
         GlStateManager.depthFunc(GL11.GL_GREATER);
+    }
+
+    public static void enableScissor(int x, int y, int width, int height) {
+        // Get the framebuffer size
+        int framebufferWidth = Display.getWidth();
+        int framebufferHeight = Display.getHeight();
+
+        // Calculate viewport coordinates
+        int scaleFactor = framebufferWidth / Display.getWidth();
+        int viewportX = x * scaleFactor;
+        int viewportY = (framebufferHeight - (y + height)) * scaleFactor;
+        int viewportWidth = width * scaleFactor;
+        int viewportHeight = height * scaleFactor;
+
+        // Enable scissor test and set scissor rectangle
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        GL11.glScissor(viewportX, viewportY, viewportWidth, viewportHeight);
+    }
+
+    public static void disableScissor() {
+        // Disable scissor test
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }
 
     public static void disableStencil() {

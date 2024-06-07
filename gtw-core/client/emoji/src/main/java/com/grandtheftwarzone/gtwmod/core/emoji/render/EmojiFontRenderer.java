@@ -1,7 +1,7 @@
 package com.grandtheftwarzone.gtwmod.core.emoji.render;
 
 import com.grandtheftwarzone.gtwmod.core.emoji.GTWEmoji;
-import com.grandtheftwarzone.gtwmod.core.emoji.api.Emoji;
+import com.grandtheftwarzone.gtwmod.api.emoji.Emoji;
 import com.grandtheftwarzone.gtwmod.core.emoji.gui.GuiIconExporter;
 import com.grandtheftwarzone.gtwmod.core.misc.GTWConfig;
 import io.netty.util.internal.StringUtil;

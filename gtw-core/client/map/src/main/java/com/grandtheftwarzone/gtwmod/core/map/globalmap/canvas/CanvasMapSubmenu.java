@@ -2,6 +2,10 @@ package com.grandtheftwarzone.gtwmod.core.map.globalmap.canvas;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
 import com.grandtheftwarzone.gtwmod.api.map.marker.MapMarker;
+import com.grandtheftwarzone.gtwmod.api.map.marker.impl.PlayerMarker;
+import com.grandtheftwarzone.gtwmod.api.map.marker.impl.RadarClient;
+import com.grandtheftwarzone.gtwmod.api.map.misc.GlobalCentrCoord;
+import com.grandtheftwarzone.gtwmod.api.map.misc.GlobalZoom;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import com.grandtheftwarzone.gtwmod.api.utils.GLUtils;
@@ -32,6 +36,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.Display;
 
+import javax.vecmath.Vector2d;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +80,7 @@ public class CanvasMapSubmenu extends BaseCanvas {
         this.elementClick = elementClick;
         this.posX = posX;
         this.posY = posY;
-        this.admin =  Minecraft.getMinecraft().player.capabilities.isCreativeMode;
+        this.admin = Minecraft.getMinecraft().player.capabilities.isCreativeMode;
     }
 
     @Override
@@ -116,7 +121,30 @@ public class CanvasMapSubmenu extends BaseCanvas {
         System.out.println("Вызывается init в CanvasMapSubmenu");
 
         ownerCanvas = (CanvasGlobalmap) getElementOwner();
-        mapCoord = ownerCanvas.getGlobalmap().calculateWorldCoord(posX, posY);
+
+        // Рассчёт координат на реальной карте.
+        // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        int centerScreenX = ownerCanvas.getWidth() / 2;
+        int centerScreenY = ownerCanvas.getHeight() / 2;
+
+        int mouseX = ownerCanvas.getLastMouseX();
+        int mouseY = ownerCanvas.getLastMouseY();
+
+        GlobalZoom zoom = ownerCanvas.getZoom();
+        GlobalCentrCoord centrCoord = ownerCanvas.getCentrCoord();
+
+        Vector2d vectorCenterCursor = new Vector2d(mouseX-centerScreenX, mouseY-centerScreenY);
+
+
+        double deltaX = vectorCenterCursor.getX() * (double) (int) (zoom.getFirstZoom()*zoom.getCoefZoomX()) / ownerCanvas.getWidth();
+        double deltaY = vectorCenterCursor.getY() * (double) (int) (zoom.getFirstZoom()*zoom.getCoefZoomY()) / ownerCanvas.getHeight();
+        MapLocation calculationCoord = new MapLocation((centrCoord.getFirstCoordInter().getX() + deltaX), (centrCoord.getFirstCoordInter().getY() + deltaY));
+
+        System.out.println("EntityLocation: " + calculationCoord.toString());
+
+        mapCoord = ownerCanvas.getGlobalmap().calculateWorldCoord(calculationCoord);
+        // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 
         // Определение списка действий
         // !+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-!
@@ -151,14 +179,11 @@ public class CanvasMapSubmenu extends BaseCanvas {
             }
             // Если локальный маркер
             if (local) {
-                DataMapSubMenu dataMapEdit = new DataMapSubMenu("Edit makrer", colorLocal, edgeMargin, sizeText, "edit_marker", sizeIcon, indentIcon, "map_edit_marker@" + marker.getIdentificator());
-                dataMapSubMenus.add(dataMapEdit);
-
                 DataMapSubMenu dataMapDelete = new DataMapSubMenu("Delete marker", colorLocal, edgeMargin, sizeText, "delete_marker", sizeIcon, indentIcon, "map_delete_marker@" + marker.getIdentificator());
                 dataMapSubMenus.add(dataMapDelete);
 
             // Если маркер сервера и чел - админ
-            } else if (admin) {
+            } else if (admin && !(marker instanceof RadarClient) && !(marker instanceof PlayerMarker)) {
 
                 DataMapSubMenu dataMapEdit = new DataMapSubMenu("Edit makrer", colorServer, edgeMargin, sizeText, "admin_edit_marker", sizeIcon, indentIcon, "map_edit_marker_server@" + marker.getIdentificator());
                 dataMapSubMenus.add(dataMapEdit);
@@ -170,11 +195,20 @@ public class CanvasMapSubmenu extends BaseCanvas {
             }
 
             if (admin) {
-                DataMapSubMenu dataMapTeleport = new DataMapSubMenu("Teleport", colorServer, edgeMargin, sizeText, "admin_teleport", sizeIcon, indentIcon, "map_teleport@" + mapCoord.toString());
+
+                EntityLocation cords = marker.getWorldLocation();
+
+                if (marker instanceof PlayerMarker || marker instanceof RadarClient) {
+                    cords.setX(marker.getWorldLocation().getX());
+                    cords.setY(marker.getWorldLocation().getZ());
+                    cords.setZ(marker.getWorldLocation().getY());
+                }
+
+                DataMapSubMenu dataMapTeleport = new DataMapSubMenu("Teleport", colorServer, edgeMargin, sizeText, "admin_teleport", sizeIcon, indentIcon, "map_teleport@" + cords.toString() + ";" + marker.getIdentificator());
                 dataMapSubMenus.add(dataMapTeleport);
             }
 
-            DataMapSubMenu dataCopyCoord = new DataMapSubMenu("Copy coordinates", colorLocal, edgeMargin, sizeText, "coord", sizeIcon,indentIcon, "map_copy_coord@" + mapCoord.toString() + marker.getIdentificator());
+            DataMapSubMenu dataCopyCoord = new DataMapSubMenu("Copy coordinates", colorLocal, edgeMargin, sizeText, "coord", sizeIcon,indentIcon, "map_copy_coord@" + marker.getWorldLocation().toString() + marker.getIdentificator());
             dataMapSubMenus.add(dataCopyCoord);
         } else {
             if (admin) {
@@ -189,8 +223,10 @@ public class CanvasMapSubmenu extends BaseCanvas {
                 dataMapSubMenus.add(dataMapLocalCreate);
             }
 
-            DataMapSubMenu dataMapTeleport = new DataMapSubMenu("Teleport", colorServer, edgeMargin, sizeText, "admin_teleport", sizeIcon, indentIcon, "map_teleport@" + mapCoord.toString());
-            dataMapSubMenus.add(dataMapTeleport);
+            if (admin) {
+                DataMapSubMenu dataMapTeleport = new DataMapSubMenu("Teleport", colorServer, edgeMargin, sizeText, "admin_teleport", sizeIcon, indentIcon, "map_teleport@" + mapCoord.toString());
+                dataMapSubMenus.add(dataMapTeleport);
+            }
             DataMapSubMenu dataCopyCoord = new DataMapSubMenu("Copy coordinates", colorLocal, edgeMargin, sizeText, "coord", sizeIcon,indentIcon, "map_copy_coord@" + mapCoord.toString());
             dataMapSubMenus.add(dataCopyCoord);
         }

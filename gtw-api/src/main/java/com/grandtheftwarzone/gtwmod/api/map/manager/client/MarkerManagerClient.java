@@ -16,6 +16,8 @@ public interface MarkerManagerClient {
 
     MapMarker getServerMarker(String identificator);
 
+    MapMarker getLocalMarker(String identificator);
+
     MapMarker removeLocalMarker(String id);
 
     void addLocalMarker(MapMarker marker);

@@ -30,12 +30,13 @@ public class BaseStaticMarker implements MapMarker {
 
     @Nullable
     @Getter
+    @Setter
     private String iconId;
 
-    @Getter
+    @Getter @Setter
     private String name;
 
-    @Getter
+    @Getter @Setter
     private String lore;
 
     @Nullable
@@ -180,5 +181,9 @@ public class BaseStaticMarker implements MapMarker {
                 "\nActions: " + getActionList() +
                 "\nDraw: " + isDraw() +
                 "\n========================";
+    }
+
+    public void setWorldLocation(String newCoord) {
+        this.worldLocation = new EntityLocation(newCoord);
     }
 }

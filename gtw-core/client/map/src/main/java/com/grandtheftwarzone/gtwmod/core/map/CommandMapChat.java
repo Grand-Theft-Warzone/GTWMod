@@ -1,10 +1,10 @@
 package com.grandtheftwarzone.gtwmod.core.map;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
-import com.grandtheftwarzone.gtwmod.api.map.marker.BaseStaticMarker;
-import com.grandtheftwarzone.gtwmod.api.map.marker.MapMarker;
-import com.grandtheftwarzone.gtwmod.api.map.marker.TemplateMarker;
+import com.grandtheftwarzone.gtwmod.api.map.marker.*;
+import com.grandtheftwarzone.gtwmod.api.map.marker.impl.RadarClient;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
+import me.phoenixra.atumconfig.api.utils.StringUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -36,6 +36,12 @@ public class CommandMapChat {
     public void onPlayerChast(ClientChatEvent event) {
         String message = event.getMessage();
         boolean zash = false;
+
+        if (message.replace(" ", "").equalsIgnoreCase("/mapmanagercreate")) {
+            GtwAPI.getInstance().getMapManagerClient().setMarkerCreator(new MarkerCreationStateMachine(null, true));
+            event.setCanceled(true);
+            return;
+        }
 
         List<String> args = Arrays.asList(message.split(" "));
 
@@ -74,7 +80,7 @@ public class CommandMapChat {
             if (marker == null) {
                 mc.player.sendMessage(new TextComponentString("§8[LMM] §cToken with id §f" + identificator + "§c was not found!"));
             } else {
-                showListMarker();
+//                showListMarker();
                 mc.player.sendMessage(new TextComponentString("\n§8[LMM] §aMarker §f" + marker.getName() + "§a removed!"));
             }
             return;
@@ -84,8 +90,7 @@ public class CommandMapChat {
 
         if (args.get(1).equalsIgnoreCase("create")) {
             if (args.size() == 2) {
-                String msg = "§8[LMM] §fSyntax: §a/lmm create <name> <iconId> §7[X Y Z]";
-                mc.player.sendMessage(new TextComponentString(msg));
+                GtwAPI.getInstance().getMapManagerClient().setMarkerCreator(new MarkerCreationStateMachine(null, false));
                 return;
             }
             if (args.size() >= 4) {
@@ -121,6 +126,51 @@ public class CommandMapChat {
 
         }
 
+        if (args.get(1).equalsIgnoreCase("edit")) {
+            if (args.size() == 3) {
+                String msgStr = "§e[GTWMap] §fSyntax: §a/lmm edit <id> name/lore/iconid/worldlocation/data/mapimageid/permissions/actions/draw <newVar> §7[Show markers]";
+                TextComponentString msg = getClicableMsg(msgStr, ClickEvent.Action.RUN_COMMAND, "/lmm list", "§8Show markers");
+                mc.player.sendMessage(msg);
+                return;
+            }
+            if (args.size() == 2) {
+                String msgStr = "§e[GTWMap] §fThere is no required command argument. §7[Show markers]";
+                TextComponentString msg = getClicableMsg(msgStr, ClickEvent.Action.RUN_COMMAND, "/lmm list", "§8Show markers");
+                mc.player.sendMessage(msg);
+                return;
+            }
+
+            String identificator = args.get(2);
+            BaseStaticMarker marker = (BaseStaticMarker) GtwAPI.getInstance().getMapManagerClient().getMarkerManager().getLocalMarker(identificator);
+            if (marker == null) {
+                String msgStr = "§e[GTWMap] §cToken with id §f" + identificator + "§c was not found!";
+                mc.player.sendMessage(new TextComponentString(msgStr));
+            } else {
+
+                String action = args.get(3);
+                List<String> newVar = args.subList(4, args.size()-1);
+                if (action.equalsIgnoreCase("name")) {
+                    marker.setName(String.join(" ", newVar));
+                } else if (action.equalsIgnoreCase("lore")) {
+                    marker.setLore(String.join(" ", newVar));
+                } else if (action.equalsIgnoreCase("iconid")) {
+                    marker.setIconId(String.join(" ", newVar));
+                } else if (action.equalsIgnoreCase("worldlocation")) {
+                    marker.setWorldLocation(String.join(" ", newVar));
+                } else  if (action.equalsIgnoreCase("draw")) {
+                    marker.setDraw(Boolean.parseBoolean(String.join(" ", newVar)));
+                }
+                GtwAPI.getInstance().getMapManagerClient().getMarkerManager().addLocalMarker(marker);
+
+                mc.player.sendChatMessage("/lmm info " + identificator);
+
+                TextComponentString msg = getClicableMsg("§e[LMM] §aParameter " + action + " changed! §7[Edit]", ClickEvent.Action.SUGGEST_COMMAND, "/lmm edit " + action + " " + newVar, "§7Change this parameter again");
+                mc.player.sendMessage(msg);
+                return;
+            }
+
+        }
+
         // LIST
 
         if (args.get(1).equalsIgnoreCase("remove") || args.get(1).equalsIgnoreCase("list")) {
@@ -145,16 +195,34 @@ public class CommandMapChat {
             i++;
             EntityLocation location = marker.getWorldLocation();
 
-            String msg = "§f" + i + ". §2" + marker.getName() + " §7(" + (int)location.getX() + " " + (int)location.getY() + " " + (int)location.getZ() + ")  " + "§c[§lX§c]";
+            if (marker instanceof RadarClient) {
+                String msg = "§f" + i + ". §2" + marker.getName() + " §7(" + (int)location.getX() + " " + (int)location.getY() + " " + (int)location.getZ() + ")";
 
-            TextComponentString clickableMsg = new TextComponentString(msg);
+                TextComponentString clickableMsg = new TextComponentString(msg);
+                mc.player.sendMessage(clickableMsg);
+            } else {
+                String msg = "§f" + i + ". §2" + marker.getName() + " §7(" + (int)location.getX() + " " + (int)location.getY() + " " + (int)location.getZ() + ")  " + "§c[§lX§c]";
 
-            Style clickableStyle = new Style().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, commands.get(0) +" remove " + marker.getIdentificator())).setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("§cRemove marker")));
-            clickableMsg.setStyle(clickableStyle);
-            mc.player.sendMessage(clickableMsg);
+                TextComponentString clickableMsg = new TextComponentString(msg);
+
+                Style clickableStyle = new Style().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, commands.get(0) +" remove " + marker.getIdentificator())).setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("§cRemove marker")));
+                clickableMsg.setStyle(clickableStyle);
+                mc.player.sendMessage(clickableMsg);
+
+            }
         }
         mc.player.sendMessage(new TextComponentString("§7--======================--"));
 
+    }
+
+    public TextComponentString getClicableMsg(String textMsg, ClickEvent.Action eventClick, String argClick, HoverEvent.Action eventHover, String argHover) {
+        TextComponentString text = new TextComponentString(textMsg);
+        text.setStyle(new Style().setClickEvent(new ClickEvent(eventClick, argClick)).setHoverEvent(new HoverEvent(eventHover, new TextComponentString(argHover))));
+        return text;
+    }
+
+    public TextComponentString getClicableMsg(String textMsg, ClickEvent.Action eventClick, String argClick, String argHover) {
+        return this.getClicableMsg(StringUtils.formatMinecraftColors(textMsg), eventClick, argClick, HoverEvent.Action.SHOW_TEXT, StringUtils.formatMinecraftColors(argHover));
     }
 
 }

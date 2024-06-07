@@ -65,7 +65,7 @@ public class GtwCommandManager extends CommandBase {
                     "§d• §a/" + getName() + " help §f- Show all commands\n\n" +
                     "§d• §a/" + getName() + " create <name> <iconId> §7[X Y Z] §f- Create a marker\n\n" +
                     "§d• §a/" + getName() + " list §f- Get a list of all markers\n\n" +
-                    "§d• §a/" + getName() + " info <id> §f- Read/Edit маркер";
+                    "§d• §a/" + getName() + " info <id> §f- Read/Edit marker";
 
 
             sender.sendMessage(new TextComponentString(msg));
@@ -261,9 +261,9 @@ public class GtwCommandManager extends CommandBase {
             String permissionsStr = (permissions!= null &&!permissions.isEmpty())? String.join(";", permissions) : null;
 
             EntityLocation location;
-            if (args.length == 6) {
+            if (args.length >= 7) {
                 try {
-                    location = new EntityLocation(Double.parseDouble(args[3] != null ? args[3] : String.valueOf(0)), Double.parseDouble(args[5]), Double.parseDouble(args[4]));
+                    location = new EntityLocation(Double.parseDouble(args[4] != null ? args[4] : String.valueOf(0)), Double.parseDouble(args[6]), Double.parseDouble(args[5]));
                 } catch (NumberFormatException e) {
                     String msg = "§e[GTWMap] §cERROR:Check the correctness of the arguments.";
                     sender.sendMessage(new TextComponentString(msg));

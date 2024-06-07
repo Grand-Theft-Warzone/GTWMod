@@ -1,11 +1,9 @@
 package com.grandtheftwarzone.gtwmod.core.map;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.toasts.GuiToast;
 import net.minecraft.client.gui.toasts.IToast;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
 public class CustomToastGui implements IToast {
@@ -13,12 +11,14 @@ public class CustomToastGui implements IToast {
     private final ResourceLocation icon;
     private final String title;
     private final String description;
+    private final long displayDuration;
     private boolean hasPlayedSound;
 
-    public CustomToastGui(ResourceLocation icon, String title, String description) {
+    public CustomToastGui(ResourceLocation icon, String title, String description, long displayDuration) {
         this.icon = icon;
         this.title = title;
         this.description = description;
+        this.displayDuration = displayDuration;
     }
 
     @Override
@@ -38,13 +38,13 @@ public class CustomToastGui implements IToast {
             toastGui.drawTexturedModalRect(8, 8, 0, 0, 16, 16);
         }
 
-        return delta >= 5000L ? Visibility.HIDE : Visibility.SHOW;
+        return delta >= displayDuration ? Visibility.HIDE : Visibility.SHOW;
     }
 
-    public static void showToast(String title, String description, ResourceLocation resourceLocation) {
+    public static void showToast(String title, String description, ResourceLocation resourceLocation, int durationSeconds) {
         Minecraft mc = Minecraft.getMinecraft();
         GuiToast toastGui = mc.getToastGui();
-        CustomToastGui toast = new CustomToastGui(resourceLocation, title, description);
+        CustomToastGui toast = new CustomToastGui(resourceLocation, title, description, durationSeconds * 1000L);
         toastGui.add(toast);
     }
 }

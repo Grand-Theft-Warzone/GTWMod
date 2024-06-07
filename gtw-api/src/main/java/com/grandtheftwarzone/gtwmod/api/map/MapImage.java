@@ -102,9 +102,16 @@ public class MapImage {
     }
 
     public EntityLocation calculateWorldCoord(double targetX, double targetY) {
-        double targetWorldX = topLeft.getX() + (targetX * pixelsPerBlockX);
-        double targetWorldZ = topLeft.getY() + (targetY * pixelsPerBlockZ);
+        System.out.println("Pix Pix " + pixelsPerBlockX + " <> " + pixelsPerBlockZ);
+        System.out.println("TL: " + topLeft.getX() + " <> " + topLeft.getY());
+        double targetWorldX = topLeft.getX() + (targetX / pixelsPerBlockX);
+        double targetWorldZ = topLeft.getY() + (targetY / pixelsPerBlockZ);
+        System.out.println("X: " + targetWorldX + " Z: " + targetWorldZ);
         return new EntityLocation(targetWorldX, targetWorldZ, 0);
+    }
+
+    public EntityLocation calculateWorldCoord(MapLocation location) {
+        return this.calculateWorldCoord(location.getX(), location.getY());
     }
 
     public boolean inRealMap(double targetX, double targetY) {

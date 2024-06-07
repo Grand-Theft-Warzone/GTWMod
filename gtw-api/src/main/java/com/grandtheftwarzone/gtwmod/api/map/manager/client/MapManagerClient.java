@@ -3,6 +3,7 @@ package com.grandtheftwarzone.gtwmod.api.map.manager.client;
 
 import com.grandtheftwarzone.gtwmod.api.map.MapImageUtils;
 import com.grandtheftwarzone.gtwmod.api.map.consumer.MapConsumersClient;
+import com.grandtheftwarzone.gtwmod.api.map.marker.MarkerCreationStateMachine;
 import com.grandtheftwarzone.gtwmod.api.map.marker.impl.RadarClient;
 import net.minecraft.client.settings.KeyBinding;
 
@@ -14,6 +15,8 @@ public interface MapManagerClient {
 
     MapImageUtils getMapImageUtils();
 
+    MarkerCreationStateMachine getMarkerCreator();
+    void setMarkerCreator(MarkerCreationStateMachine newMarkerCreator);
     // ------------------------------------------
 
     RadarClient getRadarPlayer();

@@ -1,5 +1,6 @@
 package com.grandtheftwarzone.gtwmod.api;
 
+import com.grandtheftwarzone.gtwmod.api.emoji.EmojiManagerClient;
 import com.grandtheftwarzone.gtwmod.api.gui.phone.PhoneManager;
 import com.grandtheftwarzone.gtwmod.api.map.manager.client.MapManagerClient;
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
@@ -75,6 +76,9 @@ public interface GtwAPI {
 
     @SideOnly(Side.CLIENT)
     @NotNull MapManagerClient getMapManagerClient();
+
+    @SideOnly(Side.CLIENT)
+    @NotNull EmojiManagerClient getEmojiManagerClient();
 
     @SideOnly(Side.SERVER)
     @NotNull MapManagerServer getMapManagerServer();

@@ -13,17 +13,18 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 
-@RegisterDisplayAction(templateId = "map_delete_marker_server")
-public class ActionAdminDeleteMarker implements DisplayAction {
+@RegisterDisplayAction(templateId = "map_delete_marker")
+
+public class ActionDeleteMarker implements DisplayAction {
     @Override
     public void perform(ActionData actionData) {
 
         String id = actionData.getActionArgs().getArgs()[0];
 
-        Minecraft.getMinecraft().displayGuiScreen(new GuiChatWithCommand("/mapmanager remove " + id));
+        Minecraft.getMinecraft().displayGuiScreen(new GuiChatWithCommand("/lmm remove " + id));
 
-        MapMarker marker = GtwAPI.getInstance().getMapManagerClient().getMarkerManager().getServerMarker(id);
-        TextComponentString msgDelete = getClicableMsg("§7============================================\n\n\n§8[MAP] §ePress Enter to delete the marker §f" + StringUtils.formatMinecraftColors(marker.getName() != null ? marker.getName() : "") + "\n\n\n§7============================================", ClickEvent.Action.SUGGEST_COMMAND,  "/mapmanager remove " + marker.getIdentificator(), "§eClick to enter the delete command.");
+        MapMarker marker = GtwAPI.getInstance().getMapManagerClient().getMarkerManager().getLocalMarker(id);
+        TextComponentString msgDelete = getClicableMsg("§7============================================\n\n\n§8[MAP] §ePress Enter to delete the marker " + StringUtils.formatMinecraftColors(marker.getName() != null ? marker.getName() : "") + "\n\n\n§7============================================", ClickEvent.Action.SUGGEST_COMMAND,  "/lmm remove " + marker.getIdentificator(), "§eClick to enter the delete command.");
         Minecraft.getMinecraft().player.sendMessage(msgDelete);
     }
 

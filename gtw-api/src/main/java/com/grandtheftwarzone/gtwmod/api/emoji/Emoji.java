@@ -1,4 +1,4 @@
-package com.grandtheftwarzone.gtwmod.core.emoji.api;
+package com.grandtheftwarzone.gtwmod.api.emoji;
 
 import com.grandtheftwarzone.gtwmod.api.GtwProperties;
 import net.minecraft.client.Minecraft;
@@ -19,8 +19,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static com.grandtheftwarzone.gtwmod.core.emoji.GTWEmoji.GITHUB_URL;
 
 
 public class Emoji implements Predicate<String> {
@@ -44,7 +42,7 @@ public class Emoji implements Predicate<String> {
         if (img != null)
             return;
 
-        img = new DownloadImageData(new File("gtwdata/cache/emoji/" + name + "-" + version), GITHUB_URL + location, loading_texture);
+        img = new DownloadImageData(new File("gtwdata/cache/emoji/" + name + "-" + version), "https://raw.githubusercontent.com/Grand-Theft-Warzone/.github/main/emoji/" + location, loading_texture);
         resourceLocation = new ResourceLocation(GtwProperties.MOD_ID, "textures/emoji/" + name + "-" + version);
         Minecraft.getMinecraft().renderEngine.loadTexture(resourceLocation, img);
     }
