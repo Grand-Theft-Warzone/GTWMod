@@ -136,7 +136,7 @@ public class ElementMinimap extends BaseElement {
 
                     enableCircleStencil(centerX, centerY, (float) (getHeight() /2));
 
-                    drawRect(iconX - borderThickness, iconY - borderThickness, iconSize + borderThickness*2, iconSize + borderThickness*2, color);
+                    RenderUtils.drawRect(iconX - borderThickness, iconY - borderThickness, iconSize + borderThickness*2, iconSize + borderThickness*2, color);
 
 
                     Gui.drawModalRectWithCustomSizedTexture(
@@ -222,35 +222,6 @@ public class ElementMinimap extends BaseElement {
         GtwAPI.getInstance().getMapManagerClient().getMinimapManager().updateMinimapManager(renderer);
 
          GtwAPI.getInstance().getMapManagerClient().getMinimapManager().setInitElementDraw(true);
-    }
-
-
-    public void drawRect(int posX, int posY, int width, int height, AtumColor color) {
-        // Enable scissor test and set the scissor rectangle
-        GLUtils.enableScissor(getX(), getY(), getWidth(), getHeight());
-
-        GlStateManager.enableBlend();
-        GlStateManager.disableTexture2D();
-
-        // Draw
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
-        color.useColor();
-        GlStateManager.disableDepth();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
-        buffer.pos(posX, posY + height, 0).endVertex();
-        buffer.pos(posX + width, posY + height, 0).endVertex();
-        buffer.pos(posX + width, posY, 0).endVertex();
-        buffer.pos(posX, posY, 0).endVertex();
-        tessellator.draw();
-
-        GlStateManager.enableTexture2D();
-        GlStateManager.disableBlend();
-        GlStateManager.enableDepth();
-        GlStateManager.color(1f, 1f, 1f);
-
-        // Disable scissor test
-        GLUtils.disableScissor();
     }
 
 

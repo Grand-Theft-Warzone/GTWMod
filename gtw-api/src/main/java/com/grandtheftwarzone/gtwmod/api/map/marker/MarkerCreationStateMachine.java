@@ -76,11 +76,6 @@ public class MarkerCreationStateMachine {
                 }
                 break;
             case ENTER_COORD:
-                if (!emojiListStr.contains(input)) {
-                    TextComponentString textC = new TextComponentString("\n§8[GTWMap] §сThis icon is not in the list!");
-                    mc.player.sendMessage(textC);
-                    break;
-                }
                 this.coords = input.replace(" ", ";");
                 TextComponentString text = new TextComponentString("\n§8[GTWMap] §aThe coordinates are set.");
                 mc.player.sendMessage(text);
@@ -91,8 +86,11 @@ public class MarkerCreationStateMachine {
                 timer = 180;
                 break;
             case ENTER_ICON_ID:
-
-
+                if (!emojiListStr.contains(input)) {
+                    TextComponentString textC = new TextComponentString("\n§8[GTWMap] §сThis icon is not in the list!");
+                    mc.player.sendMessage(textC);
+                    break;
+                }
                 this.iconId = input;
                 TextComponentString textI = new TextComponentString("\n§8[GTWMap] §aThe icon id is set.");
                 mc.player.sendMessage(textI);

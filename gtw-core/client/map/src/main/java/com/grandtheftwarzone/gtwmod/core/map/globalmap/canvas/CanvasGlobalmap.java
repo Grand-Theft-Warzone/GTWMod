@@ -468,7 +468,7 @@ public class CanvasGlobalmap extends BaseCanvas {
             DisplayElement clickElement = event.getClickedElement();
             if (clickElement instanceof ElementMarker) {
                 System.out.println("Вижу клик на элемент");
-                ((ElementMarker) clickElement).setHaverTimer(500);
+                ((ElementMarker) clickElement).setHaverTimer(30);
             }
         } else if (event.getParentEvent().getType() == InputType.MOUSE_RIGHT) {
             DisplayElement clickElement = event.getClickedElement();

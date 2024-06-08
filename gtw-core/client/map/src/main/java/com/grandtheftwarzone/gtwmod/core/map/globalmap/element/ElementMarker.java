@@ -20,6 +20,8 @@ import me.phoenixra.atumodcore.api.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,9 +55,8 @@ public class ElementMarker extends BaseElement {
         }
 
         haver = isHovered(getLastMouseX(), getLastMouseY());
-        if (haver) {
-            haverTimer += 1;
-        } else {
+
+        if (!haver) {
             haverTimer = 0;
         }
 
@@ -82,7 +83,8 @@ public class ElementMarker extends BaseElement {
             if (gangMarkerStr != null && gangMarkerStr.equals(playerGangId)) {
                 color = AtumColor.LIME;
             }
-            RenderUtils.drawRect(-borderThickness, -borderThickness, getWidth() + borderThickness*2, getHeight() + borderThickness*2, color);
+            // TODO UNCOMMENT WHEN FIXING ATUMMODCORE
+//            RenderUtils.drawRect(-borderThickness, -borderThickness, getWidth() + borderThickness*2, getHeight() + borderThickness*2, color);
 
             Gui.drawModalRectWithCustomSizedTexture(0, 0,
                     8, 8,
@@ -132,7 +134,7 @@ public class ElementMarker extends BaseElement {
         }
 
 
-        if (haverTimer > 200) {
+        if (haverTimer > 20) {
             CanvasGlobalmap elementOwner = (CanvasGlobalmap) getElementOwner();
             int sizeText = 8;
             float proporziaSize = (float) sizeText / 12;
@@ -151,6 +153,14 @@ public class ElementMarker extends BaseElement {
         }
     }
 
+    @SubscribeEvent
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        if (haver) {
+            haverTimer += 1;
+        } else {
+            haverTimer = 0;
+        }
+    }
 
     public void setXY(int x, int y) {
         getOriginX().setDefaultValue(x);

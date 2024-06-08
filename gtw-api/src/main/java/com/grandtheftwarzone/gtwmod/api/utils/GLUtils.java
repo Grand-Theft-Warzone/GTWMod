@@ -115,27 +115,7 @@ public class GLUtils {
         GlStateManager.depthFunc(GL11.GL_GREATER);
     }
 
-    public static void enableScissor(int x, int y, int width, int height) {
-        // Get the framebuffer size
-        int framebufferWidth = Display.getWidth();
-        int framebufferHeight = Display.getHeight();
 
-        // Calculate viewport coordinates
-        int scaleFactor = framebufferWidth / Display.getWidth();
-        int viewportX = x * scaleFactor;
-        int viewportY = (framebufferHeight - (y + height)) * scaleFactor;
-        int viewportWidth = width * scaleFactor;
-        int viewportHeight = height * scaleFactor;
-
-        // Enable scissor test and set scissor rectangle
-        GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor(viewportX, viewportY, viewportWidth, viewportHeight);
-    }
-
-    public static void disableScissor() {
-        // Disable scissor test
-        GL11.glDisable(GL11.GL_SCISSOR_TEST);
-    }
 
     public static void disableStencil() {
         GlStateManager.disableDepth();
@@ -284,10 +264,10 @@ public class GLUtils {
 
     public static void drawText(int x, int y, String text, AtumColor color, int fontSize, boolean drawShadow) {
 
-        float red = color.getRed() / 255.0f;
-        float green = color.getGreen() / 255.0f;
-        float blue = color.getBlue() / 255.0f;
-        float alpha = color.getAlpha() / 255.0f;
+        float red = color.getRed();
+        float green = color.getGreen();
+        float blue = color.getBlue();
+        float alpha = color.getAlpha();
         GlStateManager.color(red, green, blue, alpha);
 
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
