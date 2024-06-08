@@ -150,7 +150,7 @@ public class GlobalZoom {
         } else if (zoomInterpolations.size() == 1) {
             return zoomInterpolations.get(0);
         } else {
-            System.out.println("Всё плохо. Список zoomInterpolations пуст");
+            System.out.println("Everything is bad. The zoomInterpolations list is empty");
             return -3000;
         }
     }

@@ -11,7 +11,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 public class PacketHandlerEventConnect implements IMessageHandler<PacketEventConnect, IMessage> {
     @Override
     public IMessage onMessage(PacketEventConnect message, MessageContext ctx) {
-        System.out.println("Тип тут эвент должен создаваться");
         MinecraftForge.EVENT_BUS.post(new ClientConnectEvent());
         return null;
     }

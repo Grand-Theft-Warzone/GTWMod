@@ -17,7 +17,6 @@ public class PacketTest implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        System.out.println("вызываем fromBypes");
         int textSize = buf.readInt();
         byte[] bytes = new byte[textSize];
         buf.readBytes(bytes);
@@ -26,7 +25,6 @@ public class PacketTest implements IMessage {
 
     @Override
     public void toBytes(ByteBuf buf) {
-        System.out.println("вызываем toBypes");
         byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
         buf.writeInt(bytes.length);
         buf.writeBytes(bytes);

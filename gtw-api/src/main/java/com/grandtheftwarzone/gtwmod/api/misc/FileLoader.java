@@ -36,7 +36,7 @@ public class FileLoader {
         if (files != null) {
             for (File file : files) {
                 if (file.isFile()) {
-                    System.out.println("Обнаружил " + file.toString());
+                    GtwLog.getLogger().debug("[FileLoader] Discovered " + file.toString());
                     if (!(file.toString().endsWith(".png") || file.toString().endsWith(".jpeg"))) {
                         GtwLog.getLogger().warn("File " + file + " is not .png || .jpeg");
                         continue;
@@ -48,7 +48,6 @@ public class FileLoader {
                             continue;
                         }
                         FileDetails fileDetails = new FileDetails(calculateFileHash(file), resourceLocationFile);
-                        System.out.println("BLABLABLA " + fileDetails.toString());
                         fileMap.put(file, fileDetails);
                     } catch (IOException e) {
                         throw new RuntimeException(e);

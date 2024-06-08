@@ -89,7 +89,6 @@ public class GTWModServer extends AtumMod {
 
     @SubscribeEvent
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        System.out.println("Заметил вход игрока");
         GtwAPI.getInstance().getNetworkAPI().sendConnect((EntityPlayerMP) event.player);
     }
 

@@ -194,7 +194,6 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
 
     private boolean checkPermissions(UUID uuid, MapData mapData, String attachedTo) {
         if ( !(mapData.getAttachedTo().equals("all") || attachedTo.equals(mapData.getAttachedTo()))) {
-            System.out.println(attachedTo + " " + mapData.getAttachedTo());
             return false;
         }
         EntityPlayer player = GtwAPI.getInstance().getServer().getEntityWorld().getPlayerEntityByUUID(uuid);
@@ -205,8 +204,8 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
 
         for (String perm : mapData.getPermissions()) {
             if (!PermissionAPI.hasPermission(player, perm)) {
-                System.out.println("право " + perm + " " + PermissionAPI.hasPermission(player, perm));
-                System.out.println("Право " + perm + " не обнаружено.");
+                System.out.println("right " + perm + " " + PermissionAPI.hasPermission(player, perm));
+                System.out.println("Really " + perm + " not detected.");
                 return false;
             }
         }
@@ -218,12 +217,10 @@ public class GtwServerMapManager implements AtumModService, MapManagerServer {
         MapData mapData = getMaps().getOrDefault(mapId, null);
 
         if (mapData == null) {
-            System.out.println("BBBBBBBBBBBBBBBBBBBBBBBB");
             return null;
         }
 
         if (!checkAllowDisplay(uuid)) {
-            System.out.println("AAAAAAAAAAAAAAAAAAAa");
             return null;
         }
         if (!checkPermissions(uuid, mapData, attachedTo)) {

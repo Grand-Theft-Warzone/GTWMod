@@ -222,30 +222,24 @@ public class GtwMinimapManager implements MinimapManager {
     public void updateZoomLimits(Integer min, Integer max) {
 
         DisplayRenderer renderer = GtwAPI.getInstance().getGtwMod().getDisplayManager().getHUDCanvas().getDisplayRenderer();
-        if (renderer == null) {
-            System.out.println("НЕ ДАЛА(((");
-        }
         DisplayElement element = renderer != null ? renderer.getBaseCanvas().getElement("minimap") : null;
-        if (element == null) {
-            System.out.println("NULLLLLLLLLLLL");
-        }
 
-        System.out.println(min + " : " + max);
+
 //        DisplayManager
         int zoom = Integer.parseInt(renderer.getDisplayData().getDataOrDefault("zoom_minimap", "250"));
-        System.out.println("Сейчас zoom: " + zoom);
+        GtwLog.getLogger().debug("Now zoom: " + zoom);
         if (min != null) {
             this.setMinZoom(min);
             if (zoom < min) {
                 element.performAction("zoom_minimap", "update_zoom;" + min);
-                System.out.println("Уменьшаю зум до " + min);
+                GtwLog.getLogger().debug("I reduce the zoom to" + min);
             }
         }
         if (max != null) {
             this.setMaxZoom(max);
             if (zoom > max) {
                 element.performAction("zoom_minimap", "update_zoom;" + max);
-                System.out.println("Уменьшаю зум до " + max);
+                GtwLog.getLogger().debug("I reduce the zoom to " + max);
             }
         }
 

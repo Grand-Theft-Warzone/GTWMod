@@ -1,6 +1,7 @@
 package com.grandtheftwarzone.gtwmod.core.map;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
+import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.map.data.CStartData;
 import com.grandtheftwarzone.gtwmod.api.map.data.MapImageData;
 import com.grandtheftwarzone.gtwmod.api.map.data.RestrictionsData;
@@ -19,9 +20,9 @@ public class ProcessConsumer {
     public void request() {
         GtwAPI.getInstance().getMapManagerServer().getMapConsumers().setSRequest(
                 (it) ->{
-                    System.out.println("МЫ ПОЛУЧИЛИ ЗАПРОС ОТ КЛИЕНТА:");
-                    System.out.println("UUID: " + it.getUuid());
-                    System.out.println("Event: " + it.getConfig().getString("event"));
+                    GtwLog.getLogger().debug("WE HAVE RECEIVED A REQUEST FROM A CLIENT:");
+                    GtwLog.getLogger().debug("UUID: " + it.getUuid());
+                    GtwLog.getLogger().debug("Event: " + it.getConfig().getString("event"));
 
                     String event = it.getConfig().getString("event");
                     switch (event) {

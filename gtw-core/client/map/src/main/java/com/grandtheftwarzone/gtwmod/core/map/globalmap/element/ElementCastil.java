@@ -1,6 +1,7 @@
 package com.grandtheftwarzone.gtwmod.core.map.globalmap.element;
 
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.canvas.CanvasMapSubmenu;
+import lombok.Getter;
 import me.phoenixra.atumconfig.api.config.Config;
 import me.phoenixra.atumodcore.api.AtumMod;
 import me.phoenixra.atumodcore.api.display.DisplayCanvas;
@@ -10,8 +11,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ElementCastil extends BaseElement {
+
+    @Getter
+    private int fixX;
+    @Getter
+    private int fixY;
+
+
     public ElementCastil(@NotNull AtumMod atumMod, int drawPriority, int x, int y, int width, int height, @Nullable DisplayCanvas elementOwner) {
         super(atumMod, drawPriority, x, y, width, height, elementOwner);
+    }
+
+    public ElementCastil(@NotNull AtumMod atumMod, int x) {
+        super(atumMod, 90, x, 0, 0,0,null);
     }
 
     @Override
@@ -23,6 +35,9 @@ public class ElementCastil extends BaseElement {
             ((CanvasMapSubmenu) getElementOwner()).setFixHeight(getHeight());
 
         }
+
+        fixX = getX();
+        fixY = getY();
     }
 
     @Override

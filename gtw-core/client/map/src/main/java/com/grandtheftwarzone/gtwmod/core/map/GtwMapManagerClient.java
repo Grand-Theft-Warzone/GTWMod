@@ -2,6 +2,7 @@ package com.grandtheftwarzone.gtwmod.core.map;
 
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
+import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.event.ClientConnectEvent;
 import com.grandtheftwarzone.gtwmod.api.map.MapImageUtils;
 import com.grandtheftwarzone.gtwmod.api.map.manager.client.MapManagerClient;
@@ -122,7 +123,7 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
 
     @SubscribeEvent
     public void onConnectServer(ClientConnectEvent event) {
-        System.out.println("Получил статус Connect...");
+        GtwLog.getLogger().debug("Received Connect status...");
 
         // Отправляем запросы на данные и т.П.
 
@@ -163,7 +164,6 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
      * @param quietChange изменять ли значение переменной после изменения значения?
      */
     public void setAllowedToDisplay(Boolean draw, Boolean quietChange) {
-        System.out.println(draw);
         if (draw == null) {System.out.println("Draw is null");}
         DisplayRenderer render = GtwAPI.getInstance().getGtwMod().getDisplayManager().getHUDCanvas()
                 .getDisplayRenderer();
@@ -193,9 +193,7 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
     }
 
     public void onPostInit(FMLPostInitializationEvent event) {
-        System.out.println("[MapManager] PostInit start");
         mapImageUtils = new MapImageUtils(new File("gtwdata/map/"));
-        System.out.println("[MapManager] PostInit stop");
 
         this.markerManager = new GtwMarkerManagerClient();
 

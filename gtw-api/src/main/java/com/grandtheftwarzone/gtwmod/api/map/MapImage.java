@@ -44,16 +44,8 @@ public class MapImage {
         this.topLeft = topLeft;
 
 
-        System.out.println("" +
-                " Top Right: " + topRight +
-                " Down Right: " + downRight +
-                " Down Left" + downLeft +
-                " Top Left" + topLeft
-        );
-
         try {
             if (inputImage.getResourcePath().startsWith("dynamic")) {
-                System.out.println("Запускаю первый алгоритм");
                 File file = new File("gtwdata/map/maps/" + imageId + ".png");
                 InputStream stream = getFileInputStream(file);
                 BufferedImage imageFirst = ImageIO.read(stream);
@@ -64,7 +56,6 @@ public class MapImage {
                 this.imageHeightReal = imageFirst.getHeight();
 
             } else {
-                System.out.println("Запускаю другой алгоритм");
                 InputStream imageStream = Minecraft.getMinecraft().getResourceManager().getResource(inputImage).getInputStream();
 
                 BufferedImage image = ImageIO.read(imageStream);
@@ -76,8 +67,6 @@ public class MapImage {
         } catch (IOException e) {
             GtwLog.getLogger().error(String.valueOf(e));
         }
-
-        System.out.println("W: " + this.imageWidth + " H: " + this.imageHeight);
 
         this.pixelsPerBlockX = imageWidth / Math.abs(downRight.getX() - downLeft.getX());
         this.pixelsPerBlockZ = imageHeight / Math.abs(topLeft.getY() - downLeft.getY());
@@ -102,11 +91,8 @@ public class MapImage {
     }
 
     public EntityLocation calculateWorldCoord(double targetX, double targetY) {
-        System.out.println("Pix Pix " + pixelsPerBlockX + " <> " + pixelsPerBlockZ);
-        System.out.println("TL: " + topLeft.getX() + " <> " + topLeft.getY());
         double targetWorldX = topLeft.getX() + (targetX / pixelsPerBlockX);
         double targetWorldZ = topLeft.getY() + (targetY / pixelsPerBlockZ);
-        System.out.println("X: " + targetWorldX + " Z: " + targetWorldZ);
         return new EntityLocation(targetWorldX, targetWorldZ, 0);
     }
 

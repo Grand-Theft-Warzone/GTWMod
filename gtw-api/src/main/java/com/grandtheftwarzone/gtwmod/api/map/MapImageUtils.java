@@ -38,8 +38,6 @@ public class MapImageUtils extends FileImageUtils {
 
     public @Nullable ResourceLocation getMapImage(String id, @Nullable AtumColor colorBackground) {
 
-        System.out.println("F1");
-
         File file = new File(gameDir, "maps/" + id + ".png");
 
 
@@ -75,7 +73,6 @@ public class MapImageUtils extends FileImageUtils {
                 return nullImage;
             }
         }
-        System.out.println("F2");
 
 
 
@@ -84,7 +81,6 @@ public class MapImageUtils extends FileImageUtils {
         }
 
         try {
-            System.out.println("F3");
             BufferedImage imageFirst = getFileBufferedImage(file);
 
             int width = imageFirst.getWidth();
@@ -103,7 +99,6 @@ public class MapImageUtils extends FileImageUtils {
 //                imageFirst = background;
 //            }
 
-            System.out.println("F for for");
             if (colorBackground != null) {
                 for (int y = 0; y < height; y++) {
                     imageFirst.setRGB(0, y, colorBackground.toInt()); // Левый край
@@ -114,7 +109,6 @@ public class MapImageUtils extends FileImageUtils {
                     imageFirst.setRGB(x, height - 1, colorBackground.toInt()); // Нижний край
                 }
             }
-            System.out.println("F for for end");
             File modifiedFile = new File(gameDir, "/maps/" + id +"_modif.png");
 
             if (!modifiedFile.exists()) {
@@ -123,14 +117,11 @@ public class MapImageUtils extends FileImageUtils {
 
             // @TODO Тут вместо false добавить проверку на идентичность.
             if (modifiedFile.exists() && false) {
-                System.out.println("Хэш идентичный. Пропускаем изменеие файла.");
             } else {
                 modifiedFile.createNewFile();
-                System.out.println("F create end");
                 FileOutputStream outputStream = new FileOutputStream(modifiedFile);
                 ImageIO.write(imageFirst, "PNG", outputStream);
                 outputStream.close();
-                System.out.println("F4");
             }
 
             if (super.getFileLoader() != null) {
@@ -140,11 +131,9 @@ public class MapImageUtils extends FileImageUtils {
                     resourceLocationImage = getRLImagefromFile(modifiedFile);
                     super.getFileLoader().updateFileImage(modifiedFile);
                 }
-                System.out.println("F5");
                 return resourceLocationImage;
 
             } else {
-                System.out.println("F6");
                 return getRLImagefromFile(modifiedFile);
             }
 

@@ -113,7 +113,6 @@ public class FileImageUtils {
             ResourceLocation resourceLocation = new ResourceLocation("gtwmod", localSearchDir + id);
 
             try {
-                System.out.println(resourceLocation);
                 IResource resource = resourceManager.getResource(resourceLocation);
                 GtwLog.getLogger().debug("[getMapImage] Image "+idName+" detected.");
                 InputStream inputStream = resource.getInputStream();

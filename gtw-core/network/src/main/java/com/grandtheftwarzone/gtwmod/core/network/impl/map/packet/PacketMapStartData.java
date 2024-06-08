@@ -1,5 +1,6 @@
 package com.grandtheftwarzone.gtwmod.core.network.impl.map.packet;
 
+import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.map.data.CStartData;
 import com.grandtheftwarzone.gtwmod.api.map.data.MapImageData;
 import com.grandtheftwarzone.gtwmod.api.map.data.RestrictionsData;
@@ -37,7 +38,7 @@ public class PacketMapStartData implements IMessage {
 
     @Override
     public void toBytes(ByteBuf buf) {
-        System.out.println("Вызывается toBytes " + getClass().getSimpleName());
+        GtwLog.getLogger().debug("Called toBytes " + getClass().getSimpleName());
         byte[] bytes;
         MapImageData[] maps = {minimapData, globalmapData};
 
@@ -45,13 +46,13 @@ public class PacketMapStartData implements IMessage {
         for (MapImageData mapData : maps) {
             // Записываем imageId
             if (mapData == null) {
-                System.out.println("=================\nДанные карты " + "null" +
+                GtwLog.getLogger().debug("=================\nCard details " + "null" +
                                 "\nПусто..." +
                                 "================="
                         );
                 buf.writeBoolean(false);
             } else {
-                System.out.println("=================\nДанные карты " + mapData.getClass().getSimpleName() +
+                GtwLog.getLogger().debug("=================\nCard details " + mapData.getClass().getSimpleName() +
                         "\nimageId: " + mapData.getImageId() +
                         "\ncord: " + mapData.getTopRight() + "  " + mapData.getDownRight() + "  " + mapData.getDownLeft() + "  " + mapData.getTopLeft() +
                         "\nOffset: " + mapData.getOffsetX() + " " + mapData.getOffsetY() +
@@ -108,8 +109,8 @@ public class PacketMapStartData implements IMessage {
 
         }
 
-        System.out.println(
-                "Ограничения: " +
+        GtwLog.getLogger().debug(
+                "Restrictions: " +
                 "\nAllow Display: " + restrictionsData.isAllowMapDisplay() +
                 "\nAllow Local Marker: " + restrictionsData.isAllowLocalMarker() +
                 "\nMin Zoom: " + restrictionsData.getMinZoom() +
@@ -130,7 +131,7 @@ public class PacketMapStartData implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        System.out.println("Вызывается fromBytes " + getClass().getSimpleName());
+        GtwLog.getLogger().debug("Called fromBytes " + getClass().getSimpleName());
         byte[] bytes;
 
         MapImageData[] maps = {this.minimapData, this.globalmapData};
@@ -140,9 +141,9 @@ public class PacketMapStartData implements IMessage {
             boolean isNull = !buf.readBoolean();
             if (isNull) {
                 mapData = null;
-                System.out.println(
-                        "\n------------\n Данные карты " + null +
-                        "\nПусто... \n------------"
+                GtwLog.getLogger().debug(
+                        "\n------------\n Card details " + null +
+                        "\nit's empty... \n------------"
                 );
             } else {
                 // imageId
@@ -198,14 +199,14 @@ public class PacketMapStartData implements IMessage {
 
                 mapData = new MapImageData(imageId, topRight, downRight, downLeft, topLeft, offsetX, offsetY, colorBackground, colorBorderReach);
 
-                System.out.println(
+                GtwLog.getLogger().debug(
                         "\n------------ " +
-                                "\nДанные карты " + mapData.getClass().getCanonicalName() +
+                                "\nCard details " + mapData.getClass().getCanonicalName() +
                                 "\nimageId: " + mapData.getImageId() +
                                 "\ncord: " + mapData.getTopRight() + "  " + mapData.getDownRight() + "  " + mapData.getDownLeft() + "  " + mapData.getTopLeft() +
                                 "\noffset: " + mapData.getOffsetX() + "  " + mapData.getOffsetY() +
-                                "\ncolor фон: " + (mapData.getColorBackground() != null ? mapData.getColorBackground().toString() : "нету") +
-                                "\ncolor барьер: " + (mapData.getColorBorderReach() != null ? mapData.getColorBorderReach().toString() : "нету") + "\n------------"
+                                "\ncolor background: " + (mapData.getColorBackground() != null ? mapData.getColorBackground().toString() : "нету") +
+                                "\ncolor barrier: " + (mapData.getColorBorderReach() != null ? mapData.getColorBorderReach().toString() : "нету") + "\n------------"
                 );
 
             }
@@ -230,8 +231,8 @@ public class PacketMapStartData implements IMessage {
 
         this.restrictionsData = new RestrictionsData(uuid, allowMapDisplay, allowLocalMarker, minZoom, maxZoom);
 
-        System.out.println(
-                "\n-|- Ограничения: " +
+        GtwLog.getLogger().debug(
+                "\n-|- RESTRICTIONS: " +
                         "\nAllow Display: " + restrictionsData.isAllowMapDisplay() +
                         "\nAllow Local Marker: " + restrictionsData.isAllowLocalMarker() +
                         "\nMin Zoom: " + restrictionsData.getMinZoom() +

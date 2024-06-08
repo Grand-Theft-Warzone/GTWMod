@@ -7,7 +7,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 public class PacketTestHandlerClinet implements IMessageHandler<PacketTest, IMessage>  {
     @Override
     public IMessage onMessage(PacketTest message, MessageContext ctx) {
-        System.out.println("BlaBlaBlaBla");
         return null;
     }
 }

@@ -1,6 +1,7 @@
 package com.grandtheftwarzone.gtwmod.core.map.globalmap;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
+import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.map.manager.client.GlobalmapManager;
 import com.grandtheftwarzone.gtwmod.api.map.MapImage;
 import com.grandtheftwarzone.gtwmod.api.map.data.MapImageData;
@@ -52,7 +53,7 @@ public class GtwGlobalmapManager implements GlobalmapManager {
 
     public void updateData(MapImageData globalmapData, Boolean draw) {
 
-        System.out.println("[globalmap] updateData");
+        GtwLog.getLogger().debug("[globalmap] updateData");
 
         ResourceLocation mapTexture = GtwAPI.getInstance().getMapManagerClient().getMapImageUtils().getMapImage(globalmapData.getImageId(), globalmapData.getColorBackground());
         this.globalmapImage = new MapImage(mapTexture, globalmapData.getImageId(), globalmapData.getTopRight(), globalmapData.getDownRight(), globalmapData.getDownLeft(), globalmapData.getTopLeft(), globalmapData.getOffsetX(), globalmapData.getOffsetY());
@@ -91,16 +92,11 @@ public class GtwGlobalmapManager implements GlobalmapManager {
         if (!GtwAPI.getInstance().getMapManagerClient().isAllowedToDisplay()) return;
         if (GtwAPI.getInstance().getMapManagerClient().getKeyShowGlobalmap().isPressed()) {
 
-            System.out.println("Отследил нажатие на M");
-
-            System.out.println("mc.currentScreen: " + mc.currentScreen);
             if (mc.currentScreen instanceof GtwGlobalmapScreen) {
-                System.out.println("Пытаюсь закрыть карту");
                 mc.displayGuiScreen(null);
             }
 
             if (mc.currentScreen == null) {
-                System.out.println("Пытаюсь открыть карту");
                 Minecraft.getMinecraft().displayGuiScreen(
                         new GtwGlobalmapScreen(GtwAPI.getInstance().getGtwMod(), "globalmap")
                 );

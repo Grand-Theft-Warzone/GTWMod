@@ -8,7 +8,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 public class PacketMapClientHandlerRequest implements IMessageHandler<PacketMapRequest, IMessage> {
     @Override
     public IMessage onMessage(PacketMapRequest message, MessageContext ctx) {
-        System.out.println("Бабабол балаболит");
         return null;
     }
 }

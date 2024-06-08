@@ -96,14 +96,13 @@ public class GtwMarkerManagerClient implements MarkerManagerClient {
             String worldLocation = marker.getString("worldLocation");
             boolean localMarker = true;
             List<String> mapImageIds = (List<String>) marker.get("mapImageIds");
-            System.out.println(mapImageIds);
             List<String> actionList = null;
             boolean draw = true;
             TemplateMarker templateMarker = new TemplateMarker(identificator, name, lore, iconId, worldLocation, null, localMarker, mapImageIds, actionList, draw);
 
-            System.out.println("\n============================");
-            System.out.println(templateMarker);
-            System.out.println("\n============================\n");
+            GtwLog.getLogger().debug("\n============================");
+            GtwLog.getLogger().debug(templateMarker);
+            GtwLog.getLogger().debug("\n============================\n");
 
             newLocalMarkerList.add(new BaseStaticMarker(templateMarker));
         }
@@ -243,7 +242,6 @@ public class GtwMarkerManagerClient implements MarkerManagerClient {
                 marker = new PlayerMarker(templateMarker);
                 if (templateMarker.getData().getSubsection("data").getString("player_name").equals(Minecraft.getMinecraft().player.getName())) {
 
-                    System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
                     // @TODO ИЗМЕНИТЬ НА false ПРОДЕ!
                     playerMarker = (PlayerMarker) marker;
                     marker.setDraw(false);

@@ -1,6 +1,7 @@
 package com.grandtheftwarzone.gtwmod.core.network;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
+import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.map.data.CStartData;
 import com.grandtheftwarzone.gtwmod.api.map.marker.TemplateMarker;
 import com.grandtheftwarzone.gtwmod.api.networking.NetworkAPI;
@@ -83,14 +84,14 @@ public class GtwNetworkAPI implements NetworkAPI, AtumModService {
     }
 
     public void sendTest(String str, EntityPlayerMP player) {
-        System.out.println("Отправка клиенту test...");
+        GtwLog.getLogger().debug("Sending to client test...");
         atumNetwork.sendTo(new PacketTest(
                 str
         ), player);
     }
 
     public void sendTestServer(String str) {
-        System.out.println("Отправка cерверу test...");
+        GtwLog.getLogger().debug("Sending to server test...");
         atumNetwork.sendToServer(new PacketTest(
                 str
         ));

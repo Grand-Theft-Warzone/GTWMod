@@ -10,6 +10,7 @@ import com.grandtheftwarzone.gtwmod.api.map.misc.GlobalZoom;
 import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import com.grandtheftwarzone.gtwmod.api.utils.GLUtils;
+import com.grandtheftwarzone.gtwmod.core.map.CustomToastGui;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.data.DataMapSubMenu;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.element.ElementCastil;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.element.ElementMarker;
@@ -103,7 +104,7 @@ public class CanvasMapSubmenu extends BaseCanvas {
     protected void onDraw(DisplayResolution displayResolution, float v, int i, int i1) {
 
         if (!(getElementOwner() instanceof CanvasGlobalmap)) {
-            System.out.println("[ERROR] CanvasMapSubmenu only works from elementOwner = CanvasGlobalmap!");
+            GtwLog.getLogger().error("[ERROR] CanvasMapSubmenu only works from elementOwner = CanvasGlobalmap!");
             onRemove();
             return;
         }
@@ -134,18 +135,29 @@ public class CanvasMapSubmenu extends BaseCanvas {
         RenderUtils.drawRect(coordX, coordY, width, height, colorBackground);
         RenderUtils.drawOutline(coordX, coordY, width, height, outsize, colorStroke);
 
-        for (int e = 0; e<=elementNumber-2; e++) {
-            int posX = coordX;
+        if (!ownerCanvas.isWarned() && (Display.getWidth() != 1920 || Display.getHeight() != 1080)) {
+            ownerCanvas.setWarned(true);
+            GtwLog.getLogger().error("[CanvasMapSubmenu] Warning! Screen resolution is not 1920x1080 or 1080x1920! " + Display.getWidth() + "x" + Display.getHeight());
 
-            int posY = coordY + edgeMargin + textHeightMax + indentText/2 + (textHeightMax+indentText)*e;
-//            RenderUtils.drawOutline(posX, posY, width, 1, 1, AtumColor.BLACK);
-            GLUtils.drawDashedLine(posX, posY, posX+width, posY, colorStroke.toInt(), 1, 2, 1);
+            String title = "GTWMap Manager";
+            String description = "We recommend Fullscreen.";
+            ResourceLocation icon = GtwAPI.getInstance().getMapManagerClient().getMapImageUtils().getImage("system/admin_edit_marker");
+            CustomToastGui.showToast(title, description, icon, 6);
+
+        }
+        if (Display.getWidth() == 1920 && Display.getHeight() == 1080) {
+            for (int e = 0; e<=elementNumber-2; e++) {
+                int posX = coordX;
+
+                int posY = coordY + edgeMargin + textHeightMax + indentText/2 + (textHeightMax+indentText)*e;
+                GLUtils.drawDashedLine(posX, posY, posX+width, posY, colorStroke.toInt(), 1, 2, 1);
+            }
         }
     }
 
     public void init() {
 
-        System.out.println("Вызывается init в CanvasMapSubmenu");
+        GtwLog.getLogger().debug("Called init on CanvasMapSubmenu");
 
         ownerCanvas = (CanvasGlobalmap) getElementOwner();
 
@@ -167,7 +179,6 @@ public class CanvasMapSubmenu extends BaseCanvas {
         double deltaY = vectorCenterCursor.getY() * (double) (int) (zoom.getFirstZoom()*zoom.getCoefZoomY()) / ownerCanvas.getHeight();
         MapLocation calculationCoord = new MapLocation((centrCoord.getFirstCoordInter().getX() + deltaX), (centrCoord.getFirstCoordInter().getY() + deltaY));
 
-        System.out.println("EntityLocation: " + calculationCoord.toString());
 
         mapCoord = ownerCanvas.getGlobalmap().calculateWorldCoord(calculationCoord);
         // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -185,7 +196,6 @@ public class CanvasMapSubmenu extends BaseCanvas {
         AtumColor colorLocal = AtumColor.BLACK;
         AtumColor colorServer = new AtumColor(220, 0, 85);
         // Клик на пустое место
-        System.out.println("Выбран элемент: " + elementClick);
         if (elementClick instanceof ElementMarker) {
             ElementMarker elementMarker = ((ElementMarker) elementClick);
             MapMarker marker = elementMarker.getMarker();
@@ -280,19 +290,15 @@ public class CanvasMapSubmenu extends BaseCanvas {
         int height = (textHeightMax+indentText)*dataMapSubMenus.size()-indentText + edgeMargin*2;
 
         if (checkInZona(coordClickX, coordClickY, width, -height)) {
-            System.out.println("1 true");
             coordTopLeftX = coordClickX;
             coordTopLeftY = coordClickY - height;
         } else if (checkInZona(coordClickX, coordClickY, -width, -height)) {
-            System.out.println("2 true");
             coordTopLeftX = coordClickX - width;
             coordTopLeftY = coordClickY - height;
         } else if (checkInZona(coordClickX, coordClickY, width, height)) {
-            System.out.println("3 true");
             coordTopLeftX = coordClickX;
             coordTopLeftY = coordClickY;
         } else if (checkInZona(coordClickX, coordClickY, -width, height)) {
-            System.out.println("4 true");
             coordTopLeftX = coordClickX - width;
             coordTopLeftY = coordClickY;
         } else {
@@ -318,7 +324,6 @@ public class CanvasMapSubmenu extends BaseCanvas {
 
             elementNumber += 1;
 
-            System.out.println(elementNumber + " posX PosY " + posX + " <> " + posY);
             this.addElement(new ElementSubMenu(getAtumMod(), 70, posX * RenderUtils.getScaleFactor(), posY * RenderUtils.getScaleFactor(), (elementWidth) * RenderUtils.getScaleFactor(), elementHeight * RenderUtils.getScaleFactor(), this, subMenu));
         }
         // |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=|
@@ -330,7 +335,6 @@ public class CanvasMapSubmenu extends BaseCanvas {
     }
 
     public boolean checkInZona(int clickX, int clickY, int width, int height) {
-        System.out.println("Check " + clickX + " " + clickY + " " + width + " " + height);
         return checkInterval(clickX, clickY) && checkInterval(clickX, clickY + height) && checkInterval(clickX + width, clickY + height) && checkInterval(clickX + width, clickY);
     }
 
@@ -366,7 +370,7 @@ public class CanvasMapSubmenu extends BaseCanvas {
     @Override
     public void onRemove() {
         super.onRemove();
-        System.out.println("Вызываю onRemove в CanvasMapSubmenu");
+        GtwLog.getLogger().debug("I call onRemove in CanvasMapSubmenu");
         if (getElementOwner() instanceof CanvasGlobalmap) {
             ((CanvasGlobalmap) getElementOwner()).setSubCanvas(null);
         }

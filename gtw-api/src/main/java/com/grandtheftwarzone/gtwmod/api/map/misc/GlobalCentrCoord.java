@@ -335,7 +335,7 @@ public class GlobalCentrCoord {
 //        }
 
         if (maxDistance <= 0) {
-            System.out.println("ЗАМЕЧЕНО ДЕЛЕНИЕ НА 0 ИЛИ ОТРИЦАТЕЛЬНОЕ ЗНАЧЕНИЕ!!!!!!!!");
+            System.out.println("DIVISION BY 0 OR NEGATIVE VALUE NOTED!!!!!!!!");
             maxDistance = 0.5;
         }
         double ratio = (Math.PI * distance) / maxDistance;
@@ -343,7 +343,7 @@ public class GlobalCentrCoord {
         double coef = (cosValue + 1) / 2;
 
         if (coef > 1 || coef < 0) {
-            System.out.println("Неверный коэффициент: " + coef);
+            System.out.println("Incorrect coefficient: " + coef);
         }
         return coef;
     }
@@ -396,7 +396,7 @@ public class GlobalCentrCoord {
         } else if (centrCoordsInterpol.size() == 1) {
             return centrCoordsInterpol.get(0);
         } else {
-            System.out.println("Всё плохо. Список zoomInterpolations пуст");
+            System.out.println("Everything is bad. The zoomInterpolations list is empty");
             return new MapLocation(0, 0);
         }
     }
