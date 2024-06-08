@@ -276,12 +276,12 @@ public class CanvasGlobalmap extends BaseCanvas {
                 int drawX = (int) ((deltaX / ((double) zoomX / getOriginWidth().getValue(displayResolution))) + getOriginX().getValue(displayResolution) + getOriginWidth().getValue(displayResolution) /2) - fixSizeMarker/2;
                 int drawY = (int) ((deltaY / ((double) zoomY / getOriginHeight().getValue(displayResolution))) + getOriginY().getValue(displayResolution) + getOriginHeight().getValue(displayResolution) /2) - fixSizeMarker/2;
 
-                int layer = 50;
+                int layer = 40;
 
                 if (marker instanceof PlayerMarker) {
-                    layer = 52;
+                    layer = 47;
                 } else if (marker instanceof RadarClient) {
-                    layer = 53;
+                    layer = 60;
                 }
 
                 int finalLayer = layer;

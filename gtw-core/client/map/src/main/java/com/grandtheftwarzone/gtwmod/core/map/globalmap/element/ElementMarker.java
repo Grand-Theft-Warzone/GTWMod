@@ -25,6 +25,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.grandtheftwarzone.gtwmod.core.map.GtwMapManagerClient.colorMarkerBackground;
+
 public class ElementMarker extends BaseElement {
 
     @Getter
@@ -32,11 +34,13 @@ public class ElementMarker extends BaseElement {
 
     private final float[] brightnessOnHover = new float[]{0.65F,0.65F,0.65F};
 
+
     @Getter
     private boolean haver = false;
 
     @Setter
     private long haverTimer = 0;
+
 
     int addNamePosX = 0;
     int addNamePosY = 0;
@@ -78,14 +82,20 @@ public class ElementMarker extends BaseElement {
 
             int borderThickness = 1;
             AtumColor color = AtumColor.GRAY;
+            int cordColorX = 32;
+            int cordColorY = 0;
             String gangMarkerStr = ((PlayerMarker) marker).getData().getSubsection("data").getStringOrNull("gang_id");
             String playerGangId = (GtwAPI.getInstance().getMapManagerClient().getMarkerManager().getPlayerMarker() != null) ? GtwAPI.getInstance().getMapManagerClient().getMarkerManager().getPlayerMarker().getData().getSubsection("data").getStringOrNull("gang_id") : null;
             if (gangMarkerStr != null && gangMarkerStr.equals(playerGangId)) {
                 color = AtumColor.LIME;
+                cordColorX = 0;
             }
-            // TODO UNCOMMENT WHEN FIXING ATUMMODCORE
-//            RenderUtils.drawRect(-borderThickness, -borderThickness, getWidth() + borderThickness*2, getHeight() + borderThickness*2, color);
 
+            //            RenderUtils.drawRect(-borderThickness, -borderThickness, getWidth() + borderThickness*2, getHeight() + borderThickness*2, color);
+            RenderUtils.bindTexture(colorMarkerBackground);
+            RenderUtils.drawPartialImage(-borderThickness, -borderThickness, 8+borderThickness*2, 8+borderThickness*2, cordColorX, cordColorY, 16, 16);
+
+            RenderUtils.bindTexture(marker.getIcon());
             Gui.drawModalRectWithCustomSizedTexture(0, 0,
                     8, 8,
                     8, 8,
@@ -94,7 +104,7 @@ public class ElementMarker extends BaseElement {
             GlStateManager.popMatrix();
 
             addNamePosX = -2;
-            addNamePosY = 2;
+            addNamePosY = 0;
 
         } else if (marker instanceof RadarClient) {
 

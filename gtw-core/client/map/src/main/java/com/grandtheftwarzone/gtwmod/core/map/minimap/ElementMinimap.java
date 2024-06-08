@@ -34,6 +34,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.List;
 
 import static com.grandtheftwarzone.gtwmod.api.utils.GLUtils.*;
+import static com.grandtheftwarzone.gtwmod.core.map.GtwMapManagerClient.colorMarkerBackground;
 
 @RegisterDisplayElement(templateId = "minimap")
 public class ElementMinimap extends BaseElement {
@@ -127,18 +128,20 @@ public class ElementMinimap extends BaseElement {
 
                     int borderThickness = 1;
                     AtumColor color = AtumColor.GRAY;
+                    int cordColorX = 32;
+                    int cordColorY = 0;
                     String gangMarkerStr = ((PlayerMarker) marker).getData().getSubsection("data").getStringOrNull("gang_id");
                     String playerGangId = (GtwAPI.getInstance().getMapManagerClient().getMarkerManager().getPlayerMarker() != null) ? GtwAPI.getInstance().getMapManagerClient().getMarkerManager().getPlayerMarker().getData().getSubsection("data").getStringOrNull("gang_id") : null;
                     if (gangMarkerStr != null && playerGangId != null && gangMarkerStr.equals(playerGangId)) {
                         color = AtumColor.LIME;
+                        cordColorX = 0;
                     }
 
 
-                    enableCircleStencil(centerX, centerY, (float) (getHeight() /2));
+                    RenderUtils.bindTexture(colorMarkerBackground);
+                    RenderUtils.drawPartialImage(iconX-borderThickness, iconY - borderThickness, iconSize + borderThickness*2, iconSize + borderThickness*2, cordColorX, cordColorY, 16, 16);
 
-                    RenderUtils.drawRect(iconX - borderThickness, iconY - borderThickness, iconSize + borderThickness*2, iconSize + borderThickness*2, color);
-
-
+                    RenderUtils.bindTexture(iconImage);
                     Gui.drawModalRectWithCustomSizedTexture(
                             (int) (-zoomMarker / 2),
                             (int) (-zoomMarker / 2),

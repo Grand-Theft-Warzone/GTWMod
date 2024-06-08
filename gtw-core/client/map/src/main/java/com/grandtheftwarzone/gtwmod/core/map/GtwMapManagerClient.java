@@ -20,6 +20,7 @@ import me.phoenixra.atumodcore.api.display.DisplayRenderer;
 import me.phoenixra.atumodcore.api.service.AtumModService;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -75,6 +76,8 @@ public class GtwMapManagerClient implements AtumModService, MapManagerClient {
     private MarkerCreationStateMachine markerCreator;
 
     //
+
+    public static ResourceLocation colorMarkerBackground = new ResourceLocation("gtwmod", "textures/gui/system/color_marker_fon.png");
 
     @Getter @Setter
     private RadarClient radarPlayer;

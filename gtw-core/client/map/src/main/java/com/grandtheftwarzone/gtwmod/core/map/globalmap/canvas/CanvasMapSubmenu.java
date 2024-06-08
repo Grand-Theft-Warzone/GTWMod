@@ -1,6 +1,7 @@
 package com.grandtheftwarzone.gtwmod.core.map.globalmap.canvas;
 
 import com.grandtheftwarzone.gtwmod.api.GtwAPI;
+import com.grandtheftwarzone.gtwmod.api.GtwLog;
 import com.grandtheftwarzone.gtwmod.api.map.marker.MapMarker;
 import com.grandtheftwarzone.gtwmod.api.map.marker.impl.PlayerMarker;
 import com.grandtheftwarzone.gtwmod.api.map.marker.impl.RadarClient;
@@ -10,6 +11,7 @@ import com.grandtheftwarzone.gtwmod.api.misc.EntityLocation;
 import com.grandtheftwarzone.gtwmod.api.misc.MapLocation;
 import com.grandtheftwarzone.gtwmod.api.utils.GLUtils;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.data.DataMapSubMenu;
+import com.grandtheftwarzone.gtwmod.core.map.globalmap.element.ElementCastil;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.element.ElementMarker;
 import com.grandtheftwarzone.gtwmod.core.map.globalmap.element.ElementSubMenu;
 import lombok.Getter;
@@ -73,6 +75,20 @@ public class CanvasMapSubmenu extends BaseCanvas {
     int coordTopLeftX;
     int coordTopLeftY;
 
+
+    @Setter
+    private Integer fixCoordsX = null;
+
+    @Setter
+    private Integer fixCoordsY = null;
+    @Setter
+    private Integer fixWidth = null;
+
+    @Setter
+    private Integer fixHeight = null;
+
+    private ElementCastil castil = null;
+
     List<DataMapSubMenu> dataMapSubMenus = new ArrayList<>();
 
     public CanvasMapSubmenu(@NotNull AtumMod atumMod, @NotNull int layer, int posX, int posY, int width, int height, @Nullable DisplayCanvas elementOwner, @Nullable DisplayElement elementClick) {
@@ -97,13 +113,24 @@ public class CanvasMapSubmenu extends BaseCanvas {
             return;
         }
 
+        if (fixCoordsX == null || fixCoordsY == null || fixWidth == null || fixHeight == null) {
+            GtwLog.getLogger().error("[CanvasMapSubmenu] Waiting for data from ElementCastil");
+            return;
+        }
+
+
+        if (castil != null) {
+            this.removeElement(castil);
+            castil = null;
+        }
+
         AtumColor colorBackground = new AtumColor(160, 160, 160, 1);
         AtumColor colorStroke = AtumColor.ORANGE;
 
         int width = textWidthMax + indentIcon + sizeIcon + edgeMargin*2;
         int height = (textHeightMax+indentText)*elementNumber-indentText + edgeMargin*2;
-        int coordX = coordTopLeftX - edgeMargin - outsize;
-        int coordY = coordTopLeftY - edgeMargin - outsize;
+        int coordX = fixCoordsX - edgeMargin - outsize;
+        int coordY = fixCoordsY - edgeMargin - outsize;
         RenderUtils.drawRect(coordX, coordY, width, height, colorBackground);
         RenderUtils.drawOutline(coordX, coordY, width, height, outsize, colorStroke);
 
@@ -296,8 +323,10 @@ public class CanvasMapSubmenu extends BaseCanvas {
         }
         // |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=|
 
-        init = true;
+        this.castil = new ElementCastil(getAtumMod(), 100, coordTopLeftX*RenderUtils.getScaleFactor(), coordTopLeftY*RenderUtils.getScaleFactor(), ((textWidthMax + indentIcon + sizeIcon + edgeMargin*2)*RenderUtils.getScaleFactor()), ((textHeightMax+indentText)*elementNumber-indentText + edgeMargin*2)*RenderUtils.getScaleFactor(), this);
+        this.addElement(castil);
 
+        init = true;
     }
 
     public boolean checkInZona(int clickX, int clickY, int width, int height) {
